@@ -189,7 +189,7 @@ function tbxInitCustomiseContext(evt, popup) {
     for(radio = popup.lastChild; radio.localName=="menuitem"; radio = radio.previousSibling)
       radio.hidden = true;
     // hide the menuseparator
-    radio.previousSibling.hidden = true;
+    radio.hidden = true;
   } else {
     // show the menuitems, and check the appropriate one
     for(radio = popup.lastChild; radio.localName=="menuitem"; radio = radio.previousSibling) {
@@ -198,7 +198,7 @@ function tbxInitCustomiseContext(evt, popup) {
       else radio.removeAttribute("checked");
     }
     // show the menuseparator
-    radio.previousSibling.hidden = false;
+    radio.hidden = false;
   }
 }
 
