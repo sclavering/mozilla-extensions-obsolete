@@ -48,7 +48,7 @@ const linkToolbarUI = {
   linkAdded: function(event) {
     var element = event.originalTarget;
     var doc = element.ownerDocument;
-    if(!element instanceof Components.interfaces.nsIDOMHTMLLinkElement
+    if(!(element instanceof Components.interfaces.nsIDOMHTMLLinkElement)
         || !element.href
         || !(element.rel || element.rev))
       return;
