@@ -1,25 +1,20 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.6 2003/05/28 17:14:43 cdn Exp $ -->
+<!-- $Id: linkit.xul,v 1.7 2003/05/28 17:16:34 clav Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <script type="application/x-javascript"><![CDATA[
 
-// from NiceTitle.js by Stuart Langridge via grayrest's nicetitle.xpi
-// MIT Licenced : http://www.opensource.org/licenses/mit-license.php
-
-function NB_innerText(el){
-    var s = "";
-    kids = el.childNodes;
-    for(var i = 0; i < kids.length; i++){
-        if(kids[i] != 3 && kids[i].firstChild){
-            s += NB_innerText(kids[i]);
-        } else {
-            s += kids[i].nodeValue;
-        }
-    }
-    return s;
+function linkit_getInnerText(el) {
+  var s = "", kids = el.childNodes;
+  for(var i = 0; i < kids.length; i++) {
+    // add contents of CDATA or text nodes
+    if(kids[i].nodeType==3 || kids[i].nodeType==2) s += kids[i].nodeValue;
+    // call recursively for elements
+    else if(kids[i].nodeType==1) s += innerText(kids[i]);
+  }
+  return s;
 }
 
 function linkit() {
