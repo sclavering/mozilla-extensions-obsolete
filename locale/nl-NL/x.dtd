@@ -1,0 +1,10 @@
+<!ENTITY label   "Paranoia">
+<!ENTITY tooltip "Bescherm uw privacy">
+
+<!ENTITY dialogtitle "Wis Privacy Informatie">
+<!ENTITY clearHistory   "Wis de historie van bezochte pagina's">
+<!ENTITY clearFormInfo  "Wis opgeslagen formulier-informatie">
+<!ENTITY clearPasswords "Wis opgeslagen wachtwoorden">
+<!ENTITY clearDownloads "Wis de download geschiedenis">
+<!ENTITY clearCookies   "Wis alle cookies">
+<!ENTITY clearCache     "Wis het cachegeheugen">

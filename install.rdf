@@ -11,8 +11,9 @@
     <description>Adds a paranoia button to the toolbar</description>
     <creator>Stephen Clavering</creator>
     <contributor>Chris Neale</contributor>
-    <contributor>Gregory Hoppe (German translator)</contributor>
     <contributor>Giuliano Masseroni (Italian translator)</contributor>
+    <contributor>Gregory Hoppe (German translator)</contributor>
+    <contributor>Rob de Vries (Dutch translator)</contributor>
     <contributor>Sébastien Costes (French translator)</contributor>
 
     <iconURL>chrome://x/content/icon.png</iconURL>
@@ -35,6 +36,7 @@
         <locale>locale/de-DE/</locale>
         <locale>locale/fr-FR/</locale>
         <locale>locale/it-IT/</locale>
+        <locale>locale/nl-NL/</locale>
       </r:Description>
     </file>
   </r:Description>
