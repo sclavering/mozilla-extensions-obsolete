@@ -11,6 +11,7 @@
 
 #link-top, #link-up, #link-first,
 #link-prev, #link-next, #link-last {
+  -moz-appearance: none;
   list-style-image: url("chrome://linktoolbar/skin/buttons.png");
   padding: 0;
 }
@@ -128,3 +129,8 @@ bookmark folders or the Document+More menus still have a tex label */
 #linktoolbar[iconsonly="true"] > toolbarseparator {
   display: none;
 }
+
+#page-theme-button {
+  list-style-image: url("chrome://linktoolbar/skin/btn1/icon.png");
+}
+
