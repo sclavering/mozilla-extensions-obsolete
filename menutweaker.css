@@ -1,12 +1,3 @@
 @import url(chrome://global/skin/);
 
-/* fake a tree from listitems, because the syntax is less verbose, and the tree wasn't working */
-
-listitem[level="1"]:before {
-  content: "    ";
-}
-listitem[level="2"]:before {
-  content: "        ";
-}
-
 listitem[menu] { font-weight: bold; }

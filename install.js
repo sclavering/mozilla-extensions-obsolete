@@ -1,7 +1,7 @@
 const APP_DISPLAY_NAME = "MenuTweaker";
 const APP_NAME = "menutweaker";
 const APP_PACKAGE = "/extensionroom.mozdev.org/clav/menutweaker";
-const APP_VERSION = "0.05";
+const APP_VERSION = "0.1";
 
 const APP_JAR_FILE = "menutweaker.jar";
 const APP_CONTENT_FOLDER = "/"; // ook
