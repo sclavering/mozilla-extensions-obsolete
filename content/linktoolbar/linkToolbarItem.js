@@ -49,8 +49,14 @@ function LinkToolbarItem (linkType) {
   this.xulPopupId = this.xulElementId + "-popup";
   this.parentMenuButton = null;
 
+  // would like to just set this straight off, but I think this object might
+  // be being created before the element has been added to the document
+  this.xulElement = null;
+
   this.getXULElement = function() {
-    return document.getElementById(this.xulElementId);
+    if(!this.xulElement)
+      this.xulElement = document.getElementById(this.xulElementId);
+    return this.xulElement;
   }
 
   this.clear = function() {
