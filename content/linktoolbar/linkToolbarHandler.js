@@ -222,5 +222,3 @@ const ltLanguageDictionary = {
     return srGetStrBundle("chrome://global/locale/languageNames.properties");
   }
 }
-
-alert("linkbar language dictionary loaded");
