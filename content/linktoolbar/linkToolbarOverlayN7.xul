@@ -14,8 +14,8 @@
    -
    - The Original Code is Eric Hodel's <drbrain@segment7.net> code.
    -
-   - The Initial Developer of the Original Code is
-   - Eric Hodel.
+   - The Initial Developer of the Original Code is Eric Hodel.
+   -
    - Portions created by the Initial Developer are Copyright (C) 2001
    - the Initial Developer. All Rights Reserved.
    -
@@ -23,9 +23,8 @@
    -      Christopher Hoess <choess@force.stwing.upenn.edu>
    -      Tim Taylor <tim@tool-man.org>
    -      Stuart Ballard <sballard@netreach.net>
-   -
-   - Port to N7:
    -      Chris Neale <cdn@mozdev.org>
+   -      Stephen Clavering <mozilla@clav.co.uk>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -49,9 +48,7 @@
 <!DOCTYPE overlay SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
 
 <overlay id="linkToolbarOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-         xmlns:html="http://www.w3.org/1999/xhtml"
-         xmlns:rdf="http://www.mozilla.org/rdf">
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <!-- classes -->
   <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarHandler.js"/>
@@ -84,8 +81,9 @@
   </menupopup>
 
   <toolbox id="navigator-toolbox">
+    <!-- using onclick to get new tab/window for middle click -->
     <toolbar id="linktoolbar" class="chromeclass-directories"
-        oncommand="event.preventBubble(); return linkToolbarUI.commanded(event);"
+        onclick="event.preventBubble(); return linkToolbarUI.commanded(event);"
         tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar" grippytooltiptext="&linkToolbar.label;">
 
       <toolbarbutton id="link-top" class="bookmark-item"
