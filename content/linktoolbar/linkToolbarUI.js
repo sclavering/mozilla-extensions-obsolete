@@ -40,24 +40,6 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/*
-function toggleLinkToolbar() {
-
- var btn = document.getElementById("linktoolbar-toggle");
- var toolbar = document.getElementById("linktoolbar");
-
- if (toolbar.getAttribute("hidden") == "true")
- {
-   toolbar.setAttribute("hidden", "false");
-   btn.setAttribute("left", "false");
- }
- else
- {
-   toolbar.setAttribute("hidden", "true");
-   btn.setAttribute("left", "true");
- }
-}
-*/
 
 
 
@@ -66,8 +48,7 @@ const linkToolbarUI = {
   linkAdded: function(event) {
     var element = event.originalTarget;
     var doc = element.ownerDocument;
-    if(!linkToolbarUI.isLinkToolbarEnabled()
-        || !element instanceof Components.interfaces.nsIDOMHTMLLinkElement
+    if(!element instanceof Components.interfaces.nsIDOMHTMLLinkElement
         || !element.href
         || !(element.rel || element.rev))
       return;
@@ -95,16 +76,21 @@ const linkToolbarUI = {
   },
 
   clear: function(event) {
-    if(event.originalTarget != getBrowser().contentDocument
-        || !linkToolbarUI.isLinkToolbarEnabled())
-      return;
+    // When following a link of the form:
+    //   <a href="..." onclick="this.style.display='none'">.....</a>
+    //   (the onclick handler could be on an ancestor node of the link instead)
+    // the originalTarget of the unload event for leaving the current page becomes the Text node
+    // for the link, rather than the Document node.  So we use ownerDocument, but can't always do
+    // so, because the DOM2 spec defines that as being null for Document nodes.
+    var doc = event.originalTarget;
+    if(!(doc instanceof Components.interfaces.nsIDOMDocument)) doc = doc.ownerDocument;
+    // we only want to clear the toolbar if it's the currently visible document that is unloading
+    if(doc != getBrowser().contentDocument) return;
     linkToolbarHandler.clearAllItems();
   },
 
   tabSelected: function(event) {
-    if(event.originalTarget.localName != "tabs"
-        || !linkToolbarUI.isLinkToolbarEnabled())
-      return;
+    if(event.originalTarget.localName != "tabs") return;
     linkToolbarHandler.clearAllItems();
     linkToolbarUI.refresh();
 //    linkToolbarUI.fullSlowRefresh();
@@ -183,10 +169,11 @@ const linkToolbarUI = {
   pageLoaded: function(evt) {
     var doc = evt.originalTarget;
 
+    if(doc != getBrowser().contentDocument) return;
+
     linkFinder.findLinks(doc);
     linkToolbarUI.getMetaLinks(doc);
 
-    if(doc != getBrowser().contentDocument) return;
     if(linkToolbarHandler.hasItems) return;
 
     linkToolbarUI.hasItems = false;
@@ -303,7 +290,7 @@ const linkToolbarUI = {
     item.setAttribute("checked",iconsonly);
   },
 
-  // "handler for link-added active" is what this means (i think)
+
   handlersActive: false,
 
   initHandlers: function() {
