@@ -93,6 +93,8 @@ const linkToolbarHandler = {
       case "contents":
       case "toc":
         return "toc";
+      case "prefetch":
+        return null;
       default:
         return relAttribute.toLowerCase();
     }
