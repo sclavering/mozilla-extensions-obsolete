@@ -32,7 +32,102 @@ function removeToolboxListeners() {
     gToolboxes[i].removeEventListener("dragexit", onToolbarDragExit, false);
     gToolboxes[i].removeEventListener("dragdrop", onToolbarDragDrop, false);
   }
+  
+  // we're already overriding this function, and it gets called at the right time
+  // so we'll tag this in here
+  restoreContextMenus();
 }
+
+
+function restoreContextMenus() {
+  for(var i = 0; i < gToolboxes.length; i++) {
+    var toolbox = gToolboxes[i];
+    
+    toolbox.removeAttribute("context");
+    
+    var oldcontext = toolbox.getAttribute("oldcontext");
+    if(oldcontext) {
+      toolbox.setAttribute("context",oldcontext);
+      toolbox.removeAttribute("oldcontext");
+    }
+    
+    for(var j = 0; j < toolbox.childNodes.length; j++) {
+      var toolbar = toolbox.childNodes[j];
+      if(toolbar.localName!="toolbar") continue;
+      
+      toolbar.removeAttribute("context");
+      
+      var oldcontext = toolbar.getAttribute("oldcontext");
+      if(oldcontext) {
+        toolbar.setAttribute("context",oldcontext);
+        toolbar.removeAttribute("oldcontext");
+      }
+    }  
+  }
+}
+
+
+
+// overriding so that we can tag changing of context menus on to the end
+function initDialog() {
+  document.getElementById("main-box").collapsed = false;
+  
+  var mode = gToolbox.getAttribute("mode");
+  document.getElementById("modelist").value = mode;
+  var iconSize = gToolbox.getAttribute("iconsize");
+  var smallIconsCheckbox = document.getElementById("smallicons");
+  if (mode == "text")
+    smallIconsCheckbox.disabled = true;
+  else
+    smallIconsCheckbox.checked = iconSize == "small"; 
+
+  // Build up the palette of other items.
+  buildPalette();
+
+  // Wrap all the items on the toolbar in toolbarpaletteitems.
+  wrapToolbarItems();
+  
+  // extra 
+  replaceContextMenus();
+}
+
+function replaceContextMenus() {
+  for(var i = 0; i < gToolboxes.length; i++) {
+    var toolbox = gToolboxes[i];
+    
+    // always disable standard context menu
+    var context = toolbox.getAttribute("contextmenu");
+    if(context) {
+      toolbox.setAttribute("oldcontext", context);
+      toolbox.removeAttribute("contextmenu");
+    }
+    var customiseContext = toolbox.getAttribute("customiseContext");
+    if(customiseContext) toolbox.setAttribute("context",customiseContext);
+    
+    for(var j = 0; j < toolbox.childNodes.length; j++) {
+      var toolbar = toolbox.childNodes[j];
+      
+      var tcontext = toolbar.getAttribute("context");
+      if(tcontext) {
+        toolbar.setAttribute("oldcontext",tcontext);
+        toolbar.removeAttribute("context");
+      }
+      
+      var tCustomiseContext = toolbar.getAttribute("customise-context");
+      if(tCustomiseContext) {
+        toolbar.setAttribute("context",tCustomiseContext);
+      } else if(customiseContext) {
+        toolbar.setAttribute("context",customiseContext);
+      }
+    }
+  }
+}
+
+
+
+
+
+
 
 
 function persistCurrentSets() {
@@ -88,22 +183,23 @@ function wrapToolbarItems() {
   for(var j = 0; j < gToolboxes.length; j++) {
     var toolbox = gToolboxes[j];
     
-    for (var i = 0; i < toolbox.childNodes.length; ++i) {
+    for(var i = 0; i < toolbox.childNodes.length; ++i) {
       var toolbar = toolbox.childNodes[i];
-      if (isCustomizableToolbar(toolbar)) {
-        for (var k = 0; k < toolbar.childNodes.length; ++k) {
-          var item = toolbar.childNodes[k];
-          if (isToolbarItem(item)) {
-            var nextSibling = item.nextSibling;
-            
-            var wrapper = wrapToolbarItem(item);
-            
-            if (nextSibling)
-              toolbar.insertBefore(wrapper, nextSibling);
-            else
-              toolbar.appendChild(wrapper);
-          }
-        }
+      if(!isCustomizableToolbar(toolbar)) continue;
+
+      for(var k = 0; k < toolbar.childNodes.length; ++k) {
+        var item = toolbar.childNodes[k];
+      
+        if(!isToolbarItem(item)) continue;
+        
+        var nextSibling = item.nextSibling;
+        
+        var wrapper = wrapToolbarItem(item);
+        
+        if(nextSibling)
+          toolbar.insertBefore(wrapper, nextSibling);
+        else
+          toolbar.appendChild(wrapper);
       }
     }
   }
@@ -221,48 +317,58 @@ function doAddNewToolbar(toolboxIndex, name) {
 
 
 
-
-// xxx: fix these
-function updateIconSize(aUseSmallIcons)
-{
+/* we are deliberately not overriding updateIconSize and updateToolbarMode,
+   because I like it this way :) * /
+function updateIconSize(aUseSmallIcons) {
   var val = aUseSmallIcons ? "small" : null;
   
-  setAttribute(gToolbox, "iconsize", val);
-  gToolboxDocument.persist(gToolbox.id, "iconsize");
-  
-  for (var i = 0; i < gToolbox.childNodes.length; ++i) {
-    var toolbar = getToolbarAt(i);
-    if (isCustomizableToolbar(toolbar)) {
-      setAttribute(toolbar, "iconsize", val);
-      gToolboxDocument.persist(toolbar.id, "iconsize");
+  for(var j = 0; j < gToolboxes.length; j++) {
+    var toolbox = gToolboxes[j];
+    
+    // the default theme doens't use these, but other themes might be
+    // (since they were in the original code)
+    setAttribute(toolbox, "iconsize", val);
+    gToolboxDocument.persist(toolbox.id, "iconsize");
+    
+    for(var i = 0; i < toolbox.childNodes.length; ++i) {
+      var toolbar = toolbox.childNodes[i];
+      if(isCustomizableToolbar(toolbar)) {
+        setAttribute(toolbar, "iconsize", val);
+        gToolboxDocument.persist(toolbar.id, "iconsize");
+      }
     }
   }
-
+  
   repositionDialog();
 }
 
 
 function updateToolbarMode(aModeValue) {
-  setAttribute(gToolbox, "mode", aModeValue);
-  gToolboxDocument.persist(gToolbox.id, "mode");
-
-  for (var i = 0; i < gToolbox.childNodes.length; ++i) {
-    var toolbar = getToolbarAt(i);
-    if (isCustomizableToolbar(toolbar)) {
-      setAttribute(toolbar, "mode", aModeValue);
-      gToolboxDocument.persist(toolbar.id, "mode");
+  
+  for(var j = 0; j < gToolboxes.length; j++) {
+    var toolbox = gToolboxes[j];
+    
+    setAttribute(toolbox, "mode", aModeValue);
+    gToolboxDocument.persist(toolbox.id, "mode");
+  
+    for (var i = 0; i < toolbox.childNodes.length; ++i) {
+      var toolbar = toolbox.childNodes[i];
+      if (isCustomizableToolbar(toolbar)) {
+        setAttribute(toolbar, "mode", aModeValue);
+        gToolboxDocument.persist(toolbar.id, "mode");
+      }
     }
   }
 
   var iconSizeCheckbox = document.getElementById("smallicons");
-  if (aModeValue == "text") {
+  if(aModeValue == "text") {
     iconSizeCheckbox.disabled = true;
     iconSizeCheckbox.checked = false;
     updateIconSize(false);
-  }
-  else {
+  } else {
     iconSizeCheckbox.disabled = false;
   }
 
   repositionDialog();
 }
+*/
