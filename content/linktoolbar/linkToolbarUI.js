@@ -91,11 +91,10 @@ const linkToolbarUI = {
   },
 
   isLinkToolbarEnabled: function() {
-    try {
-      if (document.getElementById("linktoolbar").getAttribute("hidden") == "true")
-        return false;
-      return true;
-    } catch(e) { return false }
+    var bar = document.getElementById("linktoolbar");
+    if(!bar) return false; // it's on the Fb toolbar customisation palette
+    if(bar.getAttribute("hidden")=="true") return false;
+    return true;
   },
 
   clear: function(event) {
@@ -239,43 +238,49 @@ const linkToolbarUI = {
       toolbar.setAttribute("hidden", checkedItem.value);
       document.persist("linktoolbar", "hidden");
     }
-    this.initHandlers();
-    if(this.isLinkToolbarEnabled()) this.fullSlowRefresh();
-    else linkToolbarHandler.clearAllItems();
+    if(this.isLinkToolbarEnabled()) {
+      this.addHandlers();
+      this.fullSlowRefresh();
+    } else {
+      this.removeHandlers();
+      linkToolbarHandler.clearAllItems();
+    }
   },
 
   initLinkbarVisibilityMenu: function() {
     var state = document.getElementById("linktoolbar").getAttribute("hidden");
-    if (!state) state = "maybe";
+    if(!state) state = "maybe";
     var checkedItem = document.getElementById("cmd_viewlinktoolbar_" + state);
     checkedItem.setAttribute("checked", true);
     checkedItem.checked = true;
   },
 
   // "handler for link-added active" is what this means (i think)
-  addHandlerActive: false,
+  handlersActive: false,
 
   initHandlers: function() {
+    if(linkToolbarUI.isLinkToolbarEnabled()) this.addHandlers();
+    else this.removeHandlers();
+  },
+  addHandlers: function() {
+    if(linkToolbarUI.handlersActive) return;
     var contentArea = document.getElementById("appcontent");
-    if (linkToolbarUI.isLinkToolbarEnabled()) {
-      if (!linkToolbarUI.addHandlerActive) {
-        contentArea.addEventListener("select", linkToolbarUI.tabSelected, false);
-        contentArea.addEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
-        contentArea.addEventListener("unload", linkToolbarUI.clear, true);
-        contentArea.addEventListener("load", linkToolbarUI.pageLoaded, true);
-        contentArea.addEventListener("DOMHeadLoaded", linkToolbarUI.pageLoaded, true);
-        linkToolbarUI.addHandlerActive = true;
-      }
-    } else {
-      if (linkToolbarUI.addHandlerActive) {
-        contentArea.removeEventListener("select", linkToolbarUI.tabSelected, false);
-        contentArea.removeEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
-        contentArea.removeEventListener("unload", linkToolbarUI.clear, true);
-        contentArea.removeEventListener("load", linkToolbarUI.pageLoaded, true);
-        contentArea.removeEventListener("DOMHeadLoaded", linkToolbarUI.pageLoaded, true);
-        linkToolbarUI.addHandlerActive = false;
-      }
-    }
+    contentArea.addEventListener("select", linkToolbarUI.tabSelected, false);
+    contentArea.addEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
+    contentArea.addEventListener("unload", linkToolbarUI.clear, true);
+    contentArea.addEventListener("load", linkToolbarUI.pageLoaded, true);
+    contentArea.addEventListener("DOMHeadLoaded", linkToolbarUI.pageLoaded, true);
+    linkToolbarUI.handlersActive = true;
+  },
+  removeHandlers: function() {
+    if(!linkToolbarUI.handlersActive) return;
+    var contentArea = document.getElementById("appcontent");
+    contentArea.removeEventListener("select", linkToolbarUI.tabSelected, false);
+    contentArea.removeEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
+    contentArea.removeEventListener("unload", linkToolbarUI.clear, true);
+    contentArea.removeEventListener("load", linkToolbarUI.pageLoaded, true);
+    contentArea.removeEventListener("DOMHeadLoaded", linkToolbarUI.pageLoaded, true);
+    linkToolbarUI.handlersActive = false;
   },
 
   // multiline tooltips.  text is loaded from tooltiptext[012] attributes
@@ -292,12 +297,9 @@ const linkToolbarUI = {
     return ((text1 && text1!="") || (text2 && text2!=""));
   },
   fillTooltipLine: function(line, text) {
-    if(text && text!="") {
-      line.value = text;
-      line.hidden = false;
-    } else {
-      line.hidden = true;
-    }
+    var notempty = (text && text!="");
+    if(notempty) line.value = text;
+    line.hidden = !notempty;
   },
 
   onload: function() {
