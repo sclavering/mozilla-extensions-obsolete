@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<overlay id="titleless"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<window id="main-window" hidechrome="true"/>
+
+<toolbar id="toolbar-menubar" position="500">
+  <hbox id="menubar-window-controls">
+    <toolbarbutton id="minimize-button" class="toolbarbutton-1" oncommand="window.minimize();"/>
+    <toolbarbutton id="restore-button" class="toolbarbutton-1" oncommand="BrowserFullScreen();"/>
+    <toolbarbutton id="close-button" class="toolbarbutton-1" oncommand="window.close();"/>
+  </hbox>
+</toolbar>
+
+</overlay>

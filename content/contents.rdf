@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
+
+  <RDF:Seq about="urn:mozilla:package:root">
+    <RDF:li resource="urn:mozilla:package:titleless"/>
+  </RDF:Seq>
+
+  <RDF:Description about="urn:mozilla:package:titleless"
+      chrome:displayName="Titleless 0.3"
+      chrome:author="Stephen Clavering"
+      chrome:name="titleless"
+      chrome:description="Removes the title bar from the main Firefox window."
+      chrome:extension="true"
+      />
+
+  <RDF:Seq about="urn:mozilla:overlays">
+    <RDF:li resource="chrome://browser/content/browser.xul"/>
+  </RDF:Seq>
+  <RDF:Seq about="chrome://browser/content/browser.xul">
+    <RDF:li>chrome://titleless/content/titleless.xul</RDF:li>
+  </RDF:Seq>
+</RDF:RDF>
