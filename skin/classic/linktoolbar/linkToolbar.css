@@ -66,6 +66,20 @@
   -moz-image-region: rect(32px 32px 48px 16px);
 }
 
+#link-up .toolbarbutton-text {
+  display: inline !important;
+}
+
+#link-up > .toolbarbutton-menubutton-dropmarker,
+#link-next > .toolbarbutton-menubutton-dropmarker {
+  list-style-image: url("chrome://linktoolbar/skin/btn1/up.gif");
+}
+
+#link-up[disabled="true"] > .toolbarbutton-menubutton-dropmarker,
+#link-next[disabled="true"] > .toolbarbutton-menubutton-dropmarker {
+  list-style-image: url("chrome://linktoolbar/skin/btn1/up-dis.gif") !important;
+}
+
 #link-first {
   -moz-image-region: rect(0 48px 16px 32px);
 }
@@ -109,6 +123,14 @@
 /* would be unnecessary but for !importants sprinkled throughout browser.css and related files */
 }
 
+#linktoolbar-toggle {
+  list-style-image: url("chrome://linktoolbar/skin/btn1/chevron.gif");
+  padding: 2px 0;
+}
+
+#linktoolbar-toggle[left="true"] {
+  list-style-image: url("chrome://linktoolbar/skin/btn1/norvehc.gif");
+}
 
 /* Hide the link toolbar if it is set to autohide is empty */
 
