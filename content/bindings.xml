@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+
+<bindings id="ToolbarExtBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+ 
+  <!-- A toolbox that uses another toolbox's palette. 
+       This is the same as the standard toolbar binding except for the |palette| field, which has
+       been replaced here by a palette property.  Extending the existing binding did not work,
+       possibly because a property cannot override a field? -->
+  <binding id="linked-toolbox" extends="chrome://global/content/widgets/toolbar.xml#toolbar-base">  
+    <implementation>
+      <field name="_palette">null</field>
+      
+      <property name="palette">
+        <getter><![CDATA[
+          if(!this._palette) {
+            var linkedbox = this.getAttribute("linkedto");
+            linkedbox = document.getElementById(linkedbox);
+            this._palette = linkedbox.palette;
+          }
+          return this._palette;
+        ]]></getter>
+        <setter>
+          throw "ToolbarExt: Linked-Toolbox Binding: tried to set palette property!";
+        </setter>
+      </property>
+
+      <!-- everything from here on duplicated from standard toolbox binding -->
+      <field name="toolbarset">
+        null
+      </field>
+      
+      <field name="customToolbarCount">
+        0
+      </field>
+      
+      <constructor>
+        <![CDATA[
+          // Look to see if there is a toolbarset.
+          this.toolbarset = this.firstChild;
+          while (this.toolbarset && this.toolbarset.localName != "toolbarset")
+            this.toolbarset = toolbarset.nextSibling;
+          
+          if (this.toolbarset) {
+            // Create each toolbar described by the toolbarset.
+            var index = 0;
+            while (toolbarset.hasAttribute("toolbar"+(++index))) {
+              var toolbarInfo = toolbarset.getAttribute("toolbar"+index);
+              var infoSplit = toolbarInfo.split(":");
+              this.appendCustomToolbar(infoSplit[0], infoSplit[1]);
+            }
+          }
+          
+          //throw "linked toolbox constructed";
+        ]]>
+      </constructor>
+      
+      <method name="appendCustomToolbar">
+        <parameter name="aName"/>
+        <parameter name="aCurrentSet"/>
+        <body>
+          <![CDATA[            
+            var toolbar = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul",
+                                                  "toolbar");
+            toolbar.id = "__customToolbar_" + aName.replace(" ", "");
+            toolbar.setAttribute("customizable", "true");
+            toolbar.setAttribute("customindex", ++this.customToolbarCount);
+            toolbar.setAttribute("toolbarname", aName);
+            toolbar.setAttribute("currentset", aCurrentSet);
+            toolbar.setAttribute("mode", this.getAttribute("mode"));
+            toolbar.setAttribute("iconsize", this.getAttribute("iconsize"));
+            toolbar.setAttribute("context", this.toolbarset.getAttribute("context"));
+            toolbar.setAttribute("class", "chromeclass-toolbar");
+            
+            this.insertBefore(toolbar, this.toolbarset);
+            return toolbar;
+          ]]>
+        </body>
+      </method>
+    </implementation>
+  </binding>
+  
+</bindings>

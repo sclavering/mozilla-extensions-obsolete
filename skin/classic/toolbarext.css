@@ -1,5 +1,7 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
+/* extra toolbar buttons */
+
 #toolbarext-options {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 32px 32px 0);
@@ -89,6 +91,12 @@ toolbar[iconsize="small"] #toolbarext-pageinfo {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 200px 20px 180px);
 }
+
+
+/* for newly created vertical toolbars */
+toolbox[vertical="true"] > toolbar { min-width: 20px; }
+
+
 
 .tabs-newbutton {
   -moz-image-region: rect(0px, 8px, 8px, 0px);

@@ -23,8 +23,10 @@
   <toolbarbutton id="history-button" onclick="ToolbarExt.historyPanel(event);"/>
   <toolbarbutton id="bookmarks-button" onclick="ToolbarExt.bookmarksPanel(event);"/>
 
-  <!-- override the bookmarks toolbar folder and make it rooted on the bookmarks root -->
+  <!-- override the bookmarks toolbar folder and make it rooted on the bookmarks root
+       broken.  (causes js errors)
   <hbox id="bookmarks-ptf" ref="NC:BookmarksRoot"/>
+  -->
 
   <!-- add new buttons -->
   <toolbarpalette id="BrowserToolbarPalette">
@@ -88,4 +90,39 @@
         />
   </toolbarpalette>
 
+
+  <!-- override customise toolbars, so we can pass all our toolboxes as extra args to the palette window -->
+  <command id="cmd_CustomizeToolbars" oncommand="ToolbarExt_BrowserCustomizeToolbar();"/>
+
+  <!-- toolboxes need a name for the Add Toolbar feature.
+       (for browser we just use the location) -->
+  <toolbox id="navigator-toolbox" toolboxname="Top"/>
+  
+  <!-- another toolbox at the bottom of the window -->
+  <window id="main-window">
+    <toolbox id="toolbarext-bottom-toolbox" insertbefore="status-bar" toolboxname="Bottom"
+        linkedto="navigator-toolbox" context="toolbar-context-menu"
+        mode="icons" iconsize="small"
+        >
+      <toolbarset id="toolbarext-bottom-toolbars" context="toolbar-context-menu"/>
+    </toolbox>
+  </window>
+  
+  <!-- toolboxes at left and right -->
+  <hbox id="browser">
+    <toolbox id="toolbarext-left-toolbox" insertbefore="sidebar-box" toolboxname="Left"
+        vertical="true"
+        linkedto="navigator-toolbox" context="toolbar-context-menu"
+        mode="icons" iconsize="small"
+        >
+      <toolbarset id="toolbarext-left-toolbars" context="toolbar-context-menu"/>
+    </toolbox>
+    <toolbox id="toolbarext-right-toolbox" insertafter="appcontent" toolboxname="Right"
+        vertical="true"
+        linkedto="navigator-toolbox" context="toolbar-context-menu"
+        mode="icons" iconsize="small"
+        >
+      <toolbarset id="toolbarext-right-toolbars" context="toolbar-context-menu"/>
+    </toolbox>
+  </hbox>
 </overlay>

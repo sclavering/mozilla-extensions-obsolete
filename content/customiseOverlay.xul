@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<!-- overlayed onto chrome://global/content/customizeToolbar.xul -->
+
+<overlay id="toolbarextCustomiseOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+  <script type="application/x-javascript" src="customiseOverlay.js"/>
+  
+</overlay>
