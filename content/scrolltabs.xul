@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<!-- registering stylesheets via contents.rdf does not work reliably,
+     so we use this otherwise pointless overlay -->
+
+<?xml-stylesheet href="chrome://scrolltabs/content/scrolltabs.css" type="text/css"?>
+<?xml-stylesheet href="chrome://scrolltabs/skin/scrolltabs.css" type="text/css"?>
+
+<window id="main-window"/>

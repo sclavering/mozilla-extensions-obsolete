@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+
+<bindings id="scrolltabs-bindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="tabs" display="xul:box"
+           extends="chrome://global/content/bindings/tabbox.xml#tabs">
+    <content>
+      <xul:hbox flex="1" style="overflow:hidden">
+        <xul:spacer class="tabs-left"/>
+        <children/>
+        <xul:spacer class="tabs-right" flex="1"/>
+      </xul:hbox>
+      <!-- we have to stop the dblclick's propagating or they cause new tabs to be created -->
+      <xul:toolbarbutton class="tabs-scroll-left-button" xbl:inherits="disabled=disableScrollTabsLeft"
+          oncommand="this.parentNode.collapsedTabs--;"
+          ondblclick="event.stopPropagation();"/>
+      <xul:toolbarbutton class="tabs-scroll-right-button" xbl:inherits="disabled=disableScrollTabsRight"
+          oncommand="this.parentNode.collapsedTabs++;"
+          ondblclick="event.stopPropagation();"/>
+    </content>
+
+    <implementation implements="nsIDOMXULSelectControlElement, nsIAccessibleProvider">
+      <constructor>
+        var fst = this.firstChild;
+        if(fst) { // just in case
+          fst.removeAttribute("flex");
+          fst.removeAttribute("width");
+          fst.removeAttribute("minwidth");
+          fst.removeAttribute("maxwidth");
+        }
+        this.canScrollTabsLeft = false;
+        this.canScrollTabsRight = false;
+      </constructor>
+
+      <field name="_appendChild">this.appendChild</field>
+      <method name="appendChild">
+        <parameter name="aElt"/>
+        <body>
+          aElt.removeAttribute("flex");
+          aElt.removeAttribute("width");
+          // min-width and max-width are handled in css
+          aElt.removeAttribute("minwidth");
+          aElt.removeAttribute("maxwidth");
+          this._appendChild(aElt);
+        </body>
+      </method>
+
+      <property name="canScrollTabsLeft">
+        <getter>
+          return !this.hasAttribute("disableScrollTabsLeft");
+        </getter>
+        <setter>
+          if(val!=this.canScrollTabsLeft) {
+            if(val) this.removeAttribute("disableScrollTabsLeft");
+            else this.setAttribute("disableScrollTabsLeft","true");
+          }
+          return val;
+        </setter>
+      </property>
+
+      <property name="canScrollTabsRight">
+        <getter>
+          return !this.hasAttribute("disableScrollTabsRight");
+        </getter>
+        <setter>
+          if(val!=this.canScrollTabsRight) {
+            if(val) this.removeAttribute("disableScrollTabsRight");
+            else this.setAttribute("disableScrollTabsRight","true");
+          }
+          return val;
+        </setter>
+      </property>
+
+      <field name="_collapsedTabs">0</field>
+      <property name="collapsedTabs"
+          onget="return this._collapsedTabs">
+        <setter>
+        <![CDATA[
+          const tabs = this.childNodes;
+          var i;
+          for(i = this._collapsedTabs; i < val; i++) tabs[i].collapsed = true;
+          for(i = val; i < this._collapsedTabs; i++) tabs[i].collapsed = false;
+          this._collapsedTabs = val;
+
+          this.canScrollTabsLeft = (val !== 0);
+          this.canScrollTabsRight = (val != tabs.length-1);
+
+          return val;
+        ]]>
+        </setter>
+      </property>
+
+      <method name="ensureTabIsVisible">
+        <parameter name="aIndex"/>
+        <body>
+        <![CDATA[
+          // unhide if required
+          if(aIndex < this.collapsedTabs) {
+            this.collapsedTabs = aIndex;
+          }
+          // hide some tabs if required
+          else {
+            const tabs = this.childNodes;
+            var tab = tabs[aIndex];
+
+            var amountToCollapse = tab.boxObject.x + tab.boxObject.width - this.boxObject.width;
+            if(amountToCollapse > 0) {
+              var amount = 0, i = this.collapsedTabs;
+              while(amount < amountToCollapse) {
+                amount += tabs[i].boxObject.width;
+                i++;
+              }
+
+              this.collapsedTabs = i;
+            }
+          }
+        ]]>
+        </body>
+      </method>
+
+      <!-- this is like the original version, except the setter calls ensureTabIsVisible -->
+      <property name="selectedIndex">
+        <getter>
+        <![CDATA[
+          const tabs = this.childNodes;
+          for (var i = 0; i < tabs.length; i++) {
+            if (tabs[i].selected)
+              return i;
+          }
+          // throw an exception when no tab is selected (we shouldn't get here)
+          throw Components.results.NS_ERROR_FAILURE;
+        ]]>
+        </getter>
+
+        <setter>
+        <![CDATA[
+          const tabs = this.childNodes;
+          if (0 <= val && val < tabs.length && !tabs[val].selected) {
+
+            for (var i = 0; i < tabs.length; i++)
+              if (i != val && tabs[i].selected)
+                tabs[i].selected = false;
+
+            tabs[val].selected = true;
+
+            for (var parent = this.parentNode; parent; parent = parent.parentNode) {
+              if (parent.localName == 'tabbox') {
+                var tabpanels = parent._tabpanels;
+                // This will cause an onselect event to fire for the tabpanel element.
+                if (tabpanels) {
+                  // find an id
+                  var linkedPanelId = tabs[val].linkedPanel;
+                  var linkedPanel = linkedPanelId ? document.getElementById(linkedPanelId) : null;
+                  if (linkedPanel)
+                    tabpanels.selectedPanel = linkedPanel;
+                  else
+                    tabpanels.selectedIndex = val;
+                }
+                break;
+              }
+            }
+
+            // xxx should we do this earlier?
+            this.ensureTabIsVisible(val);
+
+            // Fire an onselect event for the tabs element.
+            var event = document.createEvent('Events');
+            event.initEvent('select', false, true);
+            this.dispatchEvent(event);
+          }
+          return val;
+        ]]>
+        </setter>
+      </property>
+
+    </implementation>
+  </binding>
+
+</bindings>

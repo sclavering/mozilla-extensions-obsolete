@@ -1,0 +1,16 @@
+.tabs-scroll-left-button {
+  list-style-image: url(buttons.png);
+  -moz-image-region: rect(0 10px 9px 0);
+}
+.tabs-scroll-right-button {
+  list-style-image: url(buttons.png);
+  -moz-image-region: rect(0 20px 9px 10px);
+}
+
+.tabs-scroll-left-button[disabled="true"] {
+  -moz-image-region: rect(9px 10px 18px 0);
+}
+.tabs-scroll-right-button[disabled="true"] {
+  -moz-image-region: rect(9px 20px 18px 10px);
+}
+
