@@ -54,7 +54,7 @@ function LinkToolbarItem (linkType) {
 
   this.clear = function() {
     this.disableParentMenuButton();
-    this.getXULElement().setAttribute("disabled", "true");
+    this.xulElement.disabled = true;
     this.xulElement.hidden = true;
     this.getXULElement().removeAttribute("href");
     this.getXULElement().removeAttribute("tooltiptext1");
@@ -70,7 +70,7 @@ function LinkToolbarItem (linkType) {
 
   this.setItem = function(linkElement) {
     this.getXULElement().setAttribute("href", linkElement.href);
-    this.getXULElement().removeAttribute("disabled");
+    this.xulElement.disabled = false;
     this.xulElement.hidden = false;
     // lines will be hidden if blank
     this.getXULElement().setAttribute("tooltiptext1", linkElement.getLongTitle());
@@ -79,20 +79,20 @@ function LinkToolbarItem (linkType) {
 
   this.enableParentMenuButton = function() {
     if(this.getParentMenuButton()) {
-      this.getParentMenuButton().removeAttribute("disabled");
+      this.getParentMenuButton().disabled = false;
       this.getParentMenuButton().hidden = false;
     }
   }
 
   this.disableParentMenuButton = function() {
     if (!this.parentMenuButton) return;
-    this.parentMenuButton.setAttribute("disabled", "true");
+    this.parentMenuButton.disabled = true;
     this.parentMenuButton = null;
   }
 
   this.getParentMenuButton = function() {
     if(!this.parentMenuButton) {
-      var node = this.getXULElement();
+      var node = this.xulElement;
       while(node.tagName!="toolbarbutton") node = node.parentNode;
       this.parentMenuButton = node;
     }
@@ -106,7 +106,7 @@ function LinkToolbarButton (linkType) {
 
   // override because we want buttons disabled, not hidden
   this.clear = function() {
-    this.getXULElement().setAttribute("disabled", "true");
+    this.xulElement.disabled = true;
     this.getXULElement().removeAttribute("href");
     this.getXULElement().removeAttribute("tooltiptext1");
     this.getXULElement().removeAttribute("tooltiptext2");
@@ -125,7 +125,7 @@ function LinkToolbarMenu (linkType) {
 
   this.clear = function() {
     this.disableParentMenuButton();
-    this.getXULElement().setAttribute("disabled", "true");
+    this.xulElement.disabled = true;
     this.xulElement.hidden = true;
     var popup = this.getPopup();
     while (popup.hasChildNodes())
@@ -139,7 +139,7 @@ function LinkToolbarMenu (linkType) {
 
   this.displayLink = function(linkElement) {
     this.addMenuItem(linkElement);
-    this.getXULElement().removeAttribute("disabled");
+    this.xulElement.disabled = false;
     this.xulElement.hidden = false;
     this.enableParentMenuButton();
     return true;
@@ -150,8 +150,6 @@ function LinkToolbarMenu (linkType) {
   }
 
   this.createMenuItem = function(linkElement) {
-    // XXX: clone a prototypical XUL element instead of hardcoding these
-    //   attributes
     var menuitem = document.createElement("menuitem");
 
     menuitem.setAttribute("tooltiptext1", linkElement.title);
