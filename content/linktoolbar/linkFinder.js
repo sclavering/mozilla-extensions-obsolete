@@ -34,7 +34,7 @@ var linkToolbarLinkFinder = {
 
     var url = location.href;
     // the char index in the url at which the path+search+hash section begins (2 is for the //)
-    var min = location.hostname.length + location.protocol.length + 2;
+    var min = location.host.length + location.protocol.length + 2;
 
     var e, s;
     for(e = url.length; e > min && !isDigit(url[e-1]); --e);
