@@ -48,6 +48,9 @@
 <!ENTITY linkToolbarNever.label "Hide Always">
 <!ENTITY linkToolbarNever.accesskey "H">
 
+<!ENTITY linkToolbarIconsOnly.label "Icons Only">
+<!ENTITY linkToolbarIconsOnly.accesskey "I">
+
 <!-- Toolbar buttons, menus, and menuitems -->
 <!ENTITY topButton.label "Top">
 <!ENTITY upButton.label "Up">

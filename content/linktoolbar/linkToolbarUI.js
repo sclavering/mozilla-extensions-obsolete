@@ -246,13 +246,28 @@ const linkToolbarUI = {
       linkToolbarHandler.clearAllItems();
     }
   },
+  toggleIconsOnly: function(menuitem) {
+    var toolbar = document.getElementById("linktoolbar");
+    alert(menuitem +" "+menuitem.getAttribute("checked"));
+    if(menuitem.getAttribute("checked")=="true")
+      toolbar.setAttribute("iconsonly","true");
+    else
+      toolbar.removeAttribute("iconsonly");
+    document.persist("linktoolbar","iconsonly");
+  },
+    
 
   initLinkbarVisibilityMenu: function() {
-    var state = document.getElementById("linktoolbar").getAttribute("hidden");
+    var bar = document.getElementById("linktoolbar");
+    var state = bar.getAttribute("hidden");
     if(!state) state = "maybe";
     var checkedItem = document.getElementById("cmd_viewlinktoolbar_" + state);
     checkedItem.setAttribute("checked", true);
     checkedItem.checked = true;
+    // icons only toggle
+    var iconsonly = (bar.getAttribute("iconsonly")=="true");
+    var item = document.getElementById("linktoolbar-iconsonly");
+    item.setAttribute("checked",iconsonly);
   },
 
   // "handler for link-added active" is what this means (i think)

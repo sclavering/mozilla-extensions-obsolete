@@ -71,6 +71,9 @@
                   accesskey="&linkToolbarNever.accesskey;"
                   class="menuitem-iconic" type="radio" value="true"
                   name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_true" />
+         <menuseparator/>
+         <menuitem id="linktoolbar-iconsonly" type="checkbox" oncommand="linkToolbarUI.toggleIconsOnly(this);"
+            label="&linkToolbarIconsOnly.label;" accesskey="&linkToolbarIconsOnly.accesskey;"/>
       </menupopup>
     </menu>
   </menupopup>
