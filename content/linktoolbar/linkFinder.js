@@ -16,11 +16,11 @@ var linkToolbarLinkFinder = {
   guessUpAndTopFromURL: function(doc, doclinks, url) {
     if(!("top" in doclinks)) {
       var topurl = url.match(/^[^\/]*?:\/\/[^\/]*\//);
-      if(topurl) this.addLink(doc, topurl[0], "top", null, null);
+      if(topurl) this.addLink(doc, {top:true}, topurl[0], null, null);
     }
     if(!("up" in doclinks)) {
       var upurl = this.getUp(url);
-      if(upurl) this.addLink(doc, upurl, "up", null, null);
+      if(upurl) this.addLink(doc, {up:true}, upurl, null, null);
     }
   },
 
@@ -44,12 +44,12 @@ var linkToolbarLinkFinder = {
     if(addPrev) {
       var prv = ""+(num-1);
       while(prv.length < old.length) prv = "0" + prv;
-      this.addLink(doc, pre+prv+post, "prev", null, null);
+      this.addLink(doc, {prev:true}, pre+prv+post, null, null);
     }
     if(addNext) {
       var nxt = ""+(num+1);
       while(nxt.length < old.length) nxt = "0" + nxt;
-      this.addLink(doc, pre+nxt+post, "next", null, null);
+      this.addLink(doc, {next:true}, pre+nxt+post, null, null);
     }
   },
 
@@ -79,19 +79,17 @@ var linkToolbarLinkFinder = {
         continue; // no point using the regexps
       }
 
-      if(this.re_next.test(title)) rels["next"] = true;
-      else if(this.re_prev.test(title)) rels["prev"] = true;
-      else if(this.re_first.test(title)) rels["first"] = true;
-      else if(this.re_last.test(title)) rels["last"] = true;
+      if(this.re_next.test(title)) rels.next = true;
+      else if(this.re_prev.test(title)) rels.prev = true;
+      else if(this.re_first.test(title)) rels.first = true;
+      else if(this.re_last.test(title)) rels.last = true;
 
-      for(var rel in rels) this.addLink(doc, href, rel, title, title);
+      this.addLink(doc, rels, href, title, title);
     }
   },
 
 
-  addLink: function(doc, url, rel, title, longTitle) {
-    var rels = [];
-    rels[rel] = true;
+  addLink: function(doc, rels, url, title, longTitle) {
     var info = {href: url, title: title, longTitle: longTitle};
     linkToolbarUI.addLink(info, doc, rels);
   },
@@ -122,28 +120,28 @@ var linkToolbarLinkFinder = {
   // get the text contained in a link, and any guesses for rel based on img url
   getTextAndImgRels: function(el, rels) {
     var s = "";
-    // use alt text for images and image map areas
-    if((el instanceof HTMLImageElement) || (el instanceof HTMLAreaElement)) {
-      // should this have spaces wrapped round it?
-      s = el.alt;
+    var node = el.firstChild, lastNode = el.nextSibling;
+    while(node && node!=lastNode) {
+      var t = null;
+      if(node.nodeType==3 || node.nodeType==2) {
+        t = node.nodeValue; // CDATA and Text nodes
+      } else if((node instanceof HTMLImageElement) || (node instanceof HTMLAreaElement)) {
+        t = node.alt;
+        // guess rel values from the URL. .src always gives an absolute URL, so we use getAttribute
+        var src = node.getAttribute("src");
+        if(this.img_re_next.test(src)) rels.next = true;
+        else if(this.img_re_prev.test(src)) rels.prev = true;
+        else if(this.img_re_first.test(src)) rels.first = true;
+        else if(this.img_re_last.test(src)) rels.last = true;
+      }
 
-      // guess rel values from the URL. .src always gives an absolute URL, so we use getAttribute
-      var src = el.getAttribute("src");
-      if(this.img_re_next.test(src)) rels["next"] = true;
-      else if(this.img_re_prev.test(src)) rels["prev"] = true;
-      else if(this.img_re_first.test(src)) rels["first"] = true;
-      else if(this.img_re_last.test(src)) rels["last"] = true;
-      return s;
+      if(t) s = s ? s+" "+t : t; // the space *is* important.  some sites (ebay) don't put a space btwn. text and images
+
+      var next = node.firstChild || node.nextSibling;
+      while(!next && node!=el) node = node.parentNode, next = node.nextSibling;
+      node = next;
     }
-    // deal with other elements
-    var kids = el.childNodes;
-    for(var i = 0; i != kids.length; i++) {
-      var kid = kids[i];
-      // add contents of CDATA or text nodes
-      if(kid.nodeType==3 || kid.nodeType==2) s += kid.nodeValue;
-      // call recursively for elements
-      else if(kid.nodeType==1) s += this.getTextAndImgRels(kid, rels);
-    }
+
     return s;
   }
 }
