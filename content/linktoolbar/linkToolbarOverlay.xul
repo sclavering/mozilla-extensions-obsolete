@@ -49,6 +49,7 @@
 ]>
 
 <overlay id="linkToolbarOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/x-javascript" src="linkFinder.js"/>
   <script type="application/x-javascript" src="linkToolbarHandler.js"/>
   <script type="application/x-javascript" src="linkToolbarItem.js"/>
   <script type="application/x-javascript" src="linkToolbarUI.js"/>

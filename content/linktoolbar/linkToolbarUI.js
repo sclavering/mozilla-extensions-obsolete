@@ -75,7 +75,7 @@ const linkToolbarUI = {
     var linkInfo = linkToolbarHandler.getLinkElementInfo(element);
     linkToolbarUI.addLink(linkInfo, doc);
   },
-  
+
   addLink: function(linkInfo, doc) {
     if(!linkInfo) return;
     if(doc == window._content.document) {
@@ -129,23 +129,23 @@ const linkToolbarUI = {
       node = node.nextSibling;
     }
   },
-  
+
   handleMetaLink: function(meta) {
     var linkInfo = linkToolbarHandler.getLinkHeaderInfo(meta.getAttribute("content"));
     if(linkInfo) this.addLink(linkInfo, meta.ownerDocument);
   },
-   
-  
+
+
   refresh: function() {
     var currentdoc = window._content.document;
     if(!("__lt__links" in currentdoc)) {
       this.hasItems = false;
       return;
-    }  
+    }
     var links = currentdoc.__lt__links;
     for(var i = 0; i < links.length; i++)
       linkToolbarHandler.handleLink(links[i]);
-    
+
     this.hasItems = (links.length!=0);
   },
 
@@ -174,7 +174,7 @@ const linkToolbarUI = {
     }
   },
 
-  
+
   /* When in "show as needed" mode we leave the bar visible after a page unloads
    * until the next page has loaded and we can be sure it has no links, at which
    * point this function is called.
@@ -182,13 +182,17 @@ const linkToolbarUI = {
    *  implemented yet)
    */
   pageLoaded: function(evt) {
-    if(evt.originalTarget != getBrowser().contentDocument) return;
+    var doc = evt.originalTarget;
+
+    linkFinder.findLinks(doc);
+
+    if(doc != getBrowser().contentDocument) return;
     if(linkToolbarHandler.hasItems) return;
-    
+
     linkToolbarUI.hasItems = false;
   },
 
-  
+
   /* The "hasitems" attribute is used to show/hide the toolbar in the
    * "show when needed mode. This property is used to set/clear it */
   _hasItems: false,
@@ -207,7 +211,7 @@ const linkToolbarUI = {
   commanded: function(event) {
     // ignore right clicks
     if(event.button==2) return;
-    
+
     // Return if this is one of the menubuttons.
     if(event.target.getAttribute("type") == "menu") return;
     if(!event.target.getAttribute("href")) return;
@@ -252,7 +256,7 @@ const linkToolbarUI = {
       openNewWindowWith(destURL, null, false);
       return;
   	}
-  	
+
   	var referrer = Components.classes["@mozilla.org/network/standard-url;1"]
   	                         .createInstance(Components.interfaces.nsIURI);
   	referrer.spec = window.content.location.href;
@@ -284,7 +288,7 @@ const linkToolbarUI = {
       toolbar.removeAttribute("iconsonly");
     document.persist("linktoolbar","iconsonly");
   },
-    
+
 
   initLinkbarVisibilityMenu: function() {
     var bar = document.getElementById("linktoolbar");
