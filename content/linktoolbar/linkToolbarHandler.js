@@ -148,11 +148,8 @@ var linkToolbarUtils = {
       case "prev":
       case "previous":
         return "next";
-      default:
-        // returning the revValue is not an option, because the
-        // toolbar is based on rel types, not rev types
-        return null;
     }
+    return null;
   }
 };
 
