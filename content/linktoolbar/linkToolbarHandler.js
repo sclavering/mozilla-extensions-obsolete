@@ -201,7 +201,7 @@ function()
 LinkElementDecorator.convertRevMade =
 function(rel, rev) 
 {
-  if (!rel && rev /\bmade\b/i.test(rev))
+  if (!rel && rev && /\bmade\b/i.test(rev))
     return rev;
   else
     return rel;
