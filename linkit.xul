@@ -68,7 +68,7 @@ function linkit(event) {
     var href = instag.getAttribute("href");
 
     // ignore non link <a>s, and internal links
-    if(!href) continue; // || /^#/i.test(href)) continue;
+    if(!href || /^#/i.test(href)) continue;
 
     // lose odd whitespace - replace with ' '
     var iText = linkit_getInnerText(instag).replace(/\s+/g," ");
