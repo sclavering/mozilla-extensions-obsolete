@@ -60,13 +60,25 @@
   </popupset>
 
 <keyset id="mainKeyset">
+  <key id="linktoolbar-key-top" keycode="&keycode.top;" modifiers="&modifiers.top;"
+      oncommand="linkToolbarGo('top');"/>
+  <key id="linktoolbar-key-up" keycode="&keycode.up;" modifiers="&modifiers.up;"
+      oncommand="linkToolbarGo('up');"/>
   <key id="linktoolbar-key-first" key="&key.first;" modifiers="&modifiers.first;"
+      oncommand="linkToolbarGo('first');"/>
+  <key id="linktoolbar-key2-first" keycode="&keycode2.first;" modifiers="&modifiers2.first;"
       oncommand="linkToolbarGo('first');"/>
   <key id="linktoolbar-key-prev" key="&key.prev;" modifiers="&modifiers.prev;"
       oncommand="linkToolbarGo('prev');"/>
+  <key id="linktoolbar-key2-prev" keycode="&keycode2.prev;" modifiers="&modifiers2.prev;"
+      oncommand="linkToolbarGo('prev');"/>
   <key id="linktoolbar-key-next" key="&key.next;" modifiers="&modifiers.next;"
       oncommand="linkToolbarGo('next');"/>
+  <key id="linktoolbar-key2-next" keycode="&keycode2.next;" modifiers="&modifiers2.next;"
+      oncommand="linkToolbarGo('next');"/>
   <key id="linktoolbar-key-last" key="&key.last;" modifiers="&modifiers.last;"
+      oncommand="linkToolbarGo('last');"/>
+  <key id="linktoolbar-key2-last" keycode="&keycode2.last;" modifiers="&modifiers2.last;"
       oncommand="linkToolbarGo('last');"/>
 </keyset>
 
