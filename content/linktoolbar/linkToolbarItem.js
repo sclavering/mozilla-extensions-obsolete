@@ -121,20 +121,15 @@ LinkToolbarButton.prototype = new LinkToolbarItem;
 
 function LinkToolbarMenu (linkType) {
   this.constructor(linkType);
-  this.xulPopup = null;
+  this.xulPopup = document.getElementById(this.xulPopupId);
 
   this.clear = function() {
     this.disableParentMenuButton();
     this.xulElement.disabled = true;
     this.xulElement.hidden = true;
-    var popup = this.getPopup();
+    var popup = this.xulPopup;
     while (popup.hasChildNodes())
       popup.removeChild(popup.lastChild);
-  }
-
-  this.getPopup = function() {
-    if(!this.xulPopup) this.xulPopup = document.getElementById(this.xulPopupId);
-    return this.xulPopup;
   }
 
   this.displayLink = function(linkElement) {
@@ -146,7 +141,7 @@ function LinkToolbarMenu (linkType) {
   }
 
   this.addMenuItem = function(linkElement) {
-    this.getPopup().appendChild(this.createMenuItem(linkElement));
+    this.xulPopup.appendChild(this.createMenuItem(linkElement));
   }
 
   this.createMenuItem = function(linkElement) {
