@@ -14,8 +14,8 @@
         chrome:authorURL="http://cdn.mozdev.org/"
         chrome:name="linkit"
         chrome:description="Adds useful 'link's to documents"
-        chrome:extension="true">
-  </RDF:Description>
+        chrome:extension="true"
+        />
 
   <!-- overlay information -->
   <RDF:Seq about="urn:mozilla:overlays">
