@@ -152,7 +152,8 @@ const linkToolbarUI = {
     }
   },
 
-  /* called whenever something on the toolbar gets an oncommand event */
+  // called whenever something on the toolbar gets an onclick event
+  // (onclick used to get middle-clicks.  otherwise we would use oncommand)
   commanded: function(event) {
     // Return if this is one of the menubuttons.
     if (event.target.getAttribute("type") == "menu") return;
@@ -228,7 +229,6 @@ const linkToolbarUI = {
       if (!linkToolbarUI.addHandlerActive) {
         contentArea.addEventListener("select", linkToolbarUI.tabSelected, false);
         contentArea.addEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
-
         linkToolbarUI.addHandlerActive = true;
       }
     } else {
@@ -250,7 +250,7 @@ const linkToolbarUI = {
     linkToolbarUI.fillTooltipLine(line,text1);
     line = document.getElementById("linktoolbar-tooltip-2");
     linkToolbarUI.fillTooltipLine(line,text2);
-    // stop the tooltip showing oif we have no text for it
+    // stop the tooltip showing if we have no text for it
     return ((text1 && text1!="") || (text2 && text2!=""));
   },
   fillTooltipLine: function(line, text) {
