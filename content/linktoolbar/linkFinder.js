@@ -30,11 +30,11 @@ const linkFinder = {
     // generate top and up links based on url
     if(noTop) {
       var topurl = doc.location.href.match(/^[^\/]*?:\/\/[^\/]*\//);
-      if(topurl) this.addLink(doc, topurl[0], null, "top", null, null, null);
+      if(topurl) this.addLink(doc, topurl[0], "top", null, null, null);
     }
     if(noUp) {
       var upurl = this.getUp(doc.location.href);
-      if(upurl) this.addLink(doc, upurl, null, "up", null, null, null);
+      if(upurl) this.addLink(doc, upurl, "up", null, null, null);
     }
 
     // generate other links based on <a href="..."/> style links
