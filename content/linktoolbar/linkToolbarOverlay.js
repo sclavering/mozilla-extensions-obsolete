@@ -181,30 +181,30 @@ function(event)
     }
   }
 
-
   var destURL = event.target.getAttribute("href");
 
-  // We have to do a security check here, because we are loading URIs given
-  // to us by a web page from chrome, which is privileged.
-  try {
-    var ssm = Components.classes["@mozilla.org/scriptsecuritymanager;1"].getService()
-	  	                  .QueryInterface(Components.interfaces.nsIScriptSecurityManager);
-  	ssm.checkLoadURIStr(window.content.location.href, destURL, 0);
+  // Note that unlike Moz Linkbar code, we do *not* need to do a security check,
+  // because it is taken care of for us in openNew[Tab|Window]With
 
-  	// middle clicking should open the link in a new tab
-  	if(event.button==1 || event.ctrlKey) {
-  	  BrowserOpenTab();
-      gURLBar.value = destURL;
-      BrowserLoadURL(event);
-      _content.focus();
-  	} else {
-    	var referrer = Components.classes["@mozilla.org/network/standard-url;1"]
-    	                         .createInstance(Components.interfaces.nsIURI);
-    	referrer.spec = window.content.location.href;
-    	loadURI(destURL, referrer);
-    }
-  } catch(e) {
-    dump("Error: it is not permitted to load this URI from a <link> element: " + e);
+  var openTabs = true, openTabsInBackground = true;
+  try {
+	  openTabs = gPrefService.getBoolPref("browser.tabs.opentabfor.middleclick")
+    openTabsInBackground = prefSvc.getBoolPref("browser.tabs.loadInBackground");
+  } catch(e) {}
+
+	// handle middleclick/ctrl+click/shift+click (nearly) as for links in page
+	if(event.button==1 && openTabs || event.ctrlKey) {
+    // This is a hack to invert the open-in-background behaviour for new tabs
+    // It ensures that a click opens in foreground, shift+click in background
+    var e = openTabsInBackground ? {shiftKey: !event.shiftKey} : event;
+    openNewTabWith(destURL, null, e, true);
+  } else if(event.button==1 || event.shiftKey) {
+    openNewWindowWith(destURL, null, true);
+	} else {
+  	var referrer = Components.classes["@mozilla.org/network/standard-url;1"]
+  	                         .createInstance(Components.interfaces.nsIURI);
+  	referrer.spec = window.content.location.href;
+  	loadURI(destURL, referrer);
   }
 }
 
