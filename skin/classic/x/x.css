@@ -1,8 +1,13 @@
-/* $Id: x.css,v 1.1 2003/05/20 22:32:52 cdn Exp $ */
+/* $Id: x.css,v 1.2 2003/05/20 22:57:42 cdn Exp $ */
 
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
 #x-button {
   -moz-image-region: rect(0 32px 32px 0);
   list-style-image: url(x.png);
+}
+
+toolbar[iconsize="small"] #x-button {
+  -moz-image-region: rect(0 20px 20px 0);
+  list-style-image: url(xs.png);
 }
