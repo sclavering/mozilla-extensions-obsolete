@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<bindings id="fusion"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="urlbar"
+           extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
+
+    <content sizetopopup="pref">
+      <xul:stack class="urlbar-stack" flex="1">
+        <xul:hbox class="autocomplete-textbox-container" flex="1">
+          <children includes="image|deck">
+            <xul:image class="autocomplete-icon" allowevents="true"/>
+          </children>
+
+          <xul:hbox class="textbox-input-box" flex="1" xbl:inherits="tooltiptext=inputtooltiptext">
+            <children/>
+            <html:input anonid="input" class="autocomplete-textbox textbox-input"
+                        flex="1" allowevents="true"
+                        xbl:inherits="tooltiptext=inputtooltiptext,onfocus,onblur,value,type,maxlength,disabled,size,readonly,userAction"/>
+          </xul:hbox>
+        </xul:hbox>
+
+        <xul:progressmeter mode="normal" value="0" id="urlbar-progressmeter"/>
+      </xul:stack>
+
+      <xul:dropmarker anonid="historydropmarker" class="autocomplete-history-dropmarker"
+                      allowevents="true"
+                      xbl:inherits="open,enablehistory"/>
+
+      <xul:popupset anonid="popupset" class="autocomplete-result-popupset"/>
+    </content>
+  </binding>
+
+
+  <binding id="urlbar-progressmeter"
+           extends="chrome://global/content/bindings/progressmeter.xml#progressmeter">
+    <implementation>
+      <!-- there's no sane reason for this to be here rather than in a .js file, but
+           I couldn't persuade Moz to actually execute the .js file at the time -->
+      <constructor>
+        window.gfusionProgressMeter = this;
+
+        // override the init method so that the new progress meter will be used
+        nsBrowserStatusHandler.prototype._fusion_init = nsBrowserStatusHandler.prototype.init;
+        nsBrowserStatusHandler.prototype.init = function() {
+          this._fusion_init();
+          this.statusMeter = document.getElementById("urlbar-progressmeter");
+
+          // Rather than hiding the panel that the stalled progress meter would be in,
+          // we want to reset the meter
+          // We do this inside this new init() method because it happens to get called
+          // in prepareForStartup() in browser.js after the code that normally sets
+          // gProgressMeterPanel
+          gProgressMeterPanel = {
+            set collapsed(val) {
+              if(val) gfusionProgressMeter.value = 0;
+            }
+          };
+        };
+      </constructor>
+
+      <!-- because code in browser.js tries to uncollapse the parentNode, and the
+           urlbar-progressmeter doesn't have one (because it's anonymous content?) -->
+      <field name="parentNode">{collapsed: false}</field>
+    </implementation>
+  </binding>
+
+</bindings>

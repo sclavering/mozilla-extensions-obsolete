@@ -1,0 +1,12 @@
+#urlbar-progressmeter {
+  -moz-appearance: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+#urlbar-progressmeter > .progress-bar {
+  -moz-appearance: none;
+  background-color: highlight;
+}

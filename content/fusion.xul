@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://fusion/content/fusion.css" type="text/css"?>
+<?xml-stylesheet href="chrome://fusion/skin/" type="text/css"?>
+
+<!DOCTYPE overlay>
+
+<overlay id="fusion">
+
+<!-- not strictly necessary, since it would be hidden anyway -->
+<progressmeter id="statusbar-icon" removeelement="true"/>
+
+<script type="application/x-javascript"><![CDATA[
+throw("ping poing");
+]]></script>
+
+</overlay>
