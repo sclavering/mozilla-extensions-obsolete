@@ -1,0 +1,22 @@
+<!--
+Licencia: MPL 1.1/GPL 2.0/LGPL 2.1
+
+Autor:
+  Stephen Clavering <mozilla@clav.me.uk>
+
+Preklad:
+ Peter Ondraska <acelists@atlas.sk>
+-->
+
+<!ENTITY title "Panel odkazov - Možnosti">
+
+<!ENTITY general "Vzhľad Panela odkazov">
+<!ENTITY showOnlyWhenNeeded "Skryť ak na stránke nie sú žiadne vhodné odkazy">
+<!ENTITY iconsOnly "Zobraziť iba ikony bez popisu">
+
+<!ENTITY linkGuessing "Odhadovanie odkazov">
+<!ENTITY linkGuessingDescription "Mnohé stránky neposkytujú HTML element &lt;link&gt;, na ktorom Panel odkazov závisí:">
+
+<!ENTITY scanHyperlinks "Hľadať odkazy na Prvú, Predošlú, Ďalšiu a Poslednú stránku v obyčajných odkazoch na stránke">
+<!ENTITY guessUpAndTopFromURL "Odhadnúť odkazy Nahor a Vrchol podľa URL stránky">
+<!ENTITY guessPrevAndNextFromURL "Odhadnúť odkazy na Ďalšiu a Poslednú stránku podľa numerických častí URL stránky">
