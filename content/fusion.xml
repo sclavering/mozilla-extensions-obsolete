@@ -66,7 +66,26 @@
       <!-- because code in browser.js tries to uncollapse the parentNode, and the
            urlbar-progressmeter doesn't have one (because it's anonymous content?) -->
       <field name="parentNode">{collapsed: false}</field>
+
+      <field name="urlbar">document.getBindingParent(this)</field>
+
+      <!-- we want to set an attribute on the urlbar when the progressmeter is active
+           for use by themes with rounded url bars -->
+      <property name="value" onget="return this.getAttribute('value');">
+        <setter><![CDATA[
+          var p = Math.round(val);
+          var c = this.value;
+          if(p == c) return p;
+
+          var delta = p - c;
+          if(delta > 3 || p == 0 || p == 100 || delta < -3) this.setAttribute("value", p);
+
+          if(p==0) this.urlbar.removeAttribute("progressMeterActive");
+          else if(c==0) this.urlbar.setAttribute("progressMeterActive", "true");
+
+          return p;
+        ]]></setter>
+      </property>
     </implementation>
   </binding>
-
 </bindings>
