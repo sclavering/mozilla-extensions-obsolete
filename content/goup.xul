@@ -1,31 +1,51 @@
 <?xml version="1.0"?>
 
-<overlay id="GoUpOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<?xml-stylesheet href="chrome://goup/skin/" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://goup/locale/goup.dtd">
+
+<overlay id="goup" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<toolbarpalette id="BrowserToolbarPalette">
+  <toolbarbutton id="goup-button" class="toolbarbutton-1"
+      oncommand="GoUp.buttonClicked(event);"
+      onclick="GoUp.buttonClicked2(event);"
+      label="&label;" tooltiptext="&tooltip;"/>
+</toolbarpalette>
 
 <script type="application/x-javascript"><![CDATA[
 
 const GoUp = {
   init: function() {
-    window.removeEventListener("load",GoUp.init,true);
     // get dom nodes ourselves incase gURLBar not initialised yet
     var urlbar = document.getElementById("urlbar");
-    urlbar.addEventListener("keypress",function(e) { GoUp.commanded(e); }, true);
+    urlbar.addEventListener("keypress", GoUp.keyComboInUrlBar, true);
     var content = document.getElementById("appcontent");
-    content.addEventListener("keypress",function(e) { GoUp.commanded(e); }, true);
+    content.addEventListener("keypress", GoUp.keyComboInPage, true);
   },
 
-  commanded: function(e) {
+  buttonClicked2: function(e) {
+    if(e.button==1) this.buttonClicked(e);
+  },
+
+  buttonClicked: function(e) {
+    var up = this.getUp(_content.document.location.href);
+    openUILink(up, e);
+  },
+
+  keyComboInUrlBar: function(e) {
     if(!e.altKey || e.keyCode!=e.DOM_VK_UP) return;
-    var t = e.target, url, url2;
-    if(t==gURLBar) {
-      var url2 = GoUp.getUp(gURLBar.value);
-      if(url2) gURLBar.value = url2;
-    } else {
-      // go up on the current page
-      // XXX find a better way to retrieve the url
-      var url2 = GoUp.getUp(e.originalTarget.ownerDocument.location.href);
-      if(url2) loadURI(url2);
-    }
+    var up = GoUp.getUp(gURLBar.value);
+    if(up) gURLBar.value = up;
+    e.preventDefault()
+    e.stopPropagation();
+  },
+
+  keyComboInPage: function(e) {
+    if(!e.altKey || e.keyCode!=e.DOM_VK_UP) return;
+    var doc = e.originalTarget.ownerDocument
+    var up = GoUp.getUp(doc.location.href);
+    if(up) doc.location.href = up;
   },
 
   getUp: function(url) {
@@ -50,7 +70,7 @@ const GoUp = {
   }
 };
 
-window.addEventListener("load",GoUp.init,true);
+window.addEventListener("load", GoUp.init, false);
 
 ]]></script>
 

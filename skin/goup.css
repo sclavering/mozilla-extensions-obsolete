@@ -1,0 +1,9 @@
+#goup-button { list-style-image: url(goup.png); }
+
+#goup-button { -moz-image-region: rect(0 24px 24px 0); }
+#goup-button:hover { -moz-image-region: rect(0 48px 24px 24px); }
+#goup-button[disabled=true] { -moz-image-region: rect(0 72px 24px 48px); }
+
+toolbar[iconsize=small] #goup-button { -moz-image-region: rect(24px 16px 40px 0); }
+toolbar[iconsize=small] #goup-button:hover { -moz-image-region: rect(24px 32px 40px 16px); }
+toolbar[iconsize=small] #goup-button[disabled=true] { -moz-image-region: rect(24px 48px 40px 32px); }

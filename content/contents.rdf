@@ -4,15 +4,16 @@
      xmlns:c="http://www.mozilla.org/rdf/chrome#">
 
   <Seq about="urn:mozilla:package:root">
-    <li resource="urn:mozilla:package:goup"/>
+    <li>
+      <Description about="urn:mozilla:package:goup" c:name="goup"/>
+    </li>
   </Seq>
-
-  <Description about="urn:mozilla:package:goup" c:name="goup"/>
 
   <Seq about="urn:mozilla:overlays">
-    <li resource="chrome://browser/content/browser.xul"/>
-  </Seq>
-  <Seq about="chrome://browser/content/browser.xul">
-    <li>chrome://goup/content/goup.xul</li>
+    <li>
+      <Seq about="chrome://browser/content/browser.xul">
+        <li>chrome://goup/content/goup.xul</li>
+      </Seq>
+    </li>
   </Seq>
 </RDF>
