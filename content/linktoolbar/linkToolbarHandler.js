@@ -131,6 +131,8 @@ var linkToolbarUtils = {
       case "section":
       case "subsection":
         return "section";
+      case "chapter":
+        return "chapter";
       case "prefetch":
       case "sidebar":
         return null;
@@ -183,7 +185,7 @@ var linkToolbarItems = {
       case "menuitem":
         return new LinkToolbarItem(linkType,linkTypeElement);
       case "menu":
-        return new LinkToolbarMenu(linkType,linkTypeElement);
+        return initLinkToolbarMenu(linkType, linkTypeElement);
     }
     return null; // should never be reached; just attending to js-strict warnings
   },

@@ -87,17 +87,11 @@
           <menuitem id="link-toc" label="&tocButton.label;" hidden="true"
               class="menuitem-iconic bookmark-item"/>
           <menu id="link-chapter" label="&chapterButton.label;" hidden="true"
-              class="menu-iconic bookmark-item" container="true">
-            <menupopup id="link-chapter-popup"/>
-          </menu>
+              class="menu-iconic bookmark-item" container="true"/>
           <menu id="link-section" label="&sectionButton.label;" hidden="true"
-              class="menu-iconic bookmark-item" container="true">
-            <menupopup id="link-section-popup"/>
-          </menu>
+              class="menu-iconic bookmark-item" container="true"/>
           <menu id="link-appendix" label="&appendixButton.label;" hidden="true"
-              class="menu-iconic bookmark-item" container="true">
-            <menupopup id="link-appendix-popup"/>
-          </menu>
+              class="menu-iconic bookmark-item" container="true"/>
           <menuitem id="link-glossary" label="&glossaryButton.label;" hidden="true"
               class="menuitem-iconic bookmark-item"/>
           <menuitem id="link-index" label="&indexButton.label;" hidden="true"
@@ -112,13 +106,9 @@
           <menuitem id="link-copyright" label="&copyrightButton.label;" hidden="true"
               class="menuitem-iconic bookmark-item"/>
           <menu id="link-bookmark" label="&bookmarkButton.label;" hidden="true"
-              class="menu-iconic bookmark-item" container="true">
-            <menupopup id="link-bookmark-popup"/>
-          </menu>
+              class="menu-iconic bookmark-item" container="true"/>
           <menu id="link-alternate" label="&alternateButton.label;" hidden="true"
-              class="menu-iconic bookmark-item" container="true">
-            <menupopup id="link-alternate-popup"/>
-          </menu>
+              class="menu-iconic bookmark-item" container="true"/>
         </menupopup>
       </toolbarbutton>
     </statusbarpanel>

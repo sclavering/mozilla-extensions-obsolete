@@ -168,29 +168,45 @@ const linkToolbarButton = {
 
 
 
-function LinkToolbarMenu(linkType, element) {
-  this.linkType = linkType;
-  this.xulElement = element;
-  this.xulPopup = document.getElementById("link-"+linkType+"-popup");
+function initLinkToolbarMenu(linkType, elt) {
+  for(var i in linkToolbarMenu) elt[i] = linkToolbarMenu[i];
+  elt.links = []; // do not remove this
+  elt.linkType = linkType;
+  var popup = elt.popup = document.createElement("menupopup");
+  popup.setAttribute("onpopupshowing", "this.parentNode.buildMenu();");
+  elt.appendChild(popup);
   // this will need fixing if we ever have more than one top-level menu
-  this.parentMenuButton = document.getElementById("more-menu");
+  elt.parentMenuButton = document.getElementById("more-menu");
+  return elt;
 }
 
-LinkToolbarMenu.prototype = {
+const linkToolbarMenu = {
+  links: [],
+  linksHaveChanged: true, // has the set of links changed since the menu was last shown?
+
   clear: function() {
     this.parentMenuButton.disabled = true;
-    this.xulElement.disabled = true;
-    this.xulElement.hidden = true;
-    const p = this.xulPopup;
-    while(p.hasChildNodes()) p.removeChild(p.lastChild);
+    this.hidden = true;
+    this.linksHaveChanged = true;
   },
 
   displayLink: function(link) {
-    this.xulElement.disabled = false;
-    this.xulElement.hidden = false;
+    this.linksHaveChanged = true;
+    this.hidden = false;
     this.parentMenuButton.disabled = false;
-    var mi = makeLinkToolbarMenuItem(link.url, link.longTitle, link.title);
-    this.xulPopup.appendChild(mi);
+    this.links.push(link);
+  },
+
+  buildMenu: function() {
+    if(!this.linksHaveChanged) return;
+    this.linksHaveChanged = false;
+    const p = this.popup;
+    while(p.hasChildNodes()) p.removeChild(p.lastChild);
+    const ls = this.links, num = ls.length;
+    for(var i = 0; i != num; i++) {
+      var l = ls[i];
+      p.appendChild(makeLinkToolbarMenuItem(l.url, l.longTitle, l.title));
+    }
   }
 };
 
