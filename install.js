@@ -1,7 +1,7 @@
 const kDisplayName = "Link Toolbar";
 const kName = "linktoolbar";
 const kPackage = "/cdn.mozdev.org/linkToolbar";
-const kVersion = "0.7"; // 2004-03-07
+const kVersion = "0.7.1"; // 2004-03-11
 
 const kJarFile = "linkToolbar.jar";
 const kContentFolder = "content/linktoolbar/";
