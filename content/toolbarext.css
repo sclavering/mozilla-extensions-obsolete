@@ -19,3 +19,7 @@ toolbox[linkedto] { -moz-binding: url(chrome://toolbarext/content/bindings.xml#l
 toolbox[vertical="true"] { -moz-box-orient: horizontal; }
 toolbox[vertical="true"] > toolbar { -moz-box-orient: vertical; min-width: 5px; }
 
+/* uses a vbox as a wrapper rather than an hbox.  needed for separators */
+toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] {
+  -moz-binding: url(chrome://toolbarext/content/bindings.xml#toolbarpaletteitem-vertical);
+}

@@ -82,4 +82,13 @@
     </implementation>
   </binding>
   
+  <!-- like chrome://global/content/widgets/toolbar.xml#toolbarpaletteitem, but with a vbox -->
+  <binding id="toolbarpaletteitem-vertical" extends="chrome://global/content/widgets/toolbar.xml#toolbar-base" display="xul:button">
+    <content>
+      <xul:vbox class="toolbarpaletteitem-box" flex="1" xbl:inherits="type,place">
+        <children/>
+      </xul:vbox>
+    </content>
+  </binding>
+  
 </bindings>

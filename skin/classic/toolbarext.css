@@ -103,7 +103,17 @@ toolbox[vertical="true"] > toolbar > toolbarspacer { height: 15px; }
 /* spacer while in customise mode */
 toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] > toolbarspacer { height: 11px; }
 
-/* xxx: support separators on vertical toolbars */
+/* separator, both normally and while in customise mode */
+toolbox[vertical="true"] > toolbar > toolbarseparator,
+toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] > toolbarseparator {
+  margin: 0.2em 2px;
+  border-bottom: 1px solid ThreeDHighlight;
+  border-top: 1px solid ThreeDShadow;
+  height: 2px;
+  border-left: none;
+  border-right: none;
+}
+
 
 
 
