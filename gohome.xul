@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE window [
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
+%browserDTD;
+]>
+
+<overlay id="GoHomeOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript"><![CDATA[
+
+// XXX add stuff to hide the menuitem when it doesn't make sense to show it
+
+]]></script>
+
+<popup id="contentAreaContextMenu">
+  <menuitem label="&goHomeCmd.label;" command="Browser:Home" insertafter="context-stop"/>
+</popup>
+
+</overlay>
