@@ -71,7 +71,8 @@ const linkToolbarUI = {
         || !element.href
         || !(element.rel || element.rev))
       return;
-    
+
+    // XXX: use addLink, below    
     var linkInfo;
     if(doc == getBrowser().contentDocument) {
       linkInfo = linkToolbarHandler.handleElement(element);
@@ -82,6 +83,14 @@ const linkToolbarUI = {
 
     // linkInfo will be null if the link was one that linkToolbarHandler.isLinkIgnored didn't like
     if(linkInfo) linkToolbarUI.rememberLink(linkInfo, doc);
+  },
+  
+  addLink: function(linkInfo, doc) {
+    if(doc == window._content.document) {
+      linkToolbarHandler.handleLink(linkInfo);
+      this.hasItems = true;
+    }
+    this.rememberLink(linkInfo, doc);
   },
   
   rememberLink: function(linkInfo, doc) {
@@ -112,6 +121,32 @@ const linkToolbarUI = {
     linkToolbarUI.refresh();
 //    linkToolbarUI.fullSlowRefresh();
   },
+
+
+  // hunt through the document for <meta http-equiv="link" ... />
+  getMetaLinks: function(e) {
+    var doc = e.originalTarget;
+    if(!(doc instanceof Components.interfaces.nsIDOMHTMLDocument)) return;
+    // get the <head/>
+    var node = doc.documentElement.firstChild;
+    while(!(node instanceof Components.interfaces.nsIDOMHTMLElement)) node = node.nextSibling;
+    if(!(node instanceof Components.interfaces.nsIDOMHTMLHeadElement)) return;
+    // get each <meta/>
+    node = node.firstChild;
+    while(node) {
+      if(node instanceof Components.interfaces.nsIDOMHTMLMetaElement) {
+        var httpequiv = node.getAttribute("http-equiv");
+        if(httpequiv && httpequiv.toLowerCase()=="link") linkToolbarUI.handleMetaLink(node);
+      }
+      node = node.nextSibling;
+    }
+  },
+  
+  handleMetaLink: function(meta) {
+    var linkInfo = linkToolbarHandler.getLinkHeaderInfo(meta.getAttribute("content"));
+    if(linkInfo) this.addLink(linkInfo, meta.ownerDocument);
+  },
+   
   
   refresh: function() {
     var currentdoc = window._content.document;
@@ -289,6 +324,7 @@ const linkToolbarUI = {
     contentArea.addEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
     contentArea.addEventListener("unload", linkToolbarUI.clear, true);
     contentArea.addEventListener("load", linkToolbarUI.pageLoaded, true);
+    contentArea.addEventListener("load", linkToolbarUI.getMetaLinks, true);
     contentArea.addEventListener("DOMHeadLoaded", linkToolbarUI.pageLoaded, true);
     linkToolbarUI.handlersActive = true;
   },
@@ -299,6 +335,7 @@ const linkToolbarUI = {
     contentArea.removeEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
     contentArea.removeEventListener("unload", linkToolbarUI.clear, true);
     contentArea.removeEventListener("load", linkToolbarUI.pageLoaded, true);
+    contentArea.removeEventListener("load", linkToolbarUI.getMetaLinks, true);
     contentArea.removeEventListener("DOMHeadLoaded", linkToolbarUI.pageLoaded, true);
     linkToolbarUI.handlersActive = false;
   },

@@ -66,30 +66,49 @@ var linkToolbarHandler = {
       this.getItemForLinkType(rel).displayLink(linkInfo);
   },
 
-  isLinkIgnored: function(relAttribute) {
-    // XXX: should some of these possibilites just be handled by returning null in standardiseRelType
-    // as we do for prefetch?  that would mean the link would still handled if it had other rel
-    // values that were interesting
-    return /\b(stylesheet\b|icon\b|pingback\b|fontdef\b|p3pv|schema\.)/i.test(relAttribute);
+  getLinkHeaderInfo: function(headerStr) {
+    // split the url off
+    var matches = headerStr.match(/\s*<([^>\s]+)>(.*)/);
+    if(!matches) return null;
+    var url = matches[1];
+    // XXX: check the url is valid (by creating an nsIURI maybe?)
+    var params = matches[2];
+    params = params.split(";");
+    var parts = [];
+    // avoid js strict warnings
+    parts["title"] = ""; parts["rel"] = ""; parts["rev"] = ""; parts["hreflang"] = ""; parts["media"] = "";
+    for(var i = 0; i < params.length; i++) {
+      matches = params[i].match(/\s*([a-z0-9\-\.]*)="?([a-z0-9\-\.]*)"?\s*/i);
+      if(matches) parts[matches[1]] = matches[2];
+    }
+    if(parts["rel"]=="" && parts["rev"]=="") return null;
+    return this.getLinkInfo(url, parts["rel"], parts["rev"], parts["title"], parts["lang"], parts["media"]);
   },
 
-  // find all the info we need to show a link on the link toolbar
-  getLinkElementInfo: function(element) {
-    if(this.isLinkIgnored(element.rel)) return null;
+  getLinkElementInfo: function(elt) {
+    return this.getLinkInfo(elt.href, elt.rel, elt.rev, elt.title, elt.hreflang, elt.media);
+  },
+  
+  getLinkInfo: function(url, relStr, revStr, title, hreflang, media) {
+    // Ignore certain rel values for links
+    // XXX: should some of these possibilites just be handled by returning null in standardiseRelType
+    // as we do for prefetch?  that would mean the link would still handled if it had other rel
+    // values that were interesting.  (icon and stylesheet we want to keep doing this way)
+    if(/\b(stylesheet\b|icon\b|pingback\b|fontdef\b|p3pv|schema\.)/i.test(relStr)) return null;
 
     var relValues = [], rel, i;
-    // get relValues from rel attribute
-    if(element.rel) {
-      var rawRelValues = element.rel.split(/\s+/);
+    // get relValues from rel
+    if(relStr) {
+      var rawRelValues = relStr.split(/\s+/);
       for(i = 0; i < rawRelValues.length; i++) {
         rel = this.standardiseRelType(rawRelValues[i]);
         // avoid duplicate rel values
         if(rel) relValues[rel] = rel;
       }
     }
-    // get relValues from rel attribute
-    if(element.rev) {
-      var revValues = element.rev.split(/\s+/);
+    // get relValues from rev
+    if(revStr) {
+      var revValues = revStr.split(/\s+/);
       for(i = 0; i < revValues.length; i++) {
         rel = this.convertRevToRel(revValues[i]);
         if(rel) relValues[rel] = rel;
@@ -100,32 +119,31 @@ var linkToolbarHandler = {
     // XXX: lookup more meaningful and localized version of media,
     //   i.e. media="print" becomes "Printable" or some such
     // XXX: use localized version of ":" separator
-    if(element.media && !/\b(all|screen)\b/i.test(element.media))
-      prefix += element.media + ": ";
-    if(element.hreflang)
-      prefix += ltLanguageDictionary.lookupLanguageName(element.hreflang) + ": ";
+    if(media && !/\b(all|screen)\b/i.test(media))
+      prefix += media + ": ";
+    if(hreflang)
+      prefix += ltLanguageDictionary.lookupLanguageName(hreflang) + ": ";
     var longTitle = prefix;
-    if(element.title&&element.title!="") longTitle += element.title;
+    if(title) longTitle += title;
 
     // bundle everything into an object to be passed to a LinkToolbarItem (or a subclass)
     return {
-      linkElement: element,
       relValues: relValues,
       longTitle: longTitle,
-      href:  element.href,
-      title: element.title
+      href:  url,
+      title: title
     }
   },
 
   standardiseRelType: function(relValue) {
     switch (relValue.toLowerCase()) {
-      case "start":
       case "top":
       case "origin":
         return "top";
       case "up":
       case "parent":
         return "up";
+      case "start":
       case "begin":
       case "first":
         return "first";
@@ -147,7 +165,8 @@ var linkToolbarHandler = {
       case "sidebar":
         return null;
       default:
-        return relValue.toLowerCase();
+        // might as well preserve case
+        return relValue;
     }
   },
 
@@ -176,11 +195,7 @@ var linkToolbarHandler = {
 
   createItemForLinkType: function(linkType) {
     var linkTypeElement = document.getElementById("link-" + linkType);
-    if(!linkTypeElement) {
-      var menu = this.createNewMenuForLinkType(linkType);
-      document.getElementById("more-menu-popup").appendChild(menu);
-      return new LinkToolbarMenu(linkType,menu);
-    }
+    if(!linkTypeElement) return this.createNewMenuForLinkType(linkType);
     switch(linkTypeElement.localName) {
       case "toolbarbutton":
         return new LinkToolbarButton(linkType,linkTypeElement);
@@ -205,7 +220,9 @@ var linkToolbarHandler = {
     var popup = document.createElement("menupopup");
     popup.id = "link-"+linkType+"-popup";
     menu.appendChild(popup);
-    return menu;
+    document.getElementById("more-menu-popup").appendChild(menu);
+    
+    return new LinkToolbarMenu(linkType,menu);
   },
 
   clearAllItems: function() {
