@@ -16,8 +16,8 @@ function linkit_getInnerText(el) {
   return s;
 }
 
-function linkit() {
-  var page = document.getElementById("content").contentDocument;
+function linkit(event) {
+  var page = event.originalTarget;
   var hydra = page.getElementsByTagName("head")[0];
   var location = page.location.href;
 
@@ -73,7 +73,8 @@ window.addEventListener("load",linkit_init,false);
 
 function linkit_init() {
   window.removeEventListener("load",linkit_init,false);
-  document.getElementById("appcontent").addEventListener("focus", linkit, true);
+  // this will hear "load" events even for background tabs, and the document
+  // that has loaded can be retrieved via event.originalTarget
   document.getElementById("appcontent").addEventListener("load", linkit, true);
 }
 
