@@ -87,8 +87,8 @@
     </menu>
   </menupopup>
 
-  <toolbarpalette id="BrowserToolbarPalette">
-    <toolbaritem  id="linktoolbar" class="chromeclass-directories"
+  <vbox id="appcontent">
+    <toolbar id="linktoolbar" class="chromeclass-directories"
         oncommand="event.preventBubble(); return linkToolbarUI.commanded(event);"
         tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar">
 
@@ -200,6 +200,6 @@
       
       <toolbarbutton id="sharc-button" oncommand="window.openDialog('chrome://browser/content', 'Phoenix', 'chrome,all,dialog=no', 'http://cdn.mozdev.org/linkToolbar/');"/>
 
-    </toolbaritem>
-  </toolbarpalette>
+    </toolbar>
+  </vbox>
 </overlay>
