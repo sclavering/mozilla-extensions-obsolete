@@ -14,7 +14,7 @@
  *
  * The Original Code is the Alternate Stylesheet selection code from Mozilla 1.1
  *
- * The Initial Developer of the Original Code is Tim Hill (bug 6782)
+ * The Initial Developer of the Original Code is Tim Hill (see bug 6782)
  *
  * Portions created by the Initial Developer are Copyright (C) 1998
  * the Initial Developer. All Rights Reserved.
@@ -22,6 +22,7 @@
  * Contributor(s):
  *   Original Use Stylesheet functions by Tim Hill (bug 6782)
  *   Frameset Handling by  Neil Rashbrook <neil@parkwaycc.co.uk>
+ *   Modification for use in StyleSelector: Stephen Clavering <mozilla@clav.co.uk>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -39,21 +40,7 @@
 
 // extracted from /chrome/comm/navigator/browser.js in Mozilla 1.1
 
-/* -- scragz
-var ShowTheColor = false;
-var LinkTagArray = document.commandDispatcher.focusedWindow.document.getElementsByTagName("link");
-if (LinkTagArray.length > 0) {
-   for (var i=0; i < LinkTagArray.length; i++) {
-      if (LinkTagArray[i].getAttribute("rel").toLowerCase() == "alternate stylesheet" &&
-         LinkTagArray[i].getAttribute("media").toLowerCase() != "print") {
-         ShowTheColor = true;
-      }
-   }
-}
 
-'alternative stylesheet' / 'alt stylesheet' ?
-
-*/
 var StyleSelector = {
   contentArea: null,
   button: null, // styleswitcher toolbarbutton
@@ -69,29 +56,16 @@ var StyleSelector = {
 
   // grey the button if there aren't any alt stylesheets
   updateUI: function(e) {
-    var doc = getBrowser().contentDocument.documentElement;
+    var doc = window._content;
+    if(!doc || !doc.document) return;
+    doc = doc.document.documentElement;
     if(!(doc instanceof Components.interfaces.nsIDOMHTMLHtmlElement)) return;
     var styleSheets = getAllStyleSheets(window._content)
     //if(styleSheets.length>1) StyleSelector.button.setAttribute("hasstyles","true");
     //else StyleSelector.button.removeAttribute("hasstyles");
     var btn = document.getElementById("styleselector");
-    
     if(styleSheets.length>1) btn.setAttribute("hasstyles","true");
     else btn.removeAttribute("hasstyles");
-
-    /*
-      var LinkTagArray = document.commandDispatcher.focusedWindow.document.getElementsByTagName("link");
-      if (LinkTagArray.length > 0) {
-        for (var i=0; i < LinkTagArray.length; i++) {
-          if ((LinkTagArray[i].getAttribute("rel").toLowerCase() == "alternative stylesheet" ||
-               LinkTagArray[i].getAttribute("rel").toLowerCase() == "alternate stylesheet" ||
-               LinkTagArray[i].getAttribute("rel").toLowerCase() == "alt stylesheet") &&
-            LinkTagArray[i].getAttribute("media").toLowerCase() != "print") {
-             btn.setAttribute("hasstyles","true");
-          }
-        }
-      }
-    */
   },
 
   commanded: function(evt, menu, page) {
