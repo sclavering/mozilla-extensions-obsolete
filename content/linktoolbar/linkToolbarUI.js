@@ -220,7 +220,10 @@ function linkToolbarFillTooltip(tooltip, event) {
 function linkToolbarLoadPage(e, isMiddleClick) {
   var url = e.target.getAttribute("href");
 
-  urlSecurityCheck(url, document); // in contentAreaUtils.js, throws an exception if check fails.
+  // in contentAreaUtils.js, throws an exception if check fails.
+  // really does expect the XUL document, not the HTML one trying to laod the url
+  urlSecurityCheck(url, document);
+
   openUILink(url, e, false, true); // in utilityOverlay.js
 
   // close any menus if it was a middle-click
@@ -232,4 +235,14 @@ function linkToolbarLoadPage(e, isMiddleClick) {
     if(p.localName=="menupopup") p.hidePopup();
     p = p.parentNode;
   }
+}
+
+
+// only works for linkType=top/up/first/prev/next/last (i.e. only for buttons)
+function linkToolbarGo(linkType) {
+  var item = linkToolbarItems.getItem(linkType);
+  var url = item.haveLink && item.getAttribute("href");
+  if(!url) return;
+  urlSecurityCheck(url, document);
+  openUILinkIn(url, "current"); // open link in current tab
 }

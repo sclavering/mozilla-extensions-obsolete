@@ -45,14 +45,14 @@ var linkToolbarItems = {
   items: [],
 
   handleLinkForRels: function(linkInfo, rels) {
-    for(var rel in rels) this.getItemForLinkType(rel).displayLink(linkInfo);
+    for(var rel in rels) this.getItem(rel).displayLink(linkInfo);
   },
 
   handleLinkForRel: function(linkInfo, rel) {
-    this.getItemForLinkType(rel).displayLink(linkInfo);
+    this.getItem(rel).displayLink(linkInfo);
   },
 
-  getItemForLinkType: function(linkType) {
+  getItem: function(linkType) {
     const items = this.items;
     if(!(linkType in items)) {
       var elt = document.getElementById("linktoolbar-" + linkType);

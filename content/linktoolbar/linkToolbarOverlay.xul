@@ -59,6 +59,17 @@
     </tooltip>
   </popupset>
 
+<keyset id="mainKeyset">
+  <key id="linktoolbar-key-first" key="&key.first;" modifiers="&modifiers.first;"
+      oncommand="linkToolbarGo('first');"/>
+  <key id="linktoolbar-key-prev" key="&key.prev;" modifiers="&modifiers.prev;"
+      oncommand="linkToolbarGo('prev');"/>
+  <key id="linktoolbar-key-next" key="&key.next;" modifiers="&modifiers.next;"
+      oncommand="linkToolbarGo('next');"/>
+  <key id="linktoolbar-key-last" key="&key.last;" modifiers="&modifiers.last;"
+      oncommand="linkToolbarGo('last');"/>
+</keyset>
+
   <statusbar id="status-bar">
     <statusbarpanel id="linktoolbar" hasitems="false"
         oncommand="return linkToolbarLoadPage(event, false);"

@@ -64,3 +64,13 @@
 <!ENTITY copyright "Copyright">
 <!ENTITY bookmark "Bookmarks">
 <!ENTITY alternate "Other Versions">
+
+<!-- keyboard shortcuts -->
+<!ENTITY key.first "[">
+<!ENTITY modifiers.first "accel shift">
+<!ENTITY key.prev "[">
+<!ENTITY modifiers.prev "accel">
+<!ENTITY key.next "]">
+<!ENTITY modifiers.next "accel">
+<!ENTITY key.last "]">
+<!ENTITY modifiers.last "accel shift">
