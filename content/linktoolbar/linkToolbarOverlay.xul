@@ -85,8 +85,6 @@
                   name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_true" />
       </menupopup>
     </menu>
-    <menuitem position="4" oncommand="openTopWin(this.getAttribute('href'))" label="Test Cases" id="lt-tests"
-              href="chrome://linktoolbar/content/index.html" class="menuitem-iconic bookmark-item"/>
   </menupopup>
 
 
