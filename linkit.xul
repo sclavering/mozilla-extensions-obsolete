@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.20 2003/05/28 21:40:23 clav Exp $ -->
+<!-- $Id: linkit.xul,v 1.21 2003/05/28 21:42:23 clav Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -95,14 +95,13 @@ function linkit() {
 }
 
 
-window.addEventListener("load", function() {
+window.addEventListener("load",linkit_init,false);
 
-dump('load listener');
-
-document.getElementById("appcontent").addEventListener("focus", linkit, true);
-document.getElementById("appcontent").addEventListener("load", linkit, true);
-
-}, false);
+function linkit_init() {
+  window.removeEventListener("load",linkit_init,false);
+  document.getElementById("appcontent").addEventListener("focus", linkit, true);
+  document.getElementById("appcontent").addEventListener("load", linkit, true);
+}
 
 ]]></script>
 
