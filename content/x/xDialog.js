@@ -97,14 +97,17 @@ function clearDownloads() {
   var rdfs = Components.classes["@mozilla.org/rdf/rdf-service;1"].getService(Components.interfaces.nsIRDFService);
   var state = rdfs.GetResource("http://home.netscape.com/NC-rdf#DownloadState");
   var ds = dlMgr.datasource;
+  var dls = [];
 
-  dlMgr.startBatchUpdate();
   while (downloads.hasMoreElements()) {
     var download = downloads.getNext().QueryInterface(Components.interfaces.nsIRDFResource);
+    dls.push(download);
+  }
+  dlMgr.startBatchUpdate();
+  for (var i = 0; i < dls.length; ++i) {
     try {
-      dlMgr.removeDownload(download.Value);
-    } catch (e) {
-    }
+      dlMgr.removeDownload(dls[i].Value);
+    } catch (e) {}
   }
   dlMgr.endBatchUpdate();
 
@@ -114,6 +117,9 @@ function clearDownloads() {
 
   return true;
 }
+
+
+
 
 function getDownloads() {
   var dlMgr = Components.classes["@mozilla.org/download-manager;1"].getService(Components.interfaces.nsIDownloadManager);
