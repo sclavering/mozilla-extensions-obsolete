@@ -15,6 +15,9 @@ function BrowserFullScreen() {
     resizeTo(gAFSwidth, gAFSheight);
     moveTo(gAFSleft, gAFStop);
     if(gAFSWasMaximized) maximize();
+    // call built-in stuff to restore normal toolbars + stuff
+    FullScreen.showXULChrome("toolbar", true);
+    FullScreen.showXULChrome("statusbar", true);
   } else {
     gAFSWasMaximized = windowState==STATE_MAXIMIZED;
     if(gAFSWasMaximized) restore(); // otherwise we get the dimensions of the maximized window
@@ -26,6 +29,9 @@ function BrowserFullScreen() {
     document.documentElement.setAttribute("hidechrome","true");
     moveTo(screen.availLeft, screen.availTop);
     resizeTo(screen.availWidth, screen.availHeight);
+    // call built-in stuff to hide most toolbars, as full-screen mode normally does
+    FullScreen.showXULChrome("toolbar", false);
+    FullScreen.showXULChrome("statusbar", false);
   }
   gAlmostFullScreen = !gAlmostFullScreen;
 }
