@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.5 2003/05/28 11:46:21 cdn Exp $ -->
+<!-- $Id: linkit.xul,v 1.6 2003/05/28 17:14:43 cdn Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -16,7 +16,7 @@ function NB_innerText(el){
         if(kids[i] != 3 && kids[i].firstChild){
             s += NB_innerText(kids[i]);
         } else {
-            s = kids[i].nodeValue;
+            s += kids[i].nodeValue;
         }
     }
     return s;
@@ -43,7 +43,7 @@ function linkit() {
   var linkP = page.createElement("link");
 
   var linkX = page.createElement("link");
-  var linkY = page.createElement("LINK");
+  var linkY = page.createElement("link");
 
    linkX.setAttribute("href", "/");
    linkX.setAttribute("id", "linkit-top");
@@ -89,8 +89,8 @@ function linkit() {
 
 //    alert(NB_innerText(instag));
 
-// \u00ab
-      if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|«/i.test(NB_innerText(instag))) {
+// \u00ab|\u00AB
+      if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|\u00ab|«/i.test(NB_innerText(instag))) {
         linkP.setAttribute("href", instag.getAttribute("href"));
         linkP.setAttribute("id", "linkit-prev");
         linkP.setAttribute("rel", "prev");
@@ -98,8 +98,8 @@ function linkit() {
         hydra.appendChild(linkP);
       }
 
-// \u00bb
-      if (/next|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|»/i.test(NB_innerText(instag))) {
+// \u00bb|\u00BB
+      if (/next|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|\u00bb|»/i.test(NB_innerText(instag))) {
         linkN.setAttribute("href", instag.getAttribute("href"));
         linkN.setAttribute("id", "linkit-next");
         linkN.setAttribute("rel", "next");
