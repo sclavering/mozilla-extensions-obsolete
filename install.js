@@ -5,7 +5,7 @@ const kVersion = "0.7";
 
 const kJarFile = "linkToolbar.jar";
 const kContentFolder = "content/linktoolbar/";
-const kLocaleFolders = ['locale/de-AT/linktoolbar/', 'locale/en-US/linktoolbar/', 'locale/fr-FR/linktoolbar/', 'locale/nl-NL/linktoolbar/', 'locale/sv-SE/linktoolbar/'];
+const kLocaleFolders = ['locale/en-US/linktoolbar/', 'locale/de-AT/linktoolbar/', 'locale/fr-FR/linktoolbar/', 'locale/nl-NL/linktoolbar/', 'locale/sv-SE/linktoolbar/'];
 const kSkinFolder = "skin/classic/"; // leave blank if not applicable
 
 
