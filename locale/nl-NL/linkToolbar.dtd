@@ -1,0 +1,35 @@
+<!--
+Licence: MPL 1.1/GPL 2.0/LGPL 2.1
+
+Author: Rob de Vries
+-->
+
+<!ENTITY topButton.label "Top">
+<!ENTITY upButton.label "Omhoog">
+<!ENTITY firstButton.label "Eerste">
+<!ENTITY prevButton.label "Vorige">
+<!ENTITY nextButton.label "Volgende">
+<!ENTITY lastButton.label "Laatste">
+<!ENTITY moreButton.label "Meer">
+
+<!ENTITY tocButton.label "Inhoudsopgave">
+<!ENTITY chapterButton.label "Hoofdstukken">
+<!ENTITY sectionButton.label "Secties">
+<!ENTITY appendixButton.label "Bijlagen">
+<!ENTITY glossaryButton.label "Verklarende woordenlijst">
+<!ENTITY indexButton.label "Index">
+
+<!ENTITY helpButton.label "Help">
+<!ENTITY searchButton.label "Zoek">
+<!ENTITY authorButton.label "Auteurs">
+<!ENTITY copyrightButton.label "Auteursrecht">
+<!ENTITY bookmarkButton.label "Bladwijzers">
+<!ENTITY alternateButton.label "Andere Versies">
+
+<!ENTITY topButton.tooltip "Top van de website">
+<!ENTITY upButton.tooltip "Een niveau omhoog">
+<!ENTITY firstButton.tooltip "Eerste pagina in volgorde">
+<!ENTITY prevButton.tooltip "Vorige pagina in volgorde">
+<!ENTITY nextButton.tooltip "Volgende pagina in volgorde">
+<!ENTITY lastButton.tooltip "Laatste pagina in volgorde">
+<!ENTITY moreButton.tooltip "Andere gerelateerde pagina's">

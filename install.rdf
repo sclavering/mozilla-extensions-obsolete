@@ -36,9 +36,9 @@
         <locale>locale/en-US/linktoolbar/</locale>
         <locale>locale/fr-FR/</locale>
         <locale>locale/it-IT/</locale>
+        <locale>locale/nl-NL/</locale>
         <!--
         <locale>locale/de-AT/linktoolbar/</locale>
-        <locale>locale/nl-NL/linktoolbar/</locale>
         <locale>locale/sv-SE/linktoolbar/</locale>
         -->
       </rdf:Description>
