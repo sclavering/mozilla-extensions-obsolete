@@ -45,16 +45,20 @@
         window.gfusionProgressMeter = this;
 
         // override the init method so that the new progress meter will be used
-        nsBrowserStatusHandler.prototype._fusion_init = nsBrowserStatusHandler.prototype.init;
-        nsBrowserStatusHandler.prototype.init = function() {
-          this._fusion_init();
+        var proto = nsBrowserStatusHandler.prototype;
+
+        // This constuctor seems to get called immediately (before and?) after toolbar customisation,
+        // leading to proto.init==proto.preFusionInit (and hence unbounded recursion) if not for this check
+        if("preFusionInit" in proto) return;
+
+        proto.preFusionInit = proto.init;
+        proto.init = function() {
+          this.preFusionInit();
           this.statusMeter = document.getElementById("urlbar-progressmeter");
 
-          // Rather than hiding the panel that the stalled progress meter would be in,
-          // we want to reset the meter
-          // We do this inside this new init() method because it happens to get called
-          // in prepareForStartup() in browser.js after the code that normally sets
-          // gProgressMeterPanel
+          // Rather than hiding the panel that the stalled progress meter would be in, we want to
+          // reset the meter. We do this here because this happens to be executed during
+          // prepareForStartup() in browser.js after the code that normally sets gProgressMeterPanel
           gProgressMeterPanel = {
             set collapsed(val) {
               if(val) gfusionProgressMeter.value = 0;
@@ -65,6 +69,7 @@
 
       <!-- because code in browser.js tries to uncollapse the parentNode, and the
            urlbar-progressmeter doesn't have one (because it's anonymous content?) -->
+      <!-- xxx should this set the progress meter value to 0 ? -->
       <field name="parentNode">{collapsed: false}</field>
 
       <field name="urlbar">document.getBindingParent(this)</field>
