@@ -9,7 +9,7 @@
 
   <!-- package information -->
   <RDF:Description about="urn:mozilla:package:linkit"
-        chrome:displayName="LinkIt 0.0.5"
+        chrome:displayName="LinkIt 0.0.6"
         chrome:author="Chris Neale, Stephen Clavering"
         chrome:authorURL="http://cdn.mozdev.org/"
         chrome:name="linkit"

@@ -58,22 +58,23 @@ function linkit(event) {
 
   var page = event.originalTarget;
   var location = page.location.href;
+  dump('Linkit :: adding <link />s to : ' + location + '\n');
 
   var corps = page.lastChild; // better than first
 
-  dump('Linkit :: corps:' + corps.localName + '\n');
+ // dump('Linkit :: corps:' + corps.localName + '\n');
 
   var hydra = corps.firstChild;
 
   while(!is_head.test(hydra.localName)) hydra = hydra.nextSibling;
 
-  dump('Linkit :: hydra:' + hydra.nodeName + '\n');
+ // dump('Linkit :: hydra:' + hydra.nodeName + '\n');
 
   if(img.test(location) && !is_head.test(hydra.nodeName)) { // for images that result in 404 html
     var tete = page.createElement('head');
     corps.appendChild(tete);
     dump('Linkit :: add Head\n');
-    var hydra2 = hydra.nextSibling;
+    var hydra2 = hydra.nextSibling; // ?
     hydra = hydra2;
   }
   else if(!is_head.test(hydra.nodeName)) {
@@ -82,7 +83,7 @@ function linkit(event) {
   }
 
   // prevent duplication, probably unnecessary
-  if(page.xxLinkItDone) { dump('deja vu\n'); return };
+  if(page.xxLinkItDone) { dump('Linkit :: deja vu\n'); return };
   page.xxLinkItDone = true;
 
   // add a top link iff relevant
@@ -96,9 +97,9 @@ function linkit(event) {
     else if(matches[2]=='')
       linkit_addLink(page,hydra,'up','..');
   }
-  else {
+ /* else {
     dump('Linkit :: already /\n');
-  }
+  } */
 
   // add prev/next links
   var instags = page.getElementsByTagName("a");
@@ -117,7 +118,7 @@ function linkit(event) {
        // inText = inText.replace(/<[^<>]+>/g, '');*/
     var iTbit = '';
 
-    if(inText != '') iTbit = "{" +inText+ "} ";
+    if(inText != '' && inText != null) iTbit = "{" +inText+ "} ";
 
     if(linkitRE_prev.test(iText))
       linkit_addLink(page,hydra,"prev",href,"LinkIt [<] " +iTbit+ "(" +href+ ")")
@@ -174,8 +175,6 @@ function linkit_addLink(page,head,rel,url,title) {
   link.setAttribute("class", "linkit-"+rel);
   link.setAttribute("href", url);
   link.setAttribute("rel", rel);
- // if(title) link.setAttribute("title", title);
- // else link.setAttribute("title", "LinkIt ["+url+"]");
 
   if(!title) title = "LinkIt ["+url+"]";
   link.setAttribute("title", title);
