@@ -199,7 +199,7 @@
             <menupopup id="link-alternate-popup" />
           </menu>
 
-          <menuseparator collapsed="true" id="misc-separator" />
+          <menuseparator hidden="true" id="misc-separator" />
 
         </menupopup>
       </toolbarbutton>

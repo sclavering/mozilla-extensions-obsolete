@@ -218,8 +218,8 @@ function LinkToolbarTransientMenu (linkType) {
     this.__proto__.clear.apply(this);
 
     // XXX: we really want to use this instead of removeXULElement
-    //this.hideXULElement();
-    this.removeXULElement();
+    this.hideXULElement();
+    //this.removeXULElement();
   }
 
   this.hideXULElement = function() {
@@ -229,23 +229,16 @@ function LinkToolbarTransientMenu (linkType) {
      *        related to bug 83906.  As of 0.9.2 I it doesn't seem
      *        to crash anymore.
      */
-    this.getXULElement().setAttribute("collapsed", "true");
-  }
-
-  this.removeXULElement = function() {
-    // XXX: stop using this method once it's safe to use hideXULElement
-    if (this.__proto__.getXULElement.apply(this))
-      this.__proto__.getXULElement.apply(this).parentNode.removeChild(
-          this.__proto__.getXULElement.apply(this));
+    this.getXULElement().hidden = true;
   }
 
   this.displayLink = function(linkElement) {
     if(!this.__proto__.displayLink.apply(this, [linkElement])) return false;
 
-    this.getXULElement().removeAttribute("collapsed");
+    this.getXULElement().hidden = false;
 
     // Show the 'miscellaneous' separator
-    document.getElementById("misc-separator").removeAttribute("collapsed");
+    document.getElementById("misc-separator").hidden = false;
     return true;
   }
 }
