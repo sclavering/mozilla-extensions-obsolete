@@ -262,14 +262,9 @@ const linkToolbarUI = {
     }
   },
       
-
   onload: function() {
-    document.removeEventListener("load", linkToolbarUI.onload, true);
     linkToolbarUI.initHandlers();
   }
 }
 
-document.addEventListener("load", linkToolbarUI.onload, true);
-
-
-
+document.addEventListener("load", linkToolbarUI.onload, false);
