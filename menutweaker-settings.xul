@@ -1,0 +1,275 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://menutweaker/content/menutweaker.css"?>
+
+<!-- loading all the DTDs that browser.xul does, just in case -->
+<!DOCTYPE overlay [
+<!ENTITY % brandDTD SYSTEM "chrome://global/locale/brand.dtd" >
+%brandDTD;
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
+%browserDTD;
+<!ENTITY % globalRegionDTD SYSTEM "chrome://global-region/locale/region.dtd">
+%globalRegionDTD;
+<!ENTITY % charsetDTD SYSTEM "chrome://global/locale/charset.dtd" >
+%charsetDTD;
+]>
+
+<dialog id="MenuTweakerSettings"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="Menu Tweaker"
+        ondialogaccept="return save();"
+        >
+
+<script type="application/x-javascript"><![CDATA[
+var prefs = null;
+var checkboxes = [];
+
+function init() {
+  // init pref service
+  prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                    .getService(Components.interfaces.nsIPrefService);
+  prefs = prefs.getBranch("extensions.menutweaker.hide.");
+
+  // will need these for both load and save
+  var listitems = document.getElementsByTagName("listitem");
+  var menus = [], menuitems = [], byselectors = []; // all arrays of <listitem type="checkbox" level="">es
+  for(var i = 0; i < listitems.length; i++) {
+    var check = listitems[i];
+    if(check.getAttribute("type")!="checkbox") continue;
+    checkboxes.push(check);
+    if(check.getAttribute("menu")) {
+      menus[check.label] = check;
+    } else if(!check.getAttribute("separator")) {
+      menuitems[check.label] = check;
+    } else if(check.getAttribute("selector")) {
+      // things hidden using specific selectors. currently used for <menuseparator/>s without ids
+      byselectors[check.getAttribute("selector")] = check;
+    }
+  }
+
+  // init id'd checkboxes
+  var ids = "";
+  try {
+    ids = prefs.getCharPref("by_id");
+  } catch(e) {}
+  if(ids!="") {
+    ids = ids.split('|');
+    for(var i = 0; i < ids.length; i++) {
+//      document.getElementById(ids[i]).setAttribute("checked","true");
+      document.getElementById(ids[i]).checked = true;
+    }
+  }
+
+  // init menus hidden by label
+  var menulabels = "";
+  try {
+    menulabels = prefs.getCharPref("menus_by_label");
+  } catch(e) {}
+  if(menulabels!="") {
+    menulabels = menulabels.split('|');
+    for(var i = 0; i < menulabels.length; i++) {
+      var menu = menus[menulabels[i]];
+//      if(menu) menu.setAttribute("checked","true");
+      if(menu) menu.checked = true;
+    }
+  }
+
+  // init menus hidden by label
+  var menuitemlabels = "";
+  try {
+    menuitemlabels = prefs.getCharPref("menuitems_by_label");
+  } catch(e) {}
+  if(menuitemlabels!="") {
+    menuitemlabels = menuitemlabels.split('|');
+    for(var i = 0; i < menuitemlabels.length; i++) {
+      var menuitem = menuitems[menuitemlabels[i]];
+//      if(menuitem) menuitem.setAttribute("checked","true");
+      if(menuitem) menuitem.checked = true;
+    }
+  }
+
+  // init seperators being hidden by selector
+  var selectors = "";
+  try {
+    selectors = prefs.getCharPref("by_selector");
+  } catch(e) {}
+  if(selectors!="") {
+    // this pref is held as a valid selector rather than being seperated by | chars
+    selectors = selectors.split(", ");
+    for(var i = 0; i < selectors.length; i++) {
+      var widget = byselectors[selectors[i]];
+//      if(widget) widget.setAttribute("checked","true");
+      if(widget) widget.checked = true;
+    }
+  }
+}
+
+function save() {
+  var ids = [];
+  var menulabels = [];
+  var menuitemlabels = [];
+  var selectors = [];
+  for(var i = 0; i < checkboxes.length; i++) {
+    var check = checkboxes[i];
+//    if(check.getAttribute("checked")!="true") continue;
+    if(!check.checked) continue;
+    // ids
+    if(check.id) ids.push(check.id);
+    // menus by label
+    else if(check.getAttribute("menu")=="true") menulabels.push(check.label);
+    // menuitems by label
+    else if(check.getAttribute("separator")!="true") menuitemlabels.push(check.label);
+    // separators by selector
+    else if(check.getAttribute("selector")) selectors.push(check.getAttribute("selector"));
+  }
+  // concatenate
+  ids = ids.join('|');
+  menulabels = menulabels.join('|');
+  menuitemlabels = menuitemlabels.join('|');
+  // might as well just make the string a valid selector straight off
+  selectors = selectors.join(", ");
+  // write prefs
+  prefs.setCharPref("by_id",ids);
+  prefs.setCharPref("menus_by_label",menulabels);
+  prefs.setCharPref("menuitems_by_label",menuitemlabels);
+  prefs.setCharPref("by_selector",selectors);
+  return true;
+}  
+
+// onload attriubte wasn't working :-|
+window.addEventListener("load",init,false);
+
+]]></script>
+
+<label value="Select the menus and/or menu items you wish to hide:"/>
+<listbox rows="20">
+<listitem type="checkbox" level="0" menu="true" label="&fileMenu.label;"/>
+  <listitem type="checkbox" level="1" label="&newNavigatorCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&tabCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&openFileCmd.label;"/>
+  <listitem type="checkbox" level="1" id="menu_close" label="&closeCmd.label;"/>
+  <listitem type="checkbox" level="1" id="menu_closeWindow" label="&closeWindow.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" selector="#menu_closeWindow + menuseparator"/>
+  <listitem type="checkbox" level="1" label="&savePageCmd.label;"/>
+  <listitem type="checkbox" level="1" id="menu_saveFrame" label="&saveFrameCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" selector="#menu_saveFrame + menuseparator"/>
+  <listitem type="checkbox" level="1" label="&printSetupCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&printPreviewCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&printCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" selector="menuitem[label=&quot;&printCmd.label;&quot;] + menuseparator"/>
+  <listitem type="checkbox" level="1" id="menu_FileQuitItem" label="&quitApplicationCmd.label;"/>
+
+<listitem type="checkbox" level="0" menu="true" label="&editMenu.label;"/>
+  <listitem type="checkbox" level="1" label="&undoCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&redoCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" selector="menuitem[label=&quot;&redoCmd.label;&quot;] + menuseparator"/>
+  <listitem type="checkbox" level="1" label="&cutCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&copyCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&pasteCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&deleteCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" selector="menuitem[label=&quot;&deleteCmd.label;&quot;] + menuseparator"/>
+  <listitem type="checkbox" level="1" label="&selectAllCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" selector="menuitem[label=&quot;&selectAllCmd.label;&quot;] + menuseparator"/>
+  <listitem type="checkbox" level="1" label="&findOnCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&findAgainCmd.label;"/>
+
+<listitem type="checkbox" level="0" menu="true" label="&viewMenu.label;"/>
+  <listitem type="checkbox" level="1" menu="true" label="&viewToolbarsMenu.label;"/>
+    <listitem type="checkbox" level="2" label="-----" separator="true" selector="menu[label=&viewToolbarsMenu.label;] menuseparator"/>
+    <listitem type="checkbox" level="2" label="&viewCustomizeToolbar.label;"/>             
+  <listitem type="checkbox" level="1" id="toggle_taskbar" label="&taskbarCmd.label;"/>
+  <listitem type="checkbox" level="1" menu="true" label="&viewSidebarMenu.label;"/>
+    <listitem type="checkbox" level="2" label="&downloadsButton.label;"/>
+    <listitem type="checkbox" level="2" label="&bookmarksButton.label;"/>
+    <listitem type="checkbox" level="2" label="&historyButton.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" selector="menu[label=&quot;&viewSidebarMenu.label;&quot;] + menuseparator"/>
+  <listitem type="checkbox" level="1" label="&stopCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&reloadCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" selector="menuitem[label=&quot;&reloadCmd.label;&quot;] + menuseparator"/>
+  <listitem type="checkbox" level="1" label="&textZoomEnlargeCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&textZoomReduceCmd.label;"/>
+  <listitem type="checkbox" level="1" menu="true" label="&charsetMenu.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" selector="menu[label=&quot;&charsetMenu.label;&quot;] + menuseparator"/>
+  <listitem type="checkbox" level="1" label="&pageSourceCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&fullScreenCmd.label;"/>
+
+<listitem type="checkbox" level="0" menu="true" label="&goMenu.label;"/>
+  <listitem type="checkbox" level="1" label="&backCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&forwardCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&goHomeCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="startHistorySeparator"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="endHistorySeparator"/>
+  <listitem type="checkbox" level="1" label="&historyButton.label;"/>
+
+<listitem type="checkbox" level="0" menu="true" id="bookmarks-menu" label="&bookmarksMenu.label;"/>
+  <listitem type="checkbox" level="1" label="&addCurPageAsCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&manBookmarksCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" selector="menuitem[label=&quot;&manBookmarksCmd.label;&quot;] + menuseparator"/>
+
+<listitem type="checkbox" level="0" menu="true" label="&tasksMenu.label;"/>
+  <listitem type="checkbox" level="1" id="javascriptConsole" label="&javaScriptConsoleCmd.label;"/>
+  <listitem type="checkbox" level="1" label="&pageInfoCmd.label;"/>          
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="prefSep"/>
+  <listitem type="checkbox" level="1" id="menu_preferences" label="&preferencesCmd.label;"/>
+
+<listitem type="checkbox" level="0" menu="true" label="&helpMenu.label;"/>
+  <listitem type="checkbox" level="1" label="&releaseCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" selector="menuitem[label=&quot;&releaseCmd.label;&quot;] + menuseparator"/>
+  <listitem type="checkbox" level="1" id="aboutName" label="&aboutCmd.label;"/>
+
+<listitem level="0" label="Main Context Menu"/>
+  <listitem type="checkbox" level="1" id="context-openlink" label="&openLinkCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-openlinkintab" label="&openLinkCmdInTab.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="context-sep-open"/>
+  <listitem type="checkbox" level="1" id="context-bookmarklink" label="&bookmarkLinkCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-savelink" label="&saveLinkCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-copyemail" label="&copyEmailCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-copylink" label="&copyLinkCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="context-sep-copylink"/>
+  <listitem type="checkbox" level="1" id="context-viewimage" label="&viewImageCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-copyimage" label="&copyImageCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="context-sep-copyimage"/>
+  <listitem type="checkbox" level="1" id="context-saveimage" label="&saveImageCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-setWallpaper" label="&setWallpaperCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-blockimage" label="&blockImageCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-back" label="&backCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-forward" label="&forwardCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-reload" label="&reloadCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-stop" label="&stopCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="context-sep-stop"/>
+  <listitem type="checkbox" level="1" id="context-bookmarkpage" label="&bookmarkPageCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-savepage" label="&savePageCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="context-sep-viewbgimage"/>  
+  <listitem type="checkbox" level="1" id="context-viewbgimage" label="&viewBGImageCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-undo" label="&undoCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="context-sep-undo"/>
+  <listitem type="checkbox" level="1" id="context-cut" label="&cutCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-copy" label="&copyCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-paste" label="&pasteCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-delete" label="&deleteCmd.label;"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="context-sep-paste"/>
+  <listitem type="checkbox" level="1" id="context-selectall" label="&selectAllCmd.label;"/>      
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="context-sep-selectall"/>
+  <listitem type="checkbox" level="1" id="context-searchselect"/>
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="frame-sep"/>
+  <listitem type="checkbox" level="1" menu="true" id="frame" label="&thisFrameMenu.label;"/>
+    <listitem type="checkbox" level="2" label="&showOnlyThisFrameCmd.label;"/>
+    <listitem type="checkbox" level="2" label="&openFrameCmd.label;"/>
+    <listitem type="checkbox" level="2" label="&openFrameCmdInTab.label;"/>
+    <listitem type="checkbox" level="2" label="-----" separator="true" selector="menuitem[label=&quot;&openFrameCmdInTab.label;&quot;] + menuseparator"/>
+    <listitem type="checkbox" level="2" label="&reloadFrameCmd.label;"/>
+    <listitem type="checkbox" level="2" label="-----" separator="true" selector="menuitem[label=&quot;&reloadFrameCmd.label;&quot;] + menuseparator"/>
+    <listitem type="checkbox" level="2" label="&bookmarkFrameCmd.label;"/>
+    <listitem type="checkbox" level="2" label="&saveFrameCmd.label;"/>
+    <listitem type="checkbox" level="2" label="-----" separator="true" selector="menuitem[label=&quot;&saveFrameCmd.label;&quot;] + menuseparator"/>
+    <listitem type="checkbox" level="2" label="&viewFrameSourceCmd.label;"/>
+    <listitem type="checkbox" level="2" label="&viewFrameInfoCmd.label;"/>        
+  <listitem type="checkbox" level="1" label="-----" separator="true" id="context-sep-properties"/>
+  <listitem type="checkbox" level="1" id="context-viewpartialsource-selection" label="&viewPartialSourceForSelectionCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-viewpartialsource-mathml" label="&viewPartialSourceForMathMLCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-viewsource" label="&viewPageSourceCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-viewinfo" label="&viewPageInfoCmd.label;"/>
+  <listitem type="checkbox" level="1" id="context-metadata" label="&metadataCmd.label;"/>
+</listbox>
+
+</dialog>
