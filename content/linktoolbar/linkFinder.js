@@ -1,4 +1,4 @@
-const linkFinder = {
+var linkFinder = {
   // regular expressions for identifying link types
   // XXX some pages use << for first and < for prev, so we should handle things like that differently
   re_first: /^first\b|\bfirst$|^begin|\|<|\u00ab/i, // ? >\u007c| ?
@@ -15,17 +15,10 @@ const linkFinder = {
   findLinks: function(doc) {
     var i, j, link;
 
-    if(!("__lt__links" in doc)) doc.__lt__links = new Array();
-
-    // work out which reltypes to generate links for
-    var noTop = true, noUp = true, noPrev = true, noNext = true;
-    for(i = 0; (noTop || noUp || noPrev || noNext) && i < doc.__lt__links.length; i++) {
-      link = doc.__lt__links[i];
-      if("top" in link.relValues) noTop = false;
-      if("up" in link.relValues) noUp = false;
-      if("prev" in link.relValues) noPrev = false;
-      if("next" in link.relValues) noNext = false;
-    }
+    var noTop = !("top" in doc.__lt__links);
+    var noUp = !("up" in doc.__lt__links);
+    var noPrev = !("prev" in doc.__lt__links);
+    var noNext = !("next" in doc.__lt__links);
 
     if(!noUp || !noTop || !noPrev || !noNext) return;
 
@@ -87,7 +80,7 @@ const linkFinder = {
     // xxx think more about what cap to use (500 is probably excessively high)
     var max = Math.min(doc.links.length, 500);
 
-    for(i = 0; i < max; i++) {
+    for(i = 0; i != max; i++) {
       var link = doc.links[i];
       var href = link.href;
 
@@ -168,7 +161,7 @@ const linkFinder = {
   getTextAndImgRels: function(el, rels) {
     var s = "";
     // use alt text for images
-    if(el instanceof Components.interfaces.nsIDOMHTMLImageElement) {
+    if(el instanceof HTMLImageElement) {
       // should this have spaces wrapped round it?
       s = el.getAttribute("alt");
       if(s) return s;

@@ -59,12 +59,9 @@
 <!ENTITY nextButton.label "Next">
 <!ENTITY lastButton.label "Last">
 
-<!ENTITY documentButton.label "Document">
-
 <!ENTITY tocButton.label "Table of Contents">
 <!ENTITY chapterButton.label "Chapters">
 <!ENTITY sectionButton.label "Sections">
-<!ENTITY subSectionButton.label "Subsections">
 <!ENTITY appendixButton.label "Appendices">
 <!ENTITY glossaryButton.label "Glossary">
 <!ENTITY indexButton.label "Index">
@@ -81,7 +78,6 @@
 
 <!ENTITY alternateButton.label "Other Versions">
 
-<!-- Tooltips for the buttons choess 102972 -->
 
 <!ENTITY topButton.tooltip "Top of website">
 <!ENTITY upButton.tooltip "Up a level in website">
@@ -89,5 +85,4 @@
 <!ENTITY prevButton.tooltip "Previous page in sequence">
 <!ENTITY nextButton.tooltip "Next page in sequence">
 <!ENTITY lastButton.tooltip "Last page in sequence">
-<!ENTITY documentButton.tooltip "Navigational aids">
 <!ENTITY moreButton.tooltip "Other related pages">

@@ -39,52 +39,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/**
- * linkToolbarHandler is a Singleton that displays LINK elements
- * and nodeLists of LINK elements in the Link Toolbar.  It
- * associates the LINK with a corresponding LinkToolbarItem based
- * on it's REL attribute and the toolbar item's ID attribute.
- * linkToolbarHandler is also a Factory and will create
- * LinkToolbarItems as necessary.
- */
-var linkToolbarHandler = {
-  items: [],
-  hasItems: false,
 
-  handleElement: function(linkElement) {
-    var linkInfo = this.getLinkElementInfo(linkElement);
-    if(!linkInfo) return null;
-
-    this.handleLink(linkInfo);
-    return linkInfo;
-  },
-
-  handleLink: function(linkInfo) {
-    if(!this.hasItems) this.hasItems = true;
-
-    for(var rel in linkInfo.relValues)
-      this.getItemForLinkType(rel).displayLink(linkInfo);
-  },
-
-  getLinkHeaderInfo: function(headerStr) {
-    // split the url off
-    var matches = headerStr.match(/\s*<([^>\s]+)>(.*)/);
-    if(!matches) return null;
-    var url = matches[1];
-    // XXX: check the url is valid (by creating an nsIURI maybe?)
-    var params = matches[2];
-    params = params.split(";");
-    var parts = [];
-    // avoid js strict warnings
-    parts["title"] = ""; parts["rel"] = ""; parts["rev"] = ""; parts["hreflang"] = ""; parts["media"] = "";
-    for(var i = 0; i < params.length; i++) {
-      matches = params[i].match(/\s*([a-z0-9\-\.]*)="?([a-z0-9\-\.]*)"?\s*/i);
-      if(matches) parts[matches[1]] = matches[2];
-    }
-    if(parts["rel"]=="" && parts["rev"]=="") return null;
-    return this.getLinkInfo(url, parts["rel"], parts["rev"], parts["title"], parts["lang"], parts["media"]);
-  },
-
+var linkToolbarUtils = {
   getLinkElementInfo: function(elt) {
     return this.getLinkInfo(elt.href, elt.rel, elt.rev, elt.title, elt.hreflang, elt.media);
   },
@@ -121,7 +77,7 @@ var linkToolbarHandler = {
     // XXX: use localized version of ":" separator
     if(media && !/\b(all|screen)\b/i.test(media))
       prefix += media + ": ";
-    if(hreflang) prefix += ltLanguageDictionary.lookupLanguageName(hreflang) + ": ";
+    if(hreflang) prefix += ltLanguageDictionary.lookup(hreflang) + ": ";
     var longTitle = prefix;
     if(title) longTitle += title;
     // the 'if' here is to ensure the longtitle isn't just the url
@@ -129,7 +85,7 @@ var linkToolbarHandler = {
 
     // bundle everything into an object to be passed to a LinkToolbarItem (or a subclass)
     return {
-      relValues: relValues,
+      relValues: relValues,  // xxx: kill this? it's redundant, since doc.__lt__links is indexed by rel
       longTitle: longTitle,
       href:  url,
       title: title
@@ -162,6 +118,9 @@ var linkToolbarHandler = {
       case "contents":
       case "toc":
         return "toc";
+      case "section":
+      case "subsection":
+        return "section";
       case "prefetch":
       case "sidebar":
         return null;
@@ -185,11 +144,35 @@ var linkToolbarHandler = {
         // toolbar is based on rel types, not rev types
         return null;
     }
+  }
+};
+
+
+
+
+var linkToolbarItems = {
+  items: [],
+
+  handleElement: function(linkElement) {
+    var linkInfo = linkToolbarUtils.getLinkElementInfo(linkElement);
+    if(!linkInfo) return null;
+
+    this.handleLink(linkInfo);
+    return linkInfo;
   },
 
+  handleLink: function(linkInfo) {
+    for(var rel in linkInfo.relValues)
+      this.getItemForLinkType(rel).displayLink(linkInfo);
+  },
+
+  // from ltUI.tabSelected it makes sense to pass links once per rel
+  handleLinkForRel: function(linkInfo, rel) {
+    this.getItemForLinkType(rel).displayLink(linkInfo);
+  },
 
   getItemForLinkType: function(linkType) {
-    if(!(linkType in this.items && this.items[linkType]))
+    if(!((linkType in this.items) && this.items[linkType]))
       this.items[linkType] = this.createItemForLinkType(linkType);
     return this.items[linkType];
   },
@@ -204,61 +187,49 @@ var linkToolbarHandler = {
         return new LinkToolbarItem(linkType,linkTypeElement);
       case "menu":
         return new LinkToolbarMenu(linkType,linkTypeElement);
-      default:
-        // should never reach this
-        throw ("Link Toolbar Error: unrecognised element exists for rel="+linkType);
     }
+    return null; // should never be reached; just attending to js-strict warnings
   },
 
-  clearAllItems: function() {
-    if(!this.hasItems) return;
-    // disable the individual items
+  clearAll: function() {
     for(var linkType in this.items) this.items[linkType].clear();
-    // remember that the toolbar is empty
-    this.hasItems = false;
   }
-}
+};
 
 
 
 
 
-/* ltLanguageDictionary is a Singleton for looking up a language name
- * given its language code.
- */
+// a dictionary for looking up readable names for 2/3-letter lang codes
+// e.g. "en" -> "English", "de" -> "German"
+// xxx doesn't handle things like "en-GB" nicely
 var ltLanguageDictionary = {
   dictionary: null,
 
-  lookupLanguageName: function(languageCode) {
+  lookup: function(languageCode) {
     if(!this.dictionary) this.createDictionary();
 
     if(languageCode in this.dictionary)
       return this.dictionary[languageCode];
 
-    // XXX: could we handle non-standard language codes better?
-    // (this includes things like "en-GB".  we only handle 2 (or
-    // occasionally 3) letter language codes at the moment)
     return languageCode;
   },
 
-  // use xpcom to read the stringbundle with language codes into an array.
-  // if it doesn't work then we don't throw errors, just the array will be empty
-  // and the user will see the raw lang codes rather than the localised names.
+  // convert the stringbundle into a js hashtable
   createDictionary: function() {
-    this.dictionary = new Array();
-    var e = null;
+    this.dictionary = [];
     try {
-      var svc = Components.classes["@mozilla.org/intl/stringbundle;1"]
-                          .getService(Components.interfaces.nsIStringBundleService);
-      var bundle = svc.createBundle("chrome://global/locale/languageNames.properties");
-      e = bundle.getSimpleEnumeration();
-    } catch(ex) {}
-    if(!e) return;
+      var bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
+                   .getService(Components.interfaces.nsIStringBundleService)
+                   .createBundle("chrome://global/locale/languageNames.properties")
+                   .getSimpleEnumeration();
+    } catch(ex) {
+      return; // we'll just live without pretty-printing
+    }
 
-    while(e.hasMoreElements()) {
-      var property = e.getNext();
-      property = property.QueryInterface(Components.interfaces.nsIPropertyElement);
-      this.dictionary[property.key] = property.value;
+    while(bundle.hasMoreElements()) {
+      var item = bundle.getNext().QueryInterface(Components.interfaces.nsIPropertyElement);
+      this.dictionary[item.key] = item.value;
     }
   }
-}
+};

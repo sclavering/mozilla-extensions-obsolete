@@ -41,38 +41,71 @@
  * ***** END LICENSE BLOCK ***** */
 
 
+var linkToolbarPrefs = {
+  showOnlyWhenNeeded: false,
+  iconsOnly: false,
+
+  useLinkGuessing: false,
+  guessUpAndTopFromURL: false,
+  guessNextAndPrevFromURL: false,
+  scanHyperlinks: false,
+
+  load: function() {
+//    const prefs = ["showOnlyWhenNeeded","iconsOnly","guessUpAndTopFromURL","guessNextAndPrevFromURL","scanHyperlinks"];
+    const prefs = ["showOnlyWhenNeeded","iconsOnly","useLinkGuessing"];
+
+    var branch = Components.classes["@mozilla.org/preferences;1"]
+                           .getService(Components.interfaces.nsIPrefService)
+                           .getBranch("extensions.linktoolbar.");
+    for(var i in prefs) this[prefs[i]] = branch.getBoolPref(prefs[i]);
+
+//    this.useLinkGuessing = this.guessUpAndTopFromURL || this.guessNextAndPrevFromURL || this.scanHyperlinks;
+
+    var lt = document.getElementById("linktoolbar");
+    if(this.showOnlyWhenNeeded) lt.setAttribute("showOnlyWhenNeeded","true");
+    else lt.removeAttribute("showOnlyWhenNeeded");
+    if(this.iconsOnly) lt.setAttribute("iconsonly","true");
+    else lt.removeAttribute("iconsonly");
+  },
+
+  init: function() {
+    this.load();
+    // xxx register this obj. as a pref observer so changes in our Options panel can apply to open windows
+  }
+};
 
 
-const linkToolbarUI = {
+
+
+var linkToolbarUI = {
   // scope is weird throught this function (|this| refers to the function itself)
   linkAdded: function(event) {
     var element = event.originalTarget;
     var doc = element.ownerDocument;
-    if(!(element instanceof Components.interfaces.nsIDOMHTMLLinkElement)
-        || !element.href
-        || !(element.rel || element.rev))
-      return;
+    if(!((element instanceof HTMLLinkElement) && element.href && (element.rel || element.rev))) return;
 
-    var linkInfo = linkToolbarHandler.getLinkElementInfo(element);
+    var linkInfo = linkToolbarUtils.getLinkElementInfo(element);
     linkToolbarUI.addLink(linkInfo, doc);
   },
 
+  // rels is a map from link rel values to |true|
   addLink: function(linkInfo, doc) {
     if(!linkInfo) return;
     if(doc == window._content.document) {
-      linkToolbarHandler.handleLink(linkInfo);
+      linkToolbarItems.handleLink(linkInfo);
       this.hasItems = true;
     }
-    // remember the link (in an array on the document)
-    if(!("__lt__links" in doc)) doc.__lt__links = new Array();
-    doc.__lt__links.push(linkInfo);
-  },
-
-  isLinkToolbarEnabled: function() {
-    var bar = document.getElementById("linktoolbar");
-    if(!bar) return false; // it's on the Fb toolbar customisation palette
-    if(bar.getAttribute("hidden")=="true") return false;
-    return true;
+    // remember the link in an array on the document
+    // xxx we'd prefer not to pollute the document's DOM of course, but javascript
+    // doesn't have hashtables (only string->anything maps), so there isn't all that
+    // much choice.
+    if(!("__lt__links" in doc)) doc.__lt__links = [];
+    var doclinks = doc.__lt__links;
+    if(doclinks.empty) doclinks.empty = false; // |length| is 0 for hashtables
+    for(var r in linkInfo.relValues) {
+      if(!(r in doclinks)) doclinks[r] = [];
+      doclinks[r].push(linkInfo);
+    }
   },
 
   clear: function(event) {
@@ -83,131 +116,51 @@ const linkToolbarUI = {
     // for the link, rather than the Document node.  So we use ownerDocument, but can't always do
     // so, because the DOM2 spec defines that as being null for Document nodes.
     var doc = event.originalTarget;
-    if(!(doc instanceof Components.interfaces.nsIDOMDocument)) doc = doc.ownerDocument;
+    if(!(doc instanceof Document)) doc = doc.ownerDocument;
     // we only want to clear the toolbar if it's the currently visible document that is unloading
-    if(doc != getBrowser().contentDocument) return;
-    linkToolbarHandler.clearAllItems();
+    if(doc != gBrowser.contentDocument) return;
+    linkToolbarItems.clearAll();
   },
 
   tabSelected: function(event) {
     if(event.originalTarget.localName != "tabs") return;
-    linkToolbarHandler.clearAllItems();
-    linkToolbarUI.refresh();
-//    linkToolbarUI.fullSlowRefresh();
-  },
+    linkToolbarItems.clearAll();
 
-
-  // hunt through the document for <meta http-equiv="link" ... />
-  getMetaLinks: function(doc) {
-    if(!(doc instanceof Components.interfaces.nsIDOMHTMLDocument)) return;
-    // get the <head/>
-    var node = doc.documentElement.firstChild;
-    while(!(node instanceof Components.interfaces.nsIDOMHTMLElement)) node = node.nextSibling;
-    if(!(node instanceof Components.interfaces.nsIDOMHTMLHeadElement)) return;
-    // get each <meta/>
-    node = node.firstChild;
-    while(node) {
-      if(node instanceof Components.interfaces.nsIDOMHTMLMetaElement) {
-        var httpequiv = node.getAttribute("http-equiv");
-        if(httpequiv && httpequiv.toLowerCase()=="link") linkToolbarUI.handleMetaLink(node);
-      }
-      node = node.nextSibling;
-    }
-  },
-
-  handleMetaLink: function(meta) {
-    var linkInfo = linkToolbarHandler.getLinkHeaderInfo(meta.getAttribute("content"));
-    if(linkInfo) this.addLink(linkInfo, meta.ownerDocument);
-  },
-
-
-  refresh: function() {
-    var currentdoc = window._content.document;
-    if(!("__lt__links" in currentdoc)) {
-      this.hasItems = false;
+    // show any links for the new doc
+    var doc = window._content.document;
+    if(!("__lt__links" in doc) || doc.__lt__links.empty) {
+      linkToolbarUI.hasItems = false;
       return;
     }
-    var links = currentdoc.__lt__links;
-    for(var i = 0; i < links.length; i++)
-      linkToolbarHandler.handleLink(links[i]);
 
-    this.hasItems = (links.length!=0);
-  },
-
-  fullSlowRefresh: function() {
-    var currentNode = getBrowser().contentDocument.documentElement;
-    if (!(currentNode instanceof Components.interfaces.nsIDOMHTMLHtmlElement))
-      return;
-    currentNode = currentNode.firstChild;
-
-    while(currentNode) {
-      if (currentNode instanceof Components.interfaces.nsIDOMHTMLHeadElement) {
-        currentNode = currentNode.firstChild;
-        while(currentNode) {
-          if (currentNode instanceof Components.interfaces.nsIDOMHTMLLinkElement)
-            linkToolbarUI.linkAdded({originalTarget: currentNode});
-          currentNode = currentNode.nextSibling;
-        }
-      } else if (currentNode instanceof Components.interfaces.nsIDOMElement) {
-        // head is supposed to be the first element inside html.
-        // Got something else instead. returning
-        return;
-      } else {
-        // Got a comment node or something like that. Moving on.
-        currentNode = currentNode.nextSibling;
-      }
+    var links = doc.__lt__links;
+    for(var rel in links) {
+      var linksForRel = links[rel];
+      for(var i in linksForRel) linkToolbarItems.handleLinkForRel(linksForRel[i], rel);
     }
+    linkToolbarUI.hasItems = true;
   },
 
-
-  /* When in "show as needed" mode we leave the bar visible after a page unloads
-   * until the next page has loaded and we can be sure it has no links, at which
-   * point this function is called.
-   * (In theory this should happen for DOMHeadLoaded, but the event has not been
-   *  implemented yet)
-   */
-  _pageLoaded: function(evt) {
-    var doc = evt.originalTarget;
-
-    if(doc instanceof HTMLDocument) {
-      linkFinder.findLinks(doc);
-      linkToolbarUI.getMetaLinks(doc);
-    }
-
-    if(doc != gBrowser.contentDocument) return;
-    if(linkToolbarHandler.hasItems) return;
-
-    linkToolbarUI.hasItems = false;
-  },
-
+  // When in "show as needed" mode we leave the bar visible after a page unloads
+  // until the next page has loaded and we can be sure it has no links, at which
+  // point this function is called.
   pageLoaded: function(evt) {
     var doc = evt.originalTarget;
-    var flibble;
-    var lt_prefs = Components.classes["@mozilla.org/preferences-service;1"].
-                          getService(Components.interfaces.nsIPrefService).getBranch("extensions.linkToolbar.");
+    if(!("__lt__links" in doc)) {
+      doc.__lt__links = [];
+      doc.__lt__links.empty = true; // |length| is 0 for hashtables. ltUI.addLink sets this to false
+    }
 
-    try {
-      flibble = lt_prefs.getBoolPref('finderActive');
-    }
-    catch(ex) {
-      lt_prefs.setBoolPref('finderActive', false);
-    }
-    
-    if((doc instanceof HTMLDocument) &&
-         lt_prefs.getBoolPref('finderActive')) {
-        linkFinder.findLinks(doc);
-        linkToolbarUI.getMetaLinks(doc);
-    }
+    if((doc instanceof HTMLDocument) && linkToolbarPrefs.useLinkGuessing) linkFinder.findLinks(doc);
 
     if(doc != gBrowser.contentDocument) return;
-    if(linkToolbarHandler.hasItems) return;
 
-    linkToolbarUI.hasItems = false;
+    // xxx can we just set this to false?
+    linkToolbarUI.hasItems = !doc.__lt__links.empty;
   },
 
-
-  /* The "hasitems" attribute is used to show/hide the toolbar in the
-   * "show when needed" mode. This property is used to set/clear it */
+  // The "hasitems" attribute is used to show/hide the toolbar in the
+  // "show when needed" mode. This property is used to set/clear it
   _hasItems: false,
   set hasItems(val) {
     if(val==this._hasItems) return;
@@ -218,9 +171,9 @@ const linkToolbarUI = {
     return this._hasItems;
   },
 
-
   // called whenever something on the toolbar gets an onclick event
   // (onclick used to get middle-clicks.  otherwise we would use oncommand)
+  // xxx yuck. the functions added for bug 246719 will allow this to be greatly simplified
   commanded: function(event) {
     // ignore right clicks
     if(event.button==2) return;
@@ -276,98 +229,27 @@ const linkToolbarUI = {
     loadURI(destURL, referrer);
   },
 
-
-  toggleLinkToolbar: function(target) {
-    if(target.id=="linktoolbar-iconsonly") {
-      this.toggleIconsOnlyMode(target);
-      return;
-    }
-    var wasEnabled = this.isLinkToolbarEnabled();
-    document.getElementById("linktoolbar").setAttribute("hidden", target.value);
-    document.persist("linktoolbar", "hidden");
-    var isEnabled = this.isLinkToolbarEnabled();
-    if(wasEnabled && !isEnabled) {
-      this.removeHandlers();
-      linkToolbarHandler.clearAllItems();
-    } else if(!wasEnabled && isEnabled) {
-      this.addHandlers();
-      this.fullSlowRefresh();
-    }
+  // multiline tooltips.  text is loaded from tooltiptext[012] attributes
+  fillTooltip: function(tooltipElement) {
+    var text1 = tooltipElement.getAttribute("tooltiptext1")
+             || tooltipElement.getAttribute("tooltiptext0");
+    var line1 = document.getElementById("linktoolbar-tooltip-1");
+    line1.hidden = !(line1.value = text1);
+    var text2 = tooltipElement.getAttribute("tooltiptext2");
+    var line2 = document.getElementById("linktoolbar-tooltip-2");
+    line2.hidden = !(line2.value = text2);
+    // return value indicates if the tooltip should be allowed to show
+    return !!(text1 || text2);
   },
 
-  toggleIconsOnlyMode: function(menuitem) {
-    var toolbar = document.getElementById("linktoolbar");
-    if(menuitem.getAttribute("checked")=="true")
-      toolbar.setAttribute("iconsonly","true");
-    else
-      toolbar.removeAttribute("iconsonly");
-    document.persist("linktoolbar","iconsonly");
-  },
-
-
-  initLinkbarVisibilityMenu: function() {
-    var bar = document.getElementById("linktoolbar");
-    var state = bar.getAttribute("hidden");
-    if(!state) state = "maybe";
-    var checkedItem = document.getElementById("cmd_viewlinktoolbar_" + state);
-    checkedItem.setAttribute("checked", true);
-    checkedItem.checked = true;
-    // icons only toggle
-    var iconsonly = (bar.getAttribute("iconsonly")=="true");
-    var item = document.getElementById("linktoolbar-iconsonly");
-    item.setAttribute("checked",iconsonly);
-  },
-
-
-  handlersActive: false,
-
-  initHandlers: function() {
-    if(linkToolbarUI.isLinkToolbarEnabled()) this.addHandlers();
-    else this.removeHandlers();
-  },
-  addHandlers: function() {
-    if(linkToolbarUI.handlersActive) return;
+  onload: function() {
     var contentArea = document.getElementById("appcontent");
     contentArea.addEventListener("select", linkToolbarUI.tabSelected, false);
     contentArea.addEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
     contentArea.addEventListener("unload", linkToolbarUI.clear, true);
     contentArea.addEventListener("load", linkToolbarUI.pageLoaded, true);
-    contentArea.addEventListener("DOMHeadLoaded", linkToolbarUI.pageLoaded, true);
-    linkToolbarUI.handlersActive = true;
-  },
-  removeHandlers: function() {
-    if(!linkToolbarUI.handlersActive) return;
-    var contentArea = document.getElementById("appcontent");
-    contentArea.removeEventListener("select", linkToolbarUI.tabSelected, false);
-    contentArea.removeEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
-    contentArea.removeEventListener("unload", linkToolbarUI.clear, true);
-    contentArea.removeEventListener("load", linkToolbarUI.pageLoaded, true);
-    contentArea.removeEventListener("DOMHeadLoaded", linkToolbarUI.pageLoaded, true);
-    linkToolbarUI.handlersActive = false;
-  },
-
-  // multiline tooltips.  text is loaded from tooltiptext[012] attributes
-  fillTooltip: function(tooltipElement) {
-    var text1 = tooltipElement.getAttribute("tooltiptext1");
-    // for items on the toolbar itself
-    if(text1=="") text1 = tooltipElement.getAttribute("tooltiptext0");
-    var line1 = document.getElementById("linktoolbar-tooltip-1");
-    linkToolbarUI.fillTooltipLine(line1,text1);
-    var text2 = tooltipElement.getAttribute("tooltiptext2");
-    var line2 = document.getElementById("linktoolbar-tooltip-2");
-    linkToolbarUI.fillTooltipLine(line2,text2);
-    // return value indicates if the tooltip should be allowed to show
-    return ((text1 && text1!="") || (text2 && text2!=""));
-  },
-  fillTooltipLine: function(line, text) {
-    var notempty = (text && text!="");
-    if(notempty) line.value = text;
-    line.hidden = !notempty;
-  },
-
-  onload: function() {
-    linkToolbarUI.initHandlers();
+    linkToolbarPrefs.init();
   }
-}
+};
 
 window.addEventListener("load", linkToolbarUI.onload, false);

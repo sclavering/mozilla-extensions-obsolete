@@ -5,7 +5,6 @@
  * Contributor(s):
  *   Stephen Clavering <mozilla@clav.me.uk>   (Complete rewrite 2003-04-17)
  *   Chris Neale <cdn@mozdev.org>  [ tweaks and email icon for [mailto:]s ]
- *
  */
 
 
@@ -96,7 +95,7 @@ buttons switch to type=menu. we change the button icon instead  */
 
 /* Hide the link toolbar if it is set to autohide is empty */
 
-#linktoolbar[hidden="maybe"][hasitems="false"] {
+#linktoolbar[showOnlyWhenNeeded="true"][hasitems="false"] {
   display:none;
 }
 
@@ -111,9 +110,3 @@ bookmark folders or the Document+More menus still have a text label */
 #linktoolbar[iconsonly="true"] > toolbarseparator {
   display: none;
 }
-
-/*
-tab {
-  -moz-binding: url(chrome://linktoolbar/skin/blip.xml#tab);
-}
-*/

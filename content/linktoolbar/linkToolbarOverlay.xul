@@ -42,41 +42,13 @@
 
 <?xml-stylesheet href="chrome://linktoolbar/skin/linkToolbar.css" type="text/css"?>
 
-<!DOCTYPE overlay [
-<!ENTITY % selfDTD SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
-%selfDTD;
-]>
+<!DOCTYPE overlay SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
 
 <overlay id="linkToolbarOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/x-javascript" src="linkFinder.js"/>
   <script type="application/x-javascript" src="linkToolbarHandler.js"/>
   <script type="application/x-javascript" src="linkToolbarItem.js"/>
   <script type="application/x-javascript" src="linkToolbarUI.js"/>
-
-  <menupopup id="menu_viewPopup">
-    <menu label="&linkToolbar.label;" position="3"
-          accesskey="&linkToolbar.accesskey;"
-          oncommand="linkToolbarUI.toggleLinkToolbar(event.target)"
-          onpopupshowing="linkToolbarUI.initLinkbarVisibilityMenu()">
-      <menupopup>
-        <menuitem label="&linkToolbarAlways.label;"
-                  accesskey="&linkToolbarAlways.accesskey;"
-                  class="menuitem-iconic" type="radio" value="false"
-                  name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_false" />
-        <menuitem label="&linkToolbarAsNeeded.label;"
-                  accesskey="&linkToolbarAsNeeded.accesskey;"
-                  class="menuitem-iconic" type="radio" value="maybe"
-                  name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_maybe" />
-        <menuitem label="&linkToolbarNever.label;"
-                  accesskey="&linkToolbarNever.accesskey;"
-                  class="menuitem-iconic" type="radio" value="true"
-                  name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_true" />
-         <menuseparator/>
-         <menuitem id="linktoolbar-iconsonly" type="checkbox"
-            label="&linkToolbarIconsOnly.label;" accesskey="&linkToolbarIconsOnly.accesskey;"/>
-      </menupopup>
-    </menu>
-  </menupopup>
 
   <!-- our two line tooltip -->
   <popupset id="mainPopupSet">
@@ -135,10 +107,6 @@
               class="menu-iconic bookmark-item" container="true">
             <menupopup id="link-section-popup"/>
           </menu>
-          <menu id="link-subsection" label="&subSectionButton.label;" hidden="true"
-              class="menu-iconic bookmark-item" container="true">
-            <menupopup id="link-subsection-popup"/>
-          </menu>
           <menu id="link-appendix" label="&appendixButton.label;" hidden="true"
               class="menu-iconic bookmark-item" container="true">
             <menupopup id="link-appendix-popup"/>
@@ -167,11 +135,5 @@
         </menupopup>
       </toolbarbutton>
     </statusbarpanel>
-
-<!--
-    <statusbarpanel id="linktoolbar-toggle-panel" insertafter="linktoolbar">
-      <toolbarbutton id="linktoolbar-toggle" oncommand="toggleLinkToolbar();" persist="left" />
-    </statusbarpanel>
--->
   </statusbar>
 </overlay>
