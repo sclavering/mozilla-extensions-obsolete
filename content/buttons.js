@@ -21,11 +21,6 @@ var tbxCommands = {
     openNewTabWith('chrome://browser/content/bookmarks/bookmarksManager.xul');
   },
 
-  downloadPanel: function(e) {
-    if(e.button!=1) return;
-    openNewTabWith("chrome://browser/content/downloads/downloadPanel.xul");
-  },
-
   historyPanel: function(e) {
     if(e.button!=1) return;
     openNewTabWith("chrome://browser/content/history/history-panel.xul");
@@ -37,10 +32,10 @@ var tbxCommands = {
   },
 
   clearCache: function() {
-  	var classID = Components.classes["@mozilla.org/network/cache-service;1"];
-  	var cacheService = classID.getService(Components.interfaces.nsICacheService);
-  	cacheService.evictEntries(Components.interfaces.nsICache.STORE_IN_MEMORY);
-  	cacheService.evictEntries(Components.interfaces.nsICache.STORE_ON_DISK);
+    var classID = Components.classes["@mozilla.org/network/cache-service;1"];
+    var cacheService = classID.getService(Components.interfaces.nsICacheService);
+    cacheService.evictEntries(Components.interfaces.nsICache.STORE_IN_MEMORY);
+    cacheService.evictEntries(Components.interfaces.nsICache.STORE_ON_DISK);
   },
 
   // unused
@@ -123,7 +118,7 @@ var tbxWebProgressListener = {
       btn.removeAttribute('state');
       btn.setAttribute('label',btn.getAttribute('reloadlabel'));
       btn.setAttribute('tooltiptext',btn.getAttribute('reloadtooltip'));
-    }
+   }
   },
 
   onProgressChange: function(aWebProgress, aRequest, aCurSelfProgress, aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {},

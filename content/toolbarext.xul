@@ -17,17 +17,9 @@
   <script src="buttons.js" type="application/x-javascript"/>
   <script src="pagecookies.js" type="application/x-javascript"/>
 
-  <!-- override the Print button to do Print Preview instead :) -->
-  <toolbarbutton id="print-button" oncommand="BrowserPrintPreview();"/>
-
-
-  <!-- allow all sidebars to be opened in a new tab when the toolbarbutton is middle clicked
-       note: might replace dl and hsitory panel with something based on the old seamonkey
-       Download Manager and History window later -->
-  <toolbarbutton id="downloads-button" onclick="tbxCommands.downloadPanel(event);"/>
+  <!-- allow both sidebars to be opened in a new tab when the toolbarbutton is middle clicked -->
   <toolbarbutton id="history-button" onclick="tbxCommands.historyPanel(event);"/>
   <toolbarbutton id="bookmarks-button" onclick="tbxCommands.bookmarksPanel(event);"/>
-
 
   <!-- add new buttons -->
   <toolbarpalette id="BrowserToolbarPalette">
