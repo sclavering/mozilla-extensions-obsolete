@@ -1,0 +1,8 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#styleselector {
+  list-style-image: url(chrome://linktoolbar/skin/btn1/icongrey.png);
+}
+#styleselector[hasstyles] {
+  list-style-image: url(chrome://linktoolbar/skin/btn1/icon.png);
+}

@@ -1,0 +1,4 @@
+<!ENTITY styleselector.label          "Style">
+<!ENTITY styleselector.tooltip        "Choose a style for the current web page">
+<!ENTITY styleselectorNoPageStyle     "No Page Style">
+<!ENTITY styleselectorPersistentStyle "Basic Page Style">

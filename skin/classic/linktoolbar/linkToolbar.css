@@ -47,10 +47,10 @@
 #link-top:hover {
   -moz-image-region: rect(16px 16px 32px 0);
 }
-#link-top[disabled="true"] {
+#linktoolbar > #link-top[disabled="true"] {
   -moz-image-region: rect(32px 16px 48px 0);
   color: graytext !important;
-  text-decoration: none !important;
+  text-decoration: none;
 }
 
 #link-up {

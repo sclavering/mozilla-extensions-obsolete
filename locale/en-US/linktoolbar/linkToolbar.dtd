@@ -88,10 +88,3 @@
 <!ENTITY lastButton.tooltip "Last page in sequence">
 <!ENTITY documentButton.tooltip "Navigational aids">
 <!ENTITY moreButton.tooltip "Other related pages">
-
-<!-- clav's styleswitcher (tweaked) -->
-
-<!ENTITY styleButton.label          "Stylesheets">
-<!ENTITY styleButton.tooltip        "Choose a stylesheet for the current web page">
-<!ENTITY styleswitcherNoPageStylesheets         "No Page Stylesheet">
-<!ENTITY styleswitcherPersistentPageStylesheets "Basic Page Style">

@@ -46,7 +46,12 @@
 <?xml-stylesheet href="chrome://linktoolbar/skin/styleselector.css" type="text/css"?>
 
 <?xul-overlay href="chrome://global/content/globalOverlay.xul"?>
-<!DOCTYPE overlay SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
+<!DOCTYPE overlay [
+<!ENTITY % selfDTD SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
+%selfDTD;
+<!ENTITY % styleDTD SYSTEM "chrome://linktoolbar/locale/styleselector.dtd">
+%styleDTD;
+]>
 
 <overlay id="linkToolbarOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -223,21 +228,20 @@
       <toolbarbutton id="sharc-button" oncommand="openTopWin('http://cdn.mozdev.org/linkToolbar/');"/>
 -->
     </statusbarpanel>
-    
-    <statusbarpanel id="linktoolbar" class="chromeclass-directories" insertafter="linktoolbar" insertbefore="statusbar-progresspanel"
-        tbautostretch="always" title="Style Twitcher">
-      <toolbarbutton id="style-menu" class="bookmark-item"
-          type="menu"
-          container="true"
-          label="&styleButton.label;"
-          tooltiptext="&styleButton.tooltip;">
-        <menupopup id="styleswitcher-popup" onpopupshowing="styleswitcherBuildMenu(this);"
-                   oncommand="styleswitcherMenuClickHandler(event, this, window._content);">
-          <menuitem label="&styleswitcherNoPageStylesheets;" type="radio"/>
-          <menuitem label="&styleswitcherPersistentPageStylesheets;" type="radio"/>
+
+    <statusbarpanel id="styleselector-panel" insertafter="linktoolbar" insertbefore="statusbar-progresspanel">
+      <toolbarbutton id="styleselector" type="menu" label="&styleselector.label;"
+          tooltiptext="&styleselector.tooltip;">
+        <menupopup id="styleselector-popup"
+          onpopupshowing="StyleSelector.buildMenu(this);"
+          onpopuphiding="StyleSelector.emptyMenu(this);"
+          oncommand="event.preventBubble(); StyleSelector.commanded(event, this, window._content);">
+          <menuitem label="&styleselectorNoPageStyle;" type="radio"/>
+          <menuitem label="&styleselectorPersistentStyle;" type="radio"/>
         </menupopup>
       </toolbarbutton>
     </statusbarpanel>
+
     <!-- </toolbar> -->
   <!-- </vbox> -->
   </statusbar>
