@@ -6,6 +6,10 @@ function gotoLoadURLInNewTab(e) {
 }
 
 var GoTo = {
+  init: function() {
+    document.getElementById("contentAreaContextMenu").addEventListener("popupshowing",GoTo.hideMenu,false);
+  },
+
   commanded: function(e,menu) {
     var t = e.target;
     if(t.id == "goto-clear-url") {
@@ -21,6 +25,12 @@ var GoTo = {
       _content.focus();
     }
     if(e.button==1) menu.hidePopup();
+  },
+
+  // called onPopupShowing for the main context menu. hides GoTo if it's not relevant
+  hideMenu: function() {
+    var cm = gContextMenu;
+    document.getElementById("context-goto").hidden = ( cm.isTextSelected || cm.onImage || cm.onTextInput );
   },
 
   clearMenu: function(menu) {
@@ -130,3 +140,5 @@ var GoTo = {
     menu.appendChild(menuitem);
   }
 };
+
+window.addEventListener("load",GoTo.init,false);
