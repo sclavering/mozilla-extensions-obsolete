@@ -76,24 +76,24 @@ var StyleSelector = {
     var titles = new Array();
     for(var i = 0; i < sheets.length; i++) {
       // make sure we don't count different sheets with the same title
-      if(sheets[i].title=="" || sheets[i].title in titles) continue;
+      if(sheets[i].title in titles) continue;
       var media = sheets[i].media;
       // by the DOM2-Style spec i think media should default to
       // something but Moz just seems to leave it blank.
-      if(media.length==0) {
+      if(media.length==0 || media.mediaText=="") {
         numsheets++;
-        titles.push(sheets[i].title);
+        titles[sheets[i].title] = true;
         continue;
       }
       for(var j = 0; j < media.length; j++) {
         if(media.item(j)=="screen" || media.item(j)=="all") {
           numsheets++;
-          titles.push(sheets[i].title);
+          titles[sheets[i].title] = true;
           continue;
         }
       }
     }
-    return (numsheets>0);
+    return (numsheets>1);
   },
 
   commanded: function(evt, menu, page) {
