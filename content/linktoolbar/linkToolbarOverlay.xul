@@ -100,6 +100,16 @@
     </popupset>
   </window>
 
+  <!-- our two line tooltip -->
+  <popupset id="mainPopupSet">
+    <tooltip id="linktoolbar-tooltip" orient="vertical"
+        onpopupshowing="linkToolbarUI.fillTooltip(document.tooltipNode);">
+      <label id="linktoolbar-tooltip-1"/>
+      <label id="linktoolbar-tooltip-2"/>
+    </tooltip>
+  </popupset>
+    
+
 <!--
 <toolbarpalette id="BrowserToolbarPalette">
     <toolbaritem  id="linktoolbar" class="chromeclass-directories"
@@ -217,12 +227,14 @@
     <!-- must use onclick not oncommand to get middleclick-opens-in-new-tab -->
     <statusbarpanel id="linktoolbar" class="chromeclass-directories" insertafter="statusbar-progresspanel"
         onclick="return linkToolbarUI.commanded(event);"
-        tbautostretch="always" hidden="maybe" hasitems="false">
+        tbautostretch="always" hidden="maybe" hasitems="false"
+        tooltip="linktoolbar-tooltip"
+        >
 
       <toolbarbutton disabled="true" id="link-top"
-          label="&topButton.label;" tooltiptext="&topButton.tooltip;"/>
+          label="&topButton.label;" tooltiptext0="&topButton.tooltip;"/>
       <toolbarbutton disabled="true" id="link-up"
-          label="&upButton.label;" tooltiptext="&upButton.tooltip;"><!--  type="menu" -->
+          label="&upButton.label;" tooltiptext0="&upButton.tooltip;">
         <menupopup position="before_end" />
       </toolbarbutton>
 <!--      <toolbarbutton id="link-up" class="bookmark-item"
@@ -236,18 +248,18 @@
 
       <toolbarseparator/>
       <toolbarbutton disabled="true" id="link-first"
-          label="&firstButton.label;" tooltiptext="&firstButton.tooltip;"/>
+          label="&firstButton.label;" tooltiptext0="&firstButton.tooltip;"/>
       <toolbarbutton disabled="true" id="link-prev"
-          label="&prevButton.label;" tooltiptext="&prevButton.tooltip;"/>
+          label="&prevButton.label;" tooltiptext0="&prevButton.tooltip;"/>
       <toolbarbutton id="link-next" disabled="true"
-          label="&nextButton.label;" tooltiptext="&nextButton.tooltip;"/>
+          label="&nextButton.label;" tooltiptext0="&nextButton.tooltip;"/>
       <toolbarbutton id="link-last" disabled="true"
-          label="&lastButton.label;" tooltiptext="&lastButton.tooltip;"/>
+          label="&lastButton.label;" tooltiptext0="&lastButton.tooltip;"/>
       <toolbarseparator/>
 
       <toolbarbutton id="document-menu" class="bookmark-item" type="menu" container="true"
           label="&documentButton.label;" disabled="true"
-          tooltip="aTooltip" tooltiptext="&documentButton.tooltip;">
+          >
         <menupopup id="document-menu-popup">
           <menuitem id="link-toc" label="&tocButton.label;" hidden="true"
               class="menuitem-iconic bookmark-item"/>
@@ -274,11 +286,9 @@
         </menupopup>
       </toolbarbutton>
 
-      <toolbarbutton id="more-menu" class="bookmark-item"
-          type="menu"
-          container="true"
+      <toolbarbutton id="more-menu" class="bookmark-item" type="menu" container="true"
           label="&moreButton.label;" disabled="true"
-          tooltiptext="&moreButton.tooltip;">
+          >
         <menupopup id="more-menu-popup">
           <menuitem id="link-help" label="&helpButton.label;" hidden="true"
               class="menuitem-iconic bookmark-item"/>

@@ -239,6 +239,29 @@ const linkToolbarUI = {
       }
     }
   },
+  
+  // multiline tooltips.  text is loaded from tooltiptext[12] attributes
+  fillTooltip: function(tooltipElement) {
+    var text1 = tooltipElement.getAttribute("tooltiptext1");
+    // for items on the toolbar itself
+    if(text1=="") text1 = tooltipElement.getAttribute("tooltiptext0");
+    var text2 = tooltipElement.getAttribute("tooltiptext2");
+    var line = document.getElementById("linktoolbar-tooltip-1");
+    linkToolbarUI.fillTooltipLine(line,text1);
+    line = document.getElementById("linktoolbar-tooltip-2");
+    linkToolbarUI.fillTooltipLine(line,text2);
+    // stop the tooltip showing oif we have no text for it
+    return ((text1 && text1!="") || (text2 && text2!=""));
+  },
+  fillTooltipLine: function(line, text) {
+    if(text && text!="") {
+      line.value = text;
+      line.hidden = false;
+    } else {
+      line.hidden = true;
+    }
+  },
+      
 
   onload: function() {
     document.removeEventListener("load", linkToolbarUI.onload, true);

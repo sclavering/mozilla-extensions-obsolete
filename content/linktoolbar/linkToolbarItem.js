@@ -69,7 +69,8 @@ function LinkToolbarItem (linkType) {
       this.getXULElement().setAttribute("hidden", "true");
 
     this.getXULElement().removeAttribute("href");
-    this.getXULElement().removeAttribute("tooltiptext");
+    this.getXULElement().removeAttribute("tooltiptext1");
+    this.getXULElement().removeAttribute("tooltiptext2");
   }
 
   this.displayLink = function(linkElement) {
@@ -83,10 +84,9 @@ function LinkToolbarItem (linkType) {
     this.getXULElement().setAttribute("href", linkElement.href);
     this.getXULElement().removeAttribute("disabled");
     this.getXULElement().removeAttribute("hidden");
-    if (linkElement.title != '')
-      this.getXULElement().setAttribute("tooltiptext", linkElement.title + ' [' + linkElement.href + ']');
-    else
-      this.getXULElement().setAttribute("tooltiptext", linkElement.href);
+    // lines will be hidden if blank
+    this.getXULElement().setAttribute("tooltiptext1", linkElement.title);
+    this.getXULElement().setAttribute("tooltiptext2", linkElement.href);
   }
 
   this.enableParentMenuButton = function() {
@@ -121,12 +121,14 @@ function LinkToolbarButton (linkType) {
 
   this.clear = function() {
     this.__proto__.clear.apply(this);
-    this.getXULElement().removeAttribute("tooltiptext");
+//    this.getXULElement().removeAttribute("tooltiptext1");
+    this.getXULElement().removeAttribute("tooltiptext2");
   }
 
   this.setItem = function(linkElement) {
     this.__proto__.setItem.apply(this, [linkElement]);
-    this.getXULElement().setAttribute("tooltiptext", linkElement.getTooltip());
+    this.getXULElement().setAttribute("tooltiptext1", linkElement.getLongTitle());
+    this.getXULElement().setAttribute("tooltiptext2", linkElement.href);
   }
 
   this.enableParentMenuButton = function() { /* do nothing */ }
@@ -176,10 +178,8 @@ function LinkToolbarMenu (linkType) {
     //   attributes
     var menuitem = document.createElement("menuitem");
 
-    if (linkElement.title != '')
-      menuitem.setAttribute("tooltiptext", linkElement.title + ' [' + linkElement.href + ']');
-    else
-      menuitem.setAttribute("tooltiptext", linkElement.href);
+    menuitem.setAttribute("tooltiptext1", linkElement.title);
+    menuitem.setAttribute("tooltiptext2", linkElement.href);
 
     menuitem.setAttribute("label", linkElement.getLabel());
     menuitem.setAttribute("href", linkElement.href);
