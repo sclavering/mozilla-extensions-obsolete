@@ -93,7 +93,7 @@ var linkToolbarUI = {
     var doc = elt.ownerDocument;
     if(!((elt instanceof HTMLLinkElement) && elt.href && (elt.rel || elt.rev))) return;
 
-    var rels = linkToolbarUtils.getLinkRels(elt.rel, elt.rev);
+    var rels = linkToolbarUtils.getLinkRels(elt.rel, elt.rev, elt.type, elt.title);
     if(!rels) return;
     var linkInfo = new LTLinkInfo(elt.href, elt.title, elt.hreflang, elt.media);
     linkToolbarUI.addLink(linkInfo, doc, rels);

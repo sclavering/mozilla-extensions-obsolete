@@ -73,21 +73,21 @@ LTLinkInfo.prototype = {
 
 
 var linkToolbarUtils = {
-  getLinkRels: function(relStr, revStr) {
+  getLinkRels: function(relStr, revStr, mimetype, title) {
     // Ignore certain rel values for links
     // XXX: should some of these possibilites just be handled by returning null in standardiseRelType
     // as we do for prefetch?  that would mean the link would still be handled if it had other rel
     // values that were interesting.  (icon and stylesheet we want to keep doing this way)
     if(/\b(stylesheet\b|icon\b|pingback\b|fontdef\b|p3pv|schema\.)/i.test(relStr)) return null;
 
-    var relValues = [], rel, i;
+    var relValues = [], rel, i, haveRels = false;
     // get relValues from rel
     if(relStr) {
       var rawRelValues = relStr.split(/[ \t\f\r\n\u200B]+/);
       for(i = 0; i < rawRelValues.length; i++) {
-        rel = this.standardiseRelType(rawRelValues[i]);
+        rel = this.standardiseRelType(rawRelValues[i], mimetype, title);
         // avoid duplicate rel values
-        if(rel) relValues[rel] = true;
+        if(rel) relValues[rel] = true, haveRels = true;
       }
     }
     // get relValues from rev
@@ -95,14 +95,14 @@ var linkToolbarUtils = {
       var revValues = revStr.split(/[ \t\f\r\n\u200B]+/);
       for(i = 0; i < revValues.length; i++) {
         rel = this.convertRevToRel(revValues[i]);
-        if(rel) relValues[rel] = true;
+        if(rel) relValues[rel] = true, haveRels = true;
       }
     }
 
-    return relValues;
+    return haveRels ? relValues : null;
   },
 
-  standardiseRelType: function(relValue) {
+  standardiseRelType: function(relValue, mimetype, title) {
     switch (relValue.toLowerCase()) {
       case "top":
       case "origin":
@@ -123,6 +123,13 @@ var linkToolbarUtils = {
       case "end":
       case "last":
         return "last";
+      case "alternate":
+        // Ignore "Livemark" links (see browser.js#~580 livemarkOnLinkAdded(...))
+        if((mimetype && (mimetype=="application/rss+xml" || mimetype=="application/atom+xml"
+            || mimetype=="application/x.atom+xml")) || (title && (title.indexOf("RSS")!=-1
+            || title.indexOf("Atom")!=-1 || title.indexOf("rss")!=-1)))
+          return null;
+        return "alternate";
       case "author":
         return "author";
       case "contents":
