@@ -23,7 +23,7 @@
  * Contributor(s):
  *   Original Use Stylesheet: functions by Tim Hill (bug 6782)
  *   Frameset Handling: Neil Rashbrook <neil@parkwaycc.co.uk>
- *   Multiple stylesheet detection, disable all sheets, and rewrite for StyleSelector
+ *   Alt styles detection, disable all styles, and rewrite for StyleSelector
  *     Stephen Clavering <mozilla@clav.co.uk>
  *
  * Alternatively, the contents of this file may be used under the terms of
@@ -44,13 +44,11 @@
 
 var StyleSelector = {
   contentArea: null,
-  button: null, // styleswitcher toolbarbutton
 
   init: function() {
     // isn't JS scoping stupid?
     window.removeEventListener("load",this,true);
     StyleSelector.contentArea = document.getElementById("appcontent");
-    //StyleSelector.button = document.getElementById("styleselector");
     StyleSelector.contentArea.addEventListener("select", function(e){StyleSelector.updateUI(e);},false);
     StyleSelector.contentArea.addEventListener("load", function(e){StyleSelector.updateUI(e);},true);
   },
@@ -198,7 +196,7 @@ var StyleSelector = {
 
   // enable one of the stylesheets for the page
   useStylesheet: function(frameset, title) {
-    if(!title || isStylesheetInFrame(frameset, title))
+    if(!title || this.isStylesheetInFrame(frameset, title))
       this.useStylesheetInFrame(frameset, title);
     for(var i = 0; i < frameset.frames.length; i++)
       this.useStylesheet(frameset.frames[i], title);
