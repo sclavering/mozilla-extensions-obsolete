@@ -13,7 +13,7 @@ function linkit_getInnerText(el) {
     // call recursively for elements
     else if(kids[i].nodeType==1) s += linkit_getInnerText(kids[i]);
 
-    if(kids[i].nodeName == "img" || kids[i].nodeName == "IMG") {
+    if(kids[i].nodeName.toLowerCase() == "img") {
       var img_att = kids[i].attributes;
       for(var k = 0; k < img_att.length; k++) {
         s += img_att.item(k).value;
@@ -70,6 +70,10 @@ function linkit(event) {
       if (/^#/i.test(href)); else
         linkit_addLink(page,hydra,"next",href,"LinkIt [>] (" +href+ ")");
 
+    else if(/^first|\/first|first$|^begin|\/begin|\|</i.test(iText)) // ? >\u007c| ?
+      if (/^#/i.test(href)); else
+        linkit_addLink(page,hydra,"first",href,"LinkIt [|<] (" +href+ ")");
+
     else if(/^last|\/last|last$|^end|\/end|>\|/i.test(iText)) // ? >\u007c| ?
       if (/^#/i.test(href)); else
         linkit_addLink(page,hydra,"last",href,"LinkIt [>|] (" +href+ ")");
@@ -79,6 +83,40 @@ function linkit(event) {
         linkit_addLink(page,hydra,"linkit",href,"LinkIt [" + iText + "] (" +href+ ")");*/
   }
 }
+
+/*
+    switch (relAttribute.toLowerCase()) {
+      case "start":
+      case "top":
+      case "origin":
+        return "top";
+      case "up":
+      case "parent":
+        return "up";
+      case "begin":
+      case "first":
+        return "first";
+      case "next":
+      case "child":
+        return "next";
+      case "prev":
+      case "previous":
+        return "prev";
+      case "end":
+      case "last":
+        return "last";
+      case "author":
+      case "made":
+        return "author";
+      case "contents":
+      case "toc":
+        return "toc";
+      case "prefetch":
+        return null;
+      default:
+        return relAttribute.toLowerCase();
+    }
+*/
 
 function linkit_addLink(page,head,rel,url,title) {
   var link = page.createElement("link");
