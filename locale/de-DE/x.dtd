@@ -1,0 +1,14 @@
+<!-- $Id: x.dtd,v 1.1 2004/04/27 15:10:35 clav Exp $ -->
+
+<!ENTITY x.label   "Paranoia">
+
+<!ENTITY x.tooltip "Paranoia - Löscht private Informationen.">
+
+<!ENTITY xdialog.title "Informationen löschen">
+
+<!ENTITY clearHistory   "Chronik löschen">
+<!ENTITY clearFormInfo  "Formulardaten löschen">
+<!ENTITY clearPasswords "Passwörter löschen">
+<!ENTITY clearDownloads "Download-Chronik löschen">
+<!ENTITY clearCookies   "Cookies löschen">
+<!ENTITY clearCache     "Cache löschen">

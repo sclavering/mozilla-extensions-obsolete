@@ -1,11 +1,11 @@
 const kDisplayName = "x";
 const kName = "x";
 const kPackage = "/cdn.mozdev.org/x";
-const kVersion = "0.3";
+const kVersion = "0.4";
 
 const kJarFile = "x.jar";
 const kContentFolder = "content/x/";
-const kLocaleFolders = ["locale/en-US/x/"];
+const kLocaleFolders = ["locale/en-US/x/","locale/de-DE/"];
 const kSkinFolder = "skin/classic/x/"; // leave blank if not applicable
 
 
