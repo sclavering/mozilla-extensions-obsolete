@@ -112,8 +112,7 @@ const linkToolbarUI = {
 
 
   // hunt through the document for <meta http-equiv="link" ... />
-  getMetaLinks: function(e) {
-    var doc = e.originalTarget;
+  getMetaLinks: function(doc) {
     if(!(doc instanceof Components.interfaces.nsIDOMHTMLDocument)) return;
     // get the <head/>
     var node = doc.documentElement.firstChild;
@@ -185,6 +184,7 @@ const linkToolbarUI = {
     var doc = evt.originalTarget;
 
     linkFinder.findLinks(doc);
+    linkToolbarUI.getMetaLinks(doc);
 
     if(doc != getBrowser().contentDocument) return;
     if(linkToolbarHandler.hasItems) return;
@@ -194,7 +194,7 @@ const linkToolbarUI = {
 
 
   /* The "hasitems" attribute is used to show/hide the toolbar in the
-   * "show when needed mode. This property is used to set/clear it */
+   * "show when needed" mode. This property is used to set/clear it */
   _hasItems: false,
   set hasItems(val) {
     if(val==this._hasItems) return;
@@ -317,7 +317,6 @@ const linkToolbarUI = {
     contentArea.addEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
     contentArea.addEventListener("unload", linkToolbarUI.clear, true);
     contentArea.addEventListener("load", linkToolbarUI.pageLoaded, true);
-    contentArea.addEventListener("load", linkToolbarUI.getMetaLinks, true);
     contentArea.addEventListener("DOMHeadLoaded", linkToolbarUI.pageLoaded, true);
     linkToolbarUI.handlersActive = true;
   },
@@ -328,7 +327,6 @@ const linkToolbarUI = {
     contentArea.removeEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
     contentArea.removeEventListener("unload", linkToolbarUI.clear, true);
     contentArea.removeEventListener("load", linkToolbarUI.pageLoaded, true);
-    contentArea.removeEventListener("load", linkToolbarUI.getMetaLinks, true);
     contentArea.removeEventListener("DOMHeadLoaded", linkToolbarUI.pageLoaded, true);
     linkToolbarUI.handlersActive = false;
   },
