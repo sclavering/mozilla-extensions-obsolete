@@ -72,29 +72,17 @@ const linkToolbarUI = {
         || !(element.rel || element.rev))
       return;
 
-    // XXX: use addLink, below    
-    var linkInfo;
-    if(doc == getBrowser().contentDocument) {
-      linkInfo = linkToolbarHandler.handleElement(element);
-      if(linkInfo) linkToolbarUI.hasItems = true;
-    } else {
-      linkInfo = linkToolbarHandler.getLinkElementInfo(element);
-    }
-
-    // linkInfo will be null if the link was one that linkToolbarHandler.isLinkIgnored didn't like
-    if(linkInfo) linkToolbarUI.rememberLink(linkInfo, doc);
+    var linkInfo = linkToolbarHandler.getLinkElementInfo(element);
+    linkToolbarUI.addLink(linkInfo, doc);
   },
   
   addLink: function(linkInfo, doc) {
+    if(!linkInfo) return;
     if(doc == window._content.document) {
       linkToolbarHandler.handleLink(linkInfo);
       this.hasItems = true;
     }
-    this.rememberLink(linkInfo, doc);
-  },
-  
-  rememberLink: function(linkInfo, doc) {
-    if(!linkInfo) return;
+    // remember the link (in an array on the document)
     if(!("__lt__links" in doc)) doc.__lt__links = new Array();
     doc.__lt__links.push(linkInfo);
   },
@@ -190,7 +178,8 @@ const linkToolbarUI = {
   /* When in "show as needed" mode we leave the bar visible after a page unloads
    * until the next page has loaded and we can be sure it has no links, at which
    * point this function is called.
-   * (Note: this used to be done by the deactivate() method.)
+   * (In theory this should happen for DOMHeadLoaded, but the event has not been
+   *  implemented yet)
    */
   pageLoaded: function(evt) {
     if(evt.originalTarget != getBrowser().contentDocument) return;
@@ -220,8 +209,8 @@ const linkToolbarUI = {
     if(event.button==2) return;
     
     // Return if this is one of the menubuttons.
-    if (event.target.getAttribute("type") == "menu") return;
-    if (!event.target.getAttribute("href")) return;
+    if(event.target.getAttribute("type") == "menu") return;
+    if(!event.target.getAttribute("href")) return;
 
     // hide the menupopups (middle clicks don't do this by themselves)
     if(event.button==1) {
