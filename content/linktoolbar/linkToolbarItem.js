@@ -90,13 +90,18 @@ function LinkToolbarItem (linkType) {
   }
 
   this.enableParentMenuButton = function() {
-    if(this.getParentMenuButton())
+    if(this.getParentMenuButton()) {
       this.getParentMenuButton().removeAttribute("disabled");
+      this.getParentMenuButton().removeAttribute("hidden");
+    }
   }
 
   this.disableParentMenuButton = function() {
     if (!this.parentMenuButton) return;
     this.parentMenuButton.setAttribute("disabled", "true");
+    if (this.parentMenuButton.id != 'document-menu' &&
+        this.parentMenuButton.id != 'more-menu')
+      this.parentMenuButton.setAttribute("hidden", "true");
     this.parentMenuButton = null;
   }
 
@@ -137,6 +142,7 @@ function LinkToolbarMenu (linkType) {
   this.clear = function() {
     this.disableParentMenuButton();
     this.getXULElement().setAttribute("disabled", "true");
+    this.getXULElement().setAttribute("hidden", "true");
     var popup = this.getPopup();
     while (popup.hasChildNodes())
       popup.removeChild(popup.lastChild);
