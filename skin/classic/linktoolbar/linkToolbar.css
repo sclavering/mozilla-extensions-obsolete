@@ -38,7 +38,8 @@
 
 #link-top, #link-up, #link-first,
 #link-prev, #link-next, #link-last {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/buttons.png") !important;
+  list-style-image: url("chrome://linktoolbar/skin/btn1/buttons.png");
+  padding: 0;
 }
 #link-top[disabled="true"], #link-up[disabled="true"], #link-first[disabled="true"],
 #link-prev[disabled="true"], #link-next[disabled="true"], #link-last[disabled="true"] {
@@ -121,6 +122,10 @@
 }
 
 
+#linktoolbar toolbarbutton[tooltiptext^="Digger"] {
+  list-style-image: url("chrome://linktoolbar/skin/btn1/buttons_digger.png");
+}
+
 #linktoolbar menuitem[href^="mailto:"],
 #linktoolbar menuitem[statustext^="mailto:"],
 #linktoolbar .bookmark-item[href^="mailto:"],
@@ -137,6 +142,14 @@
 
 #linktoolbar-toggle[left="true"] {
   list-style-image: url("chrome://linktoolbar/skin/btn1/norvehc.gif");
+}
+
+#linktoolbar-toggle[up="true"] {
+  list-style-image: url("chrome://linktoolbar/skin/btn1/maybe.gif");
+}
+
+#linktoolbar-digger > .toolbarbutton-menu-dropmarker {
+  list-style-image: url("chrome://linktoolbar/skin/btn1/up.gif")
 }
 
 /* Hide the link toolbar if it is set to autohide is empty */

@@ -62,6 +62,12 @@ function LinkToolbarItem (linkType) {
   this.clear = function() {
     this.disableParentMenuButton();
     this.getXULElement().setAttribute("disabled", "true");
+
+    if ( this.linkType != 'top' && this.linkType != 'up' &&
+         this.linkType != 'first' && this.linkType != 'prev' &&
+         this.linkType != 'next' && this.linkType != 'last' )
+      this.getXULElement().setAttribute("hidden", "true");
+
     this.getXULElement().removeAttribute("href");
     this.getXULElement().removeAttribute("tooltiptext");
   }
@@ -76,6 +82,7 @@ function LinkToolbarItem (linkType) {
   this.setItem = function(linkElement) {
     this.getXULElement().setAttribute("href", linkElement.href);
     this.getXULElement().removeAttribute("disabled");
+    this.getXULElement().removeAttribute("hidden");
     if (linkElement.title != '')
       this.getXULElement().setAttribute("tooltiptext", linkElement.title + ' [' + linkElement.href + ']');
     else
@@ -143,6 +150,7 @@ function LinkToolbarMenu (linkType) {
   this.displayLink = function(linkElement) {
     this.addMenuItem(linkElement);
     this.getXULElement().removeAttribute("disabled");
+    this.getXULElement().removeAttribute("hidden");
     this.enableParentMenuButton();
     return true;
   }
@@ -225,10 +233,9 @@ function LinkToolbarTransientMenu (linkType) {
     if(!this.__proto__.displayLink.apply(this, [linkElement])) return false;
     this.getXULElement().hidden = false;
     // Show the 'miscellaneous' separator
-    document.getElementById("misc-separator").hidden = false;
+   // document.getElementById("misc-separator").hidden = false;
     return true;
   }
 }
 
 LinkToolbarTransientMenu.prototype = new LinkToolbarMenu;
-
