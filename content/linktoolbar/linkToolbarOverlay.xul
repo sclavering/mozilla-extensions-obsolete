@@ -90,7 +90,7 @@
   <toolbarpalette id="BrowserToolbarPalette">
     <toolbaritem  id="linktoolbar" class="chromeclass-directories"
         oncommand="event.preventBubble(); return linkToolbarUI.commanded(event);"
-        tbautostretch="always" hidden="true" hasitems="false">
+        tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar">
 
       <toolbarbutton id="link-top" class="bookmark-item"
           label="&topButton.label;" disabled="true"/>
