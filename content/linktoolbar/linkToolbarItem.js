@@ -42,15 +42,52 @@
 
 // controller for all UI bits displaying <link>s
 var linkToolbarItems = {
-  items: [],
+  items: [], // rel->item map
+
+  // called after toolbar customisation is finished.  must stop using any items that are no longer present,
+  // and destroy an y menus/menuitems for which a button is now present
+  updateForToolbarCustomisation: function() {
+    const is = this.items;
+    const btns = {top:true, up:true, first:true, prev:true, next:true, last:true};
+
+    var moreMenu = document.getElementById("linktoolbar-more-menu");
+
+    for(var rel in is) {
+      var item = is[rel];
+      // if buttons have been added some menus+menuitems may need destroying
+      // if buttons have been removed they should be removed from .items[]
+      if(rel in btns) {
+        var btn = document.getElementById("linktoolbar-"+rel);
+        if(!btn && (item instanceof Element)) { // button has been removed
+          delete is[rel];
+        } else if(btn && btn!=item) { // button has been added
+          item.destroy();
+          delete is[rel];
+        } // otherwise button either still present, or still not present
+      }
+
+      // if the More menu is gone then all non-toolbar-button items should be thrown away
+      if(!moreMenu && !((item instanceof Element) && item.localName=="toolbarbutton"))
+        delete is[rel];
+    }
+  },
 
   handleLinkForRels: function(linkInfo, rels) {
     for(var rel in rels) this.getItem(rel).displayLink(linkInfo);
   },
 
-  handleLinkForRel: function(linkInfo, rel) {
-    this.getItem(rel).displayLink(linkInfo);
+  // rels is a rel->{url->linkInfo} map
+  handleLinksForRels: function(rels) {
+    for(var rel in rels) {
+      var item = this.getItem(rel);
+      var links = rels[rel];
+      for(var link in links) item.displayLink(links[link]);
+    }
   },
+
+  //handleLinkForRel: function(linkInfo, rel) {
+    //this.getItem(rel).displayLink(linkInfo);
+  //},
 
   getItem: function(linkType) {
     const items = this.items;
@@ -115,13 +152,12 @@ const linkToolbarItem = {
 // Top, Up, First, Prev, Next, and Last menu-buttons
 // Hackery employed to disable the dropmarker if there is just one link.
 function initLinkToolbarButton(elt) {
+  elt.inited = true;
   for(var i in linkToolbarButton) elt[i] = linkToolbarButton[i];
   elt.links = []; // must do this so each button has its own array rather than a reference to a shared one
   var popup = elt.popup = document.createElement("menupopup");
   elt.appendChild(popup);
   popup.setAttribute("onpopupshowing", "return this.parentNode.buildMenu();");
-  // use right click to open the full list of links
-  elt.setAttribute("onclick", "if(event.button==2 && this.haveLinks) this.firstChild.showPopup();");
   // hackish
   var anonKids = document.getAnonymousNodes(elt);
   elt.dropMarker = anonKids[anonKids.length-1];
@@ -256,6 +292,12 @@ LinkToolbarTransientItem.prototype = {
   haveLinks: false,
   // links: [],
   linksHaveChanged: true,
+
+  destroy: function() {
+    const i = this.item, m = this.menu;
+    i.parentNode.removeChild(i);
+    m.parentNode.removeChild(m);
+  },
 
   clear: function() {
     this.haveLink = this.haveLinks = false;

@@ -50,7 +50,6 @@
   <script type="application/x-javascript" src="linkToolbarItem.js"/>
   <script type="application/x-javascript" src="linkToolbarUI.js"/>
 
-  <!-- our two line tooltip -->
   <popupset id="mainPopupSet">
     <tooltip id="linktoolbar-tooltip" orient="vertical"
         onpopupshowing="return linkToolbarFillTooltip(this, event);">
@@ -84,26 +83,35 @@
 
 
 <toolbarpalette id="BrowserToolbarPalette">
-  <toolbaritem id="linktoolbar" tooltip="linktoolbar-tooltip"
-      oncommand="return linkToolbarLoadPage(event, false);"
-      onclick="return event.button==1 &amp;&amp; linkToolbarLoadPage(event, true);"
+  <toolbarbutton id="linktoolbar-top" label="&top.label;" tooltiptext0="&top.tooltip;"
+      type="menu-button" tooltip="linktoolbar-tooltip" context="" disabled="true" class="linktoolbar-button toolbarbutton-1"
+      oncommand="return linkToolbarLoadPage(event);" onclick="linkToolbarItemClicked(event);"
+      />
+  <toolbarbutton id="linktoolbar-up" label="&up.label;" tooltiptext0="&up.tooltip;"
+      type="menu-button" tooltip="linktoolbar-tooltip" context="" disabled="true" class="linktoolbar-button toolbarbutton-1"
+      oncommand="return linkToolbarLoadPage(event);" onclick="linkToolbarItemClicked(event);"
+      />
+  <toolbarbutton id="linktoolbar-first" label="&first.label;" tooltiptext0="&first.tooltip;"
+      type="menu-button" tooltip="linktoolbar-tooltip" context="" disabled="true" class="linktoolbar-button toolbarbutton-1"
+      oncommand="return linkToolbarLoadPage(event);" onclick="linkToolbarItemClicked(event);"
+      />
+  <toolbarbutton id="linktoolbar-prev" label="&prev.label;" tooltiptext0="&prev.tooltip;"
+      type="menu-button" tooltip="linktoolbar-tooltip" context="" disabled="true" class="linktoolbar-button toolbarbutton-1"
+      oncommand="return linkToolbarLoadPage(event);" onclick="linkToolbarItemClicked(event);"
+      />
+  <toolbarbutton id="linktoolbar-next" label="&next.label;" tooltiptext0="&next.tooltip;"
+      type="menu-button" tooltip="linktoolbar-tooltip" context="" disabled="true" class="linktoolbar-button toolbarbutton-1"
+      oncommand="return linkToolbarLoadPage(event);" onclick="linkToolbarItemClicked(event);"
+      />
+  <toolbarbutton id="linktoolbar-last" label="&last.label;" tooltiptext0="&last.tooltip;"
+      type="menu-button" tooltip="linktoolbar-tooltip" context="" disabled="true" class="linktoolbar-button toolbarbutton-1"
+      oncommand="return linkToolbarLoadPage(event);" onclick="linkToolbarItemClicked(event);"
+      />
+
+  <toolbarbutton id="linktoolbar-more-menu" label="&more.label;" tooltiptext0="&more.tooltip;"
+      type="menu" orient="" tooltip="linktoolbar-tooltip" context="" disabled="true" class="linktoolbar-button toolbarbutton-1"
+      oncommand="return linkToolbarLoadPage(event);" onclick="linkToolbarItemClicked(event);"
       >
-
-      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="linktoolbar-top" label="&top.label;" tooltiptext0="&top.tooltip;"/>
-      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="linktoolbar-up" label="&up.label;" tooltiptext0="&up.tooltip;"/>
-      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="linktoolbar-first" label="&first.label;" tooltiptext0="&first.tooltip;"/>
-      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="linktoolbar-prev" label="&prev.label;" tooltiptext0="&prev.tooltip;"/>
-      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="linktoolbar-next" label="&next.label;" tooltiptext0="&next.tooltip;"/>
-      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="linktoolbar-last" label="&last.label;" tooltiptext0="&last.tooltip;"/>
-
-      <toolbarbutton disabled="true" type="menu"
-          id="linktoolbar-more-menu" label="&more.label;" tooltiptext0="&more.tooltip;">
         <menupopup id="linktoolbar-more-popup">
           <menuitem id="linktoolbar-toc" label="&toc;" hidden="true" class="menuitem-iconic"/>
           <menu id="linktoolbar-chapter" label="&chapters;" hidden="true" class="menu-iconic"/>
@@ -119,8 +127,7 @@
           <menu id="linktoolbar-bookmark" label="&bookmark;" hidden="true" class="menu-iconic"/>
           <menu id="linktoolbar-alternate" label="&alternate;" hidden="true" class="menu-iconic"/>
         </menupopup>
-      </toolbarbutton>
-  </toolbaritem>
+  </toolbarbutton>
 </toolbarpalette>
 
 </overlay>

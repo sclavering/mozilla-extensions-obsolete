@@ -42,8 +42,6 @@
 
 
 var gLinkToolbar = null;
-var gLinkToolbarActive = false;
-
 var gLinkToolbarPrefUseLinkGuessing = false;
 var gLinkToolbarPrefGuessUpAndTopFromURL = false;
 var gLinkToolbarPrefGuessPrevAndNextFromURL = false;
@@ -61,7 +59,8 @@ function linkToolbarStartup() {
 }
 
 function linkToolbarDelayedStartup() {
-  linkToolbarInit();
+  linkToolbarLoadPrefs();
+  linkToolbarAddHandlers();
   // replace the toolbar customisation callback
   var box = document.getElementById("navigator-toolbox");
   box._preLinkToolbar_customizeDone = box.customizeDone;
@@ -83,29 +82,18 @@ window.addEventListener("unload", linkToolbarShutdown, false);
 
 
 function linkToolbarToolboxCustomizeDone(somethingChanged) {
-  if(somethingChanged) linkToolbarInit();
+  if(somethingChanged) {
+    linkToolbarItems.updateForToolbarCustomisation();
+    linkToolbarRefreshLinks();
+  }
   this._preLinkToolbar_customizeDone(somethingChanged);
 }
 
-
-function linkToolbarInit() {
-  var lt = gLinkToolbar = document.getElementById("linktoolbar");
-  if(gLinkToolbarActive && !lt) {
-    gLinkToolbarActive = false;
-    linkToolbarRemoveHandlers();
-  } else if(!gLinkToolbarActive && lt) {
-    linkToolbarLoadPrefs(); // has to happen here to make the "Icons Only" pref work.
-    gLinkToolbarActive = true;
-    linkToolbarAddHandlers();
-  }
-}
 
 
 
 
 function linkToolbarLoadPrefs() {
-  if(!gLinkToolbarActive) return;
-
   var branch = gPrefService.getBranch("extensions.linktoolbar.");
 
   gLinkToolbarPrefScanHyperlinks = branch.getBoolPref("scanHyperlinks");
@@ -114,9 +102,6 @@ function linkToolbarLoadPrefs() {
 
   gLinkToolbarPrefUseLinkGuessing = gLinkToolbarPrefScanHyperlinks
       || gLinkToolbarPrefGuessUpAndTopFromURL || gLinkToolbarPrefGuessPrevAndNextFromURL;
-
-  if(branch.getBoolPref("iconsOnly")) lt.setAttribute("iconsonly","true");
-  else lt.removeAttribute("iconsonly");
 }
 
 
@@ -151,7 +136,7 @@ function linkToolbarRemoveHandlers() {
 function linkToolbarLinkAddedHandler(event) {
   var elt = event.originalTarget;
   var doc = elt.ownerDocument;
-  if(!((elt instanceof HTMLLinkElement) && elt.href && (elt.rel || elt.rev))) return;
+  if(!(elt instanceof HTMLLinkElement) || !elt.href || !(elt.rel || elt.rev)) return;
 
   var rels = linkToolbarUtils.getLinkRels(elt.rel, elt.rev, elt.type, elt.title);
   if(!rels) return;
@@ -177,36 +162,30 @@ function linkToolbarPageClosedHandler(event) {
 
 function linkToolbarPageLoadedHandler(evt) {
   var doc = evt.originalTarget;
-  if(!("__lt__links" in doc)) {
-    doc.__lt__links = [];
-    doc.__lt__links.empty = true; // |length| is 0 for hashtables. ltUI.addLink sets this to false
-  }
+  var links = doc.__lt__links || (doc.__lt__links = []);
 
-  if(gLinkToolbarPrefUseLinkGuessing && (doc instanceof HTMLDocument)) {
-    if(gLinkToolbarPrefScanHyperlinks)
-      linkToolbarLinkFinder.scanPageLinks(doc, doc.__lt__links);
-    // doc.location[.href] seems not to be maskable by JS, so this should be OK
-    if(gLinkToolbarPrefGuessUpAndTopFromURL)
-      linkToolbarLinkFinder.guessUpAndTopFromURL(doc, doc.__lt__links, doc.location.href);
-    if(gLinkToolbarPrefGuessPrevAndNextFromURL)
-      linkToolbarLinkFinder.guessPrevAndNextFromURL(doc, doc.__lt__links, doc.location);
-  }
+  if(!gLinkToolbarPrefUseLinkGuessing || !(doc instanceof HTMLDocument)) return;
+  if(gLinkToolbarPrefScanHyperlinks)
+    linkToolbarLinkFinder.scanPageLinks(doc, links);
+  // doc.location[.href] seems not to be maskable by JS, so this should be OK
+  if(gLinkToolbarPrefGuessUpAndTopFromURL)
+    linkToolbarLinkFinder.guessUpAndTopFromURL(doc, links, doc.location.href);
+  if(gLinkToolbarPrefGuessPrevAndNextFromURL)
+    linkToolbarLinkFinder.guessPrevAndNextFromURL(doc, links, doc.location);
 }
 
 
 function linkToolbarTabSelectedHandler(event) {
   if(event.originalTarget.localName != "tabs") return;
+  linkToolbarRefreshLinks();
+}
+
+
+function linkToolbarRefreshLinks() {
   linkToolbarItems.clearAll();
-
-  // show any links for the new doc
   var doc = content.document;
-  if(!("__lt__links" in doc) || doc.__lt__links.empty) return;
-
-  var links = doc.__lt__links;
-  for(var rel in links) {
-    var linksForRel = links[rel];
-    for(var i in linksForRel) linkToolbarItems.handleLinkForRel(linksForRel[i], rel);
-  }
+  if(!("__lt__links" in doc)) return;
+  linkToolbarItems.handleLinksForRels(doc.__lt__links);
 }
 
 
@@ -215,9 +194,7 @@ function linkToolbarAddLinkForPage(linkInfo, doc, rels) {
   // xxx we'd prefer not to pollute the document's DOM of course, but javascript
   // doesn't have real hashtables (only string->anything maps), so there isn't
   // all that much choice.
-  if(!("__lt__links" in doc)) doc.__lt__links = [];
-  var doclinks = doc.__lt__links;
-  if(doclinks.empty) doclinks.empty = false; // |length| is 0 for hashtables
+  var doclinks = doc.__lt__links || (doc.__lt__links = []);
   for(var r in rels) {
     if(!(r in doclinks)) doclinks[r] = [];
     // we leave any existing link with the same URL alone so that linkToolbarLinkFinder-generated
@@ -245,28 +222,41 @@ function linkToolbarFillTooltip(tooltip, event) {
 }
 
 
-function linkToolbarLoadPage(e, isMiddleClick) {
-  var url = e.target.getAttribute("href");
+// handles middle-clicks and right-clicks
+function linkToolbarItemClicked(e) {
+  var b = e.button, t = e.target, ot = e.originalTarget;
 
-  // in contentAreaUtils.js, throws an exception if check fails.
-  // really does expect the XUL document, not the HTML one trying to laod the url
-  urlSecurityCheck(url, document);
+  // open the <menupopup> for a toolbarbutton with more than one link on right click
+  if(b==2 && ot.localName=="toolbarbutton" && t.haveLinks) {
+    t.firstChild.showPopup();
+    return;
+  }
 
-  openUILink(url, e, false, true); // in utilityOverlay.js
+  if(b!=1) return;
+  linkToolbarLoadPage(e);
 
   // close any menus if it was a middle-click
   // closeMenus() in utilityOverlay.js is poorly written (uses tagName, amongst other things), and appears incapable of handling nested menus
-  if(!isMiddleClick) return;
   var p = e.target.parentNode;
-  var linkbar = gLinkToolbar;
-  while(p!=linkbar) {
+  while(p.localName!="toolbarbutton") {
     if(p.localName=="menupopup") p.hidePopup();
     p = p.parentNode;
   }
 }
 
 
+function linkToolbarLoadPage(e) {
+  var url = e.target.getAttribute("href");
+  // in contentAreaUtils.js, throws an exception if check fails.
+  // really does expect the XUL document, not the HTML one trying to laod the url
+  urlSecurityCheck(url, document);
+  // in utilityOverlay.js
+  openUILink(url, e, false, true);
+}
+
+
 // only works for linkType=top/up/first/prev/next/last (i.e. only for buttons)
+// used for keyboard shortcut handling
 function linkToolbarGo(linkType) {
   var item = linkToolbarItems.getItem(linkType);
   var url = item.haveLink && item.getAttribute("href");

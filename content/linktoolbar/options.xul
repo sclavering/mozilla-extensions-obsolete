@@ -21,7 +21,7 @@ Original Author:
 
 <script type="application/x-javascript">
 <![CDATA[
-const ids = ["iconsOnly","guessUpAndTopFromURL","guessPrevAndNextFromURL","scanHyperlinks"];
+const ids = ["guessUpAndTopFromURL","guessPrevAndNextFromURL","scanHyperlinks"];
 
 var gPrefs = null;
 
@@ -47,12 +47,6 @@ function savePrefs() {
 }
 ]]>
 </script>
-
-  <groupbox id="general">
-    <caption label="&general;"/>
-
-    <checkbox id="iconsOnly" label="&iconsOnly;"/>
-  </groupbox>
 
   <groupbox id="linkGuessing">
     <caption label="&linkGuessing;"/>

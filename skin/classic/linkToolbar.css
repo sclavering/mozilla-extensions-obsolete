@@ -8,16 +8,12 @@ Contributor(s):
   Chris Neale <cdn@mozdev.org>  (tweaks and email icon for mailto: links)
 */
 
-#linktoolbar, #linktoolbar menu, #linktoolbar menuitem {
-  list-style-image: url(chrome://linktoolbar/skin/buttons.png);
+.linktoolbar-button, .linktoolbar-button menu, .linktoolbar-button menuitem {
+  list-style-image: url(chrome://linktoolbar/skin/buttons.png) !important;
 }
 
 /* for the default theme we use icons with built-in dropmarkers, but other themes might want to keep them separate */
-#linktoolbar dropmarker { display: none }
-
-.linktoolbar-button {
-  list-style-image: url(chrome://linktoolbar/skin/buttons.png);
-}
+.linktoolbar-button dropmarker { display: none }
 
 .linktoolbar-button > .toolbarbutton-menubutton-button { -moz-box-orient: horizontal; }
 
@@ -58,16 +54,9 @@ Contributor(s):
 #linktoolbar-last[disabled=true]   { -moz-image-region: rect(32px 96px 48px 80px); }
 
 /* folder, page and email icons */
-#linktoolbar menuitem { -moz-image-region: rect(32px 144px 48px 128px); }
-#linktoolbar menu, #linktoolbar-more-menu { -moz-image-region: rect(32px 160px 48px 144px); }
-#linktoolbar menu[open=true], #linktoolbar-more-menu[open=true] { -moz-image-region: rect(32px 176px 48px 160px); }
+.linktoolbar-button menuitem { -moz-image-region: rect(32px 144px 48px 128px); }
+.linktoolbar-button menu, #linktoolbar-more-menu { -moz-image-region: rect(32px 160px 48px 144px); }
+.linktoolbar-button menu[open=true],
+#linktoolbar-more-menu[open=true] { -moz-image-region: rect(32px 176px 48px 160px); }
 #linktoolbar-more-menu[disabled=true] { -moz-image-region: rect(32px 192px 48px 176px); }
-#linktoolbar menuitem[href^="mailto:"] { -moz-image-region: rect(32px 112px 48px 96px); }
-
-/* Icons Only mode.
-Have to use !important to override a rule in Fx's browser.css for
-bookmark folders or the More menu still has a text label */
-#linktoolbar[iconsonly=true] .toolbarbutton-text { display: none !important; }
-
-/* we don't need a small gap btwn. icon and text when there is no text */
-#linktoolbar[iconsonly=true] .toolbarbutton-icon { margin: 0; }
+.linktoolbar-button menuitem[href^="mailto:"] { -moz-image-region: rect(32px 112px 48px 96px); }
