@@ -39,25 +39,21 @@
 # ***** END LICENSE BLOCK *****
 */
 
-function promptClearAll(el) {
+function xkioskPromptClearAll(el) {
   var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
                       .getService(Components.interfaces.nsIPromptService);
-  if(promptService.confirm(window,
-      el.getAttribute("prompttitle"),
-      el.getAttribute("promptmsg")))
-    clearAll();
+  if(!promptService.confirm(window, el.getAttribute("prompttitle"), el.getAttribute("promptmsg"))) return;
+
+  xkioskClearHistory();
+  xkioskClearFormInfo();
+  xkioskClearPasswords();
+  xkioskClearDownloads();
+  xkioskClearCookies();
+  xkioskClearCache();
 }
 
-function clearAll() {
-  clearHistory();
-  clearFormInfo();
-  clearPasswords();
-  clearDownloads();
-  clearCookies();
-  clearCache();
-}
 
-function clearHistory() {
+function xkioskClearHistory() {
   // builds from 20040210ish onward use the second class.  the relevant parts
   // of the nsIBrowserHistory are not altered though.
   var class1 = "@mozilla.org/browser/global-history;1";
@@ -72,13 +68,15 @@ function clearHistory() {
   os.notifyObservers(null, "browser:purge-session-history", "");
 }
 
-function clearFormInfo() {
+
+function xkioskClearFormInfo() {
   var formHistory = Components.classes["@mozilla.org/satchel/form-history;1"]
                               .getService(Components.interfaces.nsIFormHistory);
   formHistory.removeAllEntries();
 }
 
-function clearPasswords() {
+
+function xkioskClearPasswords() {
   var passwdMgr = Components.classes["@mozilla.org/passwordmanager;1"].getService();
   passwdMgr = passwdMgr.QueryInterface(Components.interfaces.nsIPasswordManager);
 
@@ -93,62 +91,22 @@ function clearPasswords() {
     passwdMgr.removeUser(passwds[i].host, passwds[i].user);
 }
 
-function clearDownloads() {
-  var dlMgr = Components.classes["@mozilla.org/download-manager;1"].getService(Components.interfaces.nsIDownloadManager);
-  try {
-    var downloads = getDownloads();
-  } catch (e) {
-    return;
-  }
 
-  var rdfs = Components.classes["@mozilla.org/rdf/rdf-service;1"].getService(Components.interfaces.nsIRDFService);
-  var state = rdfs.GetResource("http://home.netscape.com/NC-rdf#DownloadState");
-  var ds = dlMgr.datasource;
-  var dls = [];
-
-  while (downloads.hasMoreElements()) {
-    var download = downloads.getNext().QueryInterface(Components.interfaces.nsIRDFResource);
-    dls.push(download);
-  }
-  dlMgr.startBatchUpdate();
-  for (var i = 0; i < dls.length; ++i) {
-    try {
-      dlMgr.removeDownload(dls[i].Value);
-    } catch (e) {}
-  }
-  dlMgr.endBatchUpdate();
-
-  var rds = ds.QueryInterface(Components.interfaces.nsIRDFRemoteDataSource);
-  if (rds)
-    rds.Flush();
+// xxx should this cancel active downloads?
+function xkioskClearDownloads() {
+  var dm = Components.classes["@mozilla.org/download-manager;1"].getService(Components.interfaces.nsIDownloadManager);
+  if(dm.canCleanUp) dm.cleanUp();
 }
 
-function getDownloads() {
-  var dlMgr = Components.classes["@mozilla.org/download-manager;1"].getService(Components.interfaces.nsIDownloadManager);
-  var ds = dlMgr.datasource;
 
-  var rdfs = Components.classes["@mozilla.org/rdf/rdf-service;1"].getService(Components.interfaces.nsIRDFService);
-  var root = rdfs.GetResource("NC:DownloadsRoot");
-
-  var rdfc = Components.classes["@mozilla.org/rdf/container;1"].createInstance(Components.interfaces.nsIRDFContainer);
-  rdfc.Init(ds, root);
-
-  return rdfc.GetElements();
-}
-
-function clearCookies() {
-  var cookieman = Components.classes["@mozilla.org/cookiemanager;1"]
-                            .getService(Components.interfaces.nsICookieManager);
+function xkioskClearCookies() {
+  var cookieman = Components.classes["@mozilla.org/cookiemanager;1"].getService(Components.interfaces.nsICookieManager);
   cookieman.removeAll();
 }
 
-function clearCache() {
-  function clearCacheOfType(aType) {
-    var classID = Components.classes["@mozilla.org/network/cache-service;1"];
-    var cacheService = classID.getService(Components.interfaces.nsICacheService);
-    cacheService.evictEntries(aType);
-  }
 
-  clearCacheOfType(Components.interfaces.nsICache.STORE_ON_DISK);
-  clearCacheOfType(Components.interfaces.nsICache.STORE_IN_MEMORY);
+function xkioskClearCache() {
+  var cacheService = Components.classes["@mozilla.org/network/cache-service;1"].getService(Components.interfaces.nsICacheService);
+  cacheService.evictEntries(Components.interfaces.nsICache.STORE_ON_DISK);
+  cacheService.evictEntries(Components.interfaces.nsICache.STORE_IN_MEMORY);
 }

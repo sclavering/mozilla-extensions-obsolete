@@ -4,21 +4,16 @@
 
 <!DOCTYPE overlay SYSTEM "chrome://xkiosk/locale/xkiosk.dtd">
 
-<overlay id="xBrowserOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="xkiosk-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-  <script type="application/x-javascript" src="xkiosk.js"/>
+<script type="application/x-javascript" src="xkiosk.js"/>
 
-  <toolbarpalette id="BrowserToolbarPalette">
-    <toolbarbutton
-      class="toolbarbutton-1"
-      id="xkiosk-button"
-      label="&xkiosk.label;"
-      oncommand="promptClearAll(this);"
-      tooltiptext="&xkiosk.tooltip;"
-      prompttitle="&xkiosk.prompttitle;"
-      promptmsg="&xkiosk.promptmsg;"
+<toolbarpalette id="BrowserToolbarPalette">
+  <toolbarbutton class="toolbarbutton-1"
+      id="xkiosk-button" oncommand="xkioskPromptClearAll(this);"
+      label="&label;" tooltiptext="&tooltip;"
+      prompttitle="&prompttitle;" promptmsg="&promptmsg;"
       />
-  </toolbarpalette>
+</toolbarpalette>
 
 </overlay>

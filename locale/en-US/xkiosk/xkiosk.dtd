@@ -1,5 +1,5 @@
-<!ENTITY xkiosk.label   "Paranoia">
-<!ENTITY xkiosk.tooltip "Paranoia - Delete all information.">
+<!ENTITY label   "Paranoia">
+<!ENTITY tooltip "Protect your privacy">
 
-<!ENTITY xkiosk.prompttitle "Clear All Data">
-<!ENTITY xkiosk.promptmsg   "Do you wish to clear all saved privacy data?">
+<!ENTITY prompttitle "Paranoia">
+<!ENTITY promptmsg   "Delete all privacy-sensitive information Firefox has saved? (e.g. cookies, history of visited web sites, etc.)">
