@@ -1,7 +1,7 @@
 const APP_DISPLAY_NAME = "Toolbar Enhancements";
 const APP_NAME = "toolbarext";
 const APP_PACKAGE = "/clav.mozdev.org/toolbarext";
-const APP_VERSION = "0.2";
+const APP_VERSION = "0.3";
 
 const APP_JAR_FILE = "toolbarext.jar";
 const APP_CONTENT_FOLDER = "content/";
