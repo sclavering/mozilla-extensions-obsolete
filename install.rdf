@@ -12,6 +12,7 @@
 
     <creator>Stephen Clavering</creator>
     <homepageURL>http://clav.mozdev.org/</homepageURL>
+    <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
 
     <targetApplication>
       <rdf:Description>
