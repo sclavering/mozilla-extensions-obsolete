@@ -3,14 +3,14 @@ const linkFinder = {
   // XXX some pages use << for first and < for prev, so we should handle things like that differently
   re_first: /^first\b|\bfirst$|^begin|\|<|\u00ab/i, // ? >\u007c| ?
   re_prev:  /^prev(ious)?\b|prev$|previous$|^back\b|\bback$|^<<?-?$|\u00ab/i, // \u003c / = | <=
-  re_next:  /^next\b|^more\b|continue\b|next$|^-?>?>$|\u00bb/i,
+  re_next:  /^next\b|continue\b|next$|^-?>?>$|\u00bb$/i,
   re_last:  /^last|last$|^end\b|>\|/i, // ? >\u007c| ?
 
   // regular expressions used for identifying links based on the src url of contained images
-  re_first2: /first/i,
-  re_prev2:  /p?rev/i,
-  re_next2:  /next|more|fwd/i,
-  re_last2:  /last/i,
+  img_re_first: /first/i,
+  img_re_prev:  /p?rev/i,
+  img_re_next:  /next|more|fwd/i,
+  img_re_last:  /last/i,
 
   findLinks: function(doc) {
     var i, j, link;
@@ -39,20 +39,21 @@ const linkFinder = {
 
     // generate other links based on <a href="..."/> style links
 
-    if(!noPrev || !noNext) return;
+    if(!noUp || !noTop || !noPrev || !noNext) return;
 
     var addedLinks = [];
 
     for(i = 0; i < doc.links.length; i++) {
       link = doc.links[i];
-      var href = link.getAttribute("href");
-      var rel = link.getAttribute("rel");
-      var base = link.baseURI; // DOM3, needed because we have to resolve relative urls
+      var href = link.href;
+      var rel = link.rel;
 
       // ignore non link <a>s, and internal links
       if(!href || href.charAt(0)=='#') continue;
 
-      var title = this.getText(link).replace(/\s+/g," ");
+      var rels = [];
+      var title = this.getTextAndImgRels(link, rels);
+      title = title.replace(/\s+/g," ");
 
       // Do The Right Thing for <a href="..." rel="..."/>  :)
       if(rel) {
@@ -72,25 +73,16 @@ const linkFinder = {
         continue;
       }
 
-      if(this.re_next.test(title))
-        this.addLink(doc, href, base, "next", title, null, addedLinks);
-      else if(this.re_prev.test(title))
-        this.addLink(doc, href, base, "prev", title, null, addedLinks);
-      else if(this.re_first.test(title))
-        this.addLink(doc, href, base, "first", title, null, addedLinks);
-      else if(this.re_last.test(title))
-        this.addLink(doc, href, base, "last", title, null, addedLinks);
+      if(this.re_next.test(title)) rels["next"] = true;
+      else if(this.re_prev.test(title)) rels["prev"] = true;
+      else if(this.re_first.test(title)) rels["first"] = true;
+      else if(this.re_last.test(title)) rels["last"] = true;
+
+      for(var rell in rels) this.addLink(doc, href, rell, title, title, addedLinks);
     }
   },
 
-  addLink: function(doc, url, base, rel, title, longTitle, addedLinks) {
-    // resolve relative urls
-    if(base) {
-      var baseuri = Components.classes["@mozilla.org/network/standard-url;1"]//.createInstance();
-                              .createInstance(Components.interfaces.nsIURI);
-      baseuri.spec = base;
-      url = baseuri.resolve(url);
-    }
+  addLink: function(doc, url, rel, title, longTitle, addedLinks) {
     // avoid duplicate links
     if(addedLinks) {
       if(rel in addedLinks) {
@@ -132,28 +124,32 @@ const linkFinder = {
     return null;
   },
 
-  // get the text contained in a link
-  // XXX rewrite this to be less horrible
-  getText: function(el) {
+  // get the text contained in a link, and any guesses for rel based on img url
+  getTextAndImgRels: function(el, rels) {
+    var s = "";
     // use alt text for images
-    if(el.nodeName.toLowerCase() == "img") {
+    if(el instanceof Components.interfaces.nsIDOMHTMLImageElement ) {
       // should this have spaces wrapped round it?
       s = el.getAttribute("alt");
-      // hacky test of image src url because authors don't use alt :(
+      if(s) return s;
+
+      // guess some rel values from the url.
+      // (examining alt text is usually better, but this image has no alt text)
       var src = el.getAttribute("src");
-      if(this.re_next2.test(src)) s += " next";
-      else if(this.re_prev2.test(src)) s += " prev";
-      else if(this.re_first2.test(src)) s += " first";
-      else if(this.re_last2.test(src)) s += " last";
+      if(this.img_re_next.test(src)) rels["next"] = true;
+      else if(this.img_re_prev.test(src)) rels["prev"] = true;
+      else if(this.img_re_first.test(src)) rels["first"] = true;
+      else if(this.img_re_last.test(src)) rels["last"] = true;
       return s;
     }
     // deal with other elements
-    var s = "", kids = el.childNodes;
+    var kids = el.childNodes;
     for(var i = 0; i < kids.length; i++) {
+      var kid = kids[i];
       // add contents of CDATA or text nodes
-      if(kids[i].nodeType==3 || kids[i].nodeType==2) s += kids[i].nodeValue;
+      if(kid.nodeType==3 || kid.nodeType==2) s += kid.nodeValue;
       // call recursively for elements
-      else if(kids[i].nodeType==1) s += this.getText(kids[i]);
+      else if(kid.nodeType==1) s += this.getTextAndImgRels(kid, rels);
     }
     return s;
   }
