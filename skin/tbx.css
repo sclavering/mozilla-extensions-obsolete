@@ -1,12 +1,7 @@
 /* extra toolbar buttons */
 
-.tbx-button {
-  list-style-image: url(chrome://tbx/skin/large.png);
-  /* -moz-box-orient: vertical;*/
-}
-toolbar[iconsize="small"] .tbx-button {
-  list-style-image: url(chrome://tbx/skin/small.png);
-}
+.tbx-button { list-style-image: url(chrome://tbx/skin/large.png); }
+toolbar[iconsize=small] .tbx-button { list-style-image: url(chrome://tbx/skin/small.png); }
 
 #tbx-options-button         { -moz-image-region: rect(0 24px 24px 0); }
 #tbx-addbookmark-button     { -moz-image-region: rect(0 48px 24px 24px); }
@@ -27,36 +22,36 @@ toolbar[iconsize="small"] .tbx-button {
 #tbx-plugins-tabpref                       { -moz-image-region: rect(0 480px 24px 456px); }
 
 
-toolbar[iconsize="small"] #tbx-options-button         { -moz-image-region: rect(0 16px 16px 0); }
-toolbar[iconsize="small"] #tbx-addbookmark-button     { -moz-image-region: rect(0 32px 16px 16px); }
-toolbar[iconsize="small"] #tbx-managebookmarks-button { -moz-image-region: rect(0 48px 16px 32px); }
-toolbar[iconsize="small"] #tbx-save-button            { -moz-image-region: rect(0 64px 16px 48px); }
-toolbar[iconsize="small"] #tbx-viewsource-button      { -moz-image-region: rect(0 80px 16px 64px); }
-toolbar[iconsize="small"] #tbx-jsconsole-button       { -moz-image-region: rect(0 96px 16px 80px); }
-toolbar[iconsize="small"] #tbx-fullscreen-button      { -moz-image-region: rect(0 112px 16px 96px); }
-toolbar[iconsize="small"] #tbx-clearcache-button      { -moz-image-region: rect(0 176px 16px 160px); }
-toolbar[iconsize="small"] #tbx-pageinfo-button        { -moz-image-region: rect(0 192px 16px 176px); }
-toolbar[iconsize="small"] #tbx-javascript-tabpref[checked="true"]    { -moz-image-region: rect(0 208px 16px 192px); }
-toolbar[iconsize="small"] #tbx-javascript-tabpref                    { -moz-image-region: rect(0 224px 16px 208px); }
-toolbar[iconsize="small"] #tbx-images-tabpref[checked="true"]        { -moz-image-region: rect(0 240px 16px 224px); }
-toolbar[iconsize="small"] #tbx-images-tabpref                        { -moz-image-region: rect(0 256px 16px 240px); }
-toolbar[iconsize="small"] #tbx-metaredirects-tabpref[checked="true"] { -moz-image-region: rect(0 272px 16px 256px); }
-toolbar[iconsize="small"] #tbx-metaredirects-tabpref                 { -moz-image-region: rect(0 288px 16px 272px); }
-toolbar[iconsize="small"] #tbx-plugins-tabpref[checked="true"]       { -moz-image-region: rect(0 304px 16px 288px); }
-toolbar[iconsize="small"] #tbx-plugins-tabpref                       { -moz-image-region: rect(0 320px 16px 304px); }
+toolbar[iconsize=small] #tbx-options-button         { -moz-image-region: rect(0 16px 16px 0); }
+toolbar[iconsize=small] #tbx-addbookmark-button     { -moz-image-region: rect(0 32px 16px 16px); }
+toolbar[iconsize=small] #tbx-managebookmarks-button { -moz-image-region: rect(0 48px 16px 32px); }
+toolbar[iconsize=small] #tbx-save-button            { -moz-image-region: rect(0 64px 16px 48px); }
+toolbar[iconsize=small] #tbx-viewsource-button      { -moz-image-region: rect(0 80px 16px 64px); }
+toolbar[iconsize=small] #tbx-jsconsole-button       { -moz-image-region: rect(0 96px 16px 80px); }
+toolbar[iconsize=small] #tbx-fullscreen-button      { -moz-image-region: rect(0 112px 16px 96px); }
+toolbar[iconsize=small] #tbx-clearcache-button      { -moz-image-region: rect(0 176px 16px 160px); }
+toolbar[iconsize=small] #tbx-pageinfo-button        { -moz-image-region: rect(0 192px 16px 176px); }
+toolbar[iconsize=small] #tbx-javascript-tabpref[checked="true"]    { -moz-image-region: rect(0 208px 16px 192px); }
+toolbar[iconsize=small] #tbx-javascript-tabpref                    { -moz-image-region: rect(0 224px 16px 208px); }
+toolbar[iconsize=small] #tbx-images-tabpref[checked="true"]        { -moz-image-region: rect(0 240px 16px 224px); }
+toolbar[iconsize=small] #tbx-images-tabpref                        { -moz-image-region: rect(0 256px 16px 240px); }
+toolbar[iconsize=small] #tbx-metaredirects-tabpref[checked="true"] { -moz-image-region: rect(0 272px 16px 256px); }
+toolbar[iconsize=small] #tbx-metaredirects-tabpref                 { -moz-image-region: rect(0 288px 16px 272px); }
+toolbar[iconsize=small] #tbx-plugins-tabpref[checked="true"]       { -moz-image-region: rect(0 304px 16px 288px); }
+toolbar[iconsize=small] #tbx-plugins-tabpref                       { -moz-image-region: rect(0 320px 16px 304px); }
 
 
 /* need a min-width so you can easily drag items onto a new toolbar */
-toolbox[vertical="true"] > toolbar { min-width: 16px; }
+toolbox[vertical=true] > toolbar { min-width: 16px; }
 
-toolbox[vertical="true"] > toolbar > toolbarspacer { height: 15px; }
+toolbox[vertical=true] > toolbar > toolbarspacer { height: 15px; }
 
 /* spacer while in customise mode */
-toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] > toolbarspacer { height: 11px; }
+toolbox[vertical=true] > toolbar > toolbarpaletteitem[place=toolbar] > toolbarspacer { height: 11px; }
 
 /* separator, both normally and while in customise mode */
-toolbox[vertical="true"] > toolbar > toolbarseparator,
-toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] > toolbarseparator {
+toolbox[vertical=true] > toolbar > toolbarseparator,
+toolbox[vertical=true] > toolbar > toolbarpaletteitem[place=toolbar] > toolbarseparator {
   margin: 0.2em 2px;
   border-bottom: 1px solid ThreeDHighlight;
   border-top: 1px solid ThreeDShadow;
@@ -67,14 +62,14 @@ toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] > toolb
 
 
 /* drag drop feedback when in customisation mode. dragover=left really means dragover=before. */
-toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] {
+toolbox[vertical=true] > toolbar > toolbarpaletteitem[place=toolbar] {
   margin: -2px -2px;
   border: none;
   border-top: 2px solid transparent;
   border-bottom: 2px solid transparent;
 }
-toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="left"] { border-top-color: black; }
-toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="right"] { border-bottom-color: black; }
+toolbox[vertical=true] > toolbar > toolbarpaletteitem[dragover="left"] { border-top-color: black; }
+toolbox[vertical=true] > toolbar > toolbarpaletteitem[dragover="right"] { border-bottom-color: black; }
 
 
 /* toolboxes on tab strip and statusbar be completely plain */
@@ -100,7 +95,7 @@ toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="right"] { bord
 
 /* toolbars are insanely large in winstripe if we don't do this
    the !important is to override a stupid rule for toolbarbutton[checked="true"] in winstripe */
-toolbar[iconsize="small"][mode=icons] .tbx-button { padding: 0 !important; }
+toolbar[iconsize=small][mode=icons] .tbx-button { padding: 0 !important; }
 
 
 /* need to have a min size so that items can be dragged into the tabbar/statusbar toolbars */

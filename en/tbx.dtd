@@ -1,7 +1,7 @@
 <!ENTITY tbx-options-button.label "Options">
 <!ENTITY tbx-options-button.tooltip "Open the Options window">
 
-<!ENTITY tbx-addbookmark-button.label "Add Bookmark">
+<!ENTITY tbx-addbookmark-button.label "Bookmark">
 <!ENTITY tbx-addbookmark-button.tooltip "Bookmark this page...">
 
 <!ENTITY tbx-managebookmarks-button.label "Bookmarks...">
@@ -49,4 +49,4 @@
 <!ENTITY tbx-mode-icons-text "Icons and Text">
 <!ENTITY tbx-mode-text-only "Text Only">
 <!ENTITY tbx-mode-small-icons "Small Icons">
-<!ENTITY tbx-mode-show-in-fullscreen "Show in Full Screen mode">
+<!ENTITY tbx-mode-show-in-fullscreen "Show in Full-Screen mode">
