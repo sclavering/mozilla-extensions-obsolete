@@ -39,25 +39,37 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/**
-LinkToolbarItem and its subclasses represent the buttons, menuitems, and menus
-that handle the various link types.  Each type must implement the methods:
-  clear()
-    stop displaying any links this item is currently displaying
-  displayLink(link)
-    display the link, which is a LTLinkInfo() object (see linkToolbarHandler.js)
 
-The command/click-handling code expects menuitems/toolbarbuttons to have an href
-attribute, and the multiline tooltip we use expects things to have "tooltiptext1"
-and "tooltiptext2" attributes (though they can be empty).
+// controller for all UI bits displaying <link>s
+var linkToolbarItems = {
+  items: [],
 
-XXX
-All of this really need redoing so that menu items are only created when the menu
-is opened, rather than when a link is found.
-*/
+  handleLinkForRels: function(linkInfo, rels) {
+    for(var rel in rels) this.getItemForLinkType(rel).displayLink(linkInfo);
+  },
+
+  handleLinkForRel: function(linkInfo, rel) {
+    this.getItemForLinkType(rel).displayLink(linkInfo);
+  },
+
+  getItemForLinkType: function(linkType) {
+    const items = this.items;
+    if(!(linkType in items)) {
+      var elt = document.getElementById("link-" + linkType);
+      // initialisation functions for different elements used to display links
+      const inits = {toolbarbutton: initLinkToolbarButton, menuitem: initLinkToolbarItem, menu: initLinkToolbarMenu};
+      items[linkType] = elt ? inits[elt.localName](elt) : new LinkToolbarTransientItem(linkType);
+    }
+    return this.items[linkType];
+  },
+
+  clearAll: function() {
+    for(var linkType in this.items) this.items[linkType].clear();
+  }
+};
 
 
-// helper for toolbar buttons and transient items
+
 function makeLinkToolbarMenuItem(href, label, tooltip) {
   var mi = document.createElement("menuitem");
   mi.className = "menuitem-iconic bookmark-item";
@@ -70,30 +82,30 @@ function makeLinkToolbarMenuItem(href, label, tooltip) {
 
 
 
-function LinkToolbarItem (linkType, element) {
-  this.linkType = linkType;
-  this.xulElement = element;
+function initLinkToolbarItem(elt) {
+  for(var i in linkToolbarItem) elt[i] = linkToolbarItem[i];
   // this will need fixing if we ever have more than one top-level menu
-  this.parentMenuButton = document.getElementById("more-menu");
+  elt.parentMenuButton = document.getElementById("more-menu");
+  return elt;
 }
-LinkToolbarItem.prototype = {
+
+const linkToolbarItem = {
+  haveLink: false,
+
   clear: function() {
     this.parentMenuButton.disabled = true;
-    this.xulElement.disabled = true;
-    this.xulElement.hidden = true;
-    this.xulElement.removeAttribute("href");
-    this.xulElement.removeAttribute("tooltiptext1");
-    this.xulElement.removeAttribute("tooltiptext2");
+    this.hidden = true;
+    this.haveLink = false;
   },
 
-  displayLink: function(linkElement) {
-    if(this.xulElement.hasAttribute("href")) return;
+  displayLink: function(link) {
+    if(this.haveLink) return;
+    this.haveLink = true;
     this.parentMenuButton.disabled = false;
-    this.xulElement.disabled = false;
-    this.xulElement.hidden = false;
-    this.xulElement.setAttribute("href", linkElement.url);
-    this.xulElement.setAttribute("tooltiptext1", linkElement.longTitle);
-    this.xulElement.setAttribute("tooltiptext2", linkElement.url);
+    this.hidden = false;
+    this.setAttribute("href", link.url);
+    this.setAttribute("tooltiptext1", link.longTitle);
+    this.setAttribute("tooltiptext2", link.url);
   }
 };
 
@@ -101,10 +113,8 @@ LinkToolbarItem.prototype = {
 
 // Top, Up, First, Prev, Next, and Last menu-buttons
 // Hackery employed to disable the dropmarker if there is just one link.
-function initLinkToolbarButton(linkType, elt) {
+function initLinkToolbarButton(elt) {
   for(var i in linkToolbarButton) elt[i] = linkToolbarButton[i];
-
-  elt.linkType = linkType;
   elt.links = []; // must do this so each button has its own array rather than a reference to a shared one
   var popup = elt.popup = document.createElement("menupopup");
   elt.appendChild(popup);
@@ -170,10 +180,9 @@ const linkToolbarButton = {
 
 
 
-function initLinkToolbarMenu(linkType, elt) {
+function initLinkToolbarMenu(elt) {
   for(var i in linkToolbarMenu) elt[i] = linkToolbarMenu[i];
   elt.links = []; // do not remove this
-  elt.linkType = linkType;
   var popup = elt.popup = document.createElement("menupopup");
   popup.setAttribute("onpopupshowing", "this.parentNode.buildMenu();");
   elt.appendChild(popup);
@@ -189,6 +198,7 @@ const linkToolbarMenu = {
   clear: function() {
     this.parentMenuButton.disabled = true;
     this.hidden = true;
+    this.links = [];
     this.linksHaveChanged = true;
   },
 
@@ -216,6 +226,7 @@ const linkToolbarMenu = {
 
 // switches automatically between being a single menu item and a whole sub menu
 function LinkToolbarTransientItem(linkType) {
+  this.links = [];
   // create a menuitem
   var item = this.item = document.createElement("menuitem");
   item.className = "menuitem-iconic bookmark-item";
@@ -229,6 +240,8 @@ function LinkToolbarTransientItem(linkType) {
   // create the popup to go with it
   var popup = this.popup = document.createElement("menupopup");
   menu.appendChild(popup);
+  popup.linkToolbarItem = this;
+  popup.setAttribute("onpopupshowing", "this.linkToolbarItem.buildMenu();");
   // add items and create object to control them
   var moreMenu = this.parentMenuButton = document.getElementById("more-menu-popup");
   moreMenu.appendChild(item);
@@ -238,35 +251,43 @@ function LinkToolbarTransientItem(linkType) {
 LinkToolbarTransientItem.prototype = {
   haveLink: false,
   haveLinks: false,
+  // links: [],
+  linksHaveChanged: true,
 
   clear: function() {
-    this.haveLink = false;
-    this.haveLinks = false;
-    this.item.hidden = true;
-    this.menu.hidden = true;
-    const p = this.popup;
-    while(p.hasChildNodes()) p.removeChild(p.lastChild);
+    this.haveLink = this.haveLinks = false;
+    this.links = [];
+    this.linksHaveChanged = true;
+    this.item.hidden = this.menu.hidden = true;
     this.parentMenuButton.disabled = true;
   },
 
-  displayLink: function(linkInfo) {
-    // handle the first link
+  displayLink: function(link) {
     if(!this.haveLink) {
       this.haveLink = true;
-      this.item.setAttribute("href", linkInfo.url);
+      this.item.setAttribute("href", link.url);
       this.item.hidden = false;
-      this.item.setAttribute("tooltiptext1", linkInfo.longTitle);
-      this.item.setAttribute("tooltiptext2", linkInfo.url);
+      this.item.setAttribute("tooltiptext1", link.longTitle);
+      this.item.setAttribute("tooltiptext2", link.url);
       this.parentMenuButton.disabled = false;
     } else if(!this.haveLinks) {
-      // handling a second link, so hide item and show menu
       this.haveLinks = true;
       this.item.hidden = true;
       this.menu.hidden = false;
     }
-    // add menu item
-    const link = linkInfo;
-    var mi = makeLinkToolbarMenuItem(link.url, link.longTitle || link.url, link.title);
-    this.popup.appendChild(mi);
+    this.links.push(link);
+    this.linksHaveChanged = true;
+  },
+
+  buildMenu: function() {
+    if(!this.linksHaveChanged) return;
+    this.linksHaveChanged = false;
+    const p = this.popup;
+    while(p.hasChildNodes()) p.removeChild(p.lastChild);
+    const ls = this.links, num = ls.length;
+    for(var i = 0; i != num; i++) {
+      var l = ls[i];
+      p.appendChild(makeLinkToolbarMenuItem(l.url, l.longTitle || l.url, l.title));
+    }
   }
 };

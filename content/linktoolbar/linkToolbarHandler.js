@@ -158,47 +158,6 @@ var linkToolbarUtils = {
 
 
 
-
-var linkToolbarItems = {
-  items: [],
-
-  handleLinkForRels: function(linkInfo, rels) {
-    for(var rel in rels) this.getItemForLinkType(rel).displayLink(linkInfo);
-  },
-
-  handleLinkForRel: function(linkInfo, rel) {
-    this.getItemForLinkType(rel).displayLink(linkInfo);
-  },
-
-  getItemForLinkType: function(linkType) {
-    if(!((linkType in this.items) && this.items[linkType]))
-      this.items[linkType] = this.createItemForLinkType(linkType);
-    return this.items[linkType];
-  },
-
-  createItemForLinkType: function(linkType) {
-    var linkTypeElement = document.getElementById("link-" + linkType);
-    if(!linkTypeElement) return new LinkToolbarTransientItem(linkType);
-    switch(linkTypeElement.localName) {
-      case "toolbarbutton":
-        return initLinkToolbarButton(linkType, linkTypeElement);
-      case "menuitem":
-        return new LinkToolbarItem(linkType,linkTypeElement);
-      case "menu":
-        return initLinkToolbarMenu(linkType, linkTypeElement);
-    }
-    return null; // should never be reached; just attending to js-strict warnings
-  },
-
-  clearAll: function() {
-    for(var linkType in this.items) this.items[linkType].clear();
-  }
-};
-
-
-
-
-
 // a lazily-initialised dictionary for looking up readable names for 2/3-letter lang codes
 // e.g. "en" -> "English", "de" -> "German" (or en->Englisch, de->Deutsch)
 var ltLanguageDictionary = {
