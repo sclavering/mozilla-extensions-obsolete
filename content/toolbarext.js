@@ -1,53 +1,4 @@
-// these functions are all for middle-click events only
-var ToolbarExt = {
-  viewSource: function(e,doc) {
-    if(e.button!=1) return;
-    openNewTabWith("view-source:"+doc.location.href);
-  },
-
-  jsConsole: function(e) {
-    if(e.button!=1) return;
-    openNewTabWith("chrome://global/content/console.xul");
-  },
-
-  // 2nd one handles clicks, first one command events
-  bookmarkManager: function(e) {
-    toOpenWindowByType('bookmarks:manager','chrome://browser/content/bookmarks/bookmarksManager.xul');
-  },
-  bookmarkManager2: function(e) {
-    if(e.button!=1) return;
-    openNewTabWith('chrome://browser/content/bookmarks/bookmarksManager.xul');
-  },
-
-  downloadPanel: function(e) {
-    if(e.button!=1) return;
-    openNewTabWith("chrome://browser/content/downloads/downloadPanel.xul");
-  },
-
-  historyPanel: function(e) {
-    if(e.button!=1) return;
-    openNewTabWith("chrome://browser/content/history/history-panel.xul");
-  },
-
-  bookmarksPanel: function(e) {
-    if(e.button!=1) return;
-    openNewTabWith("chrome://browser/content/bookmarks/bookmarksPanel.xul");
-  },
-  
-  clearCache: function() {
-  	var classID = Components.classes["@mozilla.org/network/cache-service;1"];
-  	var cacheService = classID.getService(Components.interfaces.nsICacheService);
-  	cacheService.evictEntries(Components.interfaces.nsICache.STORE_IN_MEMORY);
-  	cacheService.evictEntries(Components.interfaces.nsICache.STORE_ON_DISK);
-  },
-  
-  closeTab: function() {
-    gBrowser.removeCurrentTab();
-  }
-}
-
-
-
+// javascript for enhancing toolbar customisation.
 
 // replacement start-customisation function that passes all our toolboxes as args to the window
 
@@ -65,6 +16,9 @@ function ToolbarExt_BrowserCustomizeToolbar() {
   var leftBox = document.getElementById("toolbarext-left-toolbox");
   var rightBox = document.getElementById("toolbarext-right-toolbox");
   
+  // doesn't matter which toolbox we put the callback on
+  bottomBox.customizeDone = tbextCustomiseDone;
+  
   // get the toolboxes at the left and right of the tab strip. this really
   // does have to be this complex, because they're two xbl bindings down!
   var tabbrowser = document.getElementById("content");
@@ -75,6 +29,13 @@ function ToolbarExt_BrowserCustomizeToolbar() {
   
   window.openDialog("chrome://global/content/customizeToolbar.xul", "CustomizeToolbar",
                     "chrome,all,dependent", navbox, bottomBox, leftBox, rightBox, tableftBox, tabrightBox);
+}
+
+
+// toolboxChanged means *any* toolbox, not just the one with this callback on
+function tbextCustomiseDone(toolboxChanged) {
+  // update the Stop/Reload combi-button
+  tbextStopReloadButton.init();
 }
 
 

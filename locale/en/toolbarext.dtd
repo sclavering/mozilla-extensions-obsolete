@@ -31,6 +31,13 @@
 <!ENTITY toolbarext-clearcache.label "Clear Cache">
 <!ENTITY toolbarext-clearcache.tooltip "Clear the disk and memory cache">
 
+<!ENTITY tbext-stopreload-default.label "Stop/Reload">
+<!ENTITY tbext-stopreload-reload.label "Reload">
+<!ENTITY tbext-stopreload-reload.tooltip "Reload the current page">
+<!ENTITY tbext-stopreload-stop.label "Stop">
+<!ENTITY tbext-stopreload-stop.tooltip "Stop loading the current page">
+
+
 
 
 <!ENTITY toolbarext-top-toolbox-name "Top">

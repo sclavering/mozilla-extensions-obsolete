@@ -14,6 +14,7 @@
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <script src="toolbarext.js" type="application/x-javascript"/>
+  <script src="buttons.js" type="application/x-javascript"/>
   <script src="pagecookies.js" type="application/x-javascript"/>
 
   <!-- override the Print button to do Print Preview instead :) -->
@@ -103,6 +104,18 @@
         tooltiptext="&toolbarext-closetab.tooltip;"
         />
         -->
+        
+    <!-- Stop/Reload combi-button -->
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-stopreload" oncommand="ToolbarExt.stopOrReload(event, this);"
+        label="&tbext-stopreload-default.label;"
+        reloadlabel="&tbext-stopreload-reload.label;"
+        stoplabel="&tbext-stopreload-stop.label;"
+        tooltiptext="&tbext-stopreload-reload.tooltip;"
+        reloadtooltip="&tbext-stopreload-reload.tooltip;"
+        stoptooltip="&tbext-stopreload-stop.tooltip;"
+        />
+
   </toolbarpalette>
 
 

@@ -122,6 +122,25 @@ toolbar[iconsize="small"] #tbext-pagecookies-button {
 #tbext-pagecookies-tooltip { max-width: 65em; }
 #tbext-pagecookies-tooltip textbox { background-color: transparent !important; }
 
+#toolbarext-stopreload[state="stop"] {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 448px 32px 416px);
+}
+toolbar[iconsize="small"] #toolbarext-stopreload[state="stop"] {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 280px 20px 260px);
+}
+
+#toolbarext-stopreload {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 480px 32px 448px);
+}
+toolbar[iconsize="small"] #toolbarext-stopreload {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 300px 20px 280px);
+}
+
+
 
 
 
