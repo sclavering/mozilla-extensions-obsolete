@@ -4,10 +4,10 @@
          xmlns="http://www.mozilla.org/2004/em-rdf#">
 
   <rdf:Description about="urn:mozilla:install-manifest">
-    <id>org.mozdev.clav.fusion</id>
+    <id>fusion</id>
 
     <name>Fusion</name>
-    <version>0.3</version>
+    <version>0.5</version>
     <description>Amalgamates the location bar and the progress bar.</description>
 
     <creator>Stephen Clavering</creator>
@@ -16,8 +16,8 @@
     <targetApplication>
       <rdf:Description>
         <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
-        <minVersion>0.8</minVersion>
-        <maxVersion>0.9</maxVersion>
+        <minVersion>0.9</minVersion>
+        <maxVersion>0.10</maxVersion>
       </rdf:Description>
     </targetApplication>
 
