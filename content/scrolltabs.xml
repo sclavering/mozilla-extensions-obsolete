@@ -31,8 +31,7 @@
           fst.removeAttribute("minwidth");
           fst.removeAttribute("maxwidth");
         }
-        this.canScrollTabsLeft = false;
-        this.canScrollTabsRight = false;
+        this.updateScrollButtons();
       </constructor>
 
       <field name="_appendChild">this.appendChild</field>
@@ -45,34 +44,43 @@
           aElt.removeAttribute("minwidth");
           aElt.removeAttribute("maxwidth");
           this._appendChild(aElt);
+          this.updateScrollButtons();
         </body>
       </method>
 
-      <property name="canScrollTabsLeft">
-        <getter>
-          return !this.hasAttribute("disableScrollTabsLeft");
-        </getter>
-        <setter>
-          if(val!=this.canScrollTabsLeft) {
-            if(val) this.removeAttribute("disableScrollTabsLeft");
-            else this.setAttribute("disableScrollTabsLeft","true");
-          }
-          return val;
-        </setter>
-      </property>
+      <field name="_removeChild">this.removeChild</field>
+      <method name="removeChild">
+        <parameter name="aElt"/>
+        <body>
+          this._removeChild(aElt);
+          this.updateScrollButtons();
+        </body>
+      </method>
 
-      <property name="canScrollTabsRight">
-        <getter>
-          return !this.hasAttribute("disableScrollTabsRight");
-        </getter>
-        <setter>
-          if(val!=this.canScrollTabsRight) {
-            if(val) this.removeAttribute("disableScrollTabsRight");
-            else this.setAttribute("disableScrollTabsRight","true");
+      <method name="updateScrollButtons">
+        <body>
+        <![CDATA[
+          if(this.collapsedTabs!==0) {
+            // can scroll left
+            if(this.hasAttribute("disableScrollTabsLeft"))
+              this.removeAttribute("disableScrollTabsLeft");
+          } else {
+            if(!this.hasAttribute("disableScrollTabsLeft"))
+              this.setAttribute("disableScrollTabsLeft","true");
           }
-          return val;
-        </setter>
-      </property>
+
+          var overflow = this.lastChild.boxObject.x + this.lastChild.boxObject.width - this.boxObject.width;
+          if((this._collapsedTabs != this.childNodes.length-1) && (overflow > 0)) {
+            // can scroll right
+            if(this.hasAttribute("disableScrollTabsRight"))
+              this.removeAttribute("disableScrollTabsRight");
+          } else {
+            if(!this.hasAttribute("disableScrollTabsRight"))
+              this.setAttribute("disableScrollTabsRight","true");
+          }
+        ]]>
+        </body>
+      </method>
 
       <field name="_collapsedTabs">0</field>
       <property name="collapsedTabs"
@@ -84,10 +92,7 @@
           for(i = this._collapsedTabs; i < val; i++) tabs[i].collapsed = true;
           for(i = val; i < this._collapsedTabs; i++) tabs[i].collapsed = false;
           this._collapsedTabs = val;
-
-          this.canScrollTabsLeft = (val !== 0);
-          this.canScrollTabsRight = (val != tabs.length-1);
-
+          this.updateScrollButtons();
           return val;
         ]]>
         </setter>

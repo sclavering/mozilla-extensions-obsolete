@@ -6,4 +6,4 @@
 <?xml-stylesheet href="chrome://scrolltabs/content/scrolltabs.css" type="text/css"?>
 <?xml-stylesheet href="chrome://scrolltabs/skin/scrolltabs.css" type="text/css"?>
 
-<window id="main-window"/>
+<overlay id="scrolltabs"/>
