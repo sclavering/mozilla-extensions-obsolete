@@ -17,6 +17,7 @@
     <contributor>Chris Neale</contributor>
     <contributor>Xavier Robin</contributor>
     <contributor>Giancarlo Dessì (Localizzazione italiana)</contributor>
+    <contributor>Rob de Vries (Dutch translation)</contributor>
 
     <optionsURL>chrome://linktoolbar/content/options.xul</optionsURL>
     <!-- <iconURL></iconURL> -->
