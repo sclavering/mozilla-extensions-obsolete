@@ -96,11 +96,15 @@
   <!--  <toolbar id="linktoolbar" class="chromeclass-directories" insertafter="statusbar-display" insertbefore="statusbar-progresspanel"
         oncommand="event.preventBubble(); return linkToolbarUI.commanded(event);"
         tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar">        grippytooltiptext="&linkToolbar.label;"> -->
-  <statusbar id="status-bar">
+<!--  <statusbar id="status-bar">
     <statusbarpanel id="linktoolbar" class="chromeclass-directories" insertafter="statusbar-display" insertbefore="statusbar-progresspanel"
         oncommand="event.preventBubble(); return linkToolbarUI.commanded(event);"
-        tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar">
+        tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar"> -->
 
+   <vbox id="appcontent">
+    <toolbar id="linktoolbar" class="chromeclass-directories" insertafter="content"
+        oncommand="event.preventBubble(); return linkToolbarUI.commanded(event);"
+        tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar">
       <toolbarbutton id="link-top" class="bookmark-item"
           label="&topButton.label;" disabled="true"
           tooltiptext="&topButton.tooltip;" />
@@ -111,7 +115,7 @@
 
       <toolbarseparator />
 
-      <toolbarbutton id="link-first" class="bookmark-item" 
+      <toolbarbutton id="link-first" class="bookmark-item"
           label="&firstButton.label;" disabled="true"
           tooltiptext="&firstButton.tooltip;" />
 
@@ -239,9 +243,11 @@
 
       <toolbarbutton id="sharc-button" oncommand="window.openDialog('chrome://browser/content', 'Phoenix', 'chrome,all,dialog=no', 'http://cdn.mozdev.org/linkToolbar/');"/>
 -->
-    </statusbarpanel>
+    <!-- </statusbarpanel> -->
     <!-- </toolbar> -->
   <!-- </vbox> -->
-  </statusbar>
+    </toolbar>
+  </vbox>
+  <!-- </statusbar> -->
   <!-- </toolbox> -->
 </overlay>
