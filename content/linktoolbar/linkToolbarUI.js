@@ -248,7 +248,6 @@ const linkToolbarUI = {
   },
   toggleIconsOnly: function(menuitem) {
     var toolbar = document.getElementById("linktoolbar");
-    alert(menuitem +" "+menuitem.getAttribute("checked"));
     if(menuitem.getAttribute("checked")=="true")
       toolbar.setAttribute("iconsonly","true");
     else
