@@ -12,12 +12,14 @@
 
     <creator>Stephen Clavering</creator>
     <homepageURL>http://cdn.mozdev.org/linkToolbar/</homepageURL>
+    <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
 
     <contributor>Chris Neale</contributor>
     <contributor>Xavier Robin</contributor>
-    <contributor>Giancarlo Dessi' (Localizzazione italiana)</contributor>
+    <contributor>Giancarlo Dessì (Localizzazione italiana)</contributor>
 
     <optionsURL>chrome://linktoolbar/content/options.xul</optionsURL>
+    <!-- <iconURL></iconURL> -->
 
     <targetApplication>
       <rdf:Description>
@@ -26,9 +28,6 @@
         <maxVersion>0.9+</maxVersion>
       </rdf:Description>
     </targetApplication>
-
-    <!-- <updateURL>http://www.foo.com/update.cgi?id=%ITEM_ID%&version=%ITEM_VERSION%</updateURL> -->
-    <!-- <iconURL></iconURL> -->
 
     <file>
       <rdf:Description about="urn:mozilla:extension:file:linkToolbar.jar">
