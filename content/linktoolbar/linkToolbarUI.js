@@ -234,23 +234,22 @@ const linkToolbarUI = {
 
   toggleLinkToolbar: function(target) {
     if(target.id=="linktoolbar-iconsonly") {
-      this.toggleIconsOnly(target);
+      this.toggleIconsOnlyMode(target);
       return;
     }
-    var toolbar = document.getElementById("linktoolbar");
-    if(toolbar) {
-      toolbar.setAttribute("hidden", target.value);
-      document.persist("linktoolbar", "hidden");
-    }
-    if(this.isLinkToolbarEnabled()) {
-      this.addHandlers();
-      this.fullSlowRefresh();
-    } else {
+    var wasEnabled = this.isLinkToolbarEnabled();
+    document.getElementById("linktoolbar").setAttribute("hidden", target.value);
+    document.persist("linktoolbar", "hidden");
+    var isEnabled = this.isLinkToolbarEnabled();
+    if(wasEnabled && !isEnabled) {
       this.removeHandlers();
       linkToolbarHandler.clearAllItems();
+    } else if(!wasEnabled && isEnabled) {
+      this.addHandlers();
+      this.fullSlowRefresh();
     }
   },
-  toggleIconsOnly: function(menuitem) {
+  toggleIconsOnlyMode: function(menuitem) {
     var toolbar = document.getElementById("linktoolbar");
     if(menuitem.getAttribute("checked")=="true")
       toolbar.setAttribute("iconsonly","true");
