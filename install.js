@@ -1,7 +1,7 @@
 const kDisplayName = "Toolbar Enhancements";
 const kName = "toolbarext";
 const kPackage = "/clav.mozdev.org/toolbarext";
-const kVersion = "0.5";
+const kVersion = "0.6";
 
 const kJarFile = "toolbarext.jar";
 const kContentFolder = "content/";
