@@ -39,105 +39,95 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/*
- * LinkToolbarItem and its subclasses represent the buttons, menuitems,
- * and menus that handle the various link types.
- *
- * |element| is the XUL menu/menuitem/toolbarbutton that will be used to
- * show the |linkType| in question
- */
+/**
+LinkToolbarItem and its subclasses represent the buttons, menuitems, and menus
+that handle the various link types.  Each type must implement the methods:
+  clear()
+    stop displaying any links this item is currently displaying
+  displayLink(link)
+    display the link, which is a LTLinkInfo() object (see linkToolbarHandler.js)
+
+The command/click-handling code expects menuitems/toolbarbuttons to have an href
+attribute, and the multiline tooltip we use expects things to have "tooltiptext1"
+and "tooltiptext2" attributes (though they can be empty).
+
+XXX
+All of this really need redoing so that menu items are only created when the menu
+is opened, rather than when a link is found.
+*/
+
 function LinkToolbarItem (linkType, element) {
   this.linkType = linkType;
-  this.xulElement = element; // || document.getElementById("link-"+linkType);
-  // will be null for a LinkToolbarItem, but both LTMenu and LTButton use this
-  this.xulPopup = document.getElementById("link-"+linkType+"-popup");
-  this.parentMenuButton = null;
-
-  this.clear = function() {
-    this.disableParentMenuButton();
+  this.xulElement = element;
+  // this will need fixing if we ever have more than one top-level menu
+  this.parentMenuButton = document.getElementById("more-menu");
+}
+LinkToolbarItem.prototype = {
+  clear: function() {
+    this.parentMenuButton.disabled = true;
     this.xulElement.disabled = true;
     this.xulElement.hidden = true;
     this.xulElement.removeAttribute("href");
     this.xulElement.removeAttribute("tooltiptext1");
     this.xulElement.removeAttribute("tooltiptext2");
-  }
+  },
 
-  this.displayLink = function(linkElement) {
+  displayLink: function(linkElement) {
     if (this.xulElement.hasAttribute("href")) return false;
-    this.setItem(linkElement);
-    this.enableParentMenuButton();
-    return true;
-  }
-
-  this.setItem = function(linkElement) {
-    this.xulElement.setAttribute("href", linkElement.href);
+    this.parentMenuButton.disabled = false;
     this.xulElement.disabled = false;
     this.xulElement.hidden = false;
-    // lines will be hidden if blank
+    this.xulElement.setAttribute("href", linkElement.href);
     this.xulElement.setAttribute("tooltiptext1", linkElement.longTitle);
     this.xulElement.setAttribute("tooltiptext2", linkElement.href);
   }
+};
 
-  this.enableParentMenuButton = function() {
-    if(this.getParentMenuButton()) {
-      this.getParentMenuButton().disabled = false;
-      this.getParentMenuButton().hidden = false;
-    }
-  }
-
-  this.disableParentMenuButton = function() {
-    if(!this.parentMenuButton) return;
-    this.parentMenuButton.disabled = true;
-    this.parentMenuButton = null;
-  }
-
-  this.getParentMenuButton = function() {
-    if(!this.parentMenuButton) {
-      var node = this.xulElement;
-      while(node.tagName!="toolbarbutton") node = node.parentNode;
-      this.parentMenuButton = node;
-    }
-    return this.parentMenuButton;
-  }
-}
 
 
 // Top, Up, First, Prev, Next, and Last menu-buttons
 // Hackery employed to disable the dropmarker if there is just one link.
-function LinkToolbarButton(linkType, element) {
-  this.constructor(linkType, element);
+function initLinkToolbarButton(linkType, elt) {
+  elt.linkType = linkType;
+  elt.popup = document.getElementById("link-"+linkType+"-popup");
+  // hackish
+  var anonKids = document.getAnonymousNodes(elt);
+  elt.dropMarker = anonKids[anonKids.length-1];
+  // copy methods
+  for(var i in linkToolbarButton) elt[i] = linkToolbarButton[i];
+  return elt;
+}
 
-  var anonKids = document.getAnonymousNodes(this.xulElement);
-  this.xulDropMarker = anonKids[anonKids.length-1];
+const linkToolbarButton = {
+  haveLink: false, // indicates the button is showing 1 or more links
+  haveLinks: false, // indicates the button has >= 2 links
 
-  this.haveLink = false;  // indicates the button is showing 1 or more links
-  this.haveLinks = false; // indicates the button has >= 2 links
-
-  this.clear = function() {
+  clear: function() {
     this.haveLink = this.haveLinks = false;
-    this.xulElement.disabled = true;
-    this.xulElement.removeAttribute("href");
-    this.xulElement.removeAttribute("tooltiptext1");
-    this.xulElement.removeAttribute("tooltiptext2");
-    while(this.xulPopup.hasChildNodes())
-      this.xulPopup.removeChild(this.xulPopup.lastChild);
-  }
+    this.disabled = true;
+    this.removeAttribute("href");
+    this.removeAttribute("tooltiptext1");
+    this.removeAttribute("tooltiptext2");
+    const p = this.popup
+    while(p.hasChildNodes()) p.removeChild(p.lastChild);
+  },
 
-  this.displayLink = function(linkElement) {
+  displayLink: function(linkElement) {
     if(!this.haveLink) {
       this.haveLink = true;
-      this.setItem(linkElement);
+      this.setAttribute("href", linkElement.href);
+      this.disabled = false;
+      // lines will be hidden if blank
+      this.setAttribute("tooltiptext1", linkElement.longTitle);
+      this.setAttribute("tooltiptext2", linkElement.href);
       // just setting .disabled will not do anything, presumably because the
       // dropmarker xbl:inherits the toolbarbutton's disabled attribute.
-      this.xulDropMarker.setAttribute("disabled","true");
+      this.dropMarker.setAttribute("disabled","true");
     } else if(!this.haveLinks) {
       this.haveLinks = true;
-      this.xulDropMarker.removeAttribute("disabled");
+      this.dropMarker.removeAttribute("disabled");
     }
-    this.addMenuItem(linkElement);
-  }
-
-  this.addMenuItem = function(linkElement) {
+    // add menu item
     var menuitem = document.createElement("menuitem");
     // XXX: use longTitle for tooltip too ?
     menuitem.setAttribute("tooltiptext1", linkElement.title);
@@ -145,36 +135,34 @@ function LinkToolbarButton(linkType, element) {
     menuitem.setAttribute("label", linkElement.longTitle);
     menuitem.setAttribute("href", linkElement.href);
     menuitem.className = "menuitem-iconic bookmark-item";
-    this.xulPopup.appendChild(menuitem);
+    this.popup.appendChild(menuitem);
   }
+};
 
-  // do nothing.  unneeded?
-  this.enableParentMenuButton = function() {};
-  this.disableParentMenuButton = function() {};
+
+
+function LinkToolbarMenu(linkType, element) {
+  this.linkType = linkType;
+  this.xulElement = element;
+  this.xulPopup = document.getElementById("link-"+linkType+"-popup");
+  // this will need fixing if we ever have more than one top-level menu
+  this.parentMenuButton = document.getElementById("more-menu");
 }
-LinkToolbarButton.prototype = new LinkToolbarItem;
 
-
-function LinkToolbarMenu (linkType, element) {
-  this.constructor(linkType, element);
-
-  this.clear = function() {
-    this.disableParentMenuButton();
+LinkToolbarMenu.prototype = {
+  clear: function() {
+    this.parentMenuButton.disabled = true;
     this.xulElement.disabled = true;
     this.xulElement.hidden = true;
-    while(this.xulPopup.hasChildNodes())
-      this.xulPopup.removeChild(this.xulPopup.lastChild);
-  }
+    const p = this.xulPopup;
+    while(p.hasChildNodes()) p.removeChild(p.lastChild);
+  },
 
-  this.displayLink = function(linkElement) {
-    this.addMenuItem(linkElement);
+  displayLink: function(linkElement) {
     this.xulElement.disabled = false;
     this.xulElement.hidden = false;
-    this.enableParentMenuButton();
-    return true;
-  }
-
-  this.addMenuItem = function(linkElement) {
+    this.parentMenuButton.disabled = false;
+    // add menuitem
     var menuitem = document.createElement("menuitem");
     menuitem.setAttribute("tooltiptext1", linkElement.title);
     menuitem.setAttribute("tooltiptext2", linkElement.href);
@@ -183,56 +171,46 @@ function LinkToolbarMenu (linkType, element) {
     menuitem.className = "menuitem-iconic bookmark-item";
     this.xulPopup.appendChild(menuitem);
   }
-}
-LinkToolbarMenu.prototype = new LinkToolbarItem;
+};
 
 
 
-// switches automatically between being a
-// single menu item and a whole sub menu
+// switches automatically between being a single menu item and a whole sub menu
 function LinkToolbarTransientItem(linkType) {
   // create a menuitem
-  var item = document.createElement("menuitem");
-  item.id = "link-"+linkType+"-item";
+  var item = this.item = document.createElement("menuitem");
   item.className = "menuitem-iconic bookmark-item";
   item.setAttribute("label",linkType);
   // and a menu
-  var menu = document.createElement("menu");
-  menu.id = "link-"+linkType+"-menu";
+  var menu = this.menu = document.createElement("menu");
   menu.setAttribute("label",linkType);
   menu.hidden = true;
   menu.className = "menu-iconic bookmark-item";
   menu.setAttribute("container", "true");
   // create the popup to go with it
-  var popup = document.createElement("menupopup");
-  popup.id = "link-"+linkType+"-popup";
+  var popup = this.popup = document.createElement("menupopup");
   menu.appendChild(popup);
   // add items and create object to control them
-  var moreMenu = document.getElementById("more-menu-popup");
+  var moreMenu = this.parentMenuButton = document.getElementById("more-menu-popup");
   moreMenu.appendChild(item);
   moreMenu.appendChild(menu);
+}
 
-  this.linkType = linkType;
-  this.parentMenuButton = null;
+LinkToolbarTransientItem.prototype = {
+  haveLink: false,
+  haveLinks: false,
 
-  this.item = item;
-  this.menu = menu;
-  this.popup = popup;
-
-  this.haveLink = false;  // indicates the button is showing 1 or more links
-  this.haveLinks = false; // indicates the button is showing 2 or more links
-
-  this.clear = function() {
+  clear: function() {
     this.haveLink = false;
     this.haveLinks = false;
     this.item.hidden = true;
     this.menu.hidden = true;
-    while(this.popup.hasChildNodes())
-      this.popup.removeChild(this.popup.lastChild);
-    this.disableParentMenuButton();
-  }
+    const p = this.popup;
+    while(p.hasChildNodes()) p.removeChild(p.lastChild);
+    this.parentMenuButton.disabled = true;
+  },
 
-  this.displayLink = function(linkInfo) {
+  displayLink: function(linkInfo) {
     // handle the first link
     if(!this.haveLink) {
       this.haveLink = true;
@@ -240,7 +218,7 @@ function LinkToolbarTransientItem(linkType) {
       this.item.hidden = false;
       this.item.setAttribute("tooltiptext1", linkInfo.longTitle);
       this.item.setAttribute("tooltiptext2", linkInfo.href);
-      this.enableParentMenuButton();
+      this.parentMenuButton.disabled = false;
     } else if(!this.haveLinks) {
       // handling a second link, so hide item and show menu
       this.haveLinks = true;
@@ -248,10 +226,6 @@ function LinkToolbarTransientItem(linkType) {
       this.menu.hidden = false;
     }
     // add the link to the xul popup
-    this.addMenuItem(linkInfo);
-  }
-
-  this.addMenuItem = function(linkInfo) {
     var menuitem = document.createElement("menuitem");
     // XXX: use longTitle for tooltip too ?
     menuitem.setAttribute("tooltiptext1", linkInfo.title);
@@ -261,31 +235,4 @@ function LinkToolbarTransientItem(linkType) {
     menuitem.className = "menuitem-iconic bookmark-item";
     this.popup.appendChild(menuitem);
   }
-
-  // duplicated from ltItem.  will fix things to use inheritance later
-
-  this.enableParentMenuButton = function() {
-    if(this.getParentMenuButton()) {
-      this.getParentMenuButton().disabled = false;
-//      this.getParentMenuButton().hidden = false;
-    }
-  }
-
-  this.disableParentMenuButton = function() {
-    if(!this.parentMenuButton) return;
-    this.parentMenuButton.disabled = true;
-    // xxx: why?
-    this.parentMenuButton = null;
-  }
-
-  this.getParentMenuButton = function() {
-    if(!this.parentMenuButton) {
-      var node = this.item;
-      while(node.tagName!="toolbarbutton") node = node.parentNode;
-      this.parentMenuButton = node;
-    }
-    return this.parentMenuButton;
-  }
-}
-// member names are different, so functions duplicated rather than inherited
-//LinkToolbarTransientItem.prototype = new LinkToolbarItem;
+};

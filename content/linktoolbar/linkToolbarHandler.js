@@ -179,7 +179,7 @@ var linkToolbarItems = {
     if(!linkTypeElement) return new LinkToolbarTransientItem(linkType);
     switch(linkTypeElement.localName) {
       case "toolbarbutton":
-        return new LinkToolbarButton(linkType,linkTypeElement);
+        return initLinkToolbarButton(linkType, linkTypeElement);
       case "menuitem":
         return new LinkToolbarItem(linkType,linkTypeElement);
       case "menu":
