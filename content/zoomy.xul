@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://zoomy/skin/zoomy.css" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://zoomy/locale/">
+
+<overlay id="zoomy" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<toolbarpalette id="BrowserToolbarPalette">
+  <toolbarbutton class="zoomy-button toolbarbutton-1"
+      id="zoomy-zoomout" command="cmd_textZoomReduce"
+      label="&zoomout.label;" tooltiptext="&zoomout.tooltip;"
+      />
+  <toolbarbutton class="zoomy-button toolbarbutton-1"
+      id="zoomy-zoomin" command="cmd_textZoomEnlarge"
+      label="&zoomin.label;" tooltiptext="&zoomin.tooltip;"
+      />
+  <toolbarbutton class="zoomy-button toolbarbutton-1"
+      id="zoomy-zoomreset" oncommand="ZoomManager.prototype.getInstance().reset();"
+      label="&zoomreset.label;" tooltiptext="&zoomreset.tooltip;"
+      />
+</toolbarpalette>
+
+</overlay>
