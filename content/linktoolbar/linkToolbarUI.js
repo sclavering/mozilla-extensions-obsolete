@@ -192,19 +192,6 @@ var linkToolbarUI = {
     return this._hasItems;
   },
 
-  // multiline tooltips.  text is loaded from tooltiptext[012] attributes
-  fillTooltip: function(tooltipElement) {
-    var text1 = tooltipElement.getAttribute("tooltiptext1")
-             || tooltipElement.getAttribute("tooltiptext0");
-    var line1 = document.getElementById("linktoolbar-tooltip-1");
-    line1.hidden = !(line1.value = text1);
-    var text2 = tooltipElement.getAttribute("tooltiptext2");
-    var line2 = document.getElementById("linktoolbar-tooltip-2");
-    line2.hidden = !(line2.value = text2);
-    // return value indicates if the tooltip should be shown
-    return !!(text1 || text2);
-  },
-
   onload: function() {
     var contentArea = document.getElementById("appcontent");
     contentArea.addEventListener("select", linkToolbarUI.tabSelected, false);
@@ -217,6 +204,17 @@ var linkToolbarUI = {
 
 window.addEventListener("load", linkToolbarUI.onload, false);
 
+
+
+function linkToolbarFillTooltip(tooltip, event) {
+  var elt = document.tooltipNode, line1 = tooltip.firstChild, line2 = tooltip.lastChild;
+  var text1 = elt.getAttribute("tooltiptext1") || elt.getAttribute("tooltiptext0");
+  var text2 = elt.getAttribute("tooltiptext2");
+  line1.hidden = !(line1.value = text1);
+  line2.hidden = !(line2.value = text2);
+  // don't show the tooltip if it's over a submenu of the More menu
+  return !(!text1 && !text2); // return a bool, not a string
+}
 
 
 function linkToolbarLoadPage(e, isMiddleClick) {

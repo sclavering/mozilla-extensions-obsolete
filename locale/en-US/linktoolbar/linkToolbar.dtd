@@ -36,32 +36,31 @@
    -
    - ***** END LICENSE BLOCK ***** -->
 
-<!ENTITY topButton.label "Top">
-<!ENTITY upButton.label "Up">
-<!ENTITY firstButton.label "First">
-<!ENTITY prevButton.label "Previous">
-<!ENTITY nextButton.label "Next">
-<!ENTITY lastButton.label "Last">
-<!ENTITY moreButton.label "More">
+<!ENTITY top.label "Top">
+<!ENTITY top.tooltip "Top of website">
+<!ENTITY up.label "Up">
+<!ENTITY up.tooltip "Up a level in website">
+<!ENTITY first.label "First">
+<!ENTITY first.tooltip "First page in sequence">
+<!ENTITY prev.label "Previous">
+<!ENTITY prev.tooltip "Previous page in sequence">
+<!ENTITY next.label "Next">
+<!ENTITY next.tooltip "Next page in sequence">
+<!ENTITY last.label "Last">
+<!ENTITY last.tooltip "Last page in sequence">
+<!ENTITY more.label "More">
+<!ENTITY more.tooltip "Other related pages">
 
-<!ENTITY tocButton.label "Table of Contents">
-<!ENTITY chapterButton.label "Chapters">
-<!ENTITY sectionButton.label "Sections">
-<!ENTITY appendixButton.label "Appendices">
-<!ENTITY glossaryButton.label "Glossary">
-<!ENTITY indexButton.label "Index">
+<!ENTITY toc "Table of Contents">
+<!ENTITY chapters "Chapters">
+<!ENTITY sections "Sections">
+<!ENTITY appendices "Appendices">
+<!ENTITY glossary "Glossary">
+<!ENTITY index "Index">
 
-<!ENTITY helpButton.label "Help">
-<!ENTITY searchButton.label "Search">
-<!ENTITY authorButton.label "Authors">
-<!ENTITY copyrightButton.label "Copyright">
-<!ENTITY bookmarkButton.label "Bookmarks">
-<!ENTITY alternateButton.label "Other Versions">
-
-<!ENTITY topButton.tooltip "Top of website">
-<!ENTITY upButton.tooltip "Up a level in website">
-<!ENTITY firstButton.tooltip "First page in sequence">
-<!ENTITY prevButton.tooltip "Previous page in sequence">
-<!ENTITY nextButton.tooltip "Next page in sequence">
-<!ENTITY lastButton.tooltip "Last page in sequence">
-<!ENTITY moreButton.tooltip "Other related pages">
+<!ENTITY help "Help">
+<!ENTITY search "Search">
+<!ENTITY author "Authors">
+<!ENTITY copyright "Copyright">
+<!ENTITY bookmark "Bookmarks">
+<!ENTITY alternate "Other Versions">

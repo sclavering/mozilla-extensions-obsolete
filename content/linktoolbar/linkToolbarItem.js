@@ -55,7 +55,7 @@ var linkToolbarItems = {
   getItemForLinkType: function(linkType) {
     const items = this.items;
     if(!(linkType in items)) {
-      var elt = document.getElementById("link-" + linkType);
+      var elt = document.getElementById("linktoolbar-" + linkType);
       // initialisation functions for different elements used to display links
       const inits = {toolbarbutton: initLinkToolbarButton, menuitem: initLinkToolbarItem, menu: initLinkToolbarMenu};
       items[linkType] = elt ? inits[elt.localName](elt) : new LinkToolbarTransientItem(linkType);
@@ -72,7 +72,7 @@ var linkToolbarItems = {
 
 function makeLinkToolbarMenuItem(href, label, tooltip) {
   var mi = document.createElement("menuitem");
-  mi.className = "menuitem-iconic bookmark-item";
+  mi.className = "menuitem-iconic";
   mi.setAttribute("href", href);
   mi.setAttribute("label", label);
   mi.setAttribute("tooltiptext1", tooltip);
@@ -85,7 +85,7 @@ function makeLinkToolbarMenuItem(href, label, tooltip) {
 function initLinkToolbarItem(elt) {
   for(var i in linkToolbarItem) elt[i] = linkToolbarItem[i];
   // this will need fixing if we ever have more than one top-level menu
-  elt.parentMenuButton = document.getElementById("more-menu");
+  elt.parentMenuButton = document.getElementById("linktoolbar-more-menu");
   return elt;
 }
 
@@ -141,6 +141,7 @@ const linkToolbarButton = {
     this.removeAttribute("href");
     this.removeAttribute("tooltiptext1");
     this.removeAttribute("tooltiptext2");
+    this.removeAttribute("multi");
   },
 
   displayLink: function(linkElement) {
@@ -158,6 +159,7 @@ const linkToolbarButton = {
     } else if(!this.haveLinks) {
       this.haveLinks = true;
       this.dropMarker.removeAttribute("disabled");
+      this.setAttribute("multi", "true");
     }
   },
 
@@ -187,7 +189,7 @@ function initLinkToolbarMenu(elt) {
   popup.setAttribute("onpopupshowing", "this.parentNode.buildMenu();");
   elt.appendChild(popup);
   // this will need fixing if we ever have more than one top-level menu
-  elt.parentMenuButton = document.getElementById("more-menu");
+  elt.parentMenuButton = document.getElementById("linktoolbar-more-menu");
   return elt;
 }
 
@@ -229,13 +231,13 @@ function LinkToolbarTransientItem(linkType) {
   this.links = [];
   // create a menuitem
   var item = this.item = document.createElement("menuitem");
-  item.className = "menuitem-iconic bookmark-item";
+  item.className = "menuitem-iconic";
   item.setAttribute("label",linkType);
   // and a menu
   var menu = this.menu = document.createElement("menu");
   menu.setAttribute("label",linkType);
   menu.hidden = true;
-  menu.className = "menu-iconic bookmark-item";
+  menu.className = "menu-iconic";
   menu.setAttribute("container", "true");
   // create the popup to go with it
   var popup = this.popup = document.createElement("menupopup");
@@ -243,7 +245,7 @@ function LinkToolbarTransientItem(linkType) {
   popup.linkToolbarItem = this;
   popup.setAttribute("onpopupshowing", "this.linkToolbarItem.buildMenu();");
   // add items and create object to control them
-  var moreMenu = this.parentMenuButton = document.getElementById("more-menu-popup");
+  var moreMenu = this.parentMenuButton = document.getElementById("linktoolbar-more-popup");
   moreMenu.appendChild(item);
   moreMenu.appendChild(menu);
 }

@@ -4,32 +4,32 @@ Licence: MPL 1.1/GPL 2.0/LGPL 2.1
 Author: Rob de Vries
 -->
 
-<!ENTITY topButton.label "Top">
-<!ENTITY upButton.label "Omhoog">
-<!ENTITY firstButton.label "Eerste">
-<!ENTITY prevButton.label "Vorige">
-<!ENTITY nextButton.label "Volgende">
-<!ENTITY lastButton.label "Laatste">
-<!ENTITY moreButton.label "Meer">
+<!ENTITY top.label "Top">
+<!ENTITY top.tooltip "Top van de website">
+<!ENTITY up.label "Omhoog">
+<!ENTITY up.tooltip "Een niveau omhoog">
+<!ENTITY first.label "Eerste">
+<!ENTITY first.tooltip "Eerste pagina in volgorde">
+<!ENTITY prev.label "Vorige">
+<!ENTITY prev.tooltip "Vorige pagina in volgorde">
+<!ENTITY next.label "Volgende">
+<!ENTITY next.tooltip "Volgende pagina in volgorde">
+<!ENTITY last.label "Laatste">
+<!ENTITY last.tooltip "Laatste pagina in volgorde">
+<!ENTITY more.label "Meer">
+<!ENTITY more.tooltip "Andere gerelateerde pagina's">
 
-<!ENTITY tocButton.label "Inhoudsopgave">
-<!ENTITY chapterButton.label "Hoofdstukken">
-<!ENTITY sectionButton.label "Secties">
-<!ENTITY appendixButton.label "Bijlagen">
-<!ENTITY glossaryButton.label "Verklarende woordenlijst">
-<!ENTITY indexButton.label "Index">
+<!ENTITY toc "Inhoudsopgave">
+<!ENTITY chapters "Hoofdstukken">
+<!ENTITY sections "Secties">
+<!ENTITY appendices "Bijlagen">
+<!ENTITY glossary "Verklarende woordenlijst">
+<!ENTITY index "Index">
 
-<!ENTITY helpButton.label "Help">
-<!ENTITY searchButton.label "Zoek">
-<!ENTITY authorButton.label "Auteurs">
-<!ENTITY copyrightButton.label "Auteursrecht">
-<!ENTITY bookmarkButton.label "Bladwijzers">
-<!ENTITY alternateButton.label "Andere Versies">
+<!ENTITY help "Help">
+<!ENTITY search "Zoek">
+<!ENTITY author "Auteurs">
+<!ENTITY copyright "Auteursrecht">
+<!ENTITY bookmark "Bladwijzers">
+<!ENTITY alternate "Andere Versies">
 
-<!ENTITY topButton.tooltip "Top van de website">
-<!ENTITY upButton.tooltip "Een niveau omhoog">
-<!ENTITY firstButton.tooltip "Eerste pagina in volgorde">
-<!ENTITY prevButton.tooltip "Vorige pagina in volgorde">
-<!ENTITY nextButton.tooltip "Volgende pagina in volgorde">
-<!ENTITY lastButton.tooltip "Laatste pagina in volgorde">
-<!ENTITY moreButton.tooltip "Andere gerelateerde pagina's">

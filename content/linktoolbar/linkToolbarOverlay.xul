@@ -24,7 +24,7 @@
    -      Tim Taylor <tim@tool-man.org>
    -      Stuart Ballard <sballard@netreach.net>
    -      Chris Neale <cdn@mozdev.org>  (Port to Px/Fb/Fx)
-   -      Stephen Clavering <mozilla@clav.me.uk> (Multiple js rewrites)
+   -      Stephen Clavering <mozilla@clav.me.uk>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -53,7 +53,7 @@
   <!-- our two line tooltip -->
   <popupset id="mainPopupSet">
     <tooltip id="linktoolbar-tooltip" orient="vertical"
-        onpopupshowing="if(!linkToolbarUI.fillTooltip(document.tooltipNode)) event.preventDefault();">
+        onpopupshowing="return linkToolbarFillTooltip(this, event);">
       <label id="linktoolbar-tooltip-1"/>
       <label id="linktoolbar-tooltip-2" crop="center"/>
     </tooltip>
@@ -67,48 +67,35 @@
         >
 
       <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="link-top" label="&topButton.label;" tooltiptext0="&topButton.tooltip;"/>
+          id="linktoolbar-top" label="&top.label;" tooltiptext0="&top.tooltip;"/>
       <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="link-up" label="&upButton.label;" tooltiptext0="&upButton.tooltip;"/>
-      <toolbarseparator/>
-      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="link-first" label="&firstButton.label;" tooltiptext0="&firstButton.tooltip;"/>
-      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="link-prev" label="&prevButton.label;" tooltiptext0="&prevButton.tooltip;"/>
-      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="link-next" label="&nextButton.label;" tooltiptext0="&nextButton.tooltip;"/>
-      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="link-last" label="&lastButton.label;" tooltiptext0="&lastButton.tooltip;"/>
-      <toolbarseparator/>
+          id="linktoolbar-up" label="&up.label;" tooltiptext0="&up.tooltip;"/>
 
-      <toolbarbutton id="more-menu" class="bookmark-item" type="menu" container="true"
-          label="&moreButton.label;" disabled="true" tooltiptext0="&moreButton.tooltip;">
-        <menupopup id="more-menu-popup">
-          <menuitem id="link-toc" label="&tocButton.label;" hidden="true"
-              class="menuitem-iconic bookmark-item"/>
-          <menu id="link-chapter" label="&chapterButton.label;" hidden="true"
-              class="menu-iconic bookmark-item" container="true"/>
-          <menu id="link-section" label="&sectionButton.label;" hidden="true"
-              class="menu-iconic bookmark-item" container="true"/>
-          <menu id="link-appendix" label="&appendixButton.label;" hidden="true"
-              class="menu-iconic bookmark-item" container="true"/>
-          <menuitem id="link-glossary" label="&glossaryButton.label;" hidden="true"
-              class="menuitem-iconic bookmark-item"/>
-          <menuitem id="link-index" label="&indexButton.label;" hidden="true"
-              class="menuitem-iconic bookmark-item"/>
+      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
+          id="linktoolbar-first" label="&first.label;" tooltiptext0="&first.tooltip;"/>
+      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
+          id="linktoolbar-prev" label="&prev.label;" tooltiptext0="&prev.tooltip;"/>
+      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
+          id="linktoolbar-next" label="&next.label;" tooltiptext0="&next.tooltip;"/>
+      <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
+          id="linktoolbar-last" label="&last.label;" tooltiptext0="&last.tooltip;"/>
 
-          <menuitem id="link-help" label="&helpButton.label;" hidden="true"
-              class="menuitem-iconic bookmark-item"/>
-          <menuitem id="link-search" label="&searchButton.label;" hidden="true"
-              class="menuitem-iconic bookmark-item"/>
-          <menuitem id="link-author" label="&authorButton.label;" hidden="true"
-              class="menuitem-iconic bookmark-item"/>
-          <menuitem id="link-copyright" label="&copyrightButton.label;" hidden="true"
-              class="menuitem-iconic bookmark-item"/>
-          <menu id="link-bookmark" label="&bookmarkButton.label;" hidden="true"
-              class="menu-iconic bookmark-item" container="true"/>
-          <menu id="link-alternate" label="&alternateButton.label;" hidden="true"
-              class="menu-iconic bookmark-item" container="true"/>
+      <toolbarbutton disabled="true" type="menu"
+          id="linktoolbar-more-menu" label="&more.label;" tooltiptext0="&more.tooltip;">
+        <menupopup id="linktoolbar-more-popup">
+          <menuitem id="linktoolbar-toc" label="&toc;" hidden="true" class="menuitem-iconic"/>
+          <menu id="linktoolbar-chapter" label="&chapters;" hidden="true" class="menu-iconic"/>
+          <menu id="linktoolbar-section" label="&sections;" hidden="true" class="menu-iconic"/>
+          <menu id="linktoolbar-appendix" label="&appendices;" hidden="true" class="menu-iconic"/>
+          <menuitem id="linktoolbar-glossary" label="&glossary;" hidden="true" class="menuitem-iconic"/>
+          <menuitem id="linktoolbar-index" label="&index;" hidden="true" class="menuitem-iconic"/>
+
+          <menuitem id="linktoolbar-help" label="&help;" hidden="true" class="menuitem-iconic"/>
+          <menuitem id="linktoolbar-search" label="&search;" hidden="true" class="menuitem-iconic"/>
+          <menuitem id="linktoolbar-author" label="&author;" hidden="true" class="menuitem-iconic"/>
+          <menuitem id="linktoolbar-copyright" label="&copyright;" hidden="true" class="menuitem-iconic"/>
+          <menu id="linktoolbar-bookmark" label="&bookmark;" hidden="true" class="menu-iconic"/>
+          <menu id="linktoolbar-alternate" label="&alternate;" hidden="true" class="menu-iconic"/>
         </menupopup>
       </toolbarbutton>
     </statusbarpanel>

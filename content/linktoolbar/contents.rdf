@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
+
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
-
+     xmlns:c="http://www.mozilla.org/rdf/chrome#">
   <Seq about="urn:mozilla:package:root">
-    <li resource="urn:mozilla:package:linktoolbar"/>
+    <li>
+      <Description about="urn:mozilla:package:linktoolbar" c:name="linktoolbar"/>
+    </li>
   </Seq>
-
-  <Description about="urn:mozilla:package:linktoolbar" chrome:name="linktoolbar"/>
 
   <Seq about="urn:mozilla:overlays">
-    <li resource="chrome://browser/content/browser.xul"/>
-  </Seq>
-
-  <Seq about="chrome://browser/content/browser.xul">
-    <li>chrome://linktoolbar/content/linkToolbarOverlay.xul</li>
+    <li>
+      <Seq about="chrome://browser/content/browser.xul">
+        <li>chrome://linktoolbar/content/linkToolbarOverlay.xul</li>
+      </Seq>
+    </li>
   </Seq>
 </RDF>
