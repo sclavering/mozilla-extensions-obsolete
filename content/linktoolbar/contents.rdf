@@ -7,12 +7,13 @@
     <RDF:li resource="urn:mozilla:package:linktoolbar"/>
   </RDF:Seq>
 
-  <!-- package information $Id: contents.rdf,v 1.6 2003/03/11 23:10:40 cdn Exp $ -->
+  <!-- package information $Id: contents.rdf,v 1.7 2003/04/03 12:40:22 cdn Exp $ -->
   <RDF:Description about="urn:mozilla:package:linktoolbar"
     chrome:author="Chris Neale"
     chrome:authorURL="http://cdn.mozdev.org/linkToolbar/"
-    chrome:description="[2003-03-12] Adds Mozilla's link toolbar to Px and N7.
- Drag onto a toolbar of your choice.  Adjust View > Site Navigation Bar to suit your browsing needs."
+    chrome:description="[2003-04-03] Adds Mozilla's link toolbar to Px and N7.
+ Adds a styleswitcher for Px.
+ Adjust View > Site Navigation Bar to suit your browsing needs."
     chrome:displayName="Link Toolbar"
     chrome:extension="true"
     chrome:name="linktoolbar">
