@@ -1,12 +1,8 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE window [
-<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
-%browserDTD;
-]>
+<!DOCTYPE window SYSTEM "chrome://browser/locale/">
 
-<overlay id="GoHomeOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="GoHomeOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <script type="application/x-javascript"><![CDATA[
 
@@ -19,7 +15,7 @@ function goHomeInit() {
 // hide the Home item when approproiate (use same logic as for Back, Stop etc.)
 function goHomeHide() {
   var cm = gContextMenu;
-  document.getElementById("context-home").hidden = ( cm.isTextSelected || cm.onLink || cm.onImage || cm.onTextInput );
+  document.getElementById("context-home").hidden = (cm.isTextSelected || cm.onLink || cm.onImage || cm.onTextInput);
 }
 
 ]]></script>
