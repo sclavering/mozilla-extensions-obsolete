@@ -1,6 +1,6 @@
 /* File licenced under the MPL 1.1/GPL 2.0/LGPL 2.1 tri-licence.
  *
- * The Original Code is the LinkToolbar extension for Firebird/NN7
+ * The Original Code is the LinkToolbar extension for Firefox
  *
  * Contributor(s):
  *   Stephen Clavering <mozilla@clav.me.uk>   (Complete rewrite 2003-04-17)
@@ -12,7 +12,7 @@
 #link-top, #link-up, #link-first,
 #link-prev, #link-next, #link-last {
   -moz-appearance: none;
-  list-style-image: url("chrome://linktoolbar/skin/buttons.png");
+  list-style-image: url(chrome://linktoolbar/skin/buttons.png);
   padding: 0;
 }
 #link-top[disabled="true"], #link-up[disabled="true"], #link-first[disabled="true"],
@@ -67,11 +67,9 @@ buttons switch to type=menu. we change the button icon instead  */
 
 
 
-
-
 #linktoolbar toolbarbutton[tooltiptext^="Digger"],
 #linktoolbar toolbarbutton[tooltiptext^="LinkIt"] {
-  list-style-image: url("chrome://linktoolbar/skin/buttons_digger.png");
+  list-style-image: url(chrome://linktoolbar/skin/buttons_digger.png);
 }
 
 #linktoolbar menuitem[label^="Digger"] > .menu-iconic-text,
@@ -94,21 +92,21 @@ buttons switch to type=menu. we change the button icon instead  */
 #linktoolbar .bookmark-item[href^="mailto:"],
 #linktoolbar .bookmark-item[statustext^="mailto:"] {
   border-bottom: 1px dashed red;
-  list-style-image: url("chrome://linktoolbar/skin/mail.png") !important;
+  list-style-image: url(chrome://linktoolbar/skin/mail.png) !important;
 /* would be unnecessary but for !importants sprinkled throughout browser.css and related files */
 }
 
 #linktoolbar-toggle {
-  list-style-image: url("chrome://linktoolbar/skin/chevron.gif");
+  list-style-image: url(chrome://linktoolbar/skin/chevron.gif);
   padding: 2px 0;
 }
 
 #linktoolbar-toggle[left="true"] {
-  list-style-image: url("chrome://linktoolbar/skin/norvehc.gif");
+  list-style-image: url(chrome://linktoolbar/skin/norvehc.gif);
 }
 
 #linktoolbar-toggle[up="true"] {
-  list-style-image: url("chrome://linktoolbar/skin/maybe.gif");
+  list-style-image: url(chrome://linktoolbar/skin/maybe.gif);
 }
 
 
@@ -125,7 +123,7 @@ buttons switch to type=menu. we change the button icon instead  */
 
 /* Icons Only mode.
 Have to use !important to override a rule in Fb's browser.css for
-bookmark folders or the Document+More menus still have a tex label */
+bookmark folders or the Document+More menus still have a text label */
 
 #linktoolbar[iconsonly="true"] > toolbarbutton > .toolbarbutton-text {
   display: none !important;
@@ -135,6 +133,5 @@ bookmark folders or the Document+More menus still have a tex label */
 }
 
 #page-theme-button {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/icon.png");
+  list-style-image: url(chrome://linktoolbar/skin/btn1/icon.png);
 }
-
