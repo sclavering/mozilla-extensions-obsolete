@@ -11,7 +11,7 @@
         buttons="accept,cancel"
         persist="screenX,screenY,width,height"
         width="260"
-        height="160"
+        height="180"
         ondialogaccept="clearStuff();"
         >
 

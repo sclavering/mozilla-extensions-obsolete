@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!-- $Id: xOverlay.xul,v 1.3 2003/05/21 14:31:40 clav Exp $ -->
+<!-- $Id: xOverlay.xul,v 1.4 2003/05/21 15:01:54 cdn Exp $ -->
 
 <?xml-stylesheet href="chrome://x/skin/x.css" type="text/css"?>
 
@@ -14,10 +14,10 @@
       class="toolbarbutton-1"
       id="x-button"
       label="&x.label;"
-      oncommand="window.openDialog('chrome://x/content/xDialog.xul','paranoia','');"
+      oncommand="window.openDialog('chrome://x/content/xDialog.xul','paranoia',
+                                   'centerscreen,chrome,dialog,modal');"
       tooltiptext="&x.tooltip;"
-      />
+    />
   </toolbarpalette>
-
 
 </overlay>
