@@ -169,8 +169,10 @@ const linkToolbarUI = {
   pageLoaded: function(evt) {
     var doc = evt.originalTarget;
 
-    linkFinder.findLinks(doc);
-    linkToolbarUI.getMetaLinks(doc);
+    if(doc instanceof HTMLDocument) {
+      linkFinder.findLinks(doc);
+      linkToolbarUI.getMetaLinks(doc);
+    }
 
     if(doc != gBrowser.contentDocument) return;
     if(linkToolbarHandler.hasItems) return;
