@@ -125,13 +125,3 @@ toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] {
 }
 toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="left"] { border-top-color: #000000; }
 toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="right"] { border-bottom-color: #000000; }
-
-
-/* not in use. hangover from trivial that I might want to restore
-.tabs-newbutton {
-  -moz-image-region: rect(0px, 8px, 8px, 0px);
-  margin: 1px 2px;
-  padding: 3px 2px 3px 4px;
-  list-style-image: url(chrome://toolbarext/skin/newtab.png);
-}
-*/
