@@ -4,15 +4,16 @@
      xmlns:c="http://www.mozilla.org/rdf/chrome#">
 
   <Seq about="urn:mozilla:package:root">
-    <li resource="urn:mozilla:package:ctc"/>
+    <li>
+      <Description about="urn:mozilla:package:ctc" c:name="ctc"/>
+    </li>
   </Seq>
-
-  <Description about="urn:mozilla:package:ctc" c:name="ctc"/>
 
   <Seq about="urn:mozilla:overlays">
-    <li resource="chrome://browser/content/browser.xul"/>
-  </Seq>
-  <Seq about="chrome://browser/content/browser.xul">
-    <li>chrome://ctc/content/</li>
+    <li>
+      <Seq about="chrome://browser/content/browser.xul">
+        <li>chrome://ctc/content/</li>
+      </Seq>
+    </li>
   </Seq>
 </RDF>
