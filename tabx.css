@@ -1,0 +1,3 @@
+tabbrowser tab {
+  -moz-binding: url(chrome://tabx/content/tabx.xml#browser-tab);
+}
