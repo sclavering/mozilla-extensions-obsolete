@@ -2,19 +2,94 @@
 
 <!DOCTYPE overlay>
 
-<overlay id="diggerBrowserOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="digger" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-<script type="application/x-javascript" src="digger.js"/>
-
-<button id="go-button" class="button-toolbar" context="digger-menu"/>
+<toolbarbutton id="go-button" context="digger-menu"/>
+<toolbarbutton id="goup-button" context="digger-menu"/>
 
 <popupset id="mainPopupSet">
   <popup id="digger-menu"
-      oncommand="diggerMenuCommand(event,this);"
-      onclick="diggerMenuCommand(event,this);"
+      oncommand="diggerLoadURL(event, this, false);"
+      onclick="if(event.button==1) diggerLoadURL(event, this, true);"
       onpopupshowing="return diggerBuildMenu(this);"
-      onpopuphiding="diggerClearMenu(this);"
       />
 </popupset>
+
+<script type="application/x-javascript"><![CDATA[
+
+function diggerLoadURL(e, popup, isMiddleClick) {
+  var url = e.target.getAttribute("label");
+  openUILink(url, e);
+  if(isMiddleClick) popup.hidePopup();
+}
+
+function diggerBuildMenu(menu) {
+  var url = gURLBar.value || _content.location.href;
+  if(!url || url=="about:blank") return false;
+
+  // clear menu
+  while(menu.hasChildNodes()) menu.removeChild(menu.lastChild);
+
+  var needSeparator = false, haveItems = false;
+
+  function addItem(label) {
+    if(needSeparator && haveItems)
+      menu.appendChild(document.createElement("menuseparator")), needSeparator = false;
+    var menuitem = document.createElement("menuitem");
+    menuitem.setAttribute("label", label);
+    menu.appendChild(menuitem);
+    haveItems = true;
+  }
+
+  // chop off query string
+  var i = url.lastIndexOf("?");
+  if(i != -1) {
+    url = url.substring(0, i);
+    addItem(url);
+    // xxx look for urls in the query string
+  }
+
+  var bits = url.match(/^([^:]*:\/{0,3})(.*)/);
+  var protocol, remainder;
+  if(bits) protocol = bits[1], remainder = bits[2];
+  else protocol = "", remainder = url;
+
+  var path = remainder.split("/"), host = path.shift();
+  if(!path[path.length-1]) path.pop(); // happens when the url ends in a /
+
+  // remove bits of the path
+  var pre = protocol+host+"/";
+  if(path.length) {
+    path.pop();
+    while(path.length) {
+      addItem(pre+path.join("/")+"/");
+      path.pop();
+    }
+    addItem(pre);
+  }
+  needSeparator = true;
+
+  // ftp equiv. to http and vice versa
+  if(protocol=="http://") {
+    addItem("ftp://"+host.replace(/^www\./, "ftp.")+"/");
+  } else if(protocol=="ftp://") {
+    addItem("http://"+host.replace(/^ftp\./, "www.")+"/");
+  }
+  needSeparator = true;
+
+  // dig through subdomains
+  bits = host.split(".");
+  if(bits.length > 2) {
+    while(bits.length > 2) {
+      bits.shift();
+      addItem(protocol+bits.join(".")+"/");
+    }
+  }
+
+  // we might not have put anything on the menu
+  return haveItems;
+}
+
+]]></script>
 
 </overlay>

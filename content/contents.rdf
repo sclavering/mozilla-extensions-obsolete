@@ -4,15 +4,16 @@
      xmlns:c="http://www.mozilla.org/rdf/chrome#">
 
   <Seq about="urn:mozilla:package:root">
-    <li resource="urn:mozilla:package:digger"/>
+    <li>
+      <Description about="urn:mozilla:package:digger" c:name="digger"/>
+    </li>
   </Seq>
-
-  <Description about="urn:mozilla:package:digger" c:name="digger"/>
 
   <Seq about="urn:mozilla:overlays">
-    <li resource="chrome://browser/content/browser.xul"/>
-  </Seq>
-  <Seq about="chrome://browser/content/browser.xul">
-    <li>chrome://digger/content/digger.xul</li>
+    <li>
+      <Seq about="chrome://browser/content/browser.xul">
+        <li>chrome://digger/content/digger.xul</li>
+      </Seq>
+    </li>
   </Seq>
 </RDF>
