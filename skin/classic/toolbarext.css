@@ -1,5 +1,3 @@
-@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
-
 /* extra toolbar buttons */
 
 .tbx-button { list-style-image: url(chrome://toolbarext/skin/large.png); }
@@ -38,15 +36,6 @@ toolbar[iconsize="small"] #tbx-zoomin-button { -moz-image-region: rect(0 200px 2
 #tbx-pageinfo-button { -moz-image-region: rect(0 352px 32px 320px); }
 toolbar[iconsize="small"] #tbx-pageinfo-button { -moz-image-region: rect(0 220px 20px 200px); }
 
-#tbx-clearcache-button { -moz-image-region: rect(0 384px 32px 352px); }
-toolbar[iconsize="small"] #tbx-clearcache-button { -moz-image-region: rect(0 240px 20px 220px); }
-
-#tbx-pagecookies-button { -moz-image-region: rect(0 416px 32px 384px); }
-toolbar[iconsize="small"] #tbx-pagecookies-button { -moz-image-region: rect(0 260px 20px 240px); }
-#tbx-pagecookies-button .toolbarbutton-menu-dropmarker { display: none; }
-#tbx-pagecookies-tooltip { max-width: 65em; }
-#tbx-pagecookies-tooltip textbox { background-color: transparent !important; }
-
 #tbx-stopreload-button[state="stop"] {  -moz-image-region: rect(0 448px 32px 416px); }
 toolbar[iconsize="small"] #tbx-stopreload-button[state="stop"] { -moz-image-region: rect(0 280px 20px 260px); }
 
@@ -78,9 +67,6 @@ toolbar[iconsize="small"] #tbx-plugins-tabpref[checked="true"] { -moz-image-regi
 toolbar[iconsize="small"] #tbx-plugins-tabpref { -moz-image-region: rect(0 460px 20px 440px); }
 
 
-
-/* *** vertical toolbars at left and right of browser window *** */
-
 /* need a min-width so you can easily drag items onto a new toolbar */
 toolbox[vertical="true"] > toolbar { min-width: 20px; }
 
@@ -101,8 +87,7 @@ toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] > toolb
 }
 
 
-/* drag drop feedback when in customisation mode.  using dragover=left and
-   right does work correctly, because they work as before and after in practice */
+/* drag drop feedback when in customisation mode. dragover=left really means dragover=before. */
 toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] {
   margin: -2px 0;
   border: none;
@@ -111,8 +96,6 @@ toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] {
 }
 toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="left"] { border-top-color: black; }
 toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="right"] { border-bottom-color: black; }
-
-
 
 
 /* toolboxes on tab strip and statusbar be completely plain */

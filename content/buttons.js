@@ -1,6 +1,3 @@
-// javascript for making the extra toolbar buttons work.
-
-
 var tbxCommands = {
   viewSource: function(e,doc) {
     if(e.button!=1) return;
@@ -54,10 +51,9 @@ var tbxCommands = {
     else BrowserReload();
   },
 
-  /** These functions control whether images, javascript, and plugins are allowed, and
-    * apply to *the current tab only*. They take effect only after the page is refreshed.
-    * (could also use the allowAuth, and allowSubframes flags of docShell.)
-    */
+  // These functions control whether images, javascript, and plugins are allowed, and
+  // apply to *the current tab only*. They take effect only after the page is refreshed.
+  // (could also use the allowAuth, and allowSubframes flags of docShell.)
   toggleJavascriptInTab: function() {
     var docShell = getBrowser().docShell;
     docShell.QueryInterface(Components.interfaces.nsIDocShell);

@@ -39,13 +39,12 @@ function tbxBrowserCustomizeToolbar() {
     menubar.childNodes[i].setAttribute("disabled", true);
 
   // in practice this is irrelevant, because we replace the context menus anyway.
-  var cmd = document.getElementById("cmd_CustomizeToolbars");
-  cmd.setAttribute("disabled", "true");
+  document.getElementById("cmd_CustomizeToolbars").setAttribute("disabled", "true");
 
   if(!gTbxToolboxes) tbxGetToolboxes();
 
-  window.openDialog("chrome://global/content/customizeToolbar.xul", "CustomizeToolbar",
-                    "chrome,all,dependent", gTbxNavToolbox, gTbxToolboxes);
+  openDialog("chrome://global/content/customizeToolbar.xul", "CustomizeToolbar",
+             "chrome,all,dependent", gTbxNavToolbox, gTbxToolboxes);
 }
 
 

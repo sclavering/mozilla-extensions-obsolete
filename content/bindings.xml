@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE bindings [
-<!ENTITY % tbx SYSTEM "chrome://toolbarext/locale/">
-%tbx;
-]>
+<!DOCTYPE bindings SYSTEM "chrome://toolbarext/locale/">
 
 <bindings id="toolbarext-bindings"
           xmlns="http://www.mozilla.org/xbl"

@@ -16,7 +16,7 @@
 <!ENTITY tbx-viewsource-button.label "Source">
 <!ENTITY tbx-viewsource-button.tooltip "View page source">
 
-<!ENTITY tbx-fullscreen-button.label "Fullscreen">
+<!ENTITY tbx-fullscreen-button.label "Full Screen">
 <!ENTITY tbx-fullscreen-button.tooltip "Toggle full screen mode">
 
 <!ENTITY tbx-zoomin-button.label "Zoom In">
@@ -29,10 +29,7 @@
 <!ENTITY tbx-zoomout-button.tooltip "Decrease text size">
 
 <!ENTITY tbx-pageinfo-button.label "Info">
-<!ENTITY tbx-pageinfo-button.tooltip "Page Info">
-
-<!ENTITY tbx-clearcache-button.label "Clear Cache">
-<!ENTITY tbx-clearcache-button.tooltip "Clear the disk and memory cache">
+<!ENTITY tbx-pageinfo-button.tooltip "View Page Info">
 
 <!ENTITY tbx-stopreload.default.label "Stop/Reload">
 <!ENTITY tbx-stopreload.reload.label "Reload">
@@ -60,9 +57,8 @@
 <!ENTITY tbx-toolbar-position-bottom    "Bottom">
 
 
-
 <!ENTITY tbx-mode-icons-only "Icons Only">
 <!ENTITY tbx-mode-icons-text "Icons and Text">
 <!ENTITY tbx-mode-text-only "Text Only">
 <!ENTITY tbx-mode-small-icons "Small Icons">
-<!ENTITY tbx-mode-show-in-fullscreen "Show in Fullscreen mode">
+<!ENTITY tbx-mode-show-in-fullscreen "Show in Full Screen mode">
