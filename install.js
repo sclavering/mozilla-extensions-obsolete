@@ -3,7 +3,7 @@ const APP_NAME = "linktoolbar";
 const APP_PACKAGE = "/cdn.mozdev.org/linktoolbar";
 const APP_VERSION = "0.6";
 
-const APP_JAR_FILE = "linktoolbar.jar";
+const APP_JAR_FILE = "linkToolbar.jar";
 const APP_CONTENT_FOLDER = "content/linktoolbar/";
 const APP_LOCALE_FOLDER  = "locale/en-US/linktoolbar/";
 const APP_SKIN_FOLDER  = "skin/classic/";
