@@ -1,36 +1,50 @@
-const APP_DISPLAY_NAME = "Toolbar Enhancements";
-const APP_NAME = "toolbarext";
-const APP_PACKAGE = "/clav.mozdev.org/toolbarext";
-const APP_VERSION = "0.3";
+const kDisplayName = "Toolbar Enhancements";
+const kName = "toolbarext";
+const kPackage = "/clav.mozdev.org/toolbarext";
+const kVersion = "0.4";
 
-const APP_JAR_FILE = "toolbarext.jar";
-const APP_CONTENT_FOLDER = "content/";
-const APP_LOCALE_FOLDER  = "locale/en/";
-const APP_SKIN_FOLDER  = "skin/classic/";
+const kJarFile = "toolbarext.jar";
+const kContentFolder = "content/";
+const kLocaleFolders  = ["locale/en/"];
+const kSkinFolder = "skin/"; // leave blank if not applicable
 
-const INST_TO_PROFILE = "Do you wish to install "+APP_DISPLAY_NAME+" to your profile?\n\nClick OK to install to your profile.\n\nClick Cancel if you want to install globally.";
 
-initInstall(APP_NAME, APP_PACKAGE, APP_VERSION);
+var kMsg = "Do you wish to install "+kDisplayName+" to your profile?\n\nClick OK to install to your profile.\n\nClick Cancel if you want to install globally.";
 
-var instToProfile = confirm(INST_TO_PROFILE);
+initInstall(kName, kPackage, kVersion);
+
+var chromef = getFolder("chrome");
+var pchromef = getFolder("Profile", "chrome");
+
+
+var existsInApp     = File.exists(getFolder(chromef,  kJarFile));
+var existsInProfile = File.exists(getFolder(pchromef, kJarFile));
+
+var instToProfile = !existsInApp && (existsInProfile || confirm(kMsg));
+
+var folder = instToProfile ? pchromef : chromef;
 var flag = instToProfile ? PROFILE_CHROME : DELAYED_CHROME;
-var chromef = instToProfile ? getFolder("Profile", "chrome") : getFolder("chrome");
 
-var err = addFile(APP_PACKAGE, APP_VERSION, APP_JAR_FILE, chromef, null)
+var err = addFile(kPackage, kVersion, kJarFile, folder, null)
+
 if(err == SUCCESS) {
-	var jar = getFolder(chromef, APP_JAR_FILE);
-	registerChrome(CONTENT | flag, jar, APP_CONTENT_FOLDER);
-	registerChrome(LOCALE  | flag, jar, APP_LOCALE_FOLDER);
-	registerChrome(SKIN  | flag, jar, APP_SKIN_FOLDER);
-	err = performInstall();
-	if(err!=SUCCESS && err!=999) {
-		alert("Install failed. Error code:" + err);
-		cancelInstall(err);
-	}
+  var jar = getFolder(folder, kJarFile);
+
+  registerChrome(CONTENT | flag, jar, kContentFolder);
+  for(var i = 0; i < kLocaleFolders.length; i++)
+    registerChrome(LOCALE | flag, jar, kLocaleFolders[i]);
+  if(kSkinFolder) registerChrome(SKIN | flag, jar, kSkinFolder);
+
+  err = performInstall();
+
+  if(err!=SUCCESS && err!=999) {
+    alert("Install failed. Error code:" + err);
+    cancelInstall(err);
+  }
 } else {
-	alert("Failed to create " +APP_JAR_FILE +"\n"
-		+"You probably don't have appropriate permissions \n"
-		+"(write access to your profile or chrome directory). \n"
-		+"_____________________________\nError code:" + err);
-	cancelInstall(err);
+  alert("Failed to create " +kJarFile +"\n"
+    +"You probably don't have appropriate permissions \n"
+    +"(write access to firebird/chrome directory). \n"
+    +"_____________________________\nError code:" + err);
+  cancelInstall(err);
 }
