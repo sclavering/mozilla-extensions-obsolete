@@ -41,168 +41,196 @@
  * ***** END LICENSE BLOCK ***** */
 
 
-var linkToolbarPrefs = {
-  useLinkGuessing: false,
-  guessUpAndTopFromURL: false,
-  guessPrevAndNextFromURL: false,
-  scanHyperlinks: false,
+var gLinkToolbar = null;
+var gLinkToolbarActive = false;
 
-  load: function() {
-    const prefs = ["scanHyperlinks","guessUpAndTopFromURL","guessPrevAndNextFromURL"];
+var gLinkToolbarPrefUseLinkGuessing = false;
+var gLinkToolbarPrefGuessUpAndTopFromURL = false;
+var gLinkToolbarPrefGuessPrevAndNextFromURL = false;
+var gLinkToolbarPrefScanHyperlinks = false;
 
-    var branch = Components.classes["@mozilla.org/preferences;1"]
-                           .getService(Components.interfaces.nsIPrefService)
-                           .getBranch("extensions.linktoolbar.");
-    for(var i in prefs) this[prefs[i]] = branch.getBoolPref(prefs[i]);
 
-    this.useLinkGuessing = this.scanHyperlinks || this.guessUpAndTopFromURL || this.guessPrevAndNextFromURL;
 
-    var lt = document.getElementById("linktoolbar");
-    if(branch.getBoolPref("showOnlyWhenNeeded")) lt.setAttribute("showOnlyWhenNeeded","true");
-    else lt.removeAttribute("showOnlyWhenNeeded");
-    if(branch.getBoolPref("iconsOnly")) lt.setAttribute("iconsonly","true");
-    else lt.removeAttribute("iconsonly");
-  },
 
-  init: function() {
-    this.load();
+function linkToolbarStartup() {
+  setTimeout(linkToolbarDelayedStartup, 1); // needs to happen after Fx's delayedStartup()
 
-    window.addEventListener("unload", this.unload, false);
+  // pref listener (sort of)
+  var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
+  os.addObserver(linkToolbarPrefObserver, "linktoolbar:prefs-updated", false);
+}
 
-    var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
-    os.addObserver(this, "linktoolbar:prefs-updated", false);
-  },
+function linkToolbarDelayedStartup() {
+  linkToolbarInit();
+  // replace the toolbar customisation callback
+  var box = document.getElementById("navigator-toolbox");
+  box._preLinkToolbar_customizeDone = box.customizeDone;
+  box.customizeDone = linkToolbarToolboxCustomizeDone;
+}
 
-  unload: function(e) {
-    // I hear it causes memory leaks if you don't do this kind of thing
-    var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
-    os.removeObserver(linkToolbarPrefs, "linktoolbar:prefs-updated", false);
-  },
 
+function linkToolbarShutdown() {
+  // unhook pref listener (to prevent memory leaks)
+  var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
+  os.removeObserver(linkToolbarPrefObserver, "linktoolbar:prefs-updated", false);
+}
+
+
+window.addEventListener("load", linkToolbarStartup, false);
+window.addEventListener("unload", linkToolbarShutdown, false);
+
+
+
+
+function linkToolbarToolboxCustomizeDone(somethingChanged) {
+  if(somethingChanged) linkToolbarInit();
+  this._preLinkToolbar_customizeDone(somethingChanged);
+}
+
+
+function linkToolbarInit() {
+  var lt = gLinkToolbar = document.getElementById("linktoolbar");
+  if(gLinkToolbarActive && !lt) {
+    gLinkToolbarActive = false;
+    linkToolbarRemoveHandlers();
+  } else if(!gLinkToolbarActive && lt) {
+    linkToolbarLoadPrefs(); // has to happen here to make the "Icons Only" pref work.
+    gLinkToolbarActive = true;
+    linkToolbarAddHandlers();
+  }
+}
+
+
+
+
+function linkToolbarLoadPrefs() {
+  if(!gLinkToolbarActive) return;
+
+  var branch = gPrefService.getBranch("extensions.linktoolbar.");
+
+  gLinkToolbarPrefScanHyperlinks = branch.getBoolPref("scanHyperlinks");
+  gLinkToolbarPrefGuessUpAndTopFromURL = branch.getBoolPref("guessUpAndTopFromURL");
+  gLinkToolbarPrefGuessPrevAndNextFromURL = branch.getBoolPref("guessPrevAndNextFromURL");
+
+  gLinkToolbarPrefUseLinkGuessing = gLinkToolbarPrefScanHyperlinks
+      || gLinkToolbarPrefGuessUpAndTopFromURL || gLinkToolbarPrefGuessPrevAndNextFromURL;
+
+  if(branch.getBoolPref("iconsOnly")) lt.setAttribute("iconsonly","true");
+  else lt.removeAttribute("iconsonly");
+}
+
+
+var linkToolbarPrefObserver = {
   observe: function(subject, topic, data) {
-    this.load();
+    linkToolbarLoadPrefs();
   }
 };
 
 
 
 
-var linkToolbarUI = {
-  linkAdded: function(event) {
-    var elt = event.originalTarget;
-    var doc = elt.ownerDocument;
-    if(!((elt instanceof HTMLLinkElement) && elt.href && (elt.rel || elt.rev))) return;
 
-    var rels = linkToolbarUtils.getLinkRels(elt.rel, elt.rev, elt.type, elt.title);
-    if(!rels) return;
-    var linkInfo = new LTLinkInfo(elt.href, elt.title, elt.hreflang, elt.media);
-    linkToolbarUI.addLink(linkInfo, doc, rels);
-  },
+function linkToolbarAddHandlers() {
+  var browser = gBrowser;
+  browser.addEventListener("select", linkToolbarTabSelectedHandler, false);
+  browser.addEventListener("DOMLinkAdded", linkToolbarLinkAddedHandler, true);
+  browser.addEventListener("unload", linkToolbarPageClosedHandler, true);
+  browser.addEventListener("load", linkToolbarPageLoadedHandler, true);
+}
 
-  addLink: function(linkInfo, doc, rels) {
-    // remember the link in an array on the document
-    // xxx we'd prefer not to pollute the document's DOM of course, but javascript
-    // doesn't have real hashtables (only string->anything maps), so there isn't
-    // all that much choice.
-    if(!("__lt__links" in doc)) doc.__lt__links = [];
-    var doclinks = doc.__lt__links;
-    if(doclinks.empty) doclinks.empty = false; // |length| is 0 for hashtables
-    for(var r in rels) {
-      if(!(r in doclinks)) doclinks[r] = [];
-      // we leave any existing link with the same URL alone so that linkToolbarLinkFinder-generated
-      // links don't replace page-provided ones (which are likely to have better descriptions)
-      var url = linkInfo.href;
-      if(url in doclinks[r]) delete rels[r];
-      else doclinks[r][url] = linkInfo;
-    }
 
-    if(doc == content.document) {
-      linkToolbarItems.handleLinkForRels(linkInfo, rels);
-      this.hasItems = true;
-    }
-  },
+function linkToolbarRemoveHandlers() {
+  var browser = gBrowser;
+  browser.removeEventListener("select", linkToolbarTabSelectedHandler, false);
+  browser.removeEventListener("DOMLinkAdded", linkToolbarLinkAddedHandler, true);
+  browser.removeEventListener("unload", linkToolbarPageClosedHandler, true);
+  browser.removeEventListener("load", linkToolbarPageLoadedHandler, true);
+}
 
-  clear: function(event) {
-    // When following a link of the form:
-    //   <a href="..." onclick="this.style.display='none'">.....</a>
-    //   (the onclick handler could be on an ancestor node of the link instead)
-    // the originalTarget of the unload event for leaving the current page becomes the Text node
-    // for the link, rather than the Document node.  So we use ownerDocument, but can't always do
-    // so, because the DOM2 spec defines that as being null for Document nodes.
-    var doc = event.originalTarget;
-    if(!(doc instanceof Document)) doc = doc.ownerDocument;
-    // we only want to clear the toolbar if it's the currently visible document that is unloading
-    if(doc != gBrowser.contentDocument) return;
-    linkToolbarItems.clearAll();
-  },
 
-  tabSelected: function(event) {
-    if(event.originalTarget.localName != "tabs") return;
-    linkToolbarItems.clearAll();
+function linkToolbarLinkAddedHandler(event) {
+  var elt = event.originalTarget;
+  var doc = elt.ownerDocument;
+  if(!((elt instanceof HTMLLinkElement) && elt.href && (elt.rel || elt.rev))) return;
 
-    // show any links for the new doc
-    var doc = content.document;
-    if(!("__lt__links" in doc) || doc.__lt__links.empty) {
-      linkToolbarUI.hasItems = false;
-      return;
-    }
+  var rels = linkToolbarUtils.getLinkRels(elt.rel, elt.rev, elt.type, elt.title);
+  if(!rels) return;
+  var linkInfo = new LTLinkInfo(elt.href, elt.title, elt.hreflang, elt.media);
+  linkToolbarAddLinkForPage(linkInfo, doc, rels);
+}
 
-    var links = doc.__lt__links;
-    for(var rel in links) {
-      var linksForRel = links[rel];
-      for(var i in linksForRel) linkToolbarItems.handleLinkForRel(linksForRel[i], rel);
-    }
-    linkToolbarUI.hasItems = true;
-  },
 
-  // When in "show as needed" mode we leave the bar visible after a page unloads
-  // until the next page has loaded and we can be sure it has no links, at which
-  // point this function is called.
-  pageLoaded: function(evt) {
-    var doc = evt.originalTarget;
-    if(!("__lt__links" in doc)) {
-      doc.__lt__links = [];
-      doc.__lt__links.empty = true; // |length| is 0 for hashtables. ltUI.addLink sets this to false
-    }
+function linkToolbarPageClosedHandler(event) {
+  // When following a link of the form:
+  //   <a href="..." onclick="this.style.display='none'">.....</a>
+  //   (the onclick handler could be on an ancestor node of the link instead)
+  // the originalTarget of the unload event for leaving the current page becomes the Text node
+  // for the link, rather than the Document node.  So we use ownerDocument, but can't always do
+  // so, because the DOM2 spec defines that as being null for Document nodes.
+  var doc = event.originalTarget;
+  if(!(doc instanceof Document)) doc = doc.ownerDocument;
+  // we only want to clear the toolbar if it's the currently visible document that is unloading
+  if(doc != gBrowser.contentDocument) return;
+  linkToolbarItems.clearAll();
+}
 
-    if(linkToolbarPrefs.useLinkGuessing && (doc instanceof HTMLDocument)) {
-      if(linkToolbarPrefs.scanHyperlinks)
-        linkToolbarLinkFinder.scanPageLinks(doc, doc.__lt__links);
-      // doc.location[.href] seems not to be maskable by JS, so this should be OK
-      if(linkToolbarPrefs.guessUpAndTopFromURL)
-        linkToolbarLinkFinder.guessUpAndTopFromURL(doc, doc.__lt__links, doc.location.href);
-      if(linkToolbarPrefs.guessPrevAndNextFromURL)
-        linkToolbarLinkFinder.guessPrevAndNextFromURL(doc, doc.__lt__links, doc.location);
-    }
 
-    if(doc != gBrowser.contentDocument) return;
-
-    linkToolbarUI.hasItems = !doc.__lt__links.empty;
-  },
-
-  // The "hasitems" attribute is used to show/hide the toolbar in the
-  // "show when needed" mode. This property is used to set/clear it
-  _hasItems: false,
-  set hasItems(val) {
-    if(val==this._hasItems) return;
-    document.getElementById("linktoolbar").setAttribute("hasitems",val);
-    this._hasItems = val;
-  },
-  get hasItems() {
-    return this._hasItems;
-  },
-
-  onload: function() {
-    var contentArea = document.getElementById("appcontent");
-    contentArea.addEventListener("select", linkToolbarUI.tabSelected, false);
-    contentArea.addEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
-    contentArea.addEventListener("unload", linkToolbarUI.clear, true);
-    contentArea.addEventListener("load", linkToolbarUI.pageLoaded, true);
-    linkToolbarPrefs.init();
+function linkToolbarPageLoadedHandler(evt) {
+  var doc = evt.originalTarget;
+  if(!("__lt__links" in doc)) {
+    doc.__lt__links = [];
+    doc.__lt__links.empty = true; // |length| is 0 for hashtables. ltUI.addLink sets this to false
   }
-};
 
-window.addEventListener("load", linkToolbarUI.onload, false);
+  if(gLinkToolbarPrefUseLinkGuessing && (doc instanceof HTMLDocument)) {
+    if(gLinkToolbarPrefScanHyperlinks)
+      linkToolbarLinkFinder.scanPageLinks(doc, doc.__lt__links);
+    // doc.location[.href] seems not to be maskable by JS, so this should be OK
+    if(gLinkToolbarPrefGuessUpAndTopFromURL)
+      linkToolbarLinkFinder.guessUpAndTopFromURL(doc, doc.__lt__links, doc.location.href);
+    if(gLinkToolbarPrefGuessPrevAndNextFromURL)
+      linkToolbarLinkFinder.guessPrevAndNextFromURL(doc, doc.__lt__links, doc.location);
+  }
+}
+
+
+function linkToolbarTabSelectedHandler(event) {
+  if(event.originalTarget.localName != "tabs") return;
+  linkToolbarItems.clearAll();
+
+  // show any links for the new doc
+  var doc = content.document;
+  if(!("__lt__links" in doc) || doc.__lt__links.empty) return;
+
+  var links = doc.__lt__links;
+  for(var rel in links) {
+    var linksForRel = links[rel];
+    for(var i in linksForRel) linkToolbarItems.handleLinkForRel(linksForRel[i], rel);
+  }
+}
+
+
+function linkToolbarAddLinkForPage(linkInfo, doc, rels) {
+  // remember the link in an array on the document
+  // xxx we'd prefer not to pollute the document's DOM of course, but javascript
+  // doesn't have real hashtables (only string->anything maps), so there isn't
+  // all that much choice.
+  if(!("__lt__links" in doc)) doc.__lt__links = [];
+  var doclinks = doc.__lt__links;
+  if(doclinks.empty) doclinks.empty = false; // |length| is 0 for hashtables
+  for(var r in rels) {
+    if(!(r in doclinks)) doclinks[r] = [];
+    // we leave any existing link with the same URL alone so that linkToolbarLinkFinder-generated
+    // links don't replace page-provided ones (which are likely to have better descriptions)
+    var url = linkInfo.href;
+    if(url in doclinks[r]) delete rels[r];
+    else doclinks[r][url] = linkInfo;
+  }
+
+  if(doc == content.document) linkToolbarItems.handleLinkForRels(linkInfo, rels);
+}
+
+
 
 
 
@@ -230,7 +258,7 @@ function linkToolbarLoadPage(e, isMiddleClick) {
   // closeMenus() in utilityOverlay.js is poorly written (uses tagName, amongst other things), and appears incapable of handling nested menus
   if(!isMiddleClick) return;
   var p = e.target.parentNode;
-  var linkbar = document.getElementById("linktoolbar");
+  var linkbar = gLinkToolbar;
   while(p!=linkbar) {
     if(p.localName=="menupopup") p.hidePopup();
     p = p.parentNode;

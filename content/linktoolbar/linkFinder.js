@@ -79,7 +79,7 @@ var linkToolbarLinkFinder = {
       if(link.rel || link.rev) {
         rels = linkToolbarUtils.getLinkRels(link.rel, link.rev);
         var info = new LTLinkInfo(link.href, title, link.hreflang, null);
-        linkToolbarUI.addLink(info, doc, rels);
+        linkToolbarAddLinkForPage(info, doc, rels);
         continue; // no point using the regexps
       }
 
@@ -95,7 +95,7 @@ var linkToolbarLinkFinder = {
 
   addLink: function(doc, rels, url, title, longTitle) {
     var info = {href: url, url: url, title: title, longTitle: longTitle};
-    linkToolbarUI.addLink(info, doc, rels);
+    linkToolbarAddLinkForPage(info, doc, rels);
   },
 
 
@@ -124,12 +124,12 @@ var linkToolbarLinkFinder = {
   // get the text contained in a link, and any guesses for rel based on img url
   getTextAndImgRels: function(el, rels) {
     var s = "";
-    var node = el.firstChild, lastNode = el.nextSibling;
+    var node = el, lastNode = el.nextSibling;
     while(node && node!=lastNode) {
       var t = null;
       if(node.nodeType==3 || node.nodeType==2) {
         t = node.nodeValue; // CDATA and Text nodes
-      } else if((node instanceof HTMLImageElement) || (node instanceof HTMLAreaElement)) {
+      } else if(node instanceof HTMLImageElement) {
         t = node.alt;
         // guess rel values from the URL. .src always gives an absolute URL, so we use getAttribute
         var src = node.getAttribute("src");
@@ -137,6 +137,8 @@ var linkToolbarLinkFinder = {
         else if(this.img_re_prev.test(src)) rels.prev = true;
         else if(this.img_re_first.test(src)) rels.first = true;
         else if(this.img_re_last.test(src)) rels.last = true;
+      } else if(node instanceof HTMLAreaElement) {
+        t = node.alt;
       }
 
       if(t) s = s ? s+" "+t : t; // the space *is* important.  some sites (ebay) don't put a space btwn. text and images

@@ -82,18 +82,17 @@
       oncommand="linkToolbarGo('last');"/>
 </keyset>
 
-  <statusbar id="status-bar">
-    <statusbarpanel id="linktoolbar" hasitems="false"
-        oncommand="return linkToolbarLoadPage(event, false);"
-        onclick="return event.button==1 &amp;&amp; linkToolbarLoadPage(event, true);"
-        insertafter="livemark-button" tooltip="linktoolbar-tooltip"
-        >
+
+<toolbarpalette id="BrowserToolbarPalette">
+  <toolbaritem id="linktoolbar" tooltip="linktoolbar-tooltip"
+      oncommand="return linkToolbarLoadPage(event, false);"
+      onclick="return event.button==1 &amp;&amp; linkToolbarLoadPage(event, true);"
+      >
 
       <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
           id="linktoolbar-top" label="&top.label;" tooltiptext0="&top.tooltip;"/>
       <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
           id="linktoolbar-up" label="&up.label;" tooltiptext0="&up.tooltip;"/>
-
       <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
           id="linktoolbar-first" label="&first.label;" tooltiptext0="&first.tooltip;"/>
       <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
@@ -121,6 +120,7 @@
           <menu id="linktoolbar-alternate" label="&alternate;" hidden="true" class="menu-iconic"/>
         </menupopup>
       </toolbarbutton>
-    </statusbarpanel>
-  </statusbar>
+  </toolbaritem>
+</toolbarpalette>
+
 </overlay>

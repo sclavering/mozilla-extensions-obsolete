@@ -21,7 +21,7 @@ Original Author:
 
 <script type="application/x-javascript">
 <![CDATA[
-const ids = ["showOnlyWhenNeeded","iconsOnly","guessUpAndTopFromURL","guessPrevAndNextFromURL","scanHyperlinks"];
+const ids = ["iconsOnly","guessUpAndTopFromURL","guessPrevAndNextFromURL","scanHyperlinks"];
 
 var gPrefs = null;
 
@@ -51,7 +51,6 @@ function savePrefs() {
   <groupbox id="general">
     <caption label="&general;"/>
 
-    <checkbox id="showOnlyWhenNeeded" label="&showOnlyWhenNeeded;"/>
     <checkbox id="iconsOnly" label="&iconsOnly;"/>
   </groupbox>
 
