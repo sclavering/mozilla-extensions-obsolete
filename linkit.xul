@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.11 2003/05/28 19:35:55 cdn Exp $ -->
+<!-- $Id: linkit.xul,v 1.12 2003/05/28 19:55:48 cdn Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -52,23 +52,10 @@ function linkit() {
 
    var lYlink = "..";
    var location = gURLBar.value;
-/*
-   if (location.pathname == "/") alert('/ 1');
-   else
-   { alert('! /');
-     if (location.pathname.charAt(location.pathname.length-1) == "/")
-     { alert('..');//lYlink = "..";
-     }
-     else { alert('.');//lYlink = ".";
-     }
-   }
-*/
-//   if ( lYlink != "" ) {
      linkY.setAttribute("href", lYlink);
      linkY.setAttribute("id", "linkit-up");
      linkY.setAttribute("rel", "up");
      linkY.setAttribute("title", "LinkIt [" + lYlink + "]");
-//   }
 
   hydra.appendChild(linkY);
 
@@ -86,7 +73,7 @@ function linkit() {
         linkP.setAttribute("href", instag.getAttribute("href"));
         linkP.setAttribute("id", "linkit-prev");
         linkP.setAttribute("rel", "prev");
-        linkP.setAttribute("title", "LinkIt [<] (" + instag.getAttribute("href") + ")");
+        linkP.setAttribute("title", "LinkIt [<] (" + instag.getAttribute('href') + ")");
         hydra.appendChild(linkP);
       }
 
@@ -95,7 +82,7 @@ function linkit() {
         linkN.setAttribute("href", instag.getAttribute("href"));
         linkN.setAttribute("id", "linkit-next");
         linkN.setAttribute("rel", "next");
-        linkN.setAttribute("title", "LinkIt [>] (" + instag.getAttribute("href") + ")");
+        linkN.setAttribute("title", "LinkIt [>] (" + instag.getAttribute('href') + ")");
         hydra.appendChild(linkN);
       }
 
