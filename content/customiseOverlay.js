@@ -20,13 +20,20 @@ function onLoad() {
     gToolboxes[i].setAttribute("incustomisemode","true");
   }
 
-  document.documentElement.setAttribute("hidechrome", "true");
-
-  repositionDialog();
-  window.outerWidth = kWindowWidth;
-  window.outerHeight = 50;
-  slideOpen(0);
+  // xxx from ~20040930 onward the dialogue doesn't slide out, so the function slideOpen no longer exists
+  if("slideOpen" in window) {
+    document.documentElement.setAttribute("hidechrome", "true");
+    repositionDialog();
+    window.outerWidth = kWindowWidth;
+    window.outerHeight = 50;
+    slideOpen(0);
+  } else {
+    repositionDialog();
+    document.documentElement.setAttribute("hidechrome", "true");
+    initDialog();
+  }
 }
+
 
 
 function removeToolboxListeners() {
@@ -42,6 +49,7 @@ function removeToolboxListeners() {
   // so we'll tag this in here
   restoreContextMenus();
 }
+
 
 
 function restoreContextMenus() {
@@ -63,7 +71,7 @@ function restoreContextMenus() {
 
       toolbar.removeAttribute("context");
 
-      var oldcontext = toolbar.getAttribute("oldcontext");
+      oldcontext = toolbar.getAttribute("oldcontext");
       if(oldcontext) {
         toolbar.setAttribute("context",oldcontext);
         toolbar.removeAttribute("oldcontext");
@@ -96,6 +104,8 @@ function initDialog() {
   // extra
   replaceContextMenus();
 }
+
+
 
 function replaceContextMenus() {
   for(var i = 0; i < gToolboxes.length; i++) {
@@ -133,15 +143,11 @@ function replaceContextMenus() {
 
 
 
-
-
-
-
-
 function persistCurrentSets() {
   // it would be nice to test for each individual toolbox, but that requires
   // replicating all the drag+drop code just to change one or two lines
   if(!gToolboxChanged) return;
+  var docElt = gToolboxDocument.documentElement;
 
   for(var j = 0; j < gToolboxes.length; j++) {
 
@@ -165,7 +171,7 @@ function persistCurrentSets() {
           } else if(toolbox.toolbarset.getAttribute('anonymous')=='true') {
             // for the toolbox below the tab bar.  in xbl, so attributes can't
             // be persisted.  so we store the info on the document root instead
-            var docElt = gToolboxDocument.documentElement;
+            //var docElt = gToolboxDocument.documentElement;
             var attrPrefix = '_toolbarset_' + toolbox.toolbarset.getAttribute('anonid') + '_toolbar';
 
             // Persist custom toolbar info on the <toolbarset/>
@@ -182,7 +188,8 @@ function persistCurrentSets() {
           // for the tab-strip toolbars.  they're in XBL, so persistence doesn't work
           // instead we persist a custom attribute on the document.
           var attr = "_toolbar_currentset_"+toolbar.getAttribute('anonid');
-          gToolboxDocument.documentElement.setAttribute(attr,currentSet);
+//          gToolboxDocument.documentElement
+          docElt.setAttribute(attr,currentSet);
           gToolboxDocument.persist(gToolboxDocument.documentElement.id,attr);
 
         } else {
@@ -199,8 +206,9 @@ function persistCurrentSets() {
 
     if(toolbarset.getAttribute('anonymous')=='true') {
       // for the toolbarbox below the tab bar
-      var docElt = gToolboxDocument.documentElement;
-      var attrPrefix = '_toolbarset_' + toolbarset.getAttribute('anonid') + '_toolbar';
+//      var docElt = gToolboxDocument.documentElement;
+      //var
+      attrPrefix = '_toolbarset_' + toolbarset.getAttribute('anonid') + '_toolbar';
       while(docElt.hasAttribute(attrPrefix+(++customCount))) {
         docElt.removeAttribute(attrPrefix+customCount);
         gToolboxDocument.persist(docElt.id, attrPrefix+customCount);
@@ -269,12 +277,8 @@ function unwrapToolbarItems() {
 
 
 
-
-/**
- * Get the list of ids for the current set of items on each toolbar. ***in each toolbox***
- */
-function getCurrentItemIds()
-{
+// Get the list of ids for the current set of items on each toolbar. *in each toolbox*
+function getCurrentItemIds() {
   var currentItems = {};
   for(var j = 0; j < gToolboxes.length; j++) {
     var toolbox = gToolboxes[j];
@@ -328,8 +332,6 @@ function addNewToolbar() {
 
 
 
-
-
 /**
  * Restore the default set of buttons to fixed toolbars,
  * remove all custom toolbars, and rebuild the palette.
@@ -376,7 +378,6 @@ function restoreDefaultSet() {
 
 
 
-
 function updateIconSize(aUseSmallIcons) {
   var val = aUseSmallIcons ? "small" : null;
 
@@ -399,6 +400,7 @@ function updateIconSize(aUseSmallIcons) {
 
   repositionDialog();
 }
+
 
 
 function updateToolbarMode(aModeValue) {
