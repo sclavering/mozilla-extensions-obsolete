@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.10 2003/05/28 18:57:24 clav Exp $ -->
+<!-- $Id: linkit.xul,v 1.11 2003/05/28 19:35:55 cdn Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -74,7 +74,7 @@ function linkit() {
 
     var instags = page.getElementsByTagName("a");
     if (instags) {
-    for (ti=0;ti<instags.length;ti++) {
+     for (ti=0;ti<instags.length;ti++) {
       var instag = instags[ti];
       var text = linkit_getInnerText(instag);
 
@@ -86,7 +86,7 @@ function linkit() {
         linkP.setAttribute("href", instag.getAttribute("href"));
         linkP.setAttribute("id", "linkit-prev");
         linkP.setAttribute("rel", "prev");
-        linkP.setAttribute("title", "LinkIt [<]");
+        linkP.setAttribute("title", "LinkIt [<] (" + instag.getAttribute("href") + ")");
         hydra.appendChild(linkP);
       }
 
@@ -95,7 +95,7 @@ function linkit() {
         linkN.setAttribute("href", instag.getAttribute("href"));
         linkN.setAttribute("id", "linkit-next");
         linkN.setAttribute("rel", "next");
-        linkN.setAttribute("title", "LinkIt [>]");
+        linkN.setAttribute("title", "LinkIt [>] (" + instag.getAttribute("href") + ")");
         hydra.appendChild(linkN);
       }
 
