@@ -15,5 +15,10 @@
         <li>chrome://zoomy/content/</li>
       </Seq>
     </li>
+    <li>
+      <Seq about="chrome://messenger/content/messenger.xul">
+        <li>chrome://zoomy/content/</li>
+      </Seq>
+    </li>
   </Seq>
 </RDF>

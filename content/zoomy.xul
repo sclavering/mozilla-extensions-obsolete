@@ -6,7 +6,24 @@
 
 <overlay id="zoomy" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
+<!-- Firefox -->
 <toolbarpalette id="BrowserToolbarPalette">
+  <toolbarbutton class="zoomy-button toolbarbutton-1"
+      id="zoomy-zoomout" command="cmd_textZoomReduce"
+      label="&zoomout.label;" tooltiptext="&zoomout.tooltip;"
+      />
+  <toolbarbutton class="zoomy-button toolbarbutton-1"
+      id="zoomy-zoomin" command="cmd_textZoomEnlarge"
+      label="&zoomin.label;" tooltiptext="&zoomin.tooltip;"
+      />
+  <toolbarbutton class="zoomy-button toolbarbutton-1"
+      id="zoomy-zoomreset" oncommand="ZoomManager.prototype.getInstance().reset();"
+      label="&zoomreset.label;" tooltiptext="&zoomreset.tooltip;"
+      />
+</toolbarpalette>
+
+<!-- Thunderbird -->
+<toolbarpalette id="MailToolbarPalette">
   <toolbarbutton class="zoomy-button toolbarbutton-1"
       id="zoomy-zoomout" command="cmd_textZoomReduce"
       label="&zoomout.label;" tooltiptext="&zoomout.tooltip;"

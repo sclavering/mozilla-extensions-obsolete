@@ -7,18 +7,28 @@
     <id>zoomy</id>
 
     <name>Zoomy</name>
-    <version>1.0</version>
-    <description>Toolbar buttons to change web pages' text size</description>
+    <version>1.1</version>
+    <description>Toolbar buttons to change text size</description>
 
     <creator>Stephen Clavering</creator>
     <homepageURL>http://clav.mozdev.org/</homepageURL>
     <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
 
+    <!-- Firefox -->
     <targetApplication>
       <r:Description>
         <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
         <minVersion>0.9</minVersion>
         <maxVersion>0.10</maxVersion>
+      </r:Description>
+    </targetApplication>
+
+    <!-- Thunderbird -->
+    <targetApplication>
+      <r:Description>
+        <id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</id>
+        <minVersion>0.6</minVersion>
+        <maxVersion>1.0</maxVersion>
       </r:Description>
     </targetApplication>
 
