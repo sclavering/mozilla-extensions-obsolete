@@ -7,14 +7,14 @@
     <RDF:li resource="urn:mozilla:package:linktoolbar"/>
   </RDF:Seq>
 
-  <!-- package information $Id: contents.rdf,v 1.7 2003/04/03 12:40:22 cdn Exp $ -->
+  <!-- package information $Id: contents.rdf,v 1.8 2003/05/04 19:47:23 clav Exp $ -->
   <RDF:Description about="urn:mozilla:package:linktoolbar"
-    chrome:author="Chris Neale"
+    chrome:author="Stephen Clavering, Chris Neale"
     chrome:authorURL="http://cdn.mozdev.org/linkToolbar/"
-    chrome:description="[2003-04-03] Adds Mozilla's link toolbar to Px and N7.
- Adds a styleswitcher for Px.
+    chrome:description="Adds Mozilla's link toolbar to Firebird and Netscape 7.
+ Includes a style selector for Firebird
  Adjust View > Site Navigation Bar to suit your browsing needs."
-    chrome:displayName="Link Toolbar"
+    chrome:displayName="Link Toolbar [2003-05-04]"
     chrome:extension="true"
     chrome:name="linktoolbar">
   </RDF:Description>
