@@ -1,4 +1,4 @@
-tabbrowser tabs {
+.tabbrowser-tabs {
   -moz-binding: url(chrome://scrolltabs/content/scrolltabs.xml#tabs);
 }
 tabbrowser tab {
