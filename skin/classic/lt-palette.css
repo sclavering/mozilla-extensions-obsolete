@@ -66,29 +66,6 @@ buttons switch to type=menu. we change the button icon instead  */
 #link-last[type="menu"]:hover { -moz-image-region: rect(64px 96px 80px 80px); }
 
 
-
-
-
-#linktoolbar toolbarbutton[tooltiptext^="Digger"],
-#linktoolbar toolbarbutton[tooltiptext^="LinkIt"] {
-  list-style-image: url("chrome://linktoolbar/skin/buttons_digger.png");
-}
-
-#linktoolbar menuitem[label^="Digger"] > .menu-iconic-text,
-#linktoolbar menuitem[label^="LinkIt"] > .menu-iconic-text,
-#linktoolbar toolbarbutton[tooltiptext^="Digger"] > .toolbarbutton-text,
-#linktoolbar toolbarbutton[tooltiptext^="LinkIt"] > .toolbarbutton-text {
-  border-bottom: 1px dashed #000;
-  padding-bottom: 1px;
-}
-
-#linktoolbar menuitem[label^="Digger"]:hover > .menu-iconic-text,
-#linktoolbar menuitem[label^="LinkIt"]:hover > .menu-iconic-text,
-#linktoolbar toolbarbutton[tooltiptext^="Digger"]:hover > .toolbarbutton-text,
-#linktoolbar toolbarbutton[tooltiptext^="LinkIt"]:hover > .toolbarbutton-text {
-  border-bottom: 1px dashed #f00;
-}
-
 #linktoolbar menuitem[href^="mailto:"],
 #linktoolbar menuitem[statustext^="mailto:"],
 #linktoolbar .bookmark-item[href^="mailto:"],
@@ -98,9 +75,7 @@ buttons switch to type=menu. we change the button icon instead  */
 /* would be unnecessary but for !importants sprinkled throughout browser.css and related files */
 }
 
-/* Icons Only mode.
-Have to use !important to override a rule in Fb's browser.css for
-bookmark folders or the Document+More menus still have a tex label */
+/* Icons Only mode. */
 
 #linktoolbar > toolbarbutton > .toolbarbutton-text {
   display: none;
