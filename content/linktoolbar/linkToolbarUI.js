@@ -40,6 +40,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+/*
 function toggleLinkToolbar() {
 
  var btn = document.getElementById("linktoolbar-toggle");
@@ -56,9 +57,12 @@ function toggleLinkToolbar() {
    btn.setAttribute("left", "true");
  }
 }
+*/
+
 
 
 const linkToolbarUI = {
+  // scope is weird throught this function (|this| refers to the function itself)
   linkAdded: function(event) {
     var element = event.originalTarget;
     var doc = element.ownerDocument;
@@ -68,14 +72,19 @@ const linkToolbarUI = {
         || !(element.rel || element.rev))
       return;
     
-    var linkInfo = (doc == getBrowser().contentDocument)
-      ? linkToolbarHandler.handleElement(element)
-      : linkToolbarHandler.getLinkElementInfo(element);
-    linkToolbarUI.rememberLink(linkInfo, doc);
+    var linkInfo;
+    if(doc == getBrowser().contentDocument) {
+      linkInfo = linkToolbarHandler.handleElement(element);
+      if(linkInfo) linkToolbarUI.hasItems = true;
+    } else {
+      linkInfo = linkToolbarHandler.getLinkElementInfo(element);
+    }
+
+    // linkInfo will be null if the link was one that linkToolbarHandler.isLinkIgnored didn't like
+    if(linkInfo) linkToolbarUI.rememberLink(linkInfo, doc);
   },
   
   rememberLink: function(linkInfo, doc) {
-    // linkInfo will be null if the link was one that linkToolbarHandler.isLinkIgnored didn't like
     if(!linkInfo) return;
     if(!("__lt__links" in doc)) doc.__lt__links = new Array();
     doc.__lt__links.push(linkInfo);
@@ -90,15 +99,14 @@ const linkToolbarUI = {
   },
 
   clear: function(event) {
-    if (event.originalTarget != getBrowser().contentDocument
-        || !linkToolbarUI.isLinkToolbarEnabled()
-        || !linkToolbarHandler.hasItems)
+    if(event.originalTarget != getBrowser().contentDocument
+        || !linkToolbarUI.isLinkToolbarEnabled())
       return;
     linkToolbarHandler.clearAllItems();
   },
 
   tabSelected: function(event) {
-    if (event.originalTarget.localName != "tabs"
+    if(event.originalTarget.localName != "tabs"
         || !linkToolbarUI.isLinkToolbarEnabled())
       return;
     linkToolbarHandler.clearAllItems();
@@ -108,10 +116,15 @@ const linkToolbarUI = {
   
   refresh: function() {
     var currentdoc = window._content.document;
-    if(!("__lt__links" in currentdoc)) return;
+    if(!("__lt__links" in currentdoc)) {
+      this.hasItems = false;
+      return;
+    }  
     var links = currentdoc.__lt__links;
     for(var i = 0; i < links.length; i++)
       linkToolbarHandler.handleLink(links[i]);
+    
+    this.hasItems = (links.length!=0);
   },
 
   fullSlowRefresh: function() {
@@ -139,35 +152,32 @@ const linkToolbarUI = {
     }
   },
 
-  // XXX : is there any real need for the (de)activate functions ?
-  toolbarActive: false,
-
-  activate: function() {
-    if (!linkToolbarUI.toolbarActive) {
-      linkToolbarUI.toolbarActive = true;
-      document.getElementById("linktoolbar").setAttribute("hasitems", "true");
-      var contentArea = document.getElementById("appcontent");
-      contentArea.addEventListener("unload", linkToolbarUI.clear, true);
-      contentArea.addEventListener("load", linkToolbarUI.deactivate, true);
-      contentArea.addEventListener("DOMHeadLoaded", linkToolbarUI.deactivate, true);
-    }
+  
+  /* When in "show as needed" mode we leave the bar visible after a page unloads
+   * until the next page has loaded and we can be sure it has no links, at which
+   * point this function is called.
+   * (Note: this used to be done by the deactivate() method.)
+   */
+  pageLoaded: function(evt) {
+    if(evt.originalTarget != getBrowser().contentDocument) return;
+    if(linkToolbarHandler.hasItems) return;
+    
+    linkToolbarUI.hasItems = false;
   },
 
-  deactivate: function() {
-    // This function can never be called unless the toolbar is active, because
-    // it's a handler that's only activated in that situation, so there's no need
-    // to check toolbarActive. On the other hand, by the time this method is
-    // called the toolbar might have been populated again already, in which case
-    // we don't want to deactivate.
-    if (!linkToolbarHandler.hasItems) {
-      linkToolbarUI.toolbarActive = false;
-      document.getElementById("linktoolbar").setAttribute("hasitems", "false");
-      var contentArea = document.getElementById("appcontent");
-      contentArea.removeEventListener("unload", linkToolbarUI.clear, true);
-      contentArea.removeEventListener("load", linkToolbarUI.deactivate, true);
-      contentArea.removeEventListener("DOMHeadLoaded", linkToolbarUI.deactivate, true);
-    }
+  
+  /* The "hasitems" attribute is used to show/hide the toolbar in the
+   * "show when needed mode. This property is used to set/clear it */
+  _hasItems: false,
+  set hasItems(val) {
+    if(val==this._hasItems) return;
+    document.getElementById("linktoolbar").setAttribute("hasitems",val);
+    this._hasItems = val;
   },
+  get hasItems() {
+    return this._hasItems;
+  },
+
 
   // called whenever something on the toolbar gets an onclick event
   // (onclick used to get middle-clicks.  otherwise we would use oncommand)
@@ -251,12 +261,18 @@ const linkToolbarUI = {
       if (!linkToolbarUI.addHandlerActive) {
         contentArea.addEventListener("select", linkToolbarUI.tabSelected, false);
         contentArea.addEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
+        contentArea.addEventListener("unload", linkToolbarUI.clear, true);
+        contentArea.addEventListener("load", linkToolbarUI.pageLoaded, true);
+        contentArea.addEventListener("DOMHeadLoaded", linkToolbarUI.pageLoaded, true);
         linkToolbarUI.addHandlerActive = true;
       }
     } else {
       if (linkToolbarUI.addHandlerActive) {
         contentArea.removeEventListener("select", linkToolbarUI.tabSelected, false);
         contentArea.removeEventListener("DOMLinkAdded", linkToolbarUI.linkAdded, true);
+        contentArea.removeEventListener("unload", linkToolbarUI.clear, true);
+        contentArea.removeEventListener("load", linkToolbarUI.pageLoaded, true);
+        contentArea.removeEventListener("DOMHeadLoaded", linkToolbarUI.pageLoaded, true);
         linkToolbarUI.addHandlerActive = false;
       }
     }

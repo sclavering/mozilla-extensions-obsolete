@@ -47,22 +47,21 @@
  * linkToolbarHandler is also a Factory and will create
  * LinkToolbarItems as necessary.
  */
-const linkToolbarHandler = {
+var linkToolbarHandler = {
   items: new Array(),
   hasItems: false,
 
   handleElement: function(linkElement) {
-    if(this.isLinkIgnored(linkElement.rel)) return null;
-    if(!this.hasItems) {
-      this.hasItems = true;
-      linkToolbarUI.activate();
-    }
     var linkInfo = this.getLinkElementInfo(linkElement);
+    if(!linkInfo) return null;
+    
     this.handleLink(linkInfo);
     return linkInfo;
   },
   
   handleLink: function(linkInfo) {
+    if(!this.hasItems) this.hasItems = true;
+    
     for(var rel in linkInfo.relValues)
       this.getItemForLinkType(rel).displayLink(linkInfo);
   },
@@ -76,6 +75,8 @@ const linkToolbarHandler = {
 
   // find all the info we need to show a link on the link toolbar
   getLinkElementInfo: function(element) {
+    if(this.isLinkIgnored(element.rel)) return null;
+
     var relValues = [], rel, i;
     // get relValues from rel attribute
     if(element.rel) {
@@ -208,6 +209,7 @@ const linkToolbarHandler = {
   },
 
   clearAllItems: function() {
+    if(!this.hasItems) return;
     // Disable the individual items
     for(var linkType in this.items) this.items[linkType].clear();
     // remember that the toolbar is empty
