@@ -1,0 +1,5 @@
+<!ENTITY xkiosk.label   "Paranoia">
+<!ENTITY xkiosk.tooltip "Paranoia - Löscht alle Informationen.">
+
+<!ENTITY xkiosk.prompttitle "Informationen löschen">
+<!ENTITY xkiosk.promptmsg   "Wollen Sie alle privaten Informationen löschen?">
