@@ -144,9 +144,9 @@
       <menuitem type="radio" name="mode" value="full"  label="&toolbarext-mode-icons-text;"/>
       <menuitem type="radio" name="mode" value="text"  label="&toolbarext-mode-text-only;"/>
       <menuseparator/>
-      <menuitem type="checkbox" oncommand="toolbarextToggleSmallIcons(event);" label="&toolbarext-mode-small-icons;"/>
+      <menuitem type="checkbox" value="smallicons" label="&toolbarext-mode-small-icons;"/>
       <menuseparator/>
-      <menuitem type="checkbox" oncommand="toolbarextToggleShowInFullscreen(event);" label="&toolbarext-show-in-fullscreen;"/>
+      <menuitem type="checkbox" value="fullscreen" label="&toolbarext-show-in-fullscreen;"/>
     </popup>
   </popupset>
 

@@ -214,7 +214,7 @@
           while (this.toolbarset && this.toolbarset.localName != "toolbarset")
             this.toolbarset = toolbarset.nextSibling;
           
-          if (this.toolbarset) {
+          if(this.toolbarset) {
             // Create each toolbar described by the toolbarset.
             var index = 0;
             while (toolbarset.hasAttribute("toolbar"+(++index))) {
@@ -224,6 +224,23 @@
             }
           }
           
+          // restore toolbar modes, collapsed-ness, and icon size
+          for(var node = this.firstChild; node; node = node.nextSibling) {
+            if(node.localName!="toolbar") continue;
+            var id = node.id;
+            
+            var collapsed = this.getAttribute(id+"-collapsed")=="true";
+            node.collapsed = collapsed;
+
+            var mode = this.getAttribute(id+"-mode");
+            if(mode) node.setAttribute("mode",mode);
+            
+            var iconsize = this.getAttribute(id+"-iconsize");
+            if(iconsize) node.setAttribute("iconsize",iconsize);
+            
+            var fullscreen = this.getAttribute(id+"-showfullscreen");
+            if(fullscreen) node.setAttribute("fullscreentoolbar","true");
+          }
           //throw "toolbox bound. id="+this.id;
         ]]>
       </constructor>
@@ -253,6 +270,59 @@
             return toolbar;
           ]]>
         </body>
+      </method>
+      
+      <!-- the following methods are used because we can't just persist() the state of the
+           various attributes they set on toolbars, because the toolbars haven't been created
+           at the point where persisted attributes are restored. -->
+      <method name="hideToolbar">
+        <parameter name="aToolbar"/>
+        <parameter name="aHide"/>
+        <body><![CDATA[
+          aToolbar.collapsed = aHide;
+          var attr = aToolbar.id+"-collapsed";
+          if(aHide) this.setAttribute(attr,aHide);
+          else this.removeAttribute(attr);
+          document.persist(this.id,attr);
+        ]]></body>
+      </method>
+
+      <method name="setToolbarMode">
+        <parameter name="aToolbar"/>
+        <parameter name="aMode"/>
+        <body><![CDATA[
+          aToolbar.setAttribute("mode",aMode);
+          var attr = aToolbar.id+"-mode"
+          this.setAttribute(attr,aMode);
+          document.persist(this.id,attr);
+        ]]></body>
+      </method>
+      
+      <method name="setToolbarIconSize">
+        <parameter name="aToolbar"/>
+        <parameter name="aSize"/>
+        <body><![CDATA[
+          var attr = aToolbar.id+"-iconsize";
+          aToolbar.setAttribute("iconsize",aSize);
+          this.setAttribute(attr,aSize);
+          document.persist(this.id,attr);
+        ]]></body>
+      </method>
+
+      <method name="showToolbarInFullscreen">
+        <parameter name="aToolbar"/>
+        <parameter name="aShow"/>
+        <body><![CDATA[
+          var attr = aToolbar.id+"-showfullscreen";
+          if(aShow) {
+            aToolbar.setAttribute("fullscreentoolbar","true");
+            this.setAttribute(attr,aShow);
+          } else {
+            aToolbar.removeAttribute("fullscreentoolbar");
+            this.removeAttribute(attr);
+          }
+          document.persist(this.id,attr);
+        ]]></body>
       </method>
     </implementation>
   </binding>

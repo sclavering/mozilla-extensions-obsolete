@@ -104,8 +104,8 @@ function onViewToolbarCommand(aEvent) {
   var id = aEvent.originalTarget.getAttribute("toolbarid");
   var toolbar = document.getElementById(id);
 
-  toolbar.collapsed = aEvent.originalTarget.getAttribute("checked") != "true";
-  document.persist(toolbar.id, "collapsed");
+  var hide = aEvent.originalTarget.getAttribute("checked") != "true";
+  toolbar.parentNode.hideToolbar(toolbar,hide);
 }
 
 
@@ -155,41 +155,29 @@ function toolbarextInitCustomiseContext(evt, popup) {
     else radio.removeAttribute("checked");
   }
 
-  var iconSize = toolbar.getAttribute("iconsize");
-  var smallicons = popup.childNodes[5];
+  var small = toolbar.getAttribute("iconsize")=="small";
+  var smallicons = popup.childNodes[4];
   if(mode=="text") smallicons.setAttribute("disabled",true);
   else smallicons.removeAttribute("disabled");
-  smallicons.setAttribute("checked", iconSize == "small");
+  smallicons.setAttribute("checked", small);
 
-  var showInFullScreen = toolbar.getAttribute("fullscreentoolbar");
-  popup.lastChild.setAttribute("checked", showInFullScreen=="true");
+  var showInFullScreen = toolbar.getAttribute("fullscreentoolbar")=="true";
+  popup.lastChild.setAttribute("checked", showInFullScreen);
 }
 
 function toolbarextSetToolbarMode(evt) {
-  var mode = evt.originalTarget.value;
-  if(!mode) return; // ignore small-icons checkbox
-
   var toolbar = document.popupNode;
   while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
 
-  toolbar.setAttribute("mode", mode);
-  document.persist(toolbar.id, "mode");
-}
-function toolbarextToggleSmallIcons(evt) {
-  var toolbar = document.popupNode;
-  while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
-
-  var small = (evt.originalTarget.getAttribute("checked")=="true");
-  if(small) toolbar.setAttribute("iconsize","small");
-  else toolbar.removeAttribute("iconsize");
-  document.persist(toolbar.id, "iconsize");
-}
-
-function toolbarextToggleShowInFullscreen(evt) {
-  var toolbar = document.popupNode;
-  while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
-
-  var showInFullScreen = evt.originalTarget.getAttribute("checked")=="true";
-  if(showInFullScreen) toolbar.setAttribute("fullscreentoolbar","true");
-  else toolbar.removeAttribute("fullscreentoolbar");
+  var value = evt.originalTarget.value;
+  if(value=="smallicons") {
+    var small = evt.originalTarget.getAttribute("checked")=="true";
+    var size = small ? "small" : "large";
+    toolbar.parentNode.setToolbarIconSize(toolbar, size);
+  } else if(value=="fullscreen") {  
+    var showInFullScreen = evt.originalTarget.getAttribute("checked")=="true";
+    toolbar.parentNode.showToolbarInFullscreen(toolbar,showInFullScreen);
+  } else {
+    toolbar.parentNode.setToolbarMode(toolbar, value);
+  }
 }
