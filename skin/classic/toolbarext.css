@@ -2,120 +2,101 @@
 
 /* extra toolbar buttons */
 
-#tbx-options-button {
+.tbx-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
+}
+toolbar[iconsize="small"] .tbx-button {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+}
+
+#tbx-options-button {
   -moz-image-region: rect(0 32px 32px 0);
 }
 toolbar[iconsize="small"] #tbx-options-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 20px 20px 0);
 }
 
 #tbx-addbookmark-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 64px 32px 32px);
 }
 toolbar[iconsize="small"] #tbx-addbookmark-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 40px 20px 20px);
 }
 
 #tbx-managebookmarks-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 96px 32px 64px);
 }
 toolbar[iconsize="small"] #tbx-managebookmarks-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 60px 20px 40px);
 }
 
 #tbx-save-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 128px 32px 96px);
 }
 toolbar[iconsize="small"] #tbx-save-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 80px 20px 60px);
 }
 
 #tbx-viewsource-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 160px 32px 128px);
 }
 toolbar[iconsize="small"] #tbx-viewsource-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 100px 20px 80px);
 }
 
 #tbx-jsconsole-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 192px 32px 160px);
 }
 toolbar[iconsize="small"] #tbx-jsconsole-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 120px 20px 100px);
 }
 
 #tbx-fullscreen-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 224px 32px 192px);
 }
 toolbar[iconsize="small"] #tbx-fullscreen-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 140px 20px 120px);
 }
 
 #tbx-zoomout-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 256px 32px 224px);
 }
 toolbar[iconsize="small"] #tbx-zoomout-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 160px 20px 140px);
 }
 
 #tbx-zoomin-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 288px 32px 256px);
 }
 toolbar[iconsize="small"] #tbx-zoomin-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 180px 20px 160px);
 }
 
 #tbx-pageinfo-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 320px 32px 288px);
 }
 toolbar[iconsize="small"] #tbx-pageinfo-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 200px 20px 180px);
 }
 
 #tbx-clearcache-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 352px 32px 320px);
 }
 toolbar[iconsize="small"] #tbx-clearcache-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 220px 20px 200px);
 }
 
 #tbx-cookiemanager-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 384px 32px 352px);
 }
 toolbar[iconsize="small"] #tbx-cookiemanager-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 240px 20px 220px);
 }
 
 #tbx-pagecookies-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 416px 32px 384px);
 }
 toolbar[iconsize="small"] #tbx-pagecookies-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 260px 20px 240px);
 }
 #tbx-pagecookies-button .toolbarbutton-menu-dropmarker { display: none; }
@@ -123,21 +104,45 @@ toolbar[iconsize="small"] #tbx-pagecookies-button {
 #tbx-pagecookies-tooltip textbox { background-color: transparent !important; }
 
 #tbx-stopreload-button[state="stop"] {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 448px 32px 416px);
 }
 toolbar[iconsize="small"] #tbx-stopreload-button[state="stop"] {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 280px 20px 260px);
 }
 
 #tbx-stopreload-button {
-  list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 480px 32px 448px);
 }
 toolbar[iconsize="small"] #tbx-stopreload-button {
-  list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 300px 20px 280px);
+}
+
+#tbx-javascript-tabpref[checked="true"] {
+  -moz-image-region: rect(0 512px 32px 480px);
+}
+toolbar[iconsize="small"] #tbx-javascript-tabpref[checked="true"] {
+  -moz-image-region: rect(0 320px 20px 300px);
+}
+
+#tbx-javascript-tabpref {
+  -moz-image-region: rect(0 544px 32px 512px);
+}
+toolbar[iconsize="small"] #tbx-javascript-tabpref {
+  -moz-image-region: rect(0 340px 20px 320px);
+}
+
+#tbx-images-tabpref[checked="true"] {
+  -moz-image-region: rect(0 576px 32px 544px);
+}
+toolbar[iconsize="small"] #tbx-images-tabpref[checked="true"] {
+  -moz-image-region: rect(0 360px 20px 340px);
+}
+
+#tbx-images-tabpref {
+  -moz-image-region: rect(0 608px 32px 576px);
+}
+toolbar[iconsize="small"] #tbx-images-tabpref {
+  -moz-image-region: rect(0 380px 20px 360px);
 }
 
 

@@ -52,6 +52,27 @@ var tbxCommands = {
     if(button.getAttribute('state')=='stop') BrowserStop();
     else if(evt.shiftKey) BrowserReloadSkipCache();
     else BrowserReload();
+  },
+
+  /** These functions control whether images, javascript, and plugins are allowed, and
+    * apply to *the current tab only*. They take effect only after the page is refreshed.
+    *
+    * could also use the allowAuth, allowMetaRedirects and allowSubframes flags of docShell.
+    */
+  toggleJavascriptInTab: function() {
+    var docShell = getBrowser().docShell;
+    docShell.QueryInterface(Components.interfaces.nsIDocShell);
+    docShell.allowJavascript = !docShell.allowJavascript;
+  },
+  toggleImagesInTab: function() {
+    var docShell = getBrowser().docShell; // getBrowser() always gets the <browser> for the current tab
+    docShell.QueryInterface(Components.interfaces.nsIDocShell); // just to be sure
+    docShell.allowImages = !docShell.allowImages;
+  },
+  togglePluginsInTab: function() {
+    var docShell = getBrowser().docShell;
+    docShell.QueryInterface(Components.interfaces.nsIDocShell);
+    docShell.allowPlugins = !docShell.allowPlugins;
   }
 }
 
@@ -112,4 +133,53 @@ var tbxWebProgressListener = {
   // tabbrowser.xml#551 bogusly calls this for all registered progress listeners,
   // even though it is *not* part of the nsIWebProgressListener interface
   onLinkIconAvailable: function(href) {}
+}
+
+
+
+// code to make the per-tab toggle for images, javascript, plugins etc be checked/ticked at the right times
+var tbxTabPrefToggles = {
+  ids: [
+    "tbx-javascript-tabpref",
+    "tbx-images-tabpref",
+    "tbx-plugins-tabpref"
+  ],
+
+  updaters: [
+    function() { this.setAttribute("checked", getBrowser().docShell.allowJavascript); },
+    function() { this.setAttribute("checked", getBrowser().docShell.allowImages);  },
+    function() { this.setAttribute("checked", getBrowser().docShell.allowPlugins); }
+  ],
+
+  active: [],
+
+  listenerAdded: false,
+
+  init: function() {
+    this.active = [];
+    var anyActive = false
+    for(var i = 0; i < this.ids.length; i++) {
+      var check = document.getElementById(this.ids[i]);
+      if(!check) continue; // this check might not be in use
+      anyActive = true;
+      check.update = this.updaters[i];
+      this.active.push(check);
+    }
+
+    var appcontent = document.getElementById("appcontent");
+    if(anyActive && !this.listenerAdded) {
+      appcontent.addEventListener("select", tbxUpdateTabPrefToggles, false);
+      this.listenerAdded = true;
+    } else if(!anyActive && this.listenerAdded) {
+      appcontent.removeEventListener("select", tbxUpdateTabPrefToggles, false);
+      this.listenerAdded = false;
+    }
+
+    if(anyActive) tbxUpdateTabPrefToggles();
+  }
+}
+
+function tbxUpdateTabPrefToggles(evt) {
+  for(var i = 0; i < tbxTabPrefToggles.active.length; i++)
+    tbxTabPrefToggles.active[i].update();
 }

@@ -65,6 +65,9 @@ function tbxInit() {
   // update the Stop/Reload combi-button
   tbxWebProgressListener.init();
 
+  // update the js, image, and plugin per-tab pref toggles.
+  tbxTabPrefToggles.init();
+
   // if our fullscreen toggle is present, and on a fullscreen toolbar, then remove the built-in
   // window controls. (using a custom attr, to avoid breaking the normal hiding-when-not-fullscreen)
   var fullscreen = document.getElementById('tbx-fullscreen');

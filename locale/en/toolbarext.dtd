@@ -37,6 +37,15 @@
 <!ENTITY tbx-stopreload.stop.label "Stop">
 <!ENTITY tbx-stopreload.stop.tooltip "Stop loading the current page">
 
+<!ENTITY tbx-javascript-tabpref.label "Javascript">
+<!ENTITY tbx-javascript-tabpref.tooltip "Enable/Disable Javascript in the current tab">
+
+<!ENTITY tbx-images-tabpref.label "Images">
+<!ENTITY tbx-images-tabpref.tooltip "Enable/Disable Images in the current tab">
+
+<!ENTITY tbx-plugins-tabpref.label "Plug-ins">
+<!ENTITY tbx-plugins-tabpref.tooltip "Enable/Disable Plug-ins in the current tab">
+
 
 
 <!ENTITY tbx-top-toolbox-name "Top">
