@@ -48,6 +48,7 @@
 
 <overlay id="linkToolbarOverlay" 
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+         xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:rdf="http://www.mozilla.org/rdf">
 
   <!-- classes -->
@@ -195,6 +196,10 @@
         </menupopup>
       </toolbarbutton>
 
+      <spring flex="1"/>
+      
+      <html:a href="http://cdn.mozdev.org/linkToolbar/" target="_content"><hbox flex="1" id="sharc-box"/></html:a>
+      
     </toolbar>
   </toolbox>
 </overlay>

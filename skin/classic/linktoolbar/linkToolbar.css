@@ -148,6 +148,12 @@
   list-style-image: url("chrome://linktoolbar/skin/btn1/last-hov.gif") !important;
 }
 
+#sharc-box {
+  background: 50% 50% no-repeat url("chrome://linktoolbar/skin/sharc-2-8.50.png");
+  height: 19px;
+  width: 45px;
+}
+
 #document-menu[disabled="true"],
 #more-menu[disabled="true"] {
   color: graytext !important;
