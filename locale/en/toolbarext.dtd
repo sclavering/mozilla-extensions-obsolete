@@ -33,3 +33,9 @@
 <!ENTITY toolbarext-right-toolbox-name "Right">
 <!ENTITY toolbarext-bottom-toolbox-name "Bottom">
 <!ENTITY toolbarext-left-toolbox-name "Left">
+
+
+<!ENTITY toolbarext-mode-icons-only "Icons Only">
+<!ENTITY toolbarext-mode-icons-text "Icons and Text">
+<!ENTITY toolbarext-mode-text-only "Text Only">
+<!ENTITY toolbarext-mode-small-icons "Small Icons">

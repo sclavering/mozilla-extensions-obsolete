@@ -43,7 +43,7 @@
         />
     <toolbarbutton class="toolbarbutton-1"
         id="toolbarext-manage-bookmarks" oncommand="ToolbarExt.bookmarkManager(event);"
-        onclick="ToolbarExt.bookmarkManager(event);"
+        onclick="ToolbarExt.bookmarkManager2(event);"
         label="&toolbarext-manageBookmarks.label;" tooltiptext="&toolbarext-manageBookmarks.tooltip;"
         />
 
@@ -94,15 +94,18 @@
   <!-- override customise toolbars, so we can pass all our toolboxes as extra args to the palette window -->
   <command id="cmd_CustomizeToolbars" oncommand="ToolbarExt_BrowserCustomizeToolbar();"/>
 
-  <!-- toolboxes need a name for the Add Toolbar feature.
-       (for browser we just use the location) -->
-  <toolbox id="navigator-toolbox" toolboxname="&toolbarext-top-toolbox-name;"/>
+  <!-- Toolboxes need a name for the Add Toolbar feature. (for browser we just use the location).
+       We also want a different context menu while customising
+       -->
+  <toolbox id="navigator-toolbox" toolboxname="&toolbarext-top-toolbox-name;"
+      customiseContext="toolbar-customise-context-menu"/>
   
   <!-- another toolbox at the bottom of the window -->
   <window id="main-window">
     <toolbox id="toolbarext-bottom-toolbox" insertbefore="status-bar"
         toolboxname="&toolbarext-bottom-toolbox-name;"
         linkedto="navigator-toolbox" context="toolbar-context-menu"
+        customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
         >
       <toolbarset id="toolbarext-bottom-toolbars" context="toolbar-context-menu"/>
@@ -114,6 +117,7 @@
     <toolbox id="toolbarext-left-toolbox" insertbefore="sidebar-box"
         vertical="true" toolboxname="&toolbarext-left-toolbox-name;"
         linkedto="navigator-toolbox" context="toolbar-context-menu"
+        customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
         >
       <toolbarset id="toolbarext-left-toolbars" context="toolbar-context-menu"/>
@@ -121,9 +125,26 @@
     <toolbox id="toolbarext-right-toolbox" insertafter="appcontent"
         vertical="true" toolboxname="&toolbarext-right-toolbox-name;"
         linkedto="navigator-toolbox" context="toolbar-context-menu"
+        customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
         >
       <toolbarset id="toolbarext-right-toolbars" context="toolbar-context-menu"/>
     </toolbox>
   </hbox>
+  
+  <!-- a new context menu to use for toolbars while customising them -->
+  <popupset id="mainPopupSet">
+    <popup id="toolbar-customise-context-menu"
+        onpopupshowing="toolbarextInitCustomiseContext(event, this);"
+        oncommand="toolbarextSetToolbarMode(event);"
+        >
+      <menuitem type="radio" name="mode" value="icons" label="&toolbarext-mode-icons-only;"/>
+      <menuitem type="radio" name="mode" value="full"  label="&toolbarext-mode-icons-text;"/>
+      <menuitem type="radio" name="mode" value="text"  label="&toolbarext-mode-text-only;"/>
+      <menuseparator/>
+      <menuitem type="checkbox" oncommand="toolbarextToggleSmallIcons(event);" label="&toolbarext-mode-small-icons;"/>
+    </popup>
+  </popupset>
+      
+      
 </overlay>

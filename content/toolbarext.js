@@ -1,5 +1,5 @@
 // these functions are all for middle-click events only
-const ToolbarExt = {
+var ToolbarExt = {
   viewSource: function(e,doc) {
     if(e.button!=1) return;
     openNewTabWith("view-source:"+doc.location.href);
@@ -10,12 +10,13 @@ const ToolbarExt = {
     openNewTabWith("chrome://global/content/console.xul");
   },
   
+  // 2nd one handles clicks, first one command events
   bookmarkManager: function(e) {
-    if(e.button==1) {
-      openNewTabWith('chrome://browser/content/bookmarks/bookmarksManager.xul');
-    } else {
-      toOpenWindowByType('bookmarks:manager','chrome://browser/content/bookmarks/bookmarksManager.xul');
-    }
+    toOpenWindowByType('bookmarks:manager','chrome://browser/content/bookmarks/bookmarksManager.xul');
+  },
+  bookmarkManager2: function(e) {
+    if(e.button!=1) return;
+    openNewTabWith('chrome://browser/content/bookmarks/bookmarksManager.xul');
   },
   
   downloadPanel: function(e) {
@@ -137,3 +138,71 @@ function updateToolbarStates(toolbarMenuElt) {
   }
   */
 }
+
+
+// onshowing + oncommand handlers for the context menu for toolbars while customising
+
+function toolbarextInitCustomiseContext(evt, popup) {
+  var toolbar = document.popupNode;
+  while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
+  
+  var mode = toolbar.getAttribute("mode");
+  
+  var radio = popup.firstChild;
+  for(var radio = popup.firstChild; radio && radio.localName=="menuitem"; radio = radio.nextSibling) {
+    if(radio.value==mode) radio.setAttribute("checked","true");
+    // radio menuitems do not sort this out themselves it seems :(
+    else radio.removeAttribute("checked");
+  }
+  
+  var iconSize = toolbar.getAttribute("iconsize");
+  var smallicons = popup.lastChild;
+  if(mode=="text") smallicons.setAttribute("disabled",true);
+  else smallicons.removeAttribute("disabled");
+  smallicons.setAttribute("checked", iconSize == "small"); 
+}
+
+function toolbarextSetToolbarMode(evt) {
+  var mode = evt.originalTarget.value;
+  if(!mode) return; // ignore small-icons checkbox
+  
+  var toolbar = document.popupNode;
+  while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
+
+  toolbar.setAttribute("mode", mode);
+  document.persist(toolbar.id, "mode");
+}
+function toolbarextToggleSmallIcons(evt) {
+  var toolbar = document.popupNode;
+  while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
+
+  // xxx: not taking effect until customisation finishes!
+  var small = (evt.originalTarget.getAttribute("checked")=="true");
+  if(small) toolbar.setAttribute("iconsize","small");
+  else toolbar.removeAttribute("iconsize");
+  document.persist(toolbar.id, "iconsize");
+} 
+  
+
+
+/*
+
+function updateIconSize(aUseSmallIcons)
+{
+  var val = aUseSmallIcons ? "small" : null;
+  
+  setAttribute(gToolbox, "iconsize", val);
+  gToolboxDocument.persist(gToolbox.id, "iconsize");
+  
+  for (var i = 0; i < gToolbox.childNodes.length; ++i) {
+    var toolbar = getToolbarAt(i);
+    if (isCustomizableToolbar(toolbar)) {
+      setAttribute(toolbar, "iconsize", val);
+      gToolboxDocument.persist(toolbar.id, "iconsize");
+    }
+  }
+
+  repositionDialog();
+}
+
+*/

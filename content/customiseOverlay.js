@@ -53,6 +53,7 @@ function restoreContextMenus() {
     
     for(var j = 0; j < toolbox.childNodes.length; j++) {
       var toolbar = toolbox.childNodes[j];
+      // must avoid messing with attrs on <toolbarset/>s
       if(toolbar.localName!="toolbar") continue;
       
       toolbar.removeAttribute("context");
@@ -106,6 +107,8 @@ function replaceContextMenus() {
     
     for(var j = 0; j < toolbox.childNodes.length; j++) {
       var toolbar = toolbox.childNodes[j];
+      // must avoid messing with attrs on <toolbarset/>s
+      if(toolbar.localName!="toolbar") continue;
       
       var tcontext = toolbar.getAttribute("context");
       if(tcontext) {

@@ -5,6 +5,37 @@
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
           xmlns:xbl="http://www.mozilla.org/xbl">
  
+  <!-- we're extending this solely because we need appendCustomToolbar to set "oldcontext"
+       attributes, not "context".  (context menus are replaced during customisation when
+       using Toolbar Enhancements) -->
+  <binding id="normal-toolbox" extends="chrome://global/content/widgets/toolbar.xml#toolbox">  
+    <implementation>
+      <method name="appendCustomToolbar">
+        <parameter name="aName"/>
+        <parameter name="aCurrentSet"/>
+        <body>
+          <![CDATA[            
+            var toolbar = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul",
+                                                  "toolbar");
+            toolbar.id = "__customToolbar_" + aName.replace(" ", "");
+            toolbar.setAttribute("customizable", "true");
+            toolbar.setAttribute("customindex", ++this.customToolbarCount);
+            toolbar.setAttribute("toolbarname", aName);
+            toolbar.setAttribute("currentset", aCurrentSet);
+            toolbar.setAttribute("mode", this.getAttribute("mode"));
+            toolbar.setAttribute("iconsize", this.getAttribute("iconsize"));
+            // see comment above.
+            toolbar.setAttribute("oldcontext", this.toolbarset.getAttribute("context"));
+            toolbar.setAttribute("class", "chromeclass-toolbar");
+            
+            this.insertBefore(toolbar, this.toolbarset);
+            return toolbar;
+          ]]>
+        </body>
+      </method>
+    </implementation>
+  </binding>
+
   <!-- A toolbox that uses another toolbox's palette. 
        This is the same as the standard toolbar binding except for the |palette| field, which has
        been replaced here by a palette property.  Extending the existing binding did not work,
@@ -71,7 +102,8 @@
             toolbar.setAttribute("currentset", aCurrentSet);
             toolbar.setAttribute("mode", this.getAttribute("mode"));
             toolbar.setAttribute("iconsize", this.getAttribute("iconsize"));
-            toolbar.setAttribute("context", this.toolbarset.getAttribute("context"));
+            // see comment at top of file
+            toolbar.setAttribute("oldcontext", this.toolbarset.getAttribute("context"));
             toolbar.setAttribute("class", "chromeclass-toolbar");
             
             this.insertBefore(toolbar, this.toolbarset);

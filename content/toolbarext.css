@@ -6,6 +6,7 @@ tabs[closebutton="true"] {
 }
 */
 
+toolbox { -moz-binding: url(chrome://toolbarext/content/bindings.xml#normal-toolbox); }
 toolbox[linkedto] { -moz-binding: url(chrome://toolbarext/content/bindings.xml#linked-toolbox); }
 
 
