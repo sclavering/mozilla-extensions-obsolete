@@ -1,13 +1,13 @@
 const APP_DISPLAY_NAME = "GoTo";
 const APP_NAME = "goto";
 const APP_PACKAGE = "/clav.co.uk/goto";
-const APP_VERSION = "0.2.0";
+const APP_VERSION = "0.3";
 
 const APP_JAR_FILE = "goto.jar";
 const APP_CONTENT_FOLDER = "content/goto/";
 const APP_LOCALE_FOLDER  = "locale/en-US/goto/";
 
-const APP_SUCCESS_MESSAGE = "GoTo should now be available on the context menu for links! You may need to restart Firebird before this works.";
+const APP_SUCCESS_MESSAGE = "GoTo should now be available on the context menu when you restart Firebird.";
 
 const INST_TO_PROFILE = "Do you wish to install "+APP_DISPLAY_NAME+" to your profile?\nThis will mean it does not need reinstalling when you update Firebird.\n(Click Cancel if you want "+APP_DISPLAY_NAME+" installing to the Firebird directory.)";
 

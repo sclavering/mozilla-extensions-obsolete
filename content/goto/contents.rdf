@@ -9,7 +9,7 @@
 
   <!-- package information -->
   <RDF:Description about="urn:mozilla:package:goto"
-        chrome:displayName="GoTo v0.2"
+        chrome:displayName="GoTo v0.3"
         chrome:author="Stephen Clavering"
         chrome:name="goto"
         chrome:description="GoTo lets you dig through URLs!"
