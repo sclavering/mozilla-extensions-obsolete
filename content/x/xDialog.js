@@ -22,7 +22,7 @@
 # Contributor(s):
 #   Ben Goodger <ben@netscape.com> (Original Author)
 #   Chris Neale <cdn@mozdev.org>
-#   Stephen Clavering <mozilla@clav.co.uk>
+#   Stephen Clavering <mozilla@clav.me.uk>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -75,6 +75,11 @@ function clearHistory() {
   var history = (class2 in Components.classes) ? class2 : class1;
   history = Components.classes[history].getService(Components.interfaces.nsIBrowserHistory);
   history.removeAllPages();
+
+  // used to clear the history on back/forward buttons, and the <browser/> session history
+  var os = Components.classes["@mozilla.org/observer-service;1"]
+                     .getService(Components.interfaces.nsIObserverService);
+  os.notifyObservers(null, "browser:purge-session-history", "");
 }
 
 function clearFormInfo() {
@@ -144,18 +149,9 @@ function getDownloads() {
 
 
 function clearCookies() {
-  var cookieMgr = Components.classes["@mozilla.org/cookiemanager;1"].getService();
-  cookieMgr = cookieMgr.QueryInterface(Components.interfaces.nsICookieManager);
-
-  var e = cookieMgr.enumerator;
-  var cookies = [];
-  while (e.hasMoreElements()) {
-    var cookie = e.getNext().QueryInterface(Components.interfaces.nsICookie);
-    cookies.push(cookie);
-  }
-
-  for (var i = 0; i < cookies.length; ++i)
-    cookieMgr.remove(cookies[i].host, cookies[i].name, cookies[i].path, false);
+  var cookieman = Components.classes["@mozilla.org/cookiemanager;1"]
+                            .getService(Components.interfaces.nsICookieManager);
+  cookieman.removeAll();
 }
 
 function clearCache() {
@@ -164,7 +160,6 @@ function clearCache() {
     var cacheService = classID.getService(Components.interfaces.nsICacheService);
     cacheService.evictEntries(aType);
   }
-
   clearCacheOfType(Components.interfaces.nsICache.STORE_ON_DISK);
   clearCacheOfType(Components.interfaces.nsICache.STORE_IN_MEMORY);
 }
