@@ -31,6 +31,11 @@ var tbxCommands = {
     openNewTabWith("chrome://browser/content/bookmarks/bookmarksPanel.xul");
   },
 
+  downloadsInTab: function(e) {
+    if(e.button!=1) return;
+    openNewTabWith("chrome://mozapps/content/downloads/downloads.xul");
+  },
+
   clearCache: function() {
     var classID = Components.classes["@mozilla.org/network/cache-service;1"];
     var cacheService = classID.getService(Components.interfaces.nsICacheService);
