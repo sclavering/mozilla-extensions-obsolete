@@ -39,7 +39,7 @@ const linkFinder = {
 
     // generate other links based on <a href="..."/> style links
 
-    if(!(noPrev || noNext)) return;
+    if(!noPrev || !noNext) return;
 
     var addedLinks = [];
 
