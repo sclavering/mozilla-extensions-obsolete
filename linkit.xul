@@ -132,10 +132,9 @@ function linkit_addLink(page,head,rel,url,title) {
 }
 
 
-window.addEventListener("load",linkit_init,true);
+window.addEventListener("load",linkit_init,false);
 
 function linkit_init() {
-  window.removeEventListener("load",linkit_init,true);
   // this will hear "load" events even for background tabs, and the document
   // that has loaded can be retrieved via event.originalTarget
   document.getElementById("appcontent").addEventListener("load", linkit, true);
