@@ -1,47 +1,46 @@
-// this function verifies disk space in kilobytes
-function verifyDiskSpace(dirPath, spaceRequired)
-{
-  var spaceAvailable;
+const APP_DISPLAY_NAME = "Link Toolbar";
+const APP_NAME = "linktoolbar";
+const APP_PACKAGE = "/cdn.mozdev.org/linktoolbar";
+const APP_VERSION = "0.1.0";
 
-  // Get the available disk space on the given path
-  spaceAvailable = fileGetDiskSpaceAvailable(dirPath);
+const APP_JAR_FILE = "linktoolbar.jar";
+const APP_CONTENT_FOLDER = "content/linktoolbar/";
+const APP_LOCALE_FOLDER  = "locale/en-US/linktoolbar/";
+const APP_SKIN_FOLDER  = "skin/classic/linktoolbar/";
 
-  // Convert the available disk space into kilobytes
-  spaceAvailable = parseInt(spaceAvailable / 1024);
+const APP_SUCCESS_MESSAGE = "You may need to restart your browser first.";
 
-  // do the verification
-  if(spaceAvailable < spaceRequired)
-  {
-    logComment("Insufficient disk space: " + dirPath);
-    logComment("  required : " + spaceRequired + " K");
-    logComment("  available: " + spaceAvailable + " K");
-    return(false);
+const INST_TO_PROFILE = "Do you wish to install "+APP_DISPLAY_NAME+" to you profile?\nThis will mean it does not need reinstalling when you update your browser.\n(Click Cancel if you want "+APP_DISPLAY_NAME+" installing to the main browser directory.)";
+
+initInstall(APP_NAME, APP_PACKAGE, APP_VERSION);
+
+// profile installs only work since 2003-03-06
+var instToProfile = (buildID>2003030600 && confirm(INST_TO_PROFILE));
+
+var chromef = instToProfile ? getFolder("Profile", "chrome") : getFolder("chrome");
+var err = addFile(APP_PACKAGE, APP_VERSION, APP_JAR_FILE, chromef, null)
+if(err == SUCCESS) {
+	var jar = getFolder(chromef, APP_JAR_FILE);
+  if(instToProfile) {
+  	registerChrome(CONTENT | PROFILE_CHROME, jar, APP_CONTENT_FOLDER);
+  	registerChrome(LOCALE  | PROFILE_CHROME, jar, APP_LOCALE_FOLDER);
+  	registerChrome(SKIN  | PROFILE_CHROME, jar, APP_SKIN_FOLDER);
+  } else {
+  	registerChrome(CONTENT | DELAYED_CHROME, jar, APP_CONTENT_FOLDER);
+  	registerChrome(LOCALE  | DELAYED_CHROME, jar, APP_LOCALE_FOLDER);
+  	registerChrome(SKIN  | DELAYED_CHROME, jar, APP_SKIN_FOLDER);
   }
-
-  return(true);
+	err = performInstall();
+	if(err == SUCCESS || err == 999) {
+		alert(APP_DISPLAY_NAME+" "+APP_VERSION+" has been succesfully installed.\n"+APP_SUCCESS_MESSAGE);
+	} else {
+		alert("Install failed. Error code:" + err);
+		cancelInstall(err);
+	}
+} else {
+	alert("Failed to create " +APP_JAR_FILE +"\n"
+		+"You probably don't have appropriate permissions \n"
+		+"(write access to your profile or chrome directory). \n"
+		+"_____________________________\nError code:" + err);
+	cancelInstall(err);
 }
-
-var srDest = 1;
-
-var err = initInstall("Link Toolbar", "linktoolbar", "prototype_a"); 
-
-logComment("initInstall: " + err);
-
-if (verifyDiskSpace(getFolder("Program"), srDest))
-{
-    addFile("Link Toolbar",
-            "linkToolbar.jar", // jar source folder 
-            getFolder("Chrome"),        // target folder
-            "");                        // target subdir 
-
-    registerChrome(PACKAGE | DELAYED_CHROME, getFolder("Chrome","linkToolbar.jar"), "content/linktoolbar/");
-    registerChrome(LOCALE | DELAYED_CHROME, getFolder("Chrome", "linkToolbar.jar"), "locale/en-US/linktoolbar/");
-    registerChrome(SKIN | DELAYED_CHROME, getFolder("Chrome", "linkToolbar.jar"), "skin/classic/linktoolbar/");
-
-    if (err==SUCCESS)
-        performInstall(); 
-    else
-        cancelInstall(err);
-}
-else
-    cancelInstall(INSUFFICIENT_DISK_SPACE);
