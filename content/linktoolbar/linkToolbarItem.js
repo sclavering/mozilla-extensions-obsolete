@@ -48,33 +48,31 @@ function LinkToolbarItem (linkType) {
   this.xulElementId = "link-" + linkType;
   this.xulPopupId = this.xulElementId + "-popup";
   this.parentMenuButton = null;
-
   this.xulElement = document.getElementById(this.xulElementId);
-  this.getXULElement = function() { return this.xulElement; }
 
   this.clear = function() {
     this.disableParentMenuButton();
     this.xulElement.disabled = true;
     this.xulElement.hidden = true;
-    this.getXULElement().removeAttribute("href");
-    this.getXULElement().removeAttribute("tooltiptext1");
-    this.getXULElement().removeAttribute("tooltiptext2");
+    this.xulElement.removeAttribute("href");
+    this.xulElement.removeAttribute("tooltiptext1");
+    this.xulElement.removeAttribute("tooltiptext2");
   }
 
   this.displayLink = function(linkElement) {
-    if (this.getXULElement().hasAttribute("href")) return false;
+    if (this.xulElement.hasAttribute("href")) return false;
     this.setItem(linkElement);
     this.enableParentMenuButton();
     return true;
   }
 
   this.setItem = function(linkElement) {
-    this.getXULElement().setAttribute("href", linkElement.href);
+    this.xulElement.setAttribute("href", linkElement.href);
     this.xulElement.disabled = false;
     this.xulElement.hidden = false;
     // lines will be hidden if blank
-    this.getXULElement().setAttribute("tooltiptext1", linkElement.getLongTitle());
-    this.getXULElement().setAttribute("tooltiptext2", linkElement.href);
+    this.xulElement.setAttribute("tooltiptext1", linkElement.getLongTitle());
+    this.xulElement.setAttribute("tooltiptext2", linkElement.href);
   }
 
   this.enableParentMenuButton = function() {
