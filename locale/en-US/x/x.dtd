@@ -1,5 +1,7 @@
-<!-- $Id: x.dtd,v 1.1 2003/05/20 22:32:51 cdn Exp $ -->
+<!-- $Id: x.dtd,v 1.2 2003/05/21 09:59:25 cdn Exp $ -->
 
 <!ENTITY x.label   "Paranoia">
 
 <!ENTITY x.tooltip "Paranoia - Delete all information.">
+
+<!ENTITY x.dialog.desc "Are you sure you want to : Clear Privacy Info/Data ?">
