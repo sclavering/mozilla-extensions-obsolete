@@ -124,7 +124,8 @@ var linkToolbarHandler = {
     if(hreflang)
       prefix += ltLanguageDictionary.lookupLanguageName(hreflang) + ": ";
     var longTitle = prefix;
-    if(title) longTitle += title;
+    if(title && title!="") longTitle += title;
+    else longTitle += url;
 
     // bundle everything into an object to be passed to a LinkToolbarItem (or a subclass)
     return {
@@ -195,7 +196,7 @@ var linkToolbarHandler = {
 
   createItemForLinkType: function(linkType) {
     var linkTypeElement = document.getElementById("link-" + linkType);
-    if(!linkTypeElement) return this.createNewMenuForLinkType(linkType);
+    if(!linkTypeElement) return new LinkToolbarTransientItem(linkType);
     switch(linkTypeElement.localName) {
       case "toolbarbutton":
         return new LinkToolbarButton(linkType,linkTypeElement);
@@ -209,25 +210,9 @@ var linkToolbarHandler = {
     }
   },
 
-  createNewMenuForLinkType: function(linkType) {
-    var menu = document.createElement("menu");
-    menu.id = "link-"+linkType;
-    menu.setAttribute("label",linkType);
-    menu.hidden = true;
-    menu.className = "menu-iconic bookmark-item";
-    menu.setAttribute("container", "true");
-    // create the popup to go with it
-    var popup = document.createElement("menupopup");
-    popup.id = "link-"+linkType+"-popup";
-    menu.appendChild(popup);
-    document.getElementById("more-menu-popup").appendChild(menu);
-    
-    return new LinkToolbarMenu(linkType,menu);
-  },
-
   clearAllItems: function() {
     if(!this.hasItems) return;
-    // Disable the individual items
+    // disable the individual items
     for(var linkType in this.items) this.items[linkType].clear();
     // remember that the toolbar is empty
     this.hasItems = false;
@@ -251,6 +236,8 @@ const ltLanguageDictionary = {
       return this.dictionary[languageCode];
 
     // XXX: could we handle non-standard language codes better?
+    // (this includes things like "en-GB".  we only handle 2 (or
+    // occasionally 3) letter language codes at the moment)
     return languageCode;
   },
 
