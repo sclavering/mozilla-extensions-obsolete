@@ -76,11 +76,16 @@ function linkit(event) {
 
     // lose odd whitespace - replace with ' '
     var iText = linkit_getInnerText(instag).replace(/\s+/g," ");
+    var inText = instag.childNodes[0].nodeValue; // innerText nodeValue -> no properties
+       // inText = inText.replace(/<[^<>]+>/g, '');*/
+    var iTbit = '';
+
+    if(inText != '') iTbit = "{" +inText+ "} ";
 
     if(linkitRE_prev.test(iText))
-      linkit_addLink(page,hydra,"prev",href,"LinkIt [<] (" +href+ ")")
+      linkit_addLink(page,hydra,"prev",href,"LinkIt [<] " +iTbit+ "(" +href+ ")")
     else if(linkitRE_next.test(iText))
-      linkit_addLink(page,hydra,"next",href,"LinkIt [>] (" +href+ ")");
+      linkit_addLink(page,hydra,"next",href,"LinkIt [>] " +iTbit+ "(" +href+ ")");
     else if(linkitRE_first.test(iText))
       linkit_addLink(page,hydra,"first",href,"LinkIt [|<] (" +href+ ")");
     else if(linkitRE_last.test(iText))
