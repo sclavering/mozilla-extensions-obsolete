@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is the Link Toolbar from Mozilla Seamonkey.
+   -
+   - The Initial Developer of the Original Code is Eric Hodel <drbrain@segment7.net>.
+   -
+   - Portions created by the Initial Developer are Copyright (C) 2001
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -      Christopher Hoess <choess@force.stwing.upenn.edu>
+   -      Tim Taylor <tim@tool-man.org>
+   -      Stuart Ballard <sballard@netreach.net>
+   -      Chris Neale <cdn@mozdev.org>  (Port to Px/Fb/Fx)
+   -      Stephen Clavering <mozilla@clav.me.uk> (Multiple js rewrites)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<?xml-stylesheet href="chrome://linktoolbar/skin/linkToolbar.css" type="text/css"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % selfDTD SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
+%selfDTD;
+]>
+
+<overlay id="linkToolbarOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/x-javascript" src="linkFinder.js"/>
+  <script type="application/x-javascript" src="linkToolbarHandler.js"/>
+  <script type="application/x-javascript" src="linkToolbarItem.js"/>
+  <script type="application/x-javascript" src="linkToolbarUI.js"/>
+
+  <menupopup id="menu_viewPopup">
+    <menu label="&linkToolbar.label;" position="3"
+          accesskey="&linkToolbar.accesskey;"
+          oncommand="linkToolbarUI.toggleLinkToolbar(event.target)"
+          onpopupshowing="linkToolbarUI.initLinkbarVisibilityMenu()">
+      <menupopup>
+        <menuitem label="&linkToolbarAlways.label;"
+                  accesskey="&linkToolbarAlways.accesskey;"
+                  class="menuitem-iconic" type="radio" value="false"
+                  name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_false" />
+        <menuitem label="&linkToolbarAsNeeded.label;"
+                  accesskey="&linkToolbarAsNeeded.accesskey;"
+                  class="menuitem-iconic" type="radio" value="maybe"
+                  name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_maybe" />
+        <menuitem label="&linkToolbarNever.label;"
+                  accesskey="&linkToolbarNever.accesskey;"
+                  class="menuitem-iconic" type="radio" value="true"
+                  name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_true" />
+         <menuseparator/>
+         <menuitem id="linktoolbar-iconsonly" type="checkbox"
+            label="&linkToolbarIconsOnly.label;" accesskey="&linkToolbarIconsOnly.accesskey;"/>
+      </menupopup>
+    </menu>
+  </menupopup>
+
+  <!-- our two line tooltip -->
+  <popupset id="mainPopupSet">
+    <tooltip id="linktoolbar-tooltip" orient="vertical"
+        onpopupshowing="if(!linkToolbarUI.fillTooltip(document.tooltipNode)) event.preventDefault();">
+      <label id="linktoolbar-tooltip-1"/>
+      <label id="linktoolbar-tooltip-2"/>
+    </tooltip>
+  </popupset>
+
+  <toolbarpalette id="BrowserToolbarPalette">
+    <!-- must use onclick not oncommand to get middleclick-opens-in-new-tab -->
+    <toolbaritem id="linktoolbar" hidden="maybe" hasitems="false"
+        onclick="return linkToolbarUI.commanded(event);"
+        tooltip="linktoolbar-tooltip" title="&linkToolbar.label;"
+        >
+
+      <toolbarbutton id="link-top" disabled="true"
+          label="&topButton.label;" tooltiptext0="&topButton.tooltip;">
+        <menupopup id="link-top-popup"/>
+      </toolbarbutton>
+      <toolbarbutton id="link-up" disabled="true"
+          label="&upButton.label;" tooltiptext0="&upButton.tooltip;">
+        <menupopup id="link-up-popup"/>
+      </toolbarbutton>
+      <toolbarseparator/>
+      <toolbarbutton id="link-first" disabled="true"
+          label="&firstButton.label;" tooltiptext0="&firstButton.tooltip;">
+        <menupopup id="link-first-popup"/>
+      </toolbarbutton>
+      <toolbarbutton id="link-prev" disabled="true"
+          label="&prevButton.label;" tooltiptext0="&prevButton.tooltip;">
+        <menupopup id="link-prev-popup"/>
+      </toolbarbutton>
+      <toolbarbutton id="link-next" disabled="true"
+          label="&nextButton.label;" tooltiptext0="&nextButton.tooltip;">
+        <menupopup id="link-next-popup"/>
+      </toolbarbutton>
+      <toolbarbutton id="link-last" disabled="true"
+          label="&lastButton.label;" tooltiptext0="&lastButton.tooltip;">
+        <menupopup id="link-last-popup"/>
+      </toolbarbutton>
+      <toolbarseparator/>
+
+      <toolbarbutton id="more-menu" class="bookmark-item" type="menu" container="true"
+          label="&moreButton.label;" disabled="true" tooltiptext0="&moreButton.tooltip;">
+        <menupopup id="more-menu-popup">
+          <menuitem id="link-toc" label="&tocButton.label;" hidden="true"
+              class="menuitem-iconic bookmark-item"/>
+          <menu id="link-chapter" label="&chapterButton.label;" hidden="true"
+              class="menu-iconic bookmark-item" container="true">
+            <menupopup id="link-chapter-popup"/>
+          </menu>
+          <menu id="link-section" label="&sectionButton.label;" hidden="true"
+              class="menu-iconic bookmark-item" container="true">
+            <menupopup id="link-section-popup"/>
+          </menu>
+          <menu id="link-subsection" label="&subSectionButton.label;" hidden="true"
+              class="menu-iconic bookmark-item" container="true">
+            <menupopup id="link-subsection-popup"/>
+          </menu>
+          <menu id="link-appendix" label="&appendixButton.label;" hidden="true"
+              class="menu-iconic bookmark-item" container="true">
+            <menupopup id="link-appendix-popup"/>
+          </menu>
+          <menuitem id="link-glossary" label="&glossaryButton.label;" hidden="true"
+              class="menuitem-iconic bookmark-item"/>
+          <menuitem id="link-index" label="&indexButton.label;" hidden="true"
+              class="menuitem-iconic bookmark-item"/>
+
+          <menuitem id="link-help" label="&helpButton.label;" hidden="true"
+              class="menuitem-iconic bookmark-item"/>
+          <menuitem id="link-search" label="&searchButton.label;" hidden="true"
+              class="menuitem-iconic bookmark-item"/>
+          <menuitem id="link-author" label="&authorButton.label;" hidden="true"
+              class="menuitem-iconic bookmark-item"/>
+          <menuitem id="link-copyright" label="&copyrightButton.label;" hidden="true"
+              class="menuitem-iconic bookmark-item"/>
+          <menu id="link-bookmark" label="&bookmarkButton.label;" hidden="true"
+              class="menu-iconic bookmark-item" container="true">
+            <menupopup id="link-bookmark-popup"/>
+          </menu>
+          <menu id="link-alternate" label="&alternateButton.label;" hidden="true"
+              class="menu-iconic bookmark-item" container="true">
+            <menupopup id="link-alternate-popup"/>
+          </menu>
+        </menupopup>
+      </toolbarbutton>
+    </toolbaritem>
+  </toolbarpalette>
+
+</overlay>
