@@ -156,25 +156,6 @@
 
       <constructor>
         <![CDATA[
-          // for compatibility with fb0.7 and nightlies pre sept 10ish
-          // for those builds toolbar elements get constructed before
-          // the toolbox that contains them, so the toolbar needs to
-          // initialise the palette, rather than the toolbox doing it
-          var toolbox = this.parentNode;
-          if(!(("palette" in toolbox) && toolbox.palette)) {
-            var paletteId = toolbox.getAttribute("palette");
-            if(!("toolbarpalettes" in document))
-              document.toolbarpalettes = new Array();
-            if(paletteId in document.toolbarpalettes) {
-              toolbox.palette = document.toolbarpalettes[paletteId];
-            } else {
-              var palette = document.getElementById(paletteId);
-              palette.parentNode.removeChild(palette);
-              document.toolbarpalettes[paletteId] = palette;
-              toolbox.palette = palette;
-            }
-          }
-
           this.firstPermanentChild = this.firstChild;
           this.lastPermanentChild = this.lastChild;
 
