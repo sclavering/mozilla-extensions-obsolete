@@ -9,10 +9,10 @@
 
   <!-- package information -->
   <RDF:Description about="urn:mozilla:package:linkit"
-        chrome:displayName="LinkIt 0.0.1"
+        chrome:displayName="LinkIt 0.0.2"
         chrome:author="Chris Neale, Stephen Clavering"
         chrome:name="linkit"
-        chrome:description="Adds useless 'link's to documents"
+        chrome:description="Adds useful 'link's to documents"
         chrome:extension="true">
   </RDF:Description>
 
