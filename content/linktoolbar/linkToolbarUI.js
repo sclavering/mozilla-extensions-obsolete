@@ -116,7 +116,7 @@ var linkToolbarUI = {
       else doclinks[r][url] = linkInfo;
     }
 
-    if(doc == window._content.document) {
+    if(doc == content.document) {
       linkToolbarItems.handleLinkForRels(linkInfo, rels);
       this.hasItems = true;
     }
@@ -141,7 +141,7 @@ var linkToolbarUI = {
     linkToolbarItems.clearAll();
 
     // show any links for the new doc
-    var doc = window._content.document;
+    var doc = content.document;
     if(!("__lt__links" in doc) || doc.__lt__links.empty) {
       linkToolbarUI.hasItems = false;
       return;
