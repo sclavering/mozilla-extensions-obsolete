@@ -39,20 +39,32 @@
 # ***** END LICENSE BLOCK *****
 */
 
+// restore the items which were checked last time
+window.addEventListener("load", function() {
+  var checkeditems = document.documentElement.getAttribute("checkeditems");
+  if(!checkeditems || checkeditems=="") return;
+  checkeditems = checkeditems.split(/\s+/);
+  for(var i = 0; i < checkeditems.length; i++) {
+    var elem = document.getElementById(checkeditems[i]);
+    if(elem) elem.checked = true;
+  }
+}, false);
+
 
 function clearStuff() {
-  if(document.getElementById("history").checked)
-    clearHistory();
-  if(document.getElementById("forminfo").checked)
-    clearFormInfo();
-  if(document.getElementById("passwords").checked)
-    clearPasswords();
-  if(document.getElementById("downloads").checked)
-    clearDownloads();
-  if(document.getElementById("cookies").checked)
-    clearCookies();
-  if(document.getElementById("cache").checked)
-    clearCache();
+  var checkeditems = [];
+  var items = ["history","forminfo","passwords","downloads","cookies","cache"];
+  var functions = [clearHistory, clearFormInfo, clearPasswords, clearDownloads, clearCookies, clearCache];
+  for(var i = 0; i < items.length; i++) {
+    var checkbox = document.getElementById(items[i]);
+    if(checkbox && checkbox.checked) {
+      functions[i]();
+      checkeditems.push(items[i]);
+    }
+  }
+  // remember which boxes were checked
+  checkeditems = checkeditems.join(" ");
+  document.documentElement.setAttribute("checkeditems",checkeditems);
 }
 
 function clearHistory() {

@@ -1,7 +1,7 @@
 const APP_DISPLAY_NAME = "x";
 const APP_NAME = "x";
 const APP_PACKAGE = "/cdn.mozdev.org/x";
-const APP_VERSION = "0.1";
+const APP_VERSION = "0.2";
 
 const APP_JAR_FILE = "x.jar";
 const APP_CONTENT_FOLDER = "content/x/";
@@ -10,7 +10,7 @@ const APP_SKIN_FOLDER  = "skin/classic/x/";
 
 const APP_SUCCESS_MESSAGE = "You will need to restart Firebird first.";
 
-const INST_TO_PROFILE = "Do you wish to install "+APP_DISPLAY_NAME+" to your profile?\nThis will mean it does not need reinstalling when you update Phoenix.\n(Click Cancel if you want "+APP_DISPLAY_NAME+" installing to the Phoenix directory.)";
+const INST_TO_PROFILE = "Do you wish to install "+APP_DISPLAY_NAME+" to your profile?\nThis will mean it does not need reinstalling when you update Phoenix.\n(Click Cancel if you want "+APP_DISPLAY_NAME+" installing to the Firebird directory.)";
 
 initInstall(APP_NAME, APP_PACKAGE, APP_VERSION);
 

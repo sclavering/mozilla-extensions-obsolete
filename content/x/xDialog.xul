@@ -9,19 +9,20 @@
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         title="&xdialog.title;"
         buttons="accept,cancel"
-        persist="screenX,screenY,width,height"
         width="260"
-        height="180"
+        height="200"
         ondialogaccept="clearStuff();"
+        persist="screenX screenY width height checkeditems"
+        checkeditems="history forminfo passwords downloads cookies cache"
         >
 
 <script src="xDialog.js" type="application/x-javascript"/>
 
-<checkbox id="history"   checked="true" label="&clearHistory;"/>
-<checkbox id="forminfo"  checked="true" label="&clearFormInfo;"/>
-<checkbox id="passwords" checked="true" label="&clearPasswords;"/>
-<checkbox id="downloads" checked="true" label="&clearDownloads;"/>
-<checkbox id="cookies"   checked="true" label="&clearCookies;"/>
-<checkbox id="cache"     checked="true" label="&clearCache;"/>
+<checkbox id="history"   label="&clearHistory;"/>
+<checkbox id="forminfo"  label="&clearFormInfo;"/>
+<checkbox id="passwords" label="&clearPasswords;"/>
+<checkbox id="downloads" label="&clearDownloads;"/>
+<checkbox id="cookies"   label="&clearCookies;"/>
+<checkbox id="cache"     label="&clearCache;"/>
 
 </dialog>
