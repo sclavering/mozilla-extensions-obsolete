@@ -1,11 +1,12 @@
-/* File licenced under the MPL 1.1/GPL 2.0/LGPL 2.1 tri-licence.
- *
- * The Original Code is the LinkToolbar extension for Firefox
- *
- * Contributor(s):
- *   Stephen Clavering <mozilla@clav.me.uk>   (Complete rewrite 2003-04-17)
- *   Chris Neale <cdn@mozdev.org>  [ tweaks and email icon for [mailto:]s ]
- */
+/*
+Licence: MPL 1.1/GPL 2.0/LGPL 2.1
+
+The Original Code is the Link Toolbar extension for Firefox
+
+Contributor(s):
+  Stephen Clavering <mozilla@clav.me.uk>  (Complete rewrite 2003-04-17)
+  Chris Neale <cdn@mozdev.org>  (tweaks and email icon for mailto: links)
+*/
 
 
 #link-top, #link-up, #link-first,
@@ -67,9 +68,7 @@ buttons switch to type=menu. we change the button icon instead  */
 
 
 #linktoolbar menuitem[href^="mailto:"],
-#linktoolbar menuitem[statustext^="mailto:"],
-#linktoolbar .bookmark-item[href^="mailto:"],
-#linktoolbar .bookmark-item[statustext^="mailto:"] {
+#linktoolbar .bookmark-item[href^="mailto:"] {
   list-style-image: url(chrome://linktoolbar/skin/mail.png) !important;
 /* would be unnecessary but for !importants sprinkled throughout browser.css and related files */
 }
@@ -80,7 +79,7 @@ buttons switch to type=menu. we change the button icon instead  */
   display: block !important;
 }
 
-/* Hide the link toolbar if it is set to autohide is empty */
+/* Hide the link toolbar if it is set to autohide and empty */
 
 #linktoolbar[showOnlyWhenNeeded="true"][hasitems="false"] {
   display:none;
@@ -88,8 +87,8 @@ buttons switch to type=menu. we change the button icon instead  */
 
 
 /* Icons Only mode.
-Have to use !important to override a rule in Fb's browser.css for
-bookmark folders or the Document+More menus still have a text label */
+Have to use !important to override a rule in Fx's browser.css for
+bookmark folders or the More menu still has a text label */
 
 #linktoolbar[iconsonly="true"] > toolbarbutton > .toolbarbutton-text {
   display: none !important;
