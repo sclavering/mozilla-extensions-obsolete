@@ -4,7 +4,7 @@
      xmlns:c="http://www.mozilla.org/rdf/chrome#">
   <Seq about="urn:mozilla:locale:root">
     <li>
-      <Description about="urn:mozilla:locale:en-US">
+      <Description about="urn:mozilla:locale:en-US" c:name="en-US">
         <c:packages>
           <Seq about="urn:mozilla:locale:en-US:packages">
             <li resource="urn:mozilla:locale:en-US:tbx"/>

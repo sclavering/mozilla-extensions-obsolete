@@ -20,18 +20,8 @@ function onLoad() {
     gToolboxes[i].setAttribute("incustomisemode","true");
   }
 
-  // xxx from ~20040930 onward the dialogue doesn't slide out, so the function slideOpen no longer exists
-  if("slideOpen" in window) {
-    document.documentElement.setAttribute("hidechrome", "true");
-    repositionDialog();
-    window.outerWidth = kWindowWidth;
-    window.outerHeight = 50;
-    slideOpen(0);
-  } else {
-    repositionDialog();
-    document.documentElement.setAttribute("hidechrome", "true");
-    initDialog();
-  }
+  repositionDialog();
+  initDialog();
 }
 
 

@@ -43,32 +43,28 @@ var tbxCommands = {
   // unused
   closeTab: function() {
     gBrowser.removeCurrentTab();
-  },
-
-  // These functions control whether images, javascript, and plugins are allowed, and
-  // apply to *the current tab only*. They take effect only after the page is refreshed.
-  // (could also use the allowAuth, and allowSubframes flags of docShell.)
-  toggleJavascriptInTab: function() {
-    var docShell = getBrowser().docShell;
-    docShell.QueryInterface(Components.interfaces.nsIDocShell);
-    docShell.allowJavascript = !docShell.allowJavascript;
-  },
-  toggleImagesInTab: function() {
-    var docShell = getBrowser().docShell;
-    docShell.QueryInterface(Components.interfaces.nsIDocShell);
-    docShell.allowImages = !docShell.allowImages;
-  },
-  toggleMetaRedirectsInTab: function() {
-    var docShell = getBrowser().docShell;
-    docShell.QueryInterface(Components.interfaces.nsIDocShell);
-    docShell.allowMetaRedirects = !docShell.allowMetaRedirects;
-  },
-  togglePluginsInTab: function() {
-    var docShell = getBrowser().docShell;
-    docShell.QueryInterface(Components.interfaces.nsIDocShell);
-    docShell.allowPlugins = !docShell.allowPlugins;
   }
 }
+
+// These functions control whether images, javascript, and plugins are allowed, and
+// apply to *the current tab only*. Some take effect only after the page is refreshed.
+function tbxToggleJavascriptInTab(btn) {
+  var docShell = gBrowser.docShell;
+  btn.setAttribute("ischecked", docShell.allowJavascript = !docShell.allowJavascript);
+}
+function tbxToggleImagesInTab(btn) {
+  var docShell = gBrowser.docShell;
+  btn.setAttribute("ischecked", docShell.allowImages = !docShell.allowImages);
+}
+function tbxToggleMetaRedirectsInTab(btn) {
+  var docShell = gBrowser.docShell;
+  btn.setAttribute("ischecked", docShell.allowMetaRedirects = !docShell.allowMetaRedirects);
+}
+function tbxTogglePluginsInTab(btn) {
+  var docShell = gBrowser.docShell;
+  btn.setAttribute("ischecked", docShell.allowPlugins = !docShell.allowPlugins);
+}
+
 
 
 
@@ -83,10 +79,10 @@ var tbxTabPrefToggles = {
   ],
 
   updaters: [
-    function() { this.setAttribute("checked", getBrowser().docShell.allowJavascript); },
-    function() { this.setAttribute("checked", getBrowser().docShell.allowImages);  },
-    function() { this.setAttribute("checked", getBrowser().docShell.allowMetaRedirects); },
-    function() { this.setAttribute("checked", getBrowser().docShell.allowPlugins); }
+    function() { this.setAttribute("ischecked", gBrowser.docShell.allowJavascript); },
+    function() { this.setAttribute("ischecked", gBrowser.docShell.allowImages);  },
+    function() { this.setAttribute("ischecked", gBrowser.docShell.allowMetaRedirects); },
+    function() { this.setAttribute("ischecked", gBrowser.docShell.allowPlugins); }
   ],
 
   active: [],

@@ -75,20 +75,21 @@
         />
 
     <!-- Toggle Javascript, Images and Plugins for the current tab -->
-    <toolbarbutton class="tbx-button toolbarbutton-1" type="checkbox" checked="true"
-        id="tbx-javascript-tabpref" oncommand="tbxCommands.toggleJavascriptInTab();"
+    <!-- These don't have type=checkbox because it makes them too difficult to style nicely -->
+    <toolbarbutton class="tbx-button toolbarbutton-1"
+        id="tbx-javascript-tabpref" oncommand="tbxToggleJavascriptInTab(this);"
         label="&tbx-javascript-tabpref.label;" tooltiptext="&tbx-javascript-tabpref.tooltip;"
         />
-    <toolbarbutton class="tbx-button toolbarbutton-1" type="checkbox" checked="true"
-        id="tbx-images-tabpref" oncommand="tbxCommands.toggleImagesInTab();"
+    <toolbarbutton class="tbx-button toolbarbutton-1"
+        id="tbx-images-tabpref" oncommand="tbxToggleImagesInTab(this);"
         label="&tbx-images-tabpref.label;" tooltiptext="&tbx-images-tabpref.tooltip;"
         />
-    <toolbarbutton class="tbx-button toolbarbutton-1" type="checkbox" checked="true"
-        id="tbx-metaredirects-tabpref" oncommand="tbxCommands.toggleMetaRedirectsInTab();"
+    <toolbarbutton class="tbx-button toolbarbutton-1"
+        id="tbx-metaredirects-tabpref" oncommand="tbxToggleMetaRedirectsInTab(this);"
         label="&tbx-metaredirects-tabpref.label;" tooltiptext="&tbx-metaredirects-tabpref.tooltip;"
         />
-    <toolbarbutton class="tbx-button toolbarbutton-1" type="checkbox" checked="true"
-        id="tbx-plugins-tabpref" oncommand="tbxCommands.togglePluginsInTab();"
+    <toolbarbutton class="tbx-button toolbarbutton-1"
+        id="tbx-plugins-tabpref" oncommand="tbxTogglePluginsInTab(this);"
         label="&tbx-plugins-tabpref.label;" tooltiptext="&tbx-plugins-tabpref.tooltip;"
         />
   </toolbarpalette>
