@@ -6,7 +6,7 @@ const APP_VERSION = "0.6";
 const APP_JAR_FILE = "linktoolbar.jar";
 const APP_CONTENT_FOLDER = "content/linktoolbar/";
 const APP_LOCALE_FOLDER  = "locale/en-US/linktoolbar/";
-const APP_SKIN_FOLDER  = "skin/classic/linktoolbar/";
+const APP_SKIN_FOLDER  = "skin/classic/";
 
 const INST_TO_PROFILE = "Do you wish to install "+APP_DISPLAY_NAME+" to your profile?\nThis will mean it does not need reinstalling when you update your browser.\n(Click Cancel if you want "+APP_DISPLAY_NAME+" installing to the main browser directory.)";
 
