@@ -167,32 +167,6 @@ function linkit(event) {
     }
 */
 
- /* if (document.getElementById("linkit-"+rel) && document.getElementById("linkit-"+rel).href != url) {
-    link.setAttribute("id", "linkit-"+rel+'2');
-    head.appendChild(link);
-    dump('Linkit :: add ' + rel + '2\n');
-  }
-  else */
-
- /*
-  while(linktags[i].getAttribute('class') != "linkit-"+rel) {
-    i++; dump('linktags[' + i + ']\n');
-  }
-
-
-  if(linktags[i].getAttribute('href') != url || i == linktags.length || )
-    nodupes = true;
- */
-
-// var linkitLinks = [];
-
- // if (!linktags || nodupes) {
-//    if(linkitLinks[rel]) { dump('Linkit :: ' + rel + ' : deja vu\n'); return };
-//     linkitLinks[rel] = true;
- // }
-
- /* var nodupes = false; */
-
 
 function linkit_addLink(page,head,rel,url,title) {
 
