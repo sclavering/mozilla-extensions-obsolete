@@ -1,0 +1,110 @@
+/* File licenced under the MPL 1.1/GPL 2.0/LGPL 2.1 tri-licence.
+ *
+ * The Original Code is the LinkToolbar extension for Firebird/NN7
+ *
+ * Contributor(s):
+ *   Stephen Clavering <mozilla@clav.me.uk>   (Complete rewrite 2003-04-17)
+ *   Chris Neale <cdn@mozdev.org>  [ tweaks and email icon for [mailto:]s ]
+ *
+ */
+
+
+#link-top, #link-up, #link-first,
+#link-prev, #link-next, #link-last {
+  -moz-appearance: none;
+  list-style-image: url("chrome://linktoolbar/skin/buttons.png");
+  padding: 0;
+}
+#link-top[disabled="true"], #link-up[disabled="true"], #link-first[disabled="true"],
+#link-prev[disabled="true"], #link-next[disabled="true"], #link-last[disabled="true"],
+#document-menu[disabled="true"], #more-menu[disabled="true"] {
+  color: graytext !important;
+  text-decoration: none;
+}
+
+/* don't show drop markers, because they make the toolbar expand when
+buttons switch to type=menu. we change the button icon instead  */
+#linktoolbar > toolbarbutton > .toolbarbutton-menu-dropmarker {
+  display: none !important;
+}
+
+
+#link-top       { -moz-image-region: rect(0 16px 16px 0); }
+#link-top:hover { -moz-image-region: rect(16px 16px 32px 0); }
+#linktoolbar > #link-top[disabled="true"] { -moz-image-region: rect(32px 16px 48px 0); }
+#link-top[type="menu"]       { -moz-image-region: rect(48px 16px 64px 0); }
+#link-top[type="menu"]:hover { -moz-image-region: rect(64px 16px 80px 0); }
+
+#link-up       { -moz-image-region: rect(0 32px 16px 16px); }
+#link-up:hover { -moz-image-region: rect(16px 32px 32px 16px); }
+#link-up[disabled="true"]   { -moz-image-region: rect(32px 32px 48px 16px); }
+#link-up[type="menu"]       { -moz-image-region: rect(48px 32px 64px 16px); }
+#link-up[type="menu"]:hover { -moz-image-region: rect(64px 32px 80px 16px); }
+
+#link-first       { -moz-image-region: rect(0 48px 16px 32px); }
+#link-first:hover { -moz-image-region: rect(16px 48px 32px 32px); }
+#link-first[disabled="true"]   { -moz-image-region: rect(32px 48px 48px 32px); }
+#link-first[type="menu"]       { -moz-image-region: rect(48px 48px 64px 32px); }
+#link-first[type="menu"]:hover { -moz-image-region: rect(64px 48px 80px 32px); }
+
+#link-prev       { -moz-image-region: rect(0 64px 16px 48px); }
+#link-prev:hover { -moz-image-region: rect(16px 64px 32px 48px); }
+#link-prev[disabled="true"]   { -moz-image-region: rect(32px 64px 48px 48px); }
+#link-prev[type="menu"]       { -moz-image-region: rect(48px 64px 64px 48px); }
+#link-prev[type="menu"]:hover { -moz-image-region: rect(64px 64px 80px 48px); }
+
+#link-next       { -moz-image-region: rect(0 80px 16px 64px); }
+#link-next:hover { -moz-image-region: rect(16px 80px 32px 64px); }
+#link-next[disabled="true"]   { -moz-image-region: rect(32px 80px 48px 64px); }
+#link-next[type="menu"]       { -moz-image-region: rect(48px 80px 64px 64px); }
+#link-next[type="menu"]:hover { -moz-image-region: rect(64px 80px 80px 64px); }
+
+#link-last       { -moz-image-region: rect(0 96px 16px 80px); }
+#link-last:hover { -moz-image-region: rect(16px 96px 32px 80px); }
+#link-last[disabled="true"]   { -moz-image-region: rect(32px 96px 48px 80px); }
+#link-last[type="menu"]       { -moz-image-region: rect(48px 96px 64px 80px); }
+#link-last[type="menu"]:hover { -moz-image-region: rect(64px 96px 80px 80px); }
+
+
+
+
+
+#linktoolbar toolbarbutton[tooltiptext^="Digger"],
+#linktoolbar toolbarbutton[tooltiptext^="LinkIt"] {
+  list-style-image: url("chrome://linktoolbar/skin/buttons_digger.png");
+}
+
+#linktoolbar menuitem[label^="Digger"] > .menu-iconic-text,
+#linktoolbar menuitem[label^="LinkIt"] > .menu-iconic-text,
+#linktoolbar toolbarbutton[tooltiptext^="Digger"] > .toolbarbutton-text,
+#linktoolbar toolbarbutton[tooltiptext^="LinkIt"] > .toolbarbutton-text {
+  border-bottom: 1px dashed #000;
+  padding-bottom: 1px;
+}
+
+#linktoolbar menuitem[label^="Digger"]:hover > .menu-iconic-text,
+#linktoolbar menuitem[label^="LinkIt"]:hover > .menu-iconic-text,
+#linktoolbar toolbarbutton[tooltiptext^="Digger"]:hover > .toolbarbutton-text,
+#linktoolbar toolbarbutton[tooltiptext^="LinkIt"]:hover > .toolbarbutton-text {
+  border-bottom: 1px dashed #f00;
+}
+
+#linktoolbar menuitem[href^="mailto:"],
+#linktoolbar menuitem[statustext^="mailto:"],
+#linktoolbar .bookmark-item[href^="mailto:"],
+#linktoolbar .bookmark-item[statustext^="mailto:"] {
+  border-bottom: 1px dashed red;
+  list-style-image: url("chrome://linktoolbar/skin/mail.png") !important;
+/* would be unnecessary but for !importants sprinkled throughout browser.css and related files */
+}
+
+/* Icons Only mode.
+Have to use !important to override a rule in Fb's browser.css for
+bookmark folders or the Document+More menus still have a tex label */
+
+#linktoolbar > toolbarbutton > .toolbarbutton-text {
+  display: none;
+}
+#linktoolbar > toolbarseparator {
+  display: none;
+}
