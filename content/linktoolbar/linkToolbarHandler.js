@@ -210,7 +210,7 @@ var ltLanguageDictionary = {
     // xxx make the parentheses localizable
     if(parts && parts[1] in dict) return dict[parts[1]]+" ("+parts[2]+")";
 
-    return languageCode;
+    return code;
   },
 
   get dictionary() {
