@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!-- $Id: xOverlay.xul,v 1.1 2003/05/20 22:32:51 cdn Exp $ -->
+<!-- $Id: xOverlay.xul,v 1.2 2003/05/20 23:07:25 cdn Exp $ -->
 
 <?xml-stylesheet href="chrome://x/skin/x.css" type="text/css"?>
 
@@ -18,6 +18,9 @@
 
   <script type="application/x-javascript" src="chrome://browser/content/pref/pref-privacy.js"/>
 
+  <stringbundle id="privacyBundle" src="chrome://browser/locale/pref/prefutilities.properties"/>
+
+  <!-- -->
     <toolbar id="nav-bar">
       <toolbarbutton
         class="toolbarbutton-1"
@@ -28,5 +31,18 @@
         tooltiptext="&x.tooltip;"
         />
     </toolbar>
+  <!-- -->
+
+  <!--
+    <toolbarpalette id="BrowserToolbarPalette">
+      <toolbarbutton
+        class="toolbarbutton-1"
+        id="x-button"
+        label="&x.label;"
+        oncommand="PrivacyPanel.clearAll();"
+        tooltiptext="&x.tooltip;"
+        />
+    </toolbarpalette>
+  -->
 
 </overlay>
