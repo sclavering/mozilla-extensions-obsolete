@@ -7,8 +7,8 @@
     <id>linktoolbar</id>
 
     <name>Link Toolbar</name>
-    <version>0.9</version>
-    <description>A site navigation toolbar</description>
+    <version>0.9.1</version>
+    <description>A site-navigation toolbar</description>
 
     <creator>Stephen Clavering</creator>
     <homepageURL>http://cdn.mozdev.org/linkToolbar/</homepageURL>
