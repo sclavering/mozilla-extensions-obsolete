@@ -21,9 +21,10 @@
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
- *   Original Use Stylesheet functions by Tim Hill (bug 6782)
- *   Frameset Handling by  Neil Rashbrook <neil@parkwaycc.co.uk>
- *   Modification for use in StyleSelector: Stephen Clavering <mozilla@clav.co.uk>
+ *   Original Use Stylesheet: functions by Tim Hill (bug 6782)
+ *   Frameset Handling: Neil Rashbrook <neil@parkwaycc.co.uk>
+ *   Multiple stylesheet detection, disable all sheets, and rewrite for StyleSelector
+ *     Stephen Clavering <mozilla@clav.co.uk>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -77,7 +78,7 @@ var StyleSelector = {
     var sheetTitles = new Array();
     for(var i = 0; i < sheets.length; i++) {
       // make sure we don't count different sheets with the same title
-      if(sheets[i].title in sheetTitles) continue;
+      if(sheets[i].title=="" || sheets[i].title in sheetTitles) continue;
       sheetTitles.push(sheets[i].title);
       var media = sheets[i].media;
       // by the DOM-CSS spec i think media should default to
@@ -93,7 +94,7 @@ var StyleSelector = {
         }
       }
     }
-    return (numsheets>1);
+    return (numsheets>0);
   },
 
   commanded: function(evt, menu, page) {
