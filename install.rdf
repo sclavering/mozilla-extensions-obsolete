@@ -4,10 +4,10 @@
          xmlns="http://www.mozilla.org/2004/em-rdf#">
 
   <rdf:Description about="urn:mozilla:install-manifest">
-    <id>org.mozdev.clav.tbx</id>
+    <id>tbx</id>
 
     <name>Toolbar Enhancements</name>
-    <version>0.14</version>
+    <version>0.15</version>
     <description>Adds various toolbar buttons and increases toolbar configurability</description>
 
     <creator>Stephen Clavering</creator>
@@ -23,16 +23,16 @@
     <targetApplication>
       <rdf:Description>
         <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
-        <minVersion>0.8</minVersion>
-        <maxVersion>0.9</maxVersion>
+        <minVersion>0.9</minVersion>
+        <maxVersion>0.9+</maxVersion>
       </rdf:Description>
     </targetApplication>
 
     <file>
-      <rdf:Description about="urn:mozilla:extension:file:toolbarext.jar">
+      <rdf:Description about="urn:mozilla:extension:file:tbx.jar">
         <package>content/</package>
-        <locale>locale/en/</locale>
-        <skin>skin/classic/</skin>
+        <skin>skin/</skin>
+        <locale>en/</locale>
       </rdf:Description>
     </file>
   </rdf:Description>

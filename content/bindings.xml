@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE bindings SYSTEM "chrome://toolbarext/locale/">
+<!DOCTYPE bindings SYSTEM "chrome://tbx/locale/">
 
-<bindings id="toolbarext-bindings"
+<bindings id="tbx-bindings"
           xmlns="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
           xmlns:xbl="http://www.mozilla.org/xbl">

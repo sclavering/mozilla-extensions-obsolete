@@ -1,7 +1,7 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
-toolbox[palette] > toolbar { -moz-binding: url(chrome://toolbarext/content/bindings.xml#toolbar); }
-toolbox[palette] { -moz-binding: url(chrome://toolbarext/content/bindings.xml#customisable-toolbox); }
+toolbox[palette] > toolbar { -moz-binding: url(chrome://tbx/content/bindings.xml#toolbar); }
+toolbox[palette] { -moz-binding: url(chrome://tbx/content/bindings.xml#customisable-toolbox); }
 
 
 /* the toolboxes down the left and right need to have horizontal orientation so the toolbars
@@ -16,16 +16,16 @@ toolbox[vertical="true"] > toolbar { -moz-box-orient: vertical; min-width: 5px; 
 
 /* uses a vbox as a wrapper rather than an hbox.  needed for separators */
 toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] {
-  -moz-binding: url(chrome://toolbarext/content/bindings.xml#toolbarpaletteitem-vertical);
+  -moz-binding: url(chrome://tbx/content/bindings.xml#toolbarpaletteitem-vertical);
 }
 
 
 /* binding to add a toolbar to the start and end of the tab strip */
 #appcontent .tabbrowser-strip {
-  -moz-binding: url(chrome://toolbarext/content/bindings.xml#tab-strip-toolbars);
+  -moz-binding: url(chrome://tbx/content/bindings.xml#tab-strip-toolbars);
 }
 #appcontent tabbox {
-  -moz-binding: url(chrome://toolbarext/content/bindings.xml#tabbrowser-tabbox);
+  -moz-binding: url(chrome://tbx/content/bindings.xml#tabbrowser-tabbox);
 }
 
 

@@ -28,6 +28,9 @@
 <!ENTITY tbx-zoomout-button.label "Zoom Out">
 <!ENTITY tbx-zoomout-button.tooltip "Decrease text size">
 
+<!ENTITY tbx-clearcache-button.label "Clear Cache">
+<!ENTITY tbx-clearcache-button.tooltip "Clear the cache">
+
 <!ENTITY tbx-pageinfo-button.label "Info">
 <!ENTITY tbx-pageinfo-button.tooltip "View Page Info">
 

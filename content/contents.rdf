@@ -3,20 +3,20 @@
      xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
 
   <Seq about="urn:mozilla:package:root">
-    <li resource="urn:mozilla:package:toolbarext"/>
+    <li resource="urn:mozilla:package:tbx"/>
   </Seq>
 
-  <Description about="urn:mozilla:package:toolbarext" chrome:name="toolbarext"/>
+  <Description about="urn:mozilla:package:tbx" chrome:name="tbx"/>
 
   <Seq about="urn:mozilla:overlays">
     <li resource="chrome://browser/content/browser.xul"/>
     <li resource="chrome://global/content/customizeToolbar.xul"/>
   </Seq>
   <Seq about="chrome://browser/content/browser.xul">
-    <li>chrome://toolbarext/content/</li>
+    <li>chrome://tbx/content/</li>
   </Seq>
   <Seq about="chrome://global/content/customizeToolbar.xul">
-    <li>chrome://toolbarext/content/customiseOverlay.xul</li>
+    <li>chrome://tbx/content/customiseOverlay.xul</li>
   </Seq>
 
 </RDF>

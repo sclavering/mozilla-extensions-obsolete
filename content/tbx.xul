@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 
-<?xml-stylesheet href="chrome://toolbarext/content/toolbarext.css" type="text/css"?>
-<?xml-stylesheet href="chrome://toolbarext/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://tbx/content/tbx.css" type="text/css"?>
+<?xml-stylesheet href="chrome://tbx/skin/" type="text/css"?>
 
-<!DOCTYPE overlay SYSTEM "chrome://toolbarext/locale/">
+<!DOCTYPE overlay SYSTEM "chrome://tbx/locale/">
 
 <overlay id="tbxBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-  <script src="toolbarext.js" type="application/x-javascript"/>
+  <script src="tbx.js" type="application/x-javascript"/>
   <script src="buttons.js" type="application/x-javascript"/>
 
 
@@ -70,6 +70,12 @@
     <toolbarbutton class="tbx-button toolbarbutton-1"
         id="tbx-zoomin-button" command="cmd_textZoomEnlarge"
         label="&tbx-zoomin-button.label;" tooltiptext="&tbx-zoomin-button.tooltip;"
+        />
+
+    <!-- Clear Cache -->
+    <toolbarbutton class="toolbarbutton-1 tbx-button"
+        id="tbx-clearcache-button" oncommand="tbxCommands.clearCache();"
+        label="&tbx-clearcache-button.label;" tooltiptext="&tbx-clearcache-button.tooltip;"
         />
 
     <!-- View Page Info -->

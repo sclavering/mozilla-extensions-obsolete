@@ -9,7 +9,7 @@
   <Description about="urn:mozilla:locale:en-US">
     <chrome:packages>
       <Seq about="urn:mozilla:locale:en-US:packages">
-        <li resource="urn:mozilla:locale:en-US:toolbarext"/>
+        <li resource="urn:mozilla:locale:en-US:tbx"/>
       </Seq>
     </chrome:packages>
   </Description>
