@@ -97,7 +97,7 @@ const linkToolbarUI = {
       } else if (currentNode instanceof Components.interfaces.nsIDOMElement) {
         // head is supposed to be the first element inside html.
         // Got something else instead. returning
-         return;
+        return;
       } else {
         // Got a comment node or something like that. Moving on.
         currentNode = currentNode.nextSibling;
