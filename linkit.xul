@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.3 2003/05/27 17:52:28 cdn Exp $ -->
+<!-- $Id: linkit.xul,v 1.4 2003/05/27 19:18:31 cdn Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -54,6 +54,7 @@ function linkit() {
 // how to break the code :
 //      if (instag.getAttribute("href") == '' || instag.getAttribute("name") != '') break;
 
+//    if ( instag.hasAttribute("href") == false )
 //alert(NB_innerText(instag));
 
       if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|«/i.test(NB_innerText(instag))) {
@@ -64,7 +65,7 @@ function linkit() {
         hydra.appendChild(linkP);
       }
 
-      if (/^next|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|»/i.test(NB_innerText(instag))) {
+      if (/^next\s*\S*\s*\S*$|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|»/i.test(NB_innerText(instag))) {
         linkN.setAttribute("href", instag.getAttribute("href"));
         linkN.setAttribute("id", "linkit-next");
         linkN.setAttribute("rel", "next");
