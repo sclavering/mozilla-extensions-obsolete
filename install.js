@@ -3,10 +3,10 @@ const kName = "flowtabs";
 const kPackage = "/clav.mozdev.org/flowtabs";
 const kVersion = "0.3";
 
-const kJarFile = "tabx.jar";
+const kJarFile = "flowtabs.jar";
 const kContentFolder = "content/";
 const kLocaleFolders = [];
-const kSkinFolder = "skin/"; // leave blank if not applicable
+const kSkinFolder = "skin/";
 
 const kJarFile2 = "chrome/"+kJarFile;
 
