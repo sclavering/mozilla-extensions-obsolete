@@ -13,8 +13,8 @@
  *
  * The Original Code is Eric Hodel's <drbrain@segment7.net> code.
  *
- * The Initial Developer of the Original Code is
- * Eric Hodel.
+ * The Initial Developer of the Original Code is Eric Hodel.
+ *
  * Portions created by the Initial Developer are Copyright (C) 2001
  * the Initial Developer. All Rights Reserved.
  *
@@ -89,7 +89,6 @@ function LinkToolbarItem (linkType) {
 
   this.disableParentMenuButton = function() {
     if (!this.parentMenuButton) return;
-
     this.parentMenuButton.setAttribute("disabled", "true");
     this.parentMenuButton = null;
   }
@@ -110,13 +109,11 @@ function LinkToolbarButton (linkType) {
 
   this.clear = function() {
     this.__proto__.clear.apply(this);
-
     this.getXULElement().removeAttribute("tooltiptext");
   }
 
   this.setItem = function(linkElement) {
     this.__proto__.setItem.apply(this, [linkElement]);
-
     this.getXULElement().setAttribute("tooltiptext", linkElement.getTooltip());
   }
 
@@ -133,10 +130,7 @@ function LinkToolbarMenu (linkType) {
   this.clear = function() {
     this.disableParentMenuButton();
     this.getXULElement().setAttribute("disabled", "true");
-    clearPopup(this.getPopup());
-  }
-
-  function clearPopup(popup) {
+    var popup = this.getPopup();
     while (popup.hasChildNodes())
       popup.removeChild(popup.lastChild);
   }
@@ -156,7 +150,6 @@ function LinkToolbarMenu (linkType) {
   function match(first, second) {
     if (!first && !second) return true;
     if (!first || !second) return false;
-
     return first == second;
   }
 
@@ -220,7 +213,6 @@ function LinkToolbarTransientMenu (linkType) {
   this.createPopup = function() {
     var popup = document.createElement("menupopup");
     popup.setAttribute("id", this.xulPopupId);
-
     return popup;
   }
 
@@ -231,9 +223,7 @@ function LinkToolbarTransientMenu (linkType) {
 
   this.displayLink = function(linkElement) {
     if(!this.__proto__.displayLink.apply(this, [linkElement])) return false;
-
     this.getXULElement().hidden = false;
-
     // Show the 'miscellaneous' separator
     document.getElementById("misc-separator").hidden = false;
     return true;
