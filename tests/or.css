@@ -1,0 +1,583 @@
+
+body	{
+	background: #e0861e url(/i/2003/parts/olghost.gif) bottom right no-repeat fixed;
+	color: #000;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	}
+
+
+	/*  Establish general layout parameters */
+	
+#newmenu	{
+	background: #e0861e;
+	color: #000;
+	border: 0;
+	border-bottom: 1px solid #000;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	height: 31px;
+	}
+
+#secondarynav	{
+	/* float: left; */
+	position: absolute;
+	left: 0;
+	margin: 0;
+	padding: 0 25px 25px 25px;
+	background-color: #c60; 
+	background-image: none;
+	border: 0;
+	border-top: 10px solid #930;
+	border-bottom: 10px solid #930;
+	border-right: 1px solid #930;
+	width: 151px;  /* False value for IE4-5.x/Win */	
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	width: 100px;	 /* Actual value for conformant browsers */	
+	}
+
+html>#secondarynav {
+	width: 100px; /* Be nice to Opera */
+	}
+
+#primarycontent	{
+	border: 0;
+	border-top: 10px solid #b84811;
+	padding: 0;
+	margin: 0;
+	margin-left: 150px;
+	width: auto;
+	background-image: none;
+	background-color: transparent;
+	}
+
+#bravefourhundred	{
+	margin: 0;
+	border: 0;
+	padding: 15px 25px;	
+	color: #000;
+	background: transparent url(i/2003/parts/obg.gif) repeat;
+	width: 450px; /* False value for IE4-5.x/Win */
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	width: 400px; /* Actual value for conformant browsers */	
+	}
+
+html>#bravefourhundred {
+	width: 400px; /* Be nice to Opera */
+	}
+
+h1#dr	{
+	height: 100px;
+	width: 400px;
+	border: 0;
+	padding: 0;
+	background: transparent url(/content/i/2003/headers/drho2.gif) no-repeat;
+	margin: 0 0 10px 0;
+	}
+
+h1#gl	{
+	height: 100px;
+	width: 400px;
+	border: 0;
+	padding: 0;
+	background: transparent url(/i/2003/headers/glho.gif) no-repeat;
+	margin: 0 0 10px 0;
+	}
+
+#styletool	{
+	border: 0;
+	margin: 10px 0 15px 0;
+	padding: 0;
+	}
+
+#styletool img	{
+	display: inline;
+	border: 0;
+	}
+	
+
+	/*  Image-free logo banner with rollover  */ 
+
+#bannerlogoban {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	width: 600px;
+	height: 31px;
+	background: url(/i/2003/parts/lbo2.gif) no-repeat;
+	}
+
+#logoban {
+	display: block;
+	padding: 0;
+	border: 0;
+	margin: 0;
+	background: url(/i/2003/parts/lb2.gif) no-repeat;
+	width: 600px;
+	height: 31px;
+	}
+
+a#logoban:hover {
+	background: url(/i/2003/parts/lb02.gif) no-repeat;
+	}
+
+	/*  Set up general page elements 	*/ 
+
+img {
+	display: block;
+	border: 0;
+	}
+
+.inline {
+	display: inline;
+	}
+
+p {
+	margin-top: 0;
+	margin-bottom: 1em;
+	font: 11px/1.5 Verdana, Trebuchet, Lucida, Arial, sans-serif;
+	}
+	
+
+a:link, a:visited {
+	font-weight : bold; 
+	text-decoration : none;
+	color: #630;
+	background: transparent; 
+	}
+
+a:hover {
+	font-weight : bold; 
+	text-decoration : underline;
+	color: #a50;
+	background: transparent; 
+	}
+
+a:active {
+	font-weight : bold; 
+	text-decoration : none;
+	color: #f5d7b4;
+	background: transparent;  
+	}
+
+
+
+	/*   Gather ye headlines.  */
+
+
+h1, h2, h3, h4, h5, h6	{
+	font-weight: normal;
+	font-family: Verdana, Lucida, Helvetica, sans-serif;
+	}
+
+h1	{
+	margin-top: 0;
+	margin-bottom: 0;
+	font-size: 32px;
+	text-transform: lowercase;
+	}
+
+h2	{
+	font-size: 24px;
+	margin-top: 25px;
+	margin-bottom: 0;
+	letter-spacing: 1px;
+	}
+
+h3	{
+	font-size: 16px;
+	margin-top: 0;
+	margin-bottom: 0; 
+    }
+
+h4	{
+	font-size: 13px;
+	margin: 5px 0;
+	padding: 0;
+	letter-spacing: 1px;
+	}
+
+
+
+	/*  Search the mother 	*/ 
+	
+#searchui	{
+	margin: 10px 0;
+	}
+
+#searchui label	{
+	font: 10px Verdana, Lucida, Arial, sans-serif;
+	color: #000;
+	background: transparent;
+	margin: 0;
+	}
+
+#searchblank	{
+	font: 10px Verdana, Lucida, Arial, sans-serif;
+	color: #000;
+	background: #f3e4e4;
+	margin: 0 3px 0 0;
+	}
+
+.hun {
+	width: 98px;
+	height: 15px;
+	padding: 0;
+	margin: 2px 0;
+	border: 1px solid #000;
+	font: 10px verdana, lucida, sans-serif;
+	}
+
+
+	/*  Lay out footer 	*/ 
+
+#footer	{
+	margin: 25px 0 50px 0;
+	}
+
+
+	/*  Text treatments for primary content zone 	*/ 
+
+#primarycontent li {
+	font: 11px/1.5 Verdana, Trebuchet, Lucida, Arial, sans-serif;
+	text-align: left;     
+	margin-bottom: 1em;        
+    }
+
+#primarycontent dd	{
+	margin-bottom: 25px;
+	}
+
+#primarycontent dd, dt {
+	font: 11px/1.5 verdana, sans-serif;
+	text-align: left;          
+    }
+
+p+h3	{
+	margin-top: 25px;
+	}
+	
+#primarycontent code	{
+	font: 12px "Andale Mono", monaco, courier, "Courier New", monospace;
+	border-bottom: 1px dotted #caa65c;
+	}
+
+#primarycontent pre	{
+	font: 12px/16px "Andale Mono", monaco, courier, "Courier New", monospace;
+	}
+
+
+
+	/*  Create buttons 	*/ 
+
+#primetop	{
+	border-top: 1px solid #033;
+	}
+
+#secondarynav ul {
+	list-style: none;
+	padding: 0;
+	margin: 15px 0;
+	border: 0;
+	}
+
+#secondarynav li	{
+	text-align: center;
+	border-bottom: 1px solid #000;
+	width: 100px;
+	margin: 0;
+	padding: 0;
+	font: 10px/15px Verdana, Lucida, Arial, sans-serif;
+	color: #000;
+	background: #e0861e;
+	}
+
+#secondarytop, #tertiarytop	{
+	border-top: 1px solid #000;
+	}
+
+#secondarynav li a {
+	display: block;
+	font-weight: normal;
+	padding: 0;
+	border-left: 1px solid #000;
+	border-right: 1px solid #000;
+	background: #e0861e;
+	color: #000;
+	text-decoration: none;
+	width: 100px; 	/* False value for IE4-5.x/Win. */
+ 	voice-family: "\"}\""; 
+  	voice-family:inherit;
+	width: 98px;	/* You get it. Good value for compliant browers. */	
+	}
+	
+html>#secondarynav li a {
+	width: 98px;	 /* Be nice to Opera */
+	}
+	
+#secondarynav li a:hover {
+	font-weight: normal;
+	background: #b84811;
+	color: #fff;
+	text-decoration: none;
+	}
+
+
+	/*   Change link effects in secondary nav. 	*/
+
+#blurbomatic2 p a:link, #blurbomatic2 p a:visited, #secondarynav dd a:link, #secondarynav dd a:visited {
+	font-weight : bold; 
+	text-decoration : none;
+	color: #fff;
+	background: transparent; 
+	}
+	
+#blurbomatic2 p a:hover, #secondarynav dd a:hover   {
+	font-weight : bold; 
+	text-decoration : none;
+	color: #000;
+	background: transparent; 
+	}
+
+#blurbomatic2 p a:active, #secondarynav dd a:active  {
+	font-weight : bold; 
+	text-decoration : underline overline;
+	color: #cf0;
+	background: transparent; 
+	}
+
+
+
+	/*  Control blurbs 	*/ 
+
+#blurbomatic2 dl, dt	{
+	font: 10px/15px Verdana, Lucida, Arial, sans-serif;
+	}
+
+#blurbomatic2 dd	{
+	font: 9px/15px Verdana, Lucida, Arial, sans-serif;
+	margin-left: 0;
+	margin-top: 4px;
+	margin-bottom: 6px;
+	}
+
+#blurbomatic2 dd a	{
+	font-weight: normal;
+	}
+		
+
+	
+	/*  Banners without img elements, thanks Todd and Porter  */ 
+
+#banner1, #banner2, #banner3 {
+	margin: 10px 0 0 0;
+	padding: 0;
+	width: 100px;
+	height: 25px;
+	}
+
+#banner1	{
+  /* Opera uses this background for the rollover effect. */
+	background: url(/i/bans/hc100bano.gif) no-repeat 1px;
+	}	
+
+#banner2	{
+  /* Opera uses this background for the rollover effect. */
+	background: url(/i/bans/ala100bano.gif) no-repeat 1px;
+	}	
+
+#banner3	{
+  /* Opera uses this background for the rollover effect. */
+	background: url(/i/bans/zeldmix2.gif) no-repeat 1px;
+	}	
+
+#hcban, #alban, #wtban {
+	display: block;
+	padding: 0;
+	border: 1px solid #000;
+	background: url(/i/bans/hc100ban.gif) no-repeat 1px; /* start hiding from macie\*/
+	background-position: 0px; /* stop hiding */
+	width: 100px;
+	height: 25px;
+	voice-family: "\"}\"";   /* Need we explain? */
+	voice-family: inherit;   
+	width: 98px;
+	height: 23px; /* Actual values to overlap borders */
+	}
+
+html>body #hcban, html>body #alban, html>body #wtban {
+	width: 98px;
+	height: 23px; /* Be nice to Opera */
+	}
+
+#alban {
+	background-image: url(/i/bans/ala100ban.gif);
+	}
+
+#wtban {
+	background-image: url(/i/bans/zeldmix.gif);
+	}
+
+a#hcban:hover {
+	background-image: url(/i/bans/hc100bano.gif);
+	border: 1px solid #ffc;
+	}
+
+a#alban:hover {
+	background-image: url(/i/bans/ala100bano.gif);
+	border: 1px solid #ffc;
+	}
+
+a#wtban:hover {
+	background-image: url(/i/bans/zeldmix2.gif);
+	border: 1px solid #ffc;
+	}
+
+.alt {
+	display: none;
+	}
+
+
+	/*  Odd bits and miscellanies 	*/ 
+
+#blurbomatic	{
+	width: 102px;
+	margin-top: 5px;
+	}
+	
+#blurbomatic p {
+	font: italic 11px/1.5 Verdana, Lucida, Arial, sans-serif;
+	margin-left: 10px;
+	margin-right: 0;
+	text-align: right;
+	}
+
+#blurbomatic2	{
+	margin-top: 7px;
+	}
+	
+#blurbomatic2 p {
+	font: 10px/15px Verdana, Lucida, Arial, sans-serif;
+	margin: 0;
+	margin-bottom: 15px;
+	padding: 0;
+	text-align: left;
+	}
+
+#blurbomatic2 a	{
+	font-weight: normal;
+	}
+
+address	{
+	font: 10px/15px Verdana, Lucida, Arial, sans-serif;
+	}
+
+.butt {
+   font: 10px Verdana, Lucida, Arial, sans-serif; 
+   color: #fff; 
+   background: #b84811; 
+   margin: 2px 0;
+   padding: 2px;
+}
+
+#tale p+p	{
+	text-indent: 2em;
+	margin-top: -1em;
+	}
+
+#tale h3	{
+	margin-top: 25px;
+	margin-bottom: 25px;
+	}
+
+#tale h4	{
+	font-size: 13px;
+	margin-top: 25px;
+	}
+
+h1 img {
+	margin-bottom: 10px;
+	}
+	
+
+
+	/*  Hide earlier versions 	*/ 
+
+#primenav, .hide {
+	display: none;
+	}
+
+
+
+	/*  General helpers, tools and hacks 	*/ 
+
+.neg25	{
+	margin-top: -25px;
+	}
+
+.vs0	{
+	margin-top: 0;
+	padding-top: 0;
+	}
+
+.vs2	{
+	margin-top: 0;
+	padding-top: 2px;
+	}
+
+.vs3	{
+	margin-top: 0;
+	padding-top: 3px;
+	}
+
+
+.vs5	{
+	margin-top: 0;
+	padding-top: 5px;
+	}
+
+.vs10	{
+	margin-top: 0;
+	padding-top: 10px;
+	}
+
+.vs15	{
+	margin-top: 0;
+	padding-top: 15px;
+	}
+
+.vs25	{
+	margin-top: 0;
+	padding-top: 25px;
+	}
+	
+#coming	{
+	float: left;
+	margin: 0 10px 0 0;
+	}
+
+.floattenr	{
+	float: left; 
+	margin: 0 10px 0 0;
+	}
+
+.fifteenbot	{
+	margin-bottom: 15px;
+	}	
+	
+.bottomus25	{
+	margin-bottom: 25px;
+	}
+	
+.sluggo	{
+	margin-top: -0.25em;
+	font-style: italic;
+	}
+	
+
+
+
