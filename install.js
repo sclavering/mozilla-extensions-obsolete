@@ -1,7 +1,7 @@
 const kDisplayName = "x";
 const kName = "x";
 const kPackage = "/cdn.mozdev.org/x";
-const kVersion = "0.4";
+const kVersion = "0.4.1";
 
 const kJarFile = "x.jar";
 const kContentFolder = "content/x/";
@@ -25,7 +25,7 @@ var instToProfile = !existsInApp && (existsInProfile || confirm(kMsg));
 var folder = instToProfile ? pchromef : chromef;
 var flag = instToProfile ? PROFILE_CHROME : DELAYED_CHROME;
 
-var err = addFile(kPackage, kVersion, kJarFile, folder, null)
+var err = addFile(kPackage, kVersion, 'chrome/' + kJarFile, folder, null)
 
 if(err == SUCCESS) {
   var jar = getFolder(folder, kJarFile);
