@@ -114,7 +114,7 @@
   border-bottom: 1px dashed red;
   list-style-image: url("chrome://linktoolbar/skin/btn1/mail.png") !important;
 /* would be unnecessary but for !importants sprinkled throughout browser.css and related files */
-}                                                             
+}
 
 
 /* Hide the link toolbar if it is set to autohide is empty */
