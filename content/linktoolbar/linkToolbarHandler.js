@@ -171,8 +171,8 @@ const linkToolbarHandler = {
         // XXX: use localized version of ":" separator
         if (this.media && !/\ball\b|\bscreen\b/i.test(this.media))
           prefix += this.media + ": ";
-        if (this.hreflang)
-          prefix += languageDictionary.lookupLanguageName(this.hreflang) + ": ";
+        //if (this.hreflang)
+        //  prefix += languageDictionary.lookupLanguageName(this.hreflang) + ": ";
         this.longTitle = this.title ? prefix + this.title : prefix;
       }
       return this.longTitle;
