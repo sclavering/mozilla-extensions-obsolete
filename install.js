@@ -1,7 +1,7 @@
 const APP_DISPLAY_NAME = "Link Toolbar";
 const APP_NAME = "linktoolbar";
 const APP_PACKAGE = "/cdn.mozdev.org/linktoolbar";
-const APP_VERSION = "0.1.0";
+const APP_VERSION = "0.2";
 
 const APP_JAR_FILE = "linktoolbar.jar";
 const APP_CONTENT_FOLDER = "content/linktoolbar/";
