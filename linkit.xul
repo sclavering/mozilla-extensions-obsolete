@@ -175,8 +175,11 @@ function linkit_addLink(page,head,rel,url,title) {
   link.setAttribute("class", "linkit-"+rel);
   link.setAttribute("href", url);
   link.setAttribute("rel", rel);
-  if(title) link.setAttribute("title", title);
-  else link.setAttribute("title", "LinkIt ["+url+"]");
+ // if(title) link.setAttribute("title", title);
+ // else link.setAttribute("title", "LinkIt ["+url+"]");
+
+  if(!title) title = "LinkIt ["+url+"]";
+  link.setAttribute("title", title);
 
 // if no link currently in head matches href and rel then add
 
@@ -184,11 +187,13 @@ function linkit_addLink(page,head,rel,url,title) {
 
   for(var i = 0; i < linktags.length; i++) {
     var linktag = linktags[i];
-    var klass = linktag.getAttribute("class");
     var href = linktag.getAttribute("href");
-    var rell = linktag.getAttribute("rel");
 
-    if(rell == rel && href == url && klass == "linkit-"+rel)
+   // linktag.href doesn't work : ]
+
+//    if(linktag.className == "linkit-"+rel && linktag.href == url && linktag.rel == rel) // && linktag.title == title)
+//    if(rell == rel && href == url && linktag.className == "linkit-"+rel && linktag.title == title) // /
+    if(linktag.rel == rel && href == url && linktag.className == "linkit-"+rel && linktag.title == title) // /
       return;
 
   }
