@@ -20,11 +20,13 @@ const linkFinder = {
       }
     }
     if(noUp) {
-      var uprels = [];
-      uprels["up"] = "up";
       var upurl = this.getUp(doc.location.href);
-      var up = {href: upurl, relValues: uprels, title: null, longTitle: null};
-      linkToolbarUI.addLink(up, doc);
+      if(upurl) {
+        var uprels = [];
+        uprels["up"] = "up";
+        var up = {href: upurl, relValues: uprels, title: null, longTitle: null};
+        linkToolbarUI.addLink(up, doc);
+      }
     }
   },
 
