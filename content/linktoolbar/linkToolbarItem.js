@@ -22,6 +22,7 @@
  *      Christopher Hoess <choess@force.stwing.upenn.edu>
  *      Tim Taylor <tim@tool-man.org>
  *      Stuart Ballard <sballard@netreach.net>
+ *      Chris Neale <cdn@mozdev.org> [Port to Px and other trivialities]
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -70,7 +71,7 @@ function LinkToolbarItem (linkType) {
     this.getXULElement().setAttribute("href", linkElement.href);
     this.getXULElement().removeAttribute("disabled");
     if (linkElement.title != '')
-      this.getXULElement().setAttribute("tooltiptext", linkElement.title);
+      this.getXULElement().setAttribute("tooltiptext", linkElement.title + ' [' + linkElement.href + ']');
     else
       this.getXULElement().setAttribute("tooltiptext", linkElement.href);
   }
@@ -169,7 +170,7 @@ function LinkToolbarMenu (linkType) {
     var menuitem = document.createElement("menuitem");
 
     if (linkElement.title != '')
-      menuitem.setAttribute("tooltiptext", linkElement.title);
+      menuitem.setAttribute("tooltiptext", linkElement.title + ' [' + linkElement.href + ']');
     else
       menuitem.setAttribute("tooltiptext", linkElement.href);
 
@@ -199,6 +200,7 @@ function LinkToolbarTransientMenu (linkType) {
     var menu = document.createElement("menu");
     menu.setAttribute("id", this.xulElementId);
     menu.setAttribute("label", this.linkType);
+  //  menu.setAttribute("dir", "rtl");
     menu.setAttribute("disabled", "true");
     menu.setAttribute("class", "menu-iconic bookmark-item");
     menu.setAttribute("container", "true");
