@@ -1,7 +1,7 @@
 const APP_DISPLAY_NAME = "GoHome";
 const APP_NAME = "gohome";
 const APP_PACKAGE = "/cdn.mozdev.org/gohome";
-const APP_VERSION = "0.1";
+const APP_VERSION = "0.2";
 
 const APP_JAR_FILE = "gohome.jar";
 const APP_CONTENT_FOLDER = "/"; // ook
