@@ -12,7 +12,7 @@
     <creator>Stephen Clavering</creator>
     <contributor>Chris Neale</contributor>
 
-    <iconURL>chrome://x/content/icon.png</iconURL>
+    <iconURL>chrome://xkiosk/content/icon.png</iconURL>
 
     <!--
     <homepageURL>http://cdn.mozdev.org/x/</homepageURL>
