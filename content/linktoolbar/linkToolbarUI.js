@@ -246,46 +246,4 @@ const linkToolbarUI = {
   }
 }
 
-/**/
 document.addEventListener("load", linkToolbarUI.onload, true);
-
-function usefullinks() {
-
-  var page = document.getElementById("content").contentDocument;
-  var cerb = page.getElementsByTagName("head").item(0);
-
-  var linkN = page.createElement("link");
-  var linkP = page.createElement("link");
-
-  var linkX = page.createElement("link");
-  var linkY = page.createElement("link");
-
-   linkX.setAttribute("href", "/");
-   linkX.setAttribute("id", "digger-top");
-   linkX.setAttribute("rel", "top");
-   linkX.setAttribute("title", "Digger [/]");
-
-   linkY.setAttribute("href", "..");
-   linkY.setAttribute("id", "digger-up");
-   linkY.setAttribute("rel", "up");
-   linkY.setAttribute("title", "Digger [..]");
-
-//    if(document.getElementById("content") != null){
-//  if (cerb.lastChild.previousSibling.getAttribute("id") != "digger-top")
-    cerb.appendChild(linkX);
-//  if (cerb.lastChild.getAttribute("id") != "digger-up")
-    cerb.appendChild(linkY);
-//    }
-
-}
-
-/** /
-window.addEventListener("load", function() {
-
-dump('load listener');
-
-//document.getElementById("appcontent").addEventListener("load", usefullinks, true);
-//document.getElementById("appcontent").addEventListener("focus", usefullinks, true);
-
-}, false);
-/ **/
