@@ -13,6 +13,7 @@ const GoUp = {
     var content = document.getElementById("appcontent");
     content.addEventListener("keypress",function(e) { GoUp.commanded(e); }, true);
   },
+
   commanded: function(e) {
     if(!e.altKey || e.keyCode!=e.DOM_VK_UP) return;
     var t = e.target, url, url2;
