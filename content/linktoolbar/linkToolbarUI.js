@@ -183,6 +183,17 @@ const linkToolbarUI = {
     }
   },
 
+  toggleLinkToolbar: function(checkedItem) {
+    var toolbar = document.getElementById("linktoolbar");
+    if(toolbar) {
+      toolbar.setAttribute("hidden", checkedItem.value);
+      document.persist("linktoolbar", "hidden");
+    }
+    this.initHandlers();
+    if(this.isLinkToolbarEnabled()) this.fullSlowRefresh();
+    else linkToolbarHandler.clearAllItems();
+  },
+
   initLinkbarVisibilityMenu: function() {
     var state = document.getElementById("linktoolbar").getAttribute("hidden");
     if (!state) state = "maybe";
