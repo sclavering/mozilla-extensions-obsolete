@@ -9,19 +9,19 @@
 #navbutton-top[disabled="true"] { -moz-image-region: rect(35px 33px 67px 1px); }
 
 #navbutton-up { -moz-image-region: rect(1px 67px 33px 35px);}
-#navbutton-up[disabled="true"] { -moz-image-region: rect(32px 67px 67px 35px); }
+#navbutton-up[disabled="true"] { -moz-image-region: rect(35px 67px 67px 35px); }
 
 #navbutton-first { -moz-image-region: rect(1px 101px 33px 69px); }
-#navbutton-first[disabled="true"] { -moz-image-region: rect(32px 101px 67px 69px); }
+#navbutton-first[disabled="true"] { -moz-image-region: rect(35px 101px 67px 69px); }
 
 #navbutton-prev { -moz-image-region: rect(1px 135px 33px 103px); }
-#navbutton-prev[disabled="true"] { -moz-image-region: rect(32px 135px 67px 103px); }
+#navbutton-prev[disabled="true"] { -moz-image-region: rect(35px 135px 67px 103px); }
 
 #navbutton-next { -moz-image-region: rect(1px 169px 33px 137px); }
-#navbutton-next[disabled="true"] { -moz-image-region: rect(32px 169px 67px 137px); }
+#navbutton-next[disabled="true"] { -moz-image-region: rect(35px 169px 67px 137px); }
 
 #navbutton-last { -moz-image-region: rect(1px 203px 33px 171px); }
-#navbutton-last[disabled="true"] { -moz-image-region: rect(32px 203px 67px 171px); }
+#navbutton-last[disabled="true"] { -moz-image-region: rect(35px 203px 67px 171px); }
 
 
 /* small icons toolbar */
