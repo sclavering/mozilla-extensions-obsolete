@@ -175,6 +175,20 @@
   color: graytext !important;
 }
 
+/*
+#linktoolbar *[href^="mailto:"],
+#linktoolbar *[statustext^="mailto:"],
+*/
+#linktoolbar menuitem[href^="mailto:"],
+#linktoolbar menuitem[statustext^="mailto:"],
+#linktoolbar .bookmark-item[href^="mailto:"],
+#linktoolbar .bookmark-item[statustext^="mailto:"] {
+  border-bottom: 1px dashed red;
+  list-style-image: url("chrome://linktoolbar/skin/btn1/mail.png") !important;
+/* would be unnecessary but for !importants sprinkled throughout browser.css and related files */
+}
+
+
 /* from chrome://navigator/content/navigator.css */
 /* ::::: Hide the link toolbar if it is set to autohide and has no items. ::::: */
 
