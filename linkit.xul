@@ -52,6 +52,7 @@ function linkit(event) {
     // lose odd whitespace - replace with ' '
     var iText = linkit_getInnerText(instag).replace(/\s+/g," ");
 
+    // ^back[^to\ top] could go back to ^back
     if(/^prev|prev$|previous$|^back[^to\ top]|\bback$|^<<|^<=|^<-|\u00ab/i.test(iText))
       if (/^#/g.test(href)); else
         linkit_addLink(page,hydra,"prev",href,"LinkIt [<] (" +href+ ")")
