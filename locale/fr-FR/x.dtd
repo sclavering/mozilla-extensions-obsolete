@@ -1,7 +1,7 @@
-﻿<!ENTITY label   "Paranoiaque">
+<!ENTITY label   "Paranoiaque">
 <!ENTITY tooltip "Protéger votre vie privée">
 
-<!ENTITY dialogtitle "Effacer les informations personnelles">
+<!ENTITY dialogtitle    "Effacer les informations personnelles">
 <!ENTITY clearHistory   "Effacer l'historique des pages visitées">
 <!ENTITY clearFormInfo  "Effacer les formulaires enregistrés">
 <!ENTITY clearPasswords "Effacer les mots de passe sauvegardés">
