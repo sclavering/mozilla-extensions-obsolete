@@ -45,6 +45,7 @@
 
 #link-top {
   list-style-image: url("chrome://linktoolbar/skin/btn1/top.gif") !important;
+  -moz-image-region: rect(0px 16px 16px 0px);
 }
 
 #link-top[disabled="true"],
@@ -63,6 +64,7 @@
 
 #link-up {
   list-style-image: url("chrome://linktoolbar/skin/btn1/up.gif") !important;
+  -moz-image-region: rect(0px 16px 16px 0px);
 }
 
 #link-up[disabled="true"],
@@ -81,6 +83,7 @@
 
 #link-first {
   list-style-image: url("chrome://linktoolbar/skin/btn1/first.gif") !important;
+  -moz-image-region: rect(0px 16px 16px 0px);
 }
 
 #link-first[disabled="true"],
@@ -99,6 +102,7 @@
 
 #link-prev {
   list-style-image: url("chrome://linktoolbar/skin/btn1/previous.gif") !important;
+  -moz-image-region: rect(0px 16px 16px 0px);
 }
 
 #link-prev[disabled="true"],
@@ -117,6 +121,7 @@
 
 #link-next {
   list-style-image: url("chrome://linktoolbar/skin/btn1/next.gif") !important;
+  -moz-image-region: rect(0px 16px 16px 0px);
 }
 
 #link-next[disabled="true"],
@@ -135,6 +140,7 @@
 
 #link-last {
   list-style-image: url("chrome://linktoolbar/skin/btn1/last.gif") !important;
+  -moz-image-region: rect(0px 16px 16px 0px);
 }
 
 #link-last[disabled="true"],
@@ -162,10 +168,6 @@
   margin: 0;
   padding: 0;
   width: 45px;
-}
-
-html\:a {
-  border: 0;
 }
 
 #document-menu[disabled="true"],
