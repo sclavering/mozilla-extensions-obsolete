@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://goto/locale/goto.dtd">
+
+<overlay id="gotoBrowserOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="chrome://goto/content/goto.js"/>
+
+  <popup id="contentAreaContextMenu">
+    <menu label="&goto:label;" insertbefore="context-sep-properties">
+      <menupopup id="goto-menu" oncommand="GoTo.commanded(event,this);"
+          onclick="GoTo.commanded(event,this);"
+          onpopupshowing="GoTo.buildMenu(this);" onpopuphiding="GoTo.clearMenu(this);">
+        <!-- menuitem id="goto-decode-uri" label="&gotoDecodeURI.label;"/ -->
+      </menupopup>
+    </menu>
+  </popup>
+
+</overlay>
