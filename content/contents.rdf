@@ -7,10 +7,10 @@
   </RDF:Seq>
 
   <RDF:Description about="urn:mozilla:package:toolbarext"
-        chrome:displayName="Toolbar Enhancements v0.6"
+        chrome:displayName="Toolbar Enhancements v0.7"
         chrome:author="Stephen Clavering"
         chrome:name="toolbarext"
-        chrome:description="Adds a variety of toolbar buttons and allows for toolbars on the left, right or bottom of the window."
+        chrome:description="Adds a variety of toolbar buttons and allows for toolbars on the left, right or bottom of the window, and at each end of the tab bar."
         chrome:extension="true"
         />
 
