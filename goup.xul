@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<overlay id="GoUpOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript"><![CDATA[
+
+const GoUp = {
+  init: function() {
+    window.removeEventListener("load",GoUp.init,true);
+    // get dom nodes ourselves incase gURLBar not initialised yet
+    var urlbar = document.getElementById("urlbar");
+    urlbar.addEventListener("keypress",function(e) { GoUp.commanded(e); }, true);
+    var content = document.getElementById("appcontent");
+    content.addEventListener("keypress",function(e) { GoUp.commanded(e); }, true);
+  },
+  commanded: function(e) {
+    if(!e.altKey || e.keyCode!=e.DOM_VK_UP) return;
+    var t = e.target, url, url2;
+    if(t==gURLBar) {
+      var url2 = GoUp.getUp(gURLBar.value);
+      if(url2) gURLBar.value = url2;
+    } else {
+      // go up on the current page
+      // XXX find a better way to retrieve the url
+      var url2 = GoUp.getUp(e.originalTarget.ownerDocument.location.href);
+      if(url2) loadURI(url2);
+    }
+  },
+
+  getUp: function(url) {
+    var matches, origUrl = url;
+    // trim filename (this makes subdriectory digging easier)
+    matches = url.match(/(^.*\/)(.*)/);
+    if(!matches) return null; //only fails if "url" has no /'s
+    url = matches[1];
+    if(url!=origUrl && !/(index|main)\.(php3?|html?)/i.test(url))
+      return url;
+    // dig through subdirs
+    matches = url.match(/^([^\/]*?:\/\/.*\/)[^\/]+?\//);
+    if(matches) return matches[1];
+    // we've reach (ht|f)tp://foo.com/, climb up through subdomains
+    // split into protocol and domain
+    matches = url.match(/([^:]*:\/\/)?(.*)/);
+    var protocol = matches[1], domain = matches[2];
+    matches = domain.match(/^[^\.]*\.(.*)/);
+    if(matches) return (protocol+matches[1]);
+    // nothing found
+    return null;
+  }
+};
+
+window.addEventListener("load",GoUp.init,true);
+
+]]></script>
+
+</overlay>
