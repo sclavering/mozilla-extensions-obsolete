@@ -1,7 +1,14 @@
-<!-- $Id: x.dtd,v 1.2 2003/05/21 09:59:25 cdn Exp $ -->
+<!-- $Id: x.dtd,v 1.3 2003/05/21 14:34:44 clav Exp $ -->
 
 <!ENTITY x.label   "Paranoia">
 
 <!ENTITY x.tooltip "Paranoia - Delete all information.">
 
-<!ENTITY x.dialog.desc "Are you sure you want to : Clear Privacy Info/Data ?">
+<!ENTITY xdialog.title "Clear Privacy Information">
+
+<!ENTITY clearHistory   "Clear the history">
+<!ENTITY clearFormInfo  "Clear saved form information">
+<!ENTITY clearPasswords "Clear stored passwords">
+<!ENTITY clearDownloads "Clear the download history">
+<!ENTITY clearCookies   "Clear all cookies">
+<!ENTITY clearCache     "Clear the cache">

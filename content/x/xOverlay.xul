@@ -1,48 +1,23 @@
 <?xml version="1.0"?>
 
-<!-- $Id: xOverlay.xul,v 1.2 2003/05/20 23:07:25 cdn Exp $ -->
+<!-- $Id: xOverlay.xul,v 1.3 2003/05/21 14:31:40 clav Exp $ -->
 
 <?xml-stylesheet href="chrome://x/skin/x.css" type="text/css"?>
 
-<!DOCTYPE overlay [
-<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
-%browserDTD;
-<!ENTITY % piracyDTD SYSTEM "chrome://browser/locale/pref/pref-privacy.dtd" >
-%piracyDTD;
-<!ENTITY % identityDTD SYSTEM "chrome://x/locale/x.dtd">
-%identityDTD;
-]>
+<!DOCTYPE overlay SYSTEM "chrome://x/locale/x.dtd">
 
 <overlay id="xBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-  <script type="application/x-javascript" src="chrome://browser/content/pref/pref-privacy.js"/>
+  <toolbarpalette id="BrowserToolbarPalette">
+    <toolbarbutton
+      class="toolbarbutton-1"
+      id="x-button"
+      label="&x.label;"
+      oncommand="window.openDialog('chrome://x/content/xDialog.xul','paranoia','');"
+      tooltiptext="&x.tooltip;"
+      />
+  </toolbarpalette>
 
-  <stringbundle id="privacyBundle" src="chrome://browser/locale/pref/prefutilities.properties"/>
-
-  <!-- -->
-    <toolbar id="nav-bar">
-      <toolbarbutton
-        class="toolbarbutton-1"
-        id="x-button"
-        insertbefore="window-controls"
-        label="&x.label;"
-        oncommand="PrivacyPanel.clearAll();"
-        tooltiptext="&x.tooltip;"
-        />
-    </toolbar>
-  <!-- -->
-
-  <!--
-    <toolbarpalette id="BrowserToolbarPalette">
-      <toolbarbutton
-        class="toolbarbutton-1"
-        id="x-button"
-        label="&x.label;"
-        oncommand="PrivacyPanel.clearAll();"
-        tooltiptext="&x.tooltip;"
-        />
-    </toolbarpalette>
-  -->
 
 </overlay>

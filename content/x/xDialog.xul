@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://x/skin/" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://x/locale/x.dtd">
+
+<dialog id="xDialog"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="&xdialog.title;"
+        buttons="accept,cancel"
+        persist="screenX,screenY,width,height"
+        width="260"
+        height="160"
+        ondialogaccept="clearStuff();"
+        >
+
+<script src="xDialog.js" type="application/x-javascript"/>
+
+<checkbox id="history"   checked="true" label="&clearHistory;"/>
+<checkbox id="forminfo"  checked="true" label="&clearFormInfo;"/>
+<checkbox id="passwords" checked="true" label="&clearPasswords;"/>
+<checkbox id="downloads" checked="true" label="&clearDownloads;"/>
+<checkbox id="cookies"   checked="true" label="&clearCookies;"/>
+<checkbox id="cache"     checked="true" label="&clearCache;"/>
+
+</dialog>
