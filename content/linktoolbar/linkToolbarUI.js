@@ -40,6 +40,23 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+function toggleLinkToolbar() {
+
+ var btn = document.getElementById("linktoolbar-toggle");
+ var toolbar = document.getElementById("linktoolbar");
+
+ if (toolbar.getAttribute("hidden") == "true")
+ {
+   toolbar.setAttribute("hidden", "false");
+   btn.setAttribute("left", "false");
+ }
+ else
+ {
+   toolbar.setAttribute("hidden", "true");
+   btn.setAttribute("left", "true");
+ }
+
+}
 
 // formerly linkToolbarOverlay.js, but heavily reformatted
 
