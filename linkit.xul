@@ -9,8 +9,8 @@ const linkitRE_next  = /^next|continue\b|next$|>$|\u00bb/i;
 const linkitRE_prev  = /^prev(ious)?\b|prev$|previous$|^back|\bback$|^<|\u00ab/i;
 const linkitRE_first = /^first|first$|^begin|\|</i; // ? >\u007c| ?
 const linkitRE_last  = /^last|last$|^end\b|>\|/i; // ? >\u007c| ?
-const linkitRE_next2 = /next/i;
-const linkitRE_prev2 = /prev/i;
+const linkitRE_next2 = /next|fwd/i;
+const linkitRE_prev2 = /p?rev/i;
 const linkitREfirst2 = /first/i;
 const linkitRE_last2 = /last/i;
 
