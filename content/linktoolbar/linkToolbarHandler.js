@@ -78,7 +78,7 @@ function(element)
     linkToolbarUI.activate();
   }
 
-  if (linkElement.isStyles()) return;
+ // if (linkElement.isStyles()) return;
 
   for (var i = 0; i < linkElement.relValues.length; i++) {
     var linkType = LinkToolbarHandler.getLinkType(linkElement.relValues[i]);
@@ -208,7 +208,7 @@ function()
 {
   if (!this.rel) return true;
   for (var i = 0; i < this.relValues.length; i++)
-    if (/^icon$|^fontdef$|^p3pv|^schema./i.test(this.relValues[i])) // ^stylesheet$|
+    if (/^stylesheet$|^icon$|^fontdef$|^p3pv|^schema./i.test(this.relValues[i])) // ^stylesheet$|
       return true;
   return false;
 }
