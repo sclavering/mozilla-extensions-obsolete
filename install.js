@@ -5,8 +5,8 @@ const kVersion = "0.4";
 
 const kJarFile = "toolbarext.jar";
 const kContentFolder = "content/";
-const kLocaleFolders  = ["locale/en/"];
-const kSkinFolder = "skin/"; // leave blank if not applicable
+const kLocaleFolders = ["locale/en/"];
+const kSkinFolder = "skin/classic/"; // leave blank if not applicable
 
 
 var kMsg = "Do you wish to install "+kDisplayName+" to your profile?\n\nClick OK to install to your profile.\n\nClick Cancel if you want to install globally.";
