@@ -43,6 +43,8 @@
 
 <!-- <?xml-stylesheet href="chrome://navigator/skin/linkToolbar.css" type="text/css"?> -->
 <?xml-stylesheet href="chrome://linktoolbar/skin/linkToolbar.css" type="text/css"?>
+<?xml-stylesheet href="chrome://linktoolbar/skin/styleselector.css" type="text/css"?>
+
 <?xul-overlay href="chrome://global/content/globalOverlay.xul"?>
 <!DOCTYPE overlay SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
 
@@ -59,7 +61,7 @@
   <!-- functions -->
   <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarOverlay.js" />
 
-  <script type="application/x-javascript" src="chrome://linktoolbar/content/styleswitcher.js" />
+  <script type="application/x-javascript" src="chrome://linktoolbar/content/styleselector.js"/>
 
   <script type="application/x-javascript">
     <![CDATA[
@@ -215,9 +217,15 @@
 
         </menupopup>
       </toolbarbutton>
-
+<!--
       <toolbarseparator />
 
+      <toolbarbutton id="sharc-button" oncommand="openTopWin('http://cdn.mozdev.org/linkToolbar/');"/>
+-->
+    </statusbarpanel>
+    
+    <statusbarpanel id="linktoolbar" class="chromeclass-directories" insertafter="linktoolbar" insertbefore="statusbar-progresspanel"
+        tbautostretch="always" title="Style Twitcher">
       <toolbarbutton id="style-menu" class="bookmark-item"
           type="menu"
           container="true"
@@ -229,11 +237,6 @@
           <menuitem label="&styleswitcherPersistentPageStylesheets;" type="radio"/>
         </menupopup>
       </toolbarbutton>
-<!--
-      <toolbarseparator />
-
-      <toolbarbutton id="sharc-button" oncommand="openTopWin('http://cdn.mozdev.org/linkToolbar/');"/>
--->
     </statusbarpanel>
     <!-- </toolbar> -->
   <!-- </vbox> -->
