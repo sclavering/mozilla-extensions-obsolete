@@ -112,6 +112,10 @@ buttons switch to type=menu. we change the button icon instead  */
 }
 
 
+#linktoolbar > toolbarbutton > .toolbarbutton-text {
+  display: block !important;
+}
+
 /* Hide the link toolbar if it is set to autohide is empty */
 
 #linktoolbar[hidden="maybe"][hasitems="false"] {
