@@ -53,12 +53,11 @@
 
 <overlay id="linkToolbarOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-  <!-- classes -->
+  <script type="application/x-javascript" src="chrome://global/content/strres.js"/>
+  
   <script type="application/x-javascript" src="linkToolbarHandler.js"/>
   <script type="application/x-javascript" src="linkToolbarItem.js"/>
-  <script type="application/x-javascript" src="languageDictionary.js"/>
 
-  <!-- functions -->
   <script type="application/x-javascript" src="linkToolbarUI.js"/>
   <script type="application/x-javascript" src="styleselector.js"/>
   <script type="application/x-javascript" src="digger.js"/>

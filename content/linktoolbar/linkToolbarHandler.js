@@ -173,11 +173,54 @@ const linkToolbarHandler = {
         // XXX: use localized version of ":" separator
         if (this.media && !/\ball\b|\bscreen\b/i.test(this.media))
           prefix += this.media + ": ";
-        //if (this.hreflang)
-        //  prefix += languageDictionary.lookupLanguageName(this.hreflang) + ": ";
+        if (this.hreflang)
+          prefix += ltLanguageDictionary.lookupLanguageName(this.hreflang) + ": ";
         this.longTitle = this.title ? prefix + this.title : prefix;
       }
       return this.longTitle;
     };
   }
 }
+
+
+
+
+
+/*
+ * ltLanguageDictionary is a Singleton for looking up a language name
+ * given its language code.
+ * 
+ * from languageDictionary.js
+ */
+const ltLanguageDictionary = {
+  dictionary: null,
+
+  lookupLanguageName: function(languageCode) {
+    if (this.getDictionary()[languageCode])
+      return this.getDictionary()[languageCode];
+    else
+      // XXX: handle non-standard language code's per
+      //    hixie's spec (see bug 2800)
+      return languageCode;
+  },
+
+  getDictionary: function() {
+    if(!this.dictionary) {
+      this.dictionary = new Array();
+      var e = this.getLanguageNames().getSimpleEnumeration();
+      while(e.hasMoreElements()) {
+        var property = e.getNext();
+        property = property.QueryInterface(Components.interfaces.nsIPropertyElement);
+        this.dictionary[property.key] = property.value;
+      }
+    }
+    return this.dictionary;
+  },
+
+  getLanguageNames: function() {
+    // srGetStrBundle defined in /xpfe/global/resources/content/strres.js
+    return srGetStrBundle("chrome://global/locale/languageNames.properties");
+  }
+}
+
+alert("linkbar language dictionary loaded");
