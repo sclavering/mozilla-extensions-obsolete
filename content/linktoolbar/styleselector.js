@@ -62,34 +62,35 @@ var StyleSelector = {
     doc = doc.document.documentElement;
     if(!(doc instanceof Components.interfaces.nsIDOMHTMLHtmlElement)) return;
     var btn = document.getElementById("styleselector");
-    if(StyleSelector.hasMultipleStyles(window._content)) btn.setAttribute("hasstyles","true");
+    if(StyleSelector.hasAltStyles(window._content)) btn.setAttribute("hasstyles","true");
     else btn.removeAttribute("hasstyles");
   },
 
-  hasMultipleStyles: function(frameset) {
-    if(this.frameDocHasMultipleStyles(frameset)) return true;
+  hasAltStyles: function(frameset) {
+    if(this.frameDocHasAltStyles(frameset)) return true;
     for(var i = 0; i < frameset.frames.length; i++)
-      if(this.hasMultipleStyles(frameset.frames[i])) return true;
+      if(this.hasAltStyles(frameset.frames[i])) return true;
     return false;
   },
-  frameDocHasMultipleStyles: function(frame) {
+  frameDocHasAltStyles: function(frame) {
     var numsheets = 0;
     var sheets = frame.document.styleSheets;
-    var sheetTitles = new Array();
+    var titles = new Array();
     for(var i = 0; i < sheets.length; i++) {
       // make sure we don't count different sheets with the same title
-      if(sheets[i].title=="" || sheets[i].title in sheetTitles) continue;
-      sheetTitles.push(sheets[i].title);
+      if(sheets[i].title=="" || sheets[i].title in titles) continue;
       var media = sheets[i].media;
-      // by the DOM-CSS spec i think media should default to
+      // by the DOM2-Style spec i think media should default to
       // something but Moz just seems to leave it blank.
       if(media.length==0) {
         numsheets++;
+        titles.push(sheets[i].title);
         continue;
       }
       for(var j = 0; j < media.length; j++) {
-        if(media[j]=="screen" || media[j]=="all") {
+        if(media.item(j)=="screen" || media.item(j)=="all") {
           numsheets++;
+          titles.push(sheets[i].title);
           continue;
         }
       }
@@ -98,8 +99,8 @@ var StyleSelector = {
   },
 
   commanded: function(evt, menu, page) {
-    if(evt.target == menu.firstChild) disableStyles(page);
-    else useStylesheet(page, evt.target.getAttribute("data"));
+    if(evt.target == menu.firstChild) StyleSelector.disableStyles(page);
+    else StyleSelector.useStylesheet(page, evt.target.getAttribute("data"));
   },
 
   emptyMenu: function(menuPopup) {
@@ -154,67 +155,61 @@ var StyleSelector = {
     itemPersistentStyles.setAttribute("checked", (anyStyleEnabled && !optionalStyleEnabled) ? "true" : "false");
     if(hasPersistentStylesheet) itemPersistentStyles.removeAttribute("style");
     else itemPersistentStyles.setAttribute("style","display:none");
-  }
-}
+  },
 
+  // building the main styleselector popup
+  getFrameStyleSheets: function(frame) {
+    var styleSheets = frame.document.styleSheets;
+    var styleSheetsArray = new Array(styleSheets.length);
+    for (var i = 0; i < styleSheets.length; i++) {
+      styleSheetsArray[i] = styleSheets[i];
+    }
+    return styleSheetsArray;
+  },
+  getAllStyleSheets: function(frameset) {
+    var styleSheetsArray = this.getFrameStyleSheets(frameset);
+    for (var i = 0; i < frameset.frames.length; i++) {
+      var frameSheets = this.getAllStyleSheets(frameset.frames[i]);
+      styleSheetsArray = styleSheetsArray.concat(frameSheets);
+    }
+    return styleSheetsArray;
+  },
 
-// building the main styleselector popup
-function getFrameStyleSheets(frame) {
-  var styleSheets = frame.document.styleSheets;
-  var styleSheetsArray = new Array(styleSheets.length);
-  for (var i = 0; i < styleSheets.length; i++) {
-    styleSheetsArray[i] = styleSheets[i];
-  }
-  return styleSheetsArray;
-}
-function getAllStyleSheets(frameset) {
-  var styleSheetsArray = getFrameStyleSheets(frameset);
-  for (var i = 0; i < frameset.frames.length; i++) {
-    var frameSheets = getAllStyleSheets(frameset.frames[i]);
-    styleSheetsArray = styleSheetsArray.concat(frameSheets);
-  }
-  return styleSheetsArray;
-}
+  // test if a stylesheet is in a page
+  isStylesheetInFrame: function(frame, title) {
+    var sheets = frame.document.styleSheets;
+    for(var i = 0; i < sheets.length; i++)
+      if(sheets[i].title == title)
+        return true;
+    return false;
+  },
 
-
-// test if a stylesheet is in a page
-function isStylesheetInFrame(frame, title) {
-  var sheets = frame.document.styleSheets;
-  for(var i = 0; i < sheets.length; i++)
-    if(sheets[i].title == title)
-      return true;
-  return false;
-}
-
-
-// disable all page stylesheets.  written by Stephen Clavering
-function disableStyles(frameset) {
-  disableStylesInFrame(frameset);
-  for(var i = 0; i < frameset.frames.length; i++)
-    disableStyles(frameset.frames[i]);
-}
-function disableStylesInFrame(frame) {
-  var sheets = frame.document.styleSheets;
-  for(var i = 0; i < sheets.length; i++)
-    if(!sheets[i].isUserStylesheet)
+  // disable all page stylesheets.  written by Stephen Clavering
+  disableStyles: function(frameset) {
+    this.disableStylesInFrame(frameset);
+    for(var i = 0; i < frameset.frames.length; i++)
+      this.disableStyles(frameset.frames[i]);
+  },
+  disableStylesInFrame: function(frame) {
+    var sheets = frame.document.styleSheets;
+    for(var i = 0; i < sheets.length; i++)
       sheets[i].disabled = true;
-}
+  },
 
-
-// enable one of the stylesheets for the page
-function useStylesheet(frameset, title) {
-  if(!title || isStylesheetInFrame(frameset, title))
-    useStylesheetInFrame(frameset, title);
-  for(var i = 0; i < frameset.frames.length; i++)
-    useStylesheet(frameset.frames[i], title);
-}
-function useStylesheetInFrame(frame, title) {
-  var sheets = frame.document.styleSheets;
-  for(var i = 0; i < sheets.length; i++) {
-    var sheet = sheets[i];
-    sheet.disabled = (sheet.title) ? (sheet.title != title) : false;
+  // enable one of the stylesheets for the page
+  useStylesheet: function(frameset, title) {
+    if(!title || isStylesheetInFrame(frameset, title))
+      this.useStylesheetInFrame(frameset, title);
+    for(var i = 0; i < frameset.frames.length; i++)
+      this.useStylesheet(frameset.frames[i], title);
+  },
+  useStylesheetInFrame: function (frame, title) {
+    var sheets = frame.document.styleSheets;
+    for(var i = 0; i < sheets.length; i++) {
+      var sheet = sheets[i];
+      sheet.disabled = (sheet.title) ? (sheet.title != title) : false;
+    }
   }
 }
-
 
 window.addEventListener("load",StyleSelector.init(),true);
