@@ -1,28 +1,22 @@
 <?xml version="1.0"?>
-<RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-         xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
 
-  <RDF:Seq about="urn:mozilla:package:root">
-    <RDF:li resource="urn:mozilla:package:toolbarext"/>
-  </RDF:Seq>
+  <Seq about="urn:mozilla:package:root">
+    <li resource="urn:mozilla:package:toolbarext"/>
+  </Seq>
 
-  <RDF:Description about="urn:mozilla:package:toolbarext"
-        chrome:displayName="Toolbar Enhancements v0.13"
-        chrome:author="Stephen Clavering, Chris Neale"
-        chrome:name="toolbarext"
-        chrome:description="Adds a variety of toolbar buttons and allows for toolbars on the left, right or bottom of the window.  Also allows toolbar items to be added to each end of the tab bar and status bar."
-        chrome:extension="true"
-        />
+  <Description about="urn:mozilla:package:toolbarext" chrome:name="toolbarext"/>
 
-  <RDF:Seq about="urn:mozilla:overlays">
-    <RDF:li resource="chrome://browser/content/browser.xul"/>
-    <RDF:li resource="chrome://global/content/customizeToolbar.xul"/>
-  </RDF:Seq>
-  <RDF:Seq about="chrome://browser/content/browser.xul">
-    <RDF:li>chrome://toolbarext/content/</RDF:li>
-  </RDF:Seq>
-  <RDF:Seq about="chrome://global/content/customizeToolbar.xul">
-    <RDF:li>chrome://toolbarext/content/customiseOverlay.xul</RDF:li>
-  </RDF:Seq>
+  <Seq about="urn:mozilla:overlays">
+    <li resource="chrome://browser/content/browser.xul"/>
+    <li resource="chrome://global/content/customizeToolbar.xul"/>
+  </Seq>
+  <Seq about="chrome://browser/content/browser.xul">
+    <li>chrome://toolbarext/content/</li>
+  </Seq>
+  <Seq about="chrome://global/content/customizeToolbar.xul">
+    <li>chrome://toolbarext/content/customiseOverlay.xul</li>
+  </Seq>
 
-</RDF:RDF>
+</RDF>
