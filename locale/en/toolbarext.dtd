@@ -46,6 +46,9 @@
 <!ENTITY tbx-images-tabpref.label "Images">
 <!ENTITY tbx-images-tabpref.tooltip "Enable/Disable Images in the current tab">
 
+<!ENTITY tbx-metaredirects-tabpref.label "Redirections">
+<!ENTITY tbx-metaredirects-tabpref.tooltip "Enable/Disable Meta Redirections in the current tab">
+
 <!ENTITY tbx-plugins-tabpref.label "Plug-ins">
 <!ENTITY tbx-plugins-tabpref.tooltip "Enable/Disable Plug-ins in the current tab">
 

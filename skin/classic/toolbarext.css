@@ -65,6 +65,11 @@ toolbar[iconsize="small"] #tbx-images-tabpref[checked="true"] { -moz-image-regio
 #tbx-images-tabpref { -moz-image-region: rect(0 608px 32px 576px); }
 toolbar[iconsize="small"] #tbx-images-tabpref { -moz-image-region: rect(0 380px 20px 360px); }
 
+#tbx-metaredirects-tabpref[checked="true"] { -moz-image-region: rect(0 640px 32px 608px); }
+toolbar[iconsize="small"] #tbx-metaredirects-tabpref[checked="true"] { -moz-image-region: rect(0 400px 20px 380px); }
+
+#tbx-metaredirects-tabpref { -moz-image-region: rect(0 672px 32px 640px); }
+toolbar[iconsize="small"] #tbx-metaredirects-tabpref { -moz-image-region: rect(0 420px 20px 400px); }
 
 
 

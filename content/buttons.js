@@ -56,8 +56,7 @@ var tbxCommands = {
 
   /** These functions control whether images, javascript, and plugins are allowed, and
     * apply to *the current tab only*. They take effect only after the page is refreshed.
-    *
-    * could also use the allowAuth, allowMetaRedirects and allowSubframes flags of docShell.
+    * (could also use the allowAuth, and allowSubframes flags of docShell.)
     */
   toggleJavascriptInTab: function() {
     var docShell = getBrowser().docShell;
@@ -65,9 +64,14 @@ var tbxCommands = {
     docShell.allowJavascript = !docShell.allowJavascript;
   },
   toggleImagesInTab: function() {
-    var docShell = getBrowser().docShell; // getBrowser() always gets the <browser> for the current tab
-    docShell.QueryInterface(Components.interfaces.nsIDocShell); // just to be sure
+    var docShell = getBrowser().docShell;
+    docShell.QueryInterface(Components.interfaces.nsIDocShell);
     docShell.allowImages = !docShell.allowImages;
+  },
+  toggleMetaRedirectsInTab: function() {
+    var docShell = getBrowser().docShell;
+    docShell.QueryInterface(Components.interfaces.nsIDocShell);
+    docShell.allowMetaRedirects = !docShell.allowMetaRedirects;
   },
   togglePluginsInTab: function() {
     var docShell = getBrowser().docShell;
@@ -142,12 +146,14 @@ var tbxTabPrefToggles = {
   ids: [
     "tbx-javascript-tabpref",
     "tbx-images-tabpref",
+    "tbx-metaredirects-tabpref",
     "tbx-plugins-tabpref"
   ],
 
   updaters: [
     function() { this.setAttribute("checked", getBrowser().docShell.allowJavascript); },
     function() { this.setAttribute("checked", getBrowser().docShell.allowImages);  },
+    function() { this.setAttribute("checked", getBrowser().docShell.allowMetaRedirects); },
     function() { this.setAttribute("checked", getBrowser().docShell.allowPlugins); }
   ],
 

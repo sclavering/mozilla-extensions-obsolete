@@ -70,7 +70,7 @@ function tbxInit() {
 
   // if our fullscreen toggle is present, and on a fullscreen toolbar, then remove the built-in
   // window controls. (using a custom attr, to avoid breaking the normal hiding-when-not-fullscreen)
-  var fullscreen = document.getElementById('tbx-fullscreen');
+  var fullscreen = document.getElementById('tbx-fullscreen-button');
   var controls = document.getElementById('window-controls');
   var hideControls = fullscreen && fullscreen.parentNode.getAttribute('fullscreentoolbar')=='true';
   if(hideControls) controls.setAttribute('hidecontrols','true');
