@@ -16,7 +16,7 @@
 }
 #link-top[disabled="true"], #link-up[disabled="true"], #link-first[disabled="true"],
 #link-prev[disabled="true"], #link-next[disabled="true"], #link-last[disabled="true"],
-#document-menu[disabled="true"], #more-menu[disabled="true"] {
+#more-menu[disabled="true"] {
   color: graytext !important;
   text-decoration: none;
 }
@@ -70,23 +70,10 @@ buttons switch to type=menu. we change the button icon instead  */
 #linktoolbar menuitem[statustext^="mailto:"],
 #linktoolbar .bookmark-item[href^="mailto:"],
 #linktoolbar .bookmark-item[statustext^="mailto:"] {
-  border-bottom: 1px dashed red;
   list-style-image: url(chrome://linktoolbar/skin/mail.png) !important;
 /* would be unnecessary but for !importants sprinkled throughout browser.css and related files */
 }
 
-#linktoolbar-toggle {
-  list-style-image: url(chrome://linktoolbar/skin/chevron.gif);
-  padding: 2px 0;
-}
-
-#linktoolbar-toggle[left="true"] {
-  list-style-image: url(chrome://linktoolbar/skin/norvehc.gif);
-}
-
-#linktoolbar-toggle[up="true"] {
-  list-style-image: url(chrome://linktoolbar/skin/maybe.gif);
-}
 
 
 #linktoolbar > toolbarbutton > .toolbarbutton-text {
