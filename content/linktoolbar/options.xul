@@ -41,6 +41,9 @@ function savePrefs() {
     var elt = document.getElementById(ids[i]);
     gPrefs.setBoolPref(ids[i], elt.checked);
   }
+
+  var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
+  os.notifyObservers(null, "linktoolbar:prefs-updated", null);
 }
 ]]>
 </script>

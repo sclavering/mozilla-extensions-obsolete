@@ -70,7 +70,21 @@ var linkToolbarPrefs = {
 
   init: function() {
     this.load();
-    // xxx register this obj. as a pref observer so changes in our Options panel can apply to open windows
+
+    window.addEventListener("unload", this.unload, false);
+
+    var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
+    os.addObserver(this, "linktoolbar:prefs-updated", false);
+  },
+
+  unload: function(e) {
+    // I hear it causes memory leaks if you don't do this kind of thing
+    var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
+    os.removeObserver(linkToolbarPrefs, "linktoolbar:prefs-updated", false);
+  },
+
+  observe: function(subject, topic, data) {
+    this.load();
   }
 };
 
