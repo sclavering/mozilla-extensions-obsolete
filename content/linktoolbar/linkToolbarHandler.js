@@ -83,7 +83,7 @@ var linkToolbarUtils = {
     var relValues = [], rel, i;
     // get relValues from rel
     if(relStr) {
-      var rawRelValues = relStr.split(/[ \t\f\u200B]+/);
+      var rawRelValues = relStr.split(/[ \t\f\r\n\u200B]+/);
       for(i = 0; i < rawRelValues.length; i++) {
         rel = this.standardiseRelType(rawRelValues[i]);
         // avoid duplicate rel values
@@ -92,7 +92,7 @@ var linkToolbarUtils = {
     }
     // get relValues from rev
     if(revStr) {
-      var revValues = revStr.split(/[ \t\f\u200B]+/);
+      var revValues = revStr.split(/[ \t\f\r\n\u200B]+/);
       for(i = 0; i < revValues.length; i++) {
         rel = this.convertRevToRel(revValues[i]);
         if(rel) relValues[rel] = true;

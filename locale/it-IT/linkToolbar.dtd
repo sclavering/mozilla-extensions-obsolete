@@ -1,0 +1,41 @@
+<!--
+Licence: MPL 1.1/GPL 2.0/LGPL 2.1
+
+Original Author:
+  Giancarlo Dessi' <gian@cettolini.it>
+
+Translated from en-US version, which was by:
+  Christopher Hoess <choess@stwing.upenn.edu>
+  Eric Hodel <drbrain@segment7.net>
+  Stuart Ballard <sballard@netreach.net>
+-->
+
+<!ENTITY topButton.label "Inizio">
+<!ENTITY upButton.label "Sali">
+<!ENTITY firstButton.label "Primo">
+<!ENTITY prevButton.label "Precedente">
+<!ENTITY nextButton.label "Successivo">
+<!ENTITY lastButton.label "Ultimo">
+<!ENTITY moreButton.label "Altro">
+
+<!ENTITY tocButton.label "Indice degli Argomenti">
+<!ENTITY chapterButton.label "Capitoli">
+<!ENTITY sectionButton.label "Sezioni">
+<!ENTITY appendixButton.label "Appendici">
+<!ENTITY glossaryButton.label "Glossario">
+<!ENTITY indexButton.label "Indice">
+
+<!ENTITY helpButton.label "Guida">
+<!ENTITY searchButton.label "Ricerca">
+<!ENTITY authorButton.label "Autori">
+<!ENTITY copyrightButton.label "Copyright">
+<!ENTITY bookmarkButton.label "Segnalibri">
+<!ENTITY alternateButton.label "Altre Versioni">
+
+<!ENTITY topButton.tooltip "Pagina iniziale del sito Web">
+<!ENTITY upButton.tooltip "Sali di un livello nel sito Web">
+<!ENTITY firstButton.tooltip "Prima pagina in sequenza">
+<!ENTITY prevButton.tooltip "Pagina prederente">
+<!ENTITY nextButton.tooltip "Pagina successiva">
+<!ENTITY lastButton.tooltip "Ultima pagina in sequenza">
+<!ENTITY moreButton.tooltip "Altre pagine correlate">
