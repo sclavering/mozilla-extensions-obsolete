@@ -53,12 +53,12 @@ function linkit(event) {
     var iText = linkit_getInnerText(instag).replace(/\s+/g," ");
 
     // ^back[^to\ top] could go back to ^back
-    if(/^prev|prev$|previous$|^back[^to\ top]|\bback$|^<<|^<=|^<-|\u00ab/i.test(iText))
-      if (/^#/g.test(href)); else
+    if(/^prev|prev$|previous$|^back|\bback$|^<<|^<=|^<-|\u00ab/i.test(iText))
+      if (/^#/i.test(href)); else
         linkit_addLink(page,hydra,"prev",href,"LinkIt [<] (" +href+ ")")
 
     else if(/^next|continu|next$|>$|\u00bb/i.test(iText))
-      if (/^#/g.test(href)); else
+      if (/^#/i.test(href)); else
         linkit_addLink(page,hydra,"next",href,"LinkIt [>] (" +href+ ")");
   }
 }
