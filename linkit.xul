@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<overlay id="linkitBrowserOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript"><![CDATA[
+
+function linkit() {
+  var page = document.getElementById("content").contentDocument;
+  var hydra = page.getElementsByTagName("head").item(0);
+  var linkX = page.createElement("LINK");
+   linkX.setAttribute("href", "/");
+   linkX.setAttribute("rel", "top");
+   linkX.setAttribute("title", "LinkIt [/]");
+
+  hydra.appendChild(linkX);
+
+}
+
+window.addEventListener("load", function() {
+
+dump('load listener');
+
+document.getElementById("appcontent").addEventListener("load", linkit, true);
+
+}, false);
+
+]]></script>
+
+</overlay>
