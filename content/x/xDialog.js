@@ -68,17 +68,19 @@ function clearStuff() {
 }
 
 function clearHistory() {
-  var globalHistory = Components.classes["@mozilla.org/browser/global-history;1"]
-                                .getService(Components.interfaces.nsIBrowserHistory);
-  globalHistory.removeAllPages();
-  return true;
+  // builds from 20040210ish onward use the second class.  the relevant parts
+  // of the nsIBrowserHistory are not altered though.
+  var class1 = "@mozilla.org/browser/global-history;1";
+  var class2 = "@mozilla.org/browser/global-history;2";
+  var history = (class2 in Components.classes) ? class2 : class1;
+  history = Components.classes[history].getService(Components.interfaces.nsIBrowserHistory);
+  history.removeAllPages();
 }
 
 function clearFormInfo() {
   var formHistory = Components.classes["@mozilla.org/satchel/form-history;1"]
                               .getService(Components.interfaces.nsIFormHistory);
   formHistory.removeAllEntries();
-  return true;
 }
 
 function clearPasswords() {
@@ -94,8 +96,6 @@ function clearPasswords() {
 
   for (var i = 0; i < passwds.length; ++i)
     passwdMgr.removeUser(passwds[i].host, passwds[i].user);
-
-  return true;
 }
 
 function clearDownloads() {
@@ -103,7 +103,7 @@ function clearDownloads() {
   try {
     var downloads = getDownloads();
   } catch (e) {
-    return true;
+    return;
   }
 
   var rdfs = Components.classes["@mozilla.org/rdf/rdf-service;1"].getService(Components.interfaces.nsIRDFService);
@@ -126,11 +126,7 @@ function clearDownloads() {
   var rds = ds.QueryInterface(Components.interfaces.nsIRDFRemoteDataSource);
   if (rds)
     rds.Flush();
-
-  return true;
 }
-
-
 
 
 function getDownloads() {
@@ -160,8 +156,6 @@ function clearCookies() {
 
   for (var i = 0; i < cookies.length; ++i)
     cookieMgr.remove(cookies[i].host, cookies[i].name, cookies[i].path, false);
-
-  return true;
 }
 
 function clearCache() {
@@ -173,6 +167,4 @@ function clearCache() {
 
   clearCacheOfType(Components.interfaces.nsICache.STORE_ON_DISK);
   clearCacheOfType(Components.interfaces.nsICache.STORE_IN_MEMORY);
-
-  return true;
 }
