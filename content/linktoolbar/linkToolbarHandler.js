@@ -106,11 +106,11 @@ var linkToolbarUtils = {
     switch (relValue.toLowerCase()) {
       case "top":
       case "origin":
+      case "start":
         return "top";
       case "up":
       case "parent":
         return "up";
-      case "start":
       case "begin":
       case "first":
         return "first";
