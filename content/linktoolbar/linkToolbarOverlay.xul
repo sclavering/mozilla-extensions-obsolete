@@ -60,11 +60,10 @@
   </popupset>
 
   <statusbar id="status-bar">
-    <!-- must use onclick not oncommand to get middleclick-opens-in-new-tab -->
     <statusbarpanel id="linktoolbar" insertafter="statusbar-progresspanel"
         class="chromeclass-directories" hasitems="false"
-        oncommand="return linkToolbarUI.commanded(event);"
-        onclick="return event.button==1 ? linkToolbarUI.commanded(event) : false;"
+        oncommand="return linkToolbarLoadPage(event, false);"
+        onclick="return event.button==1 &amp;&amp; linkToolbarLoadPage(event, true);"
         tooltip="linktoolbar-tooltip"
         >
 

@@ -1,4 +1,4 @@
-var linkFinder = {
+var linkToolbarLinkFinder = {
   // regular expressions for identifying link types
   // XXX some pages use << for first and < for prev, so we should handle things like that differently
   re_first: /^first\b|\bfirst$|^begin|\|<|\u00ab/i, // ? >\u007c| ?
@@ -8,7 +8,7 @@ var linkFinder = {
 
   // regular expressions used for identifying links based on the src url of contained images
   img_re_first: /first/i,
-  img_re_prev:  /rev/i, // was /p?rev/
+  img_re_prev:  /rev(?!iew)/i, // match [p]revious, but not [p]review
   img_re_next:  /ne?xt|more|fwd/i,
   img_re_last:  /last/i,
 
@@ -55,8 +55,8 @@ var linkFinder = {
 
 
   scanPageLinks: function(doc, links) {
-    // The user has to wait for linkFinder to finish before they can interact with the page
-    // that has just loaded.  On pages with lots of links linkFinder could make Firefox
+    // The user has to wait for linkToolbarLinkFinder to finish before they can interact with the page
+    // that has just loaded.  On pages with lots of links linkToolbarLinkFinder could make Firefox
     // unresponsive for several seconds if we didn't cap the number of links we inspect.
     // xxx think more about what cap to use (500 is probably excessively high)
     var max = Math.min(doc.links.length, 500);

@@ -109,7 +109,7 @@ var linkToolbarUI = {
     if(doclinks.empty) doclinks.empty = false; // |length| is 0 for hashtables
     for(var r in rels) {
       if(!(r in doclinks)) doclinks[r] = [];
-      // we leave any existing link with the same URL alone so that linkFinder-generated
+      // we leave any existing link with the same URL alone so that linkToolbarLinkFinder-generated
       // links don't replace page-provided ones (which are likely to have better descriptions)
       var url = linkInfo.href;
       if(url in doclinks[r]) delete rels[r];
@@ -167,12 +167,12 @@ var linkToolbarUI = {
 
     if(linkToolbarPrefs.useLinkGuessing && (doc instanceof HTMLDocument)) {
       if(linkToolbarPrefs.scanHyperlinks)
-        linkFinder.scanPageLinks(doc, doc.__lt__links);
+        linkToolbarLinkFinder.scanPageLinks(doc, doc.__lt__links);
       // is doc.location.href always defined? and are there any security issues with it?
       if(linkToolbarPrefs.guessUpAndTopFromURL)
-        linkFinder.guessUpAndTopFromURL(doc, doc.__lt__links, doc.location.href);
+        linkToolbarLinkFinder.guessUpAndTopFromURL(doc, doc.__lt__links, doc.location.href);
       if(linkToolbarPrefs.guessPrevAndNextFromURL)
-        linkFinder.guessPrevAndNextFromURL(doc, doc.__lt__links, doc.location.href);
+        linkToolbarLinkFinder.guessPrevAndNextFromURL(doc, doc.__lt__links, doc.location.href);
     }
 
     if(doc != gBrowser.contentDocument) return;
@@ -192,64 +192,6 @@ var linkToolbarUI = {
     return this._hasItems;
   },
 
-  // called whenever something on the toolbar gets an onclick event
-  // (onclick used to get middle-clicks.  otherwise we would use oncommand)
-  // xxx yuck. the functions added for bug 246719 will allow this to be greatly simplified
-  commanded: function(event) {
-    // ignore right clicks
-    if(event.button==2) return;
-
-    // Return if this is one of the menubuttons.
-    if(event.target.getAttribute("type") == "menu") return;
-    if(!event.target.getAttribute("href")) return;
-
-    // hide the menupopups (middle clicks don't do this by themselves)
-    if(event.button==1) {
-      var p = event.target.parentNode;
-      var linkbar = document.getElementById("linktoolbar");
-      while(p!=linkbar) {
-        if(p.localName=="menupopup") p.hidePopup();
-        p = p.parentNode;
-      }
-    }
-
-    var destURL = event.target.getAttribute("href");
-    try {
-      // we need to do a security check because we're loading this url from chrome
-      var ssm = Components.classes["@mozilla.org/scriptsecuritymanager;1"].getService()
-                          .QueryInterface(Components.interfaces.nsIScriptSecurityManager);
-      ssm.checkLoadURIStr(window.content.location.href, destURL, 0);
-    } catch(e) {
-      dump("LinkToolbar Error: it is not permitted to load this URI from a <link> element: " + e);
-      return;
-    }
-
-    // XXX use pref listeners rather than checking every time
-    var openTabs = true, openTabsInBackground = true;
-    try {
-      openTabs = gPrefService.getBoolPref("browser.tabs.opentabfor.middleclick")
-      openTabsInBackground = gPrefService.getBoolPref("browser.tabs.loadInBackground");
-    } catch(e) {}
-
-    // handle middleclick/ctrl+click/shift+click (nearly) as for links in page
-    if(event.button==1 && openTabs || event.ctrlKey) {
-      // This is a hack to invert the open-in-background behaviour for new tabs
-      // It ensures that a click opens in foreground, shift+click in background
-      var e = openTabsInBackground ? {shiftKey: !event.shiftKey} : event;
-      openNewTabWith(destURL, null, e, false);
-      return;
-    }
-    if(event.button==1 || event.shiftKey) {
-      openNewWindowWith(destURL, null, false);
-      return;
-    }
-
-    var referrer = Components.classes["@mozilla.org/network/standard-url;1"]
-                             .createInstance(Components.interfaces.nsIURI);
-    referrer.spec = window.content.location.href;
-    loadURI(destURL, referrer);
-  },
-
   // multiline tooltips.  text is loaded from tooltiptext[012] attributes
   fillTooltip: function(tooltipElement) {
     var text1 = tooltipElement.getAttribute("tooltiptext1")
@@ -259,7 +201,7 @@ var linkToolbarUI = {
     var text2 = tooltipElement.getAttribute("tooltiptext2");
     var line2 = document.getElementById("linktoolbar-tooltip-2");
     line2.hidden = !(line2.value = text2);
-    // return value indicates if the tooltip should be allowed to show
+    // return value indicates if the tooltip should be shown
     return !!(text1 || text2);
   },
 
@@ -274,3 +216,22 @@ var linkToolbarUI = {
 };
 
 window.addEventListener("load", linkToolbarUI.onload, false);
+
+
+
+function linkToolbarLoadPage(e, isMiddleClick) {
+  var url = e.target.getAttribute("href");
+
+  urlSecurityCheck(url, document); // in contentAreaUtils.js, throws an exception if check fails.
+  openUILink(url, e, false, true); // in utilityOverlay.js
+
+  // close any menus if it was a middle-click
+  // closeMenus() in utilityOverlay.js is poorly written (uses tagName, amongst other things), and appears incapable of handling nested menus
+  if(!isMiddleClick) return;
+  var p = event.target.parentNode;
+  var linkbar = document.getElementById("linktoolbar");
+  while(p!=linkbar) {
+    if(p.localName=="menupopup") p.hidePopup();
+    p = p.parentNode;
+  }
+}
