@@ -1,7 +1,3 @@
-/*
-#stopreload-button {
-  list-style-image: url(chrome://browser/skin/Toolbar.png);
-}*/
 .stopreload-reload {
   -moz-image-region: rect(0px 96px 24px 72px);
 }
@@ -15,9 +11,6 @@
   -moz-image-region: rect(24px 72px 48px 48px);
 }
 
-/*
-toolbar[iconsize=small]
-  list-style-image: url(chrome://browser/skin/Toolbar-small.png); */
 toolbar[iconsize=small] .stopreload-reload {
   -moz-image-region: rect(0px 64px 16px 48px);
 }
