@@ -78,7 +78,7 @@
 
 <!ENTITY alternateButton.label "Other Versions">
 
-<!-- Tooltips for the buttons -->
+<!-- Tooltips for the buttons choess 102972 -->
 
 <!ENTITY topButton.tooltip "Top of website">
 <!ENTITY upButton.tooltip "Up a level in website">
@@ -88,3 +88,10 @@
 <!ENTITY lastButton.tooltip "Last page in sequence">
 <!ENTITY documentButton.tooltip "Navigational aids">
 <!ENTITY moreButton.tooltip "Other related pages">
+
+<!-- clav's styleswitcher (tweaked) -->
+
+<!ENTITY styleButton.label          "Stylesheets">
+<!ENTITY styleButton.tooltip        "Choose a stylesheet for the current web page">
+<!ENTITY styleswitcherNoPageStylesheets         "No Page Stylesheet">
+<!ENTITY styleswitcherPersistentPageStylesheets "Basic Page Style">
