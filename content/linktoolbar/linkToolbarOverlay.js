@@ -172,7 +172,7 @@ function(event)
   if (!event.target.getAttribute("href")) return;
 
   // hide the menupopups (middle clicks don't do this by themselves)
-  if(event.button==1 || event.ctrlKey) {
+  if(event.button==1) {
     var p = event.target.parentNode;
     var linkbar = document.getElementById("linktoolbar");
     while(p!=linkbar) {
@@ -192,7 +192,7 @@ function(event)
   	ssm.checkLoadURIStr(window.content.location.href, destURL, 0);
 
   	// middle clicking should open the link in a new tab
-  	if(event.button==1) {
+  	if(event.button==1 || event.ctrlKey) {
   	  BrowserOpenTab();
       gURLBar.value = destURL;
       BrowserLoadURL(event);
