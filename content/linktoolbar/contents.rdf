@@ -6,13 +6,13 @@
     <RDF:li resource="urn:mozilla:package:linktoolbar"/>
   </RDF:Seq>
 
-  <!-- package information $Id: contents.rdf,v 1.12 2003/09/06 01:40:48 clav Exp $ -->
+  <!-- package information $Id: contents.rdf,v 1.13 2003/09/08 22:56:55 cdn Exp $ -->
   <RDF:Description about="urn:mozilla:package:linktoolbar"
     chrome:author="Stephen Clavering, Chris Neale"
     chrome:authorURL="http://cdn.mozdev.org/linkToolbar/"
     chrome:description="Adds a derivative of Mozilla's link toolbar to Firebird.
 Adjust View > Link Toolbar to suit your browsing needs."
-    chrome:displayName="Link Toolbar 0.6rc3 (2003-09-06)"
+    chrome:displayName="Link Toolbar 0.6 (2003-09-09)"
     chrome:extension="true"
     chrome:name="linktoolbar"
     />
