@@ -153,7 +153,7 @@ const linkToolbarHandler = {
       var relValues = this.getRelValues()
       if(!relValues) return true;
       for(var i = 0; i < relValues.length; i++)
-        if(/^stylesheet$|^icon$|^fontdef$|^p3pv|^schema./i.test(relValues[i]))
+        if(/^stylesheet$|^icon$|^pingback$|^fontdef$|^p3pv|^schema./i.test(relValues[i]))
           return true;
       return false;
     };
