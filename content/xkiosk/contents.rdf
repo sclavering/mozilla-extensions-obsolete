@@ -13,8 +13,8 @@
         chrome:author="Chris Neale, Stephen Clavering"
         chrome:name="xkiosk"
         chrome:description="Adds a paranoia button to the toolbars."
-        chrome:extension="true">
-  </RDF:Description>
+        chrome:extension="true"
+        />
 
   <!-- overlay information -->
   <RDF:Seq about="urn:mozilla:overlays">
