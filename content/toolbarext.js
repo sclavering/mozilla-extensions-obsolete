@@ -32,6 +32,13 @@ var ToolbarExt = {
   bookmarksPanel: function(e) {
     if(e.button!=1) return;
     openNewTabWith("chrome://browser/content/bookmarks/bookmarksPanel.xul");
+  },
+  
+  clearCache: function() {
+  	var classID = Components.classes["@mozilla.org/network/cache-service;1"];
+  	var cacheService = classID.getService(Components.interfaces.nsICacheService);
+  	cacheService.evictEntries(Components.interfaces.nsICache.STORE_IN_MEMORY);
+  	cacheService.evictEntries(Components.interfaces.nsICache.STORE_ON_DISK);
   }
 }
 

@@ -67,12 +67,6 @@
         label="&toolbarext-jsconsole.label;" tooltiptext="&toolbarext-jsconsole.tooltip;"
         />
 
-    <!-- View Page Info -->
-    <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-pageinfo" command="View:PageInfo"
-        label="&toolbarext-pageinfo.label;" tooltiptext="&toolbarext-pageinfo.tooltip;"
-        />
-
     <!-- Toggle Fullscreen Mode -->
     <toolbarbutton class="toolbarbutton-1"
         id="toolbarext-fullscreen" oncommand="BrowserFullScreen();"
@@ -87,6 +81,18 @@
     <toolbarbutton class="toolbarbutton-1"
         id="toolbarext-zoomout" command="cmd_textZoomReduce"
         label="&toolbarext-zoomout.label;" tooltiptext="&toolbarext-zoomout.tooltip;"
+        />
+
+    <!-- View Page Info -->
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-pageinfo" command="View:PageInfo"
+        label="&toolbarext-pageinfo.label;" tooltiptext="&toolbarext-pageinfo.tooltip;"
+        />
+
+    <!-- Clear Cache -->
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-clearcache" oncommand="ToolbarExt.clearCache();"
+        label="&toolbarext-clearcache.label;" tooltiptext="&toolbarext-clearcache.tooltip;"
         />
   </toolbarpalette>
 

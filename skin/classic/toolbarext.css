@@ -92,6 +92,18 @@ toolbar[iconsize="small"] #toolbarext-pageinfo {
   -moz-image-region: rect(0 200px 20px 180px);
 }
 
+#toolbarext-clearcache {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 352px 32px 320px);
+}
+toolbar[iconsize="small"] #toolbarext-clearcache {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 220px 20px 200px);
+}
+
+
+
+
 
 /* *** vertical toolbars at left and right of browser window *** */
 
