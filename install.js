@@ -1,7 +1,7 @@
 const APP_DISPLAY_NAME = "LinkIt";
 const APP_NAME = "linkit";
 const APP_PACKAGE = "/cdn.mozdev.org/linkit";
-const APP_VERSION = "0.0.4";
+const APP_VERSION = "0.0.5";
 
 const APP_JAR_FILE = "linkit.jar";
 const APP_CONTENT_FOLDER = "/";

@@ -11,6 +11,7 @@
   <RDF:Description about="urn:mozilla:package:linkit"
         chrome:displayName="LinkIt 0.0.4"
         chrome:author="Chris Neale, Stephen Clavering"
+        chrome:authorURL="http://cdn.mozdev.org/"
         chrome:name="linkit"
         chrome:description="Adds useful 'link's to documents"
         chrome:extension="true">
