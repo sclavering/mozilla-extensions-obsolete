@@ -108,47 +108,8 @@ function clearPasswords() {
 
 
 function clearDownloads() {
-  var dlMgr = Components.classes["@mozilla.org/download-manager;1"].getService(Components.interfaces.nsIDownloadManager);
-  try {
-    var downloads = getDownloads();
-  } catch (e) {
-    return;
-  }
-
-  var rdfs = Components.classes["@mozilla.org/rdf/rdf-service;1"].getService(Components.interfaces.nsIRDFService);
-  var state = rdfs.GetResource("http://home.netscape.com/NC-rdf#DownloadState");
-  var ds = dlMgr.datasource;
-  var dls = [];
-
-  while (downloads.hasMoreElements()) {
-    var download = downloads.getNext().QueryInterface(Components.interfaces.nsIRDFResource);
-    dls.push(download);
-  }
-  dlMgr.startBatchUpdate();
-  for (var i = 0; i < dls.length; ++i) {
-    try {
-      dlMgr.removeDownload(dls[i].Value);
-    } catch (e) {}
-  }
-  dlMgr.endBatchUpdate();
-
-  var rds = ds.QueryInterface(Components.interfaces.nsIRDFRemoteDataSource);
-  if (rds)
-    rds.Flush();
-}
-
-
-function getDownloads() {
-  var dlMgr = Components.classes["@mozilla.org/download-manager;1"].getService(Components.interfaces.nsIDownloadManager);
-  var ds = dlMgr.datasource;
-
-  var rdfs = Components.classes["@mozilla.org/rdf/rdf-service;1"].getService(Components.interfaces.nsIRDFService);
-  var root = rdfs.GetResource("NC:DownloadsRoot");
-
-  var rdfc = Components.classes["@mozilla.org/rdf/container;1"].createInstance(Components.interfaces.nsIRDFContainer);
-  rdfc.Init(ds, root);
-
-  return rdfc.GetElements();
+  var dm = Components.classes["@mozilla.org/download-manager;1"].getService(Components.interfaces.nsIDownloadManager);
+  if(dm.canCleanUp) dm.cleanUp();
 }
 
 

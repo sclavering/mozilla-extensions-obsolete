@@ -20,6 +20,7 @@
 <checkbox id="forminfo"  label="&clearFormInfo;"/>
 <checkbox id="passwords" label="&clearPasswords;"/>
 <checkbox id="downloads" label="&clearDownloads;"/>
+<!-- xxx maybe offer to cancel active downloads? -->
 <checkbox id="cookies"   label="&clearCookies;"/>
 <checkbox id="cache"     label="&clearCache;"/>
 
