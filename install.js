@@ -8,6 +8,7 @@ const kContentFolder = "content/";
 const kLocaleFolders = [];
 const kSkinFolder = "skin/"; // leave blank if not applicable
 
+const kJarFile2 = "chrome/"+kJarFile;
 
 var kMsg = "Do you wish to install "+kDisplayName+" to your profile?\n\nClick OK to install to your profile.\n\nClick Cancel if you want to install globally.";
 
@@ -25,7 +26,7 @@ var instToProfile = !existsInApp && (existsInProfile || confirm(kMsg));
 var folder = instToProfile ? pchromef : chromef;
 var flag = instToProfile ? PROFILE_CHROME : DELAYED_CHROME;
 
-var err = addFile(kPackage, kVersion, kJarFile, folder, null)
+var err = addFile(kPackage, kVersion, kJarFile2, folder, null)
 
 if(err == SUCCESS) {
   var jar = getFolder(folder, kJarFile);
@@ -44,7 +45,7 @@ if(err == SUCCESS) {
 } else {
   alert("Failed to create " +kJarFile +"\n"
     +"You probably don't have appropriate permissions \n"
-    +"(write access to firebird/chrome directory). \n"
+    +"(write access to mozilla/chrome/ directory). \n"
     +"_____________________________\nError code:" + err);
   cancelInstall(err);
 }

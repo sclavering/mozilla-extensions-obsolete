@@ -1,25 +1,29 @@
 <?xml version="1.0"?>
-<RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-         xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:c="http://www.mozilla.org/rdf/chrome#">
 
-  <RDF:Seq about="urn:mozilla:package:root">
-    <RDF:li resource="urn:mozilla:package:tabx"/>
-  </RDF:Seq>
+  <Seq about="urn:mozilla:package:root">
+    <li resource="urn:mozilla:package:tabx"/>
+  </Seq>
 
-  <RDF:Description about="urn:mozilla:package:tabx"
-      chrome:displayName="Tab X"
-      chrome:author="Stephen Clavering"
-      chrome:name="tabx"
-      chrome:description="Adds a close button to each of the browser tabs"
-      chrome:extension="true"
+  <Description about="urn:mozilla:package:tabx"
+      c:displayName="Tab X"
+      c:author="Stephen Clavering"
+      c:name="tabx"
+      c:description="Adds a close button to each of the browser tabs"
+      c:extension="true"
       />
 
   <!-- the overlay just provides a stylesheet -->
-  <RDF:Seq about="urn:mozilla:overlays">
-    <RDF:li resource="chrome://browser/content/browser.xul"/>
-  </RDF:Seq>
-  <RDF:Seq about="chrome://browser/content/browser.xul">
-    <RDF:li>chrome://tabx/content/</RDF:li>
-  </RDF:Seq>
+  <Seq about="urn:mozilla:overlays">
+    <li resource="chrome://browser/content/browser.xul"/>
+    <li resource="chrome://navigator/content/navigator.xul"/>
+  </Seq>
+  <Seq about="chrome://browser/content/browser.xul">
+    <li>chrome://tabx/content/</li>
+  </Seq>
+  <Seq about="chrome://navigator/content/navigator.xul">
+    <li>chrome://tabx/content/</li>
+  </Seq>
 
-</RDF:RDF>
+</RDF>
