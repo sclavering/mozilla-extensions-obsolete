@@ -138,6 +138,7 @@ var StyleSelector = {
         if(!lastWithSameTitle) {
           var menuItem = document.createElement("menuitem");
           menuItem.setAttribute("type", "radio");
+          menuItem.setAttribute("tooltiptext", title);
           menuItem.setAttribute("label", title);
           menuItem.setAttribute("data", title);
           menuItem.setAttribute("checked", !currentStyleSheet.disabled);
