@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://navbuttons/skin/navbuttons.css" type="text/css"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % selfDTD SYSTEM "chrome://navbuttons/locale/navbuttons.dtd">
+%selfDTD;
+]>
+
+<overlay id="navbuttonToolbarOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="navbuttons.js"/>
+
+  <toolbarpalette id="BrowserToolbarPalette">
+    <toolbarbutton id="navbutton-top" onclick="NavButtons.commanded(event);"
+        disabled="true" label="&top.label;"/>
+    <toolbarbutton id="navbutton-up" onclick="NavButtons.commanded(event);"
+        disabled="true" label="&up.label;"/>
+    <toolbarbutton id="navbutton-first" onclick="NavButtons.commanded(event);"
+        disabled="true" label="&first.label;"/>
+    <toolbarbutton id="navbutton-prev" onclick="NavButtons.commanded(event);"
+        disabled="true" label="&prev.label;"/>
+    <toolbarbutton id="navbutton-next" onclick="NavButtons.commanded(event);"
+        disabled="true" label="&next.label;"/>
+    <toolbarbutton id="navbutton-last" onclick="NavButtons.commanded(event);"
+        disabled="true" label="&last.label;"/>
+    <toolbarseparator/>
+  </toolbarpalette>
+
+</overlay>

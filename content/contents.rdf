@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
+
+  <!-- list all the packages being supplied by this jar -->
+  <RDF:Seq about="urn:mozilla:package:root">
+    <RDF:li resource="urn:mozilla:package:navbuttons"/>
+  </RDF:Seq>
+
+  <!-- package information $Id: contents.rdf,v 1.1 2003/06/15 13:44:48 clav Exp $ -->
+  <RDF:Description about="urn:mozilla:package:navbuttons"
+    chrome:author="Stephen Clavering"
+    chrome:name="navbuttons"
+    chrome:displayName="NavButtons"
+    chrome:description="Adds site navigation toolbar buttons: Top, Up, First, Previous, Next, Last"
+    chrome:extension="true"
+    />
+
+  <!-- overlay information -->
+  <RDF:Seq about="urn:mozilla:overlays">
+    <RDF:li resource="chrome://browser/content/browser.xul"/>
+  </RDF:Seq>
+
+  <RDF:Seq about="chrome://browser/content/browser.xul">
+    <RDF:li>chrome://navbuttons/content/navbuttons.xul</RDF:li>
+  </RDF:Seq>
+</RDF:RDF>
