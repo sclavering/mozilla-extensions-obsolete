@@ -6,10 +6,7 @@
     <RDF:li resource="urn:mozilla:locale:fr-FR"/>
   </RDF:Seq>
 
-  <RDF:Description about="urn:mozilla:locale:fr-FR"
-        chrome:displayName="Français(FR)"
-        chrome:author="Original Contributors, Seb Delahaye"
-        chrome:name="fr-FR">
+  <RDF:Description about="urn:mozilla:locale:fr-FR">
     <chrome:packages>
       <RDF:Seq about="urn:mozilla:locale:fr-FR:packages">
         <RDF:li resource="urn:mozilla:locale:fr-FR:linktoolbar"/>
