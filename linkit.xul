@@ -169,7 +169,6 @@ function linkit(event) {
 
 
 function linkit_addLink(page,head,rel,url,title) {
-
   var link = page.createElement("link");
   if(!head) return;
   link.setAttribute("class", "linkit-"+rel);
@@ -191,16 +190,12 @@ function linkit_addLink(page,head,rel,url,title) {
 
    // linktag.href doesn't work : ]
 
-//    if(linktag.className == "linkit-"+rel && linktag.href == url && linktag.rel == rel) // && linktag.title == title)
-//    if(rell == rel && href == url && linktag.className == "linkit-"+rel && linktag.title == title) // /
-    if(linktag.rel == rel && href == url && linktag.className == "linkit-"+rel && linktag.title == title) // /
+    if(linktag.title == title && linktag.rel == rel && href == url && linktag.className == "linkit-"+rel)
       return;
-
   }
 
     head.appendChild(link);
     dump('Linkit :: add ' + rel + '\n');
-
 }
 
 
