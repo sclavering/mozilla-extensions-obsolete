@@ -1,5 +1,6 @@
 // javascript for enhancing toolbar customisation.
 
+
 // replacement start-customisation function that passes all our toolboxes as args to the window
 
 function ToolbarExt_BrowserCustomizeToolbar() {
@@ -27,8 +28,11 @@ function ToolbarExt_BrowserCustomizeToolbar() {
   var tableftBox = document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'toolbarext-toolbox-tableft');
   var tabrightBox = document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'toolbarext-toolbox-tabright');
   
+  var tabbox = document.getAnonymousNodes(tabbrowser)[1];
+  var belowTabsBox = document.getAnonymousElementByAttribute(tabbox, 'anonid', 'toolbarext-toolbox-belowtabs');
+  
   window.openDialog("chrome://global/content/customizeToolbar.xul", "CustomizeToolbar",
-                    "chrome,all,dependent", navbox, bottomBox, leftBox, rightBox, tableftBox, tabrightBox);
+                    "chrome,all,dependent", navbox, bottomBox, leftBox, rightBox, tableftBox, tabrightBox, belowTabsBox);
 }
 
 

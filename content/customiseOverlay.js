@@ -155,11 +155,20 @@ function persistCurrentSets() {
         toolbar.setAttribute("currentset", currentSet);
         
         var customIndex = toolbar.hasAttribute("customindex");
-        if (customIndex) {
-          if (!toolbar.firstChild) {
+        if(customIndex) {
+          if(!toolbar.firstChild) {
             // Remove custom toolbars whose contents have been removed.
             toolbox.removeChild(toolbar);
             --i;
+          } else if(toolbox.toolbarset.getAttribute('anonymous')=='true') {
+            // for the toolbox below the tab bar.  in xbl, so attributes can't
+            // be persisted.  so we store the info on the document root instead
+            var docElt = gToolboxDocument.documentElement;
+            var attrPrefix = '_toolbarset_' + toolbox.toolbarset.getAttribute('anonid') + '_toolbar';
+            
+            // Persist custom toolbar info on the <toolbarset/>
+            docElt.setAttribute(attrPrefix+(++customCount), toolbar.toolbarName + ":" + currentSet);
+            gToolboxDocument.persist(docElt.id, attrPrefix+customCount);
           } else {
             // Persist custom toolbar info on the <toolbarset/>
             toolbox.toolbarset.setAttribute("toolbar"+(++customCount),
@@ -170,7 +179,7 @@ function persistCurrentSets() {
         } else if(toolbar.getAttribute('anonymous')=='true') {
           // for the tab-strip toolbars.  they're in XBL, so persistence doesn't work
           // instead we persist a custom attribute on the document.
-          var attr = "_toolbarset_"+toolbar.getAttribute('anonid');
+          var attr = "_toolbar_currentset_"+toolbar.getAttribute('anonid');
           gToolboxDocument.documentElement.setAttribute(attr,currentSet);
           gToolboxDocument.persist(gToolboxDocument.documentElement.id,attr);
   
@@ -183,7 +192,18 @@ function persistCurrentSets() {
     
     // Remove toolbarX attributes for removed toolbars.
     // (we need the |if| because the toolboxes on the tabbar do not have a toolbarset)
-    if(toolbox.toolbarset) {
+    var toolbarset = toolbox.toolbarset;
+    if(!toolbarset) continue;
+    
+    if(toolbarset.getAttribute('anonymous')=='true') {
+      // for the toolbarbox below the tab bar
+      var docElt = gToolboxDocument.documentElement;
+      var attrPrefix = '_toolbarset_' + toolbarset.getAttribute('anonid') + '_toolbar';
+      while(docElt.hasAttribute(attrPrefix+(++customCount))) {
+        docElt.removeAttribute(attrPrefix+customCount);
+        gToolboxDocument.persist(docElt.id, attrPrefix+customCount);
+      }
+    } else {
       while(toolbox.toolbarset.hasAttribute("toolbar"+(++customCount))) {
         toolbox.toolbarset.removeAttribute("toolbar"+customCount);
         gToolboxDocument.persist(toolbox.toolbarset.id, "toolbar"+customCount);

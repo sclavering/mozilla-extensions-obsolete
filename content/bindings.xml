@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 
+<!DOCTYPE bindings [
+<!ENTITY % tbext SYSTEM "chrome://toolbarext/locale/">
+%tbext;
+]>
+
 <bindings id="ToolbarExtBindings"
           xmlns="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -178,7 +183,7 @@
           if(!currentSet && this.getAttribute("anonymous")=="true") {
             // for the tab-strip toolbars, which are in XBL, so can't have their 
             // attributes persisted.  use an attr on the document instead
-            var attr = "_toolbarset_"+this.getAttribute('anonid');
+            var attr = "_toolbar_currentset_"+this.getAttribute('anonid');
             currentSet = document.documentElement.getAttribute(attr);
           }
           if(!currentSet) currentSet = this.getAttribute("defaultset");
@@ -216,17 +221,32 @@
           }
           
           // Look to see if there is a toolbarset.
-          this.toolbarset = this.firstChild;
-          while (this.toolbarset && this.toolbarset.localName != "toolbarset")
-            this.toolbarset = toolbarset.nextSibling;
+          var toolbarset = this.firstChild;
+          while (toolbarset && toolbarset.localName != "toolbarset")
+            toolbarset = toolbarset.nextSibling;
+          this.toolbarset = toolbarset;
           
-          if(this.toolbarset) {
-            // Create each toolbar described by the toolbarset.
-            var index = 0;
-            while (toolbarset.hasAttribute("toolbar"+(++index))) {
-              var toolbarInfo = toolbarset.getAttribute("toolbar"+index);
-              var infoSplit = toolbarInfo.split(":");
-              this.appendCustomToolbar(infoSplit[0], infoSplit[1], false);
+          if(toolbarset) {
+            if(toolbarset.getAttribute('anonymous')=='true') {
+              // the toolbox below the tab bar is in xbl, so can't have attrs
+              // persisted.  they're persisted on the document instead.
+              var index = 0;
+              var docElt = document.documentElement;
+              var attrPrefix = '_toolbarset_' + toolbarset.getAttribute('anonid') + '_toolbar';
+              while(docElt.hasAttribute(attrPrefix+(++index))) {
+                var toolbarInfo = docElt.getAttribute(attrPrefix+index);
+                var infoSplit = toolbarInfo.split(":");
+                this.appendCustomToolbar(infoSplit[0], infoSplit[1], false);
+              }
+            } else {
+              // (normal toolboxes)
+              // Create each toolbar described by the toolbarset.
+              var index = 0;
+              while (toolbarset.hasAttribute("toolbar"+(++index))) {
+                var toolbarInfo = toolbarset.getAttribute("toolbar"+index);
+                var infoSplit = toolbarInfo.split(":");
+                this.appendCustomToolbar(infoSplit[0], infoSplit[1], false);
+              }
             }
           }
           
@@ -350,16 +370,33 @@
   <binding id="tab-strip-toolbars">
     <content>
       <xul:toolbox anonid="toolbarext-toolbox-tableft" class="toolbarext-tabbar-toolbox"
-          palette="BrowserToolbarPalette">
+          palette="BrowserToolbarPalette" context="toolbar-context-menu"
+          customiseContext="toolbar-customise-context-menu">
         <xul:toolbar anonid="toolbarext-toolbar-tableft" class="toolbarext-tabbar-toolbar"
             anonymous="true" customizable="true" mode="icons" iconsize="small"/>
       </xul:toolbox>  
       <children/>
       <xul:toolbox anonid="toolbarext-toolbox-tabright" class="toolbarext-tabbar-toolbox"
-          palette="BrowserToolbarPalette">
+          palette="BrowserToolbarPalette" context="toolbar-context-menu"
+          customiseContext="toolbar-customise-context-menu">
         <xul:toolbar anonid="toolbarext-toolbar-tabright" class="toolbarext-tabbar-toolbar"
             anonymous="true" customizable="true" mode="icons" iconsize="small"/>
       </xul:toolbox>  
+    </content>
+  </binding>
+
+  <!-- binding attached to the <tabbox/> immediately inside <tabbrowser/> to insert a toolbox
+       between it and the deck of <browser/>s -->
+  <binding id="tabbrowser-tabbox" display="xul:box" extends="chrome://global/content/widgets/tabbox.xml#tabbox">
+    <content>
+      <children includes="hbox"/>
+      <xul:toolbox anonid="toolbarext-toolbox-belowtabs" class="toolbarext-toolbox-belowtabs"
+          toolboxname="&toolbarext-belowtabs-toolbox-name;"
+          palette="BrowserToolbarPalette" anonymous="true"
+          context="toolbar-context-menu" customiseContext="toolbar-customise-context-menu">
+        <xul:toolbarset anonymous="true" anonid="toolbarext-toolbarset-belowtabs"/>
+      </xul:toolbox>
+      <children includes="tabpanels"/>
     </content>
   </binding>
   

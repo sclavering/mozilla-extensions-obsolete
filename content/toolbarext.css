@@ -24,4 +24,7 @@ toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] {
 #appcontent tabbrowser .tabbrowser-strip {
   -moz-binding: url(chrome://toolbarext/content/bindings.xml#tab-strip-toolbars);
 }
+#appcontent tabbrowser tabbox {
+  -moz-binding: url(chrome://toolbarext/content/bindings.xml#tabbrowser-tabbox);
+}
 
