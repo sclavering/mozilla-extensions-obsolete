@@ -62,10 +62,14 @@ function(event)
 LinkToolbarUI.prototype.isLinkToolbarEnabled =
 function()
 {
+  try {
+
   if (document.getElementById("linktoolbar").getAttribute("hidden") == "true")
     return false;
   else
     return true;
+
+  } catch(e) { return false }
 }
 
 LinkToolbarUI.prototype.clear =
