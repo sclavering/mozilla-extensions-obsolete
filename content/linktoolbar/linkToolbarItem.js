@@ -93,7 +93,7 @@ var linkToolbarItems = {
       const inits = {toolbarbutton: initLinkToolbarButton, menuitem: initLinkToolbarItem, menu: initLinkToolbarMenu};
       items[linkType] = elt ? inits[elt.localName](elt) : new LinkToolbarTransientItem(linkType);
     }
-    return this.items[linkType];
+    return items[linkType];
   },
 
   clearAll: function() {
@@ -278,7 +278,8 @@ function LinkToolbarTransientItem(linkType) {
   popup.linkToolbarItem = this;
   popup.setAttribute("onpopupshowing", "this.linkToolbarItem.buildMenu();");
   // add items and create object to control them
-  var moreMenu = this.parentMenuButton = document.getElementById("linktoolbar-more-popup");
+  this.parentMenuButton = document.getElementById("linktoolbar-more-menu");
+  var moreMenu = document.getElementById("linktoolbar-more-popup");
   moreMenu.appendChild(item);
   moreMenu.appendChild(menu);
 }
