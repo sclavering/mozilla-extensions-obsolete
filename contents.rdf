@@ -13,8 +13,8 @@
         chrome:author="Stephen Clavering"
         chrome:name="goup"
         chrome:description="Easily navigate 'up' a level in a website"
-        chrome:extension="true">
-  </RDF:Description>
+        chrome:extension="true"
+        />
 
   <!-- overlay information -->
   <RDF:Seq about="urn:mozilla:overlays">
