@@ -12,7 +12,8 @@
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is the Alternate Stylesheet selection code from Mozilla 1.1
+ * The Original Code is the Alternate Stylesheet selection code from Mozilla 1.1,
+ * taken from /chrome/comm/navigator/browser.js
  *
  * The Initial Developer of the Original Code is Tim Hill (see bug 6782)
  *
@@ -38,7 +39,6 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// extracted from /chrome/comm/navigator/browser.js in Mozilla 1.1
 
 
 var StyleSelector = {
@@ -60,24 +60,52 @@ var StyleSelector = {
     if(!doc || !doc.document) return;
     doc = doc.document.documentElement;
     if(!(doc instanceof Components.interfaces.nsIDOMHTMLHtmlElement)) return;
-    var styleSheets = getAllStyleSheets(window._content)
-    //if(styleSheets.length>1) StyleSelector.button.setAttribute("hasstyles","true");
-    //else StyleSelector.button.removeAttribute("hasstyles");
     var btn = document.getElementById("styleselector");
-    if(styleSheets.length>1) btn.setAttribute("hasstyles","true");
+    if(StyleSelector.hasMultipleStyles(window._content)) btn.setAttribute("hasstyles","true");
     else btn.removeAttribute("hasstyles");
   },
 
+  hasMultipleStyles: function(frameset) {
+    if(this.frameDocHasMultipleStyles(frameset)) return true;
+    for(var i = 0; i < frameset.frames.length; i++)
+      if(this.hasMultipleStyles(frameset.frames[i])) return true;
+    return false;
+  },
+  frameDocHasMultipleStyles: function(frame) {
+    var numsheets = 0;
+    var sheets = frame.document.styleSheets;
+    var sheetTitles = new Array();
+    for(var i = 0; i < sheets.length; i++) {
+      // make sure we don't count different sheets with the same title
+      if(sheets[i].title in sheetTitles) continue;
+      sheetTitles.push(sheets[i].title);
+      var media = sheets[i].media;
+      // by the DOM-CSS spec i think media should default to
+      // something but Moz just seems to leave it blank.
+      if(media.length==0) {
+        numsheets++;
+        continue;
+      }
+      for(var j = 0; j < media.length; j++) {
+        if(media[j]=="screen" || media[j]=="all") {
+          numsheets++;
+          continue;
+        }
+      }
+    }
+    return (numsheets>1);
+  },
+
   commanded: function(evt, menu, page) {
-    if(evt.target == menu.firstChild) disableAllStyles(page);
+    if(evt.target == menu.firstChild) disableStyles(page);
     else useStylesheet(page, evt.target.getAttribute("data"));
   },
 
   emptyMenu: function(menuPopup) {
-    // empty menu apart from No/Persistent Stylesheets option
+    // empty menu apart from No+Persistent Stylesheets options
     var itemNoStyles = menuPopup.childNodes[0];
     var itemPersistentStyles = menuPopup.childNodes[1];
-    while (itemPersistentStyles.nextSibling)
+    while(itemPersistentStyles.nextSibling)
       menuPopup.removeChild(itemPersistentStyles.nextSibling);
   },
 
@@ -130,7 +158,7 @@ var StyleSelector = {
 
 
 // building the main styleselector popup
-function getFrameStyleSheet(frame) {
+function getFrameStyleSheets(frame) {
   var styleSheets = frame.document.styleSheets;
   var styleSheetsArray = new Array(styleSheets.length);
   for (var i = 0; i < styleSheets.length; i++) {
@@ -139,7 +167,7 @@ function getFrameStyleSheet(frame) {
   return styleSheetsArray;
 }
 function getAllStyleSheets(frameset) {
-  var styleSheetsArray = getFrameStyleSheet(frameset);
+  var styleSheetsArray = getFrameStyleSheets(frameset);
   for (var i = 0; i < frameset.frames.length; i++) {
     var frameSheets = getAllStyleSheets(frameset.frames[i]);
     styleSheetsArray = styleSheetsArray.concat(frameSheets);
@@ -159,12 +187,12 @@ function isStylesheetInFrame(frame, title) {
 
 
 // disable all page stylesheets.  written by Stephen Clavering
-function disableAllStyles(frameset) {
-  disableAllStylesInFrame(frameset);
+function disableStyles(frameset) {
+  disableStylesInFrame(frameset);
   for(var i = 0; i < frameset.frames.length; i++)
-    disableAllStyles(frameset.frames[i]);
+    disableStyles(frameset.frames[i]);
 }
-function disableAllStylesInFrame(frame) {
+function disableStylesInFrame(frame) {
   var sheets = frame.document.styleSheets;
   for(var i = 0; i < sheets.length; i++)
     if(!sheets[i].isUserStylesheet)
@@ -174,9 +202,9 @@ function disableAllStylesInFrame(frame) {
 
 // enable one of the stylesheets for the page
 function useStylesheet(frameset, title) {
-  if (!title || isStylesheetInFrame(frameset, title))
+  if(!title || isStylesheetInFrame(frameset, title))
     useStylesheetInFrame(frameset, title);
-  for (var i = 0; i < frameset.frames.length; i++)
+  for(var i = 0; i < frameset.frames.length; i++)
     useStylesheet(frameset.frames[i], title);
 }
 function useStylesheetInFrame(frame, title) {
