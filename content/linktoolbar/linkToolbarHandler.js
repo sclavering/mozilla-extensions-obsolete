@@ -40,28 +40,28 @@
  * ***** END LICENSE BLOCK ***** */
 
 /**
- * LinkToolbarHandler is a Singleton that displays LINK elements
+ * linkToolbarHandler is a Singleton that displays LINK elements
  * and nodeLists of LINK elements in the Link Toolbar.  It
  * associates the LINK with a corresponding LinkToolbarItem based
  * on it's REL attribute and the toolbar item's ID attribute.
- * LinkToolbarHandler is also a Factory and will create
+ * linkToolbarHandler is also a Factory and will create
  * LinkToolbarItems as necessary.
  */
 const linkToolbarHandler = {
   items: new Array(),
   hasItems: false,
 
-  handle: function(element) {
-    // XXX: if you're going to re-enable handling of anchor elements,
-    //    you'll want to change this to AnchorElementDecorator
-    var linkElement = new LinkElementDecorator(element);
-    if (linkElement.isIgnored()) return;
-    if (!this.hasItems) {
+  handle: function(linkElement) {
+    // add some methods to all link elements if we haven't done so already.
+    if(!linkElement.linkToolbarExtensionsAdded) this.extendLinkElements(linkElement);
+    if(linkElement.isIgnored()) return;
+    if(!this.hasItems) {
       this.hasItems = true;
       linkToolbarUI.activate();
     }
-    for (var i = 0; i < linkElement.relValues.length; i++) {
-      var linkType = this.getLinkType(linkElement.relValues[i]);
+    var relValues = linkElement.getRelValues();
+    for(var i = 0; i < relValues.length; i++) {
+      var linkType = this.getLinkType(relValues[i]);
         this.getItemForLinkType(linkType).displayLink(linkElement);
     }
   },
@@ -128,78 +128,64 @@ const linkToolbarHandler = {
     for(var linkType in this.items) this.items[linkType].clear();
     // Store the fact that the toolbar is empty
     this.hasItems = false;
-  }
-}
+  },
 
-
-
-
-function LinkElementDecorator(element) {
-  /*
-   * XXX: this is an incomplete decorator, because it doesn't implement
-   *      the full Element interface.  If you need to use a method
-   *      or member in the Element interface, just add it here and
-   *      have it delegate to this.element
-   *
-   * XXX: would rather add some methods to Element.prototype instead of
-   *      using a decorator, but Element.prototype is no longer exposed
-   *      since the XPCDOM landing, see bug 83433
-   *      Since that bug was long since fixed we should think about doing that!
+  /* This code replaces the old LinkElementDecorator.
+   * The first time a <link> is handled this function is called, and adds some
+   * functions that we need to the prototype for all <link>s
    */
-  if (!element) return; // skip the rest on foo.prototype = new ThisClass calls
-  this.element = element;
-  this.rel = this.convertRevMade(element.rel, element.rev);
-  if(this.rel) this.relValues = this.rel.split(" ");
-  this.rev = element.rev;
-  this.title = element.title;
-  this.href = element.href;
-  this.hreflang = element.hreflang;
-  this.media = element.media;
-  this.longTitle = null;
-}
-
-LinkElementDecorator.prototype = {
-  isIgnored: function() {
-    if(!this.rel) return true;
-    for(var i = 0; i < this.relValues.length; i++)
-      if(/^stylesheet$|^icon$|^fontdef$|^p3pv|^schema./i.test(this.relValues[i]))
-        return true;
-    return false;
-  },
-
-  convertRevMade: function(rel, rev) {
-    return (!rel && rev && /\bmade\b/i.test(rev)) ? rev : rel;
-  },
-
-  getTooltip: function() {
-    return this.getLongTitle() != "" ? this.getLongTitle() : this.href;
-  },
-
-  getLabel: function() {
-    return this.getLongTitle() != "" ? this.getLongTitle() : this.rel;
-  },
-
-  getLongTitle: function() {
-    if (this.longTitle == null)
-      this.longTitle = this.makeLongTitle();
-    return this.longTitle;
-  },
-
-  makeLongTitle: function() {
-    var prefix = "";
-    // XXX: lookup more meaningful and localized version of media,
-    //   i.e. media="print" becomes "Printable" or some such
-    // XXX: use localized version of ":" separator
-    if (this.media && !/\ball\b|\bscreen\b/i.test(this.media))
-      prefix += this.media + ": ";
-    if (this.hreflang)
-      prefix += languageDictionary.lookupLanguageName(this.hreflang) + ": ";
-    return this.title ? prefix + this.title : prefix;
+  extendLinkElements: function(element) {
+    var c = element.constructor;
+    // set a flag so this is only executed once
+    c.prototype.linkToolbarExtensionsAdded = true;
+    c.prototype.getRelValues = function() {
+      if(!this._relValues) {
+        // convert rev=made to rel=made, which is handled the same as rel=author
+        var rel = (!this.rel && this.rev && /\bmade\b/i.test(this.rev)) ? this.rev : this.rel;
+        // XXX should this be changed to split round any whitespace ? probably yes
+        if(rel) this._relValues = rel.split(" ");
+        else this._relValues = null;
+      }
+      return this._relValues;
+    };
+    c.prototype.isIgnored = function() {
+      // XXX should we cache the value that's returned? would cause problems if page changes rel= ?
+      var relValues = this.getRelValues()
+      if(!relValues) return true;
+      for(var i = 0; i < relValues.length; i++)
+        if(/^stylesheet$|^icon$|^fontdef$|^p3pv|^schema./i.test(relValues[i]))
+          return true;
+      return false;
+    };
+    c.prototype.getTooltip = function() {
+      return this.getLongTitle() != "" ? this.getLongTitle() : this.href;
+    };
+    c.prototype.getLabel = function() {
+      return this.getLongTitle() != "" ? this.getLongTitle() : this.rel;
+    };
+    c.prototype.getLongTitle = function() {
+      if(!this.longTitle) {
+        var prefix = "";
+        // XXX: lookup more meaningful and localized version of media,
+        //   i.e. media="print" becomes "Printable" or some such
+        // XXX: use localized version of ":" separator
+        if (this.media && !/\ball\b|\bscreen\b/i.test(this.media))
+          prefix += this.media + ": ";
+        if (this.hreflang)
+          prefix += languageDictionary.lookupLanguageName(this.hreflang) + ": ";
+        this.longTitle = this.title ? prefix + this.title : prefix;
+      }
+      return this.longTitle;
+    };
   }
 }
 
 
 
+
+/*
+XXX: This code was not in use before the removal of LinkElementDecorator,
+and would now require a rewriting.
 
 function AnchorElementDecorator(element) {
   this.constructor(element);
@@ -228,7 +214,8 @@ AnchorElementDecorator.prototype.getTextRecursive = function(node) {
   }
   return text;
 }
+*/
 
-AnchorElementDecorator.prototype.condenseWhitespace = function(text) {
-  return text.replace(/\W*$/, "").replace(/^\W*/, "").replace(/\W+/g, " ");
-}
+//AnchorElementDecorator.prototype.condenseWhitespace = function(text) {
+//  return text.replace(/\W*$/, "").replace(/^\W*/, "").replace(/\W+/g, " ");
+//}
