@@ -25,17 +25,21 @@ var linkToolbarLinkFinder = {
   },
 
 
-  guessPrevAndNextFromURL: function(doc, doclinks, url) {
+  guessPrevAndNextFromURL: function(doc, doclinks, location) {
     var addPrev = !("prev" in doclinks);
     var addNext = !("next" in doclinks);
     if(!addPrev && !addNext) return;
 
     function isDigit(c) { return ("0" <= c && c <= "9") }
 
-    var e,s;
-    for(e = url.length; e > 0 && !isDigit(url[e-1]); --e);
-    if(e==0) return;
-    for(s = e - 1; s > 0 && isDigit(url[s-1]); --s);
+    var url = location.href;
+    // the char index in the url at which the path+search+hash section begins (2 is for the //)
+    var min = location.hostname.length + location.protocol.length + 2;
+
+    var e, s;
+    for(e = url.length; e > min && !isDigit(url[e-1]); --e);
+    if(e==min) return;
+    for(s = e - 1; s > min && isDigit(url[s-1]); --s);
 
     var old = url.substring(s,e);
     var num = parseInt(old, 10); // force base 10 because number could start with zeros
@@ -90,7 +94,7 @@ var linkToolbarLinkFinder = {
 
 
   addLink: function(doc, rels, url, title, longTitle) {
-    var info = {href: url, title: title, longTitle: longTitle};
+    var info = {href: url, url: url, title: title, longTitle: longTitle};
     linkToolbarUI.addLink(info, doc, rels);
   },
 

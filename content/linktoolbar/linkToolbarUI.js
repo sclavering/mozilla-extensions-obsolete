@@ -168,11 +168,11 @@ var linkToolbarUI = {
     if(linkToolbarPrefs.useLinkGuessing && (doc instanceof HTMLDocument)) {
       if(linkToolbarPrefs.scanHyperlinks)
         linkToolbarLinkFinder.scanPageLinks(doc, doc.__lt__links);
-      // is doc.location.href always defined? and are there any security issues with it?
+      // doc.location[.href] seems not to be maskable by JS, so this should be OK
       if(linkToolbarPrefs.guessUpAndTopFromURL)
         linkToolbarLinkFinder.guessUpAndTopFromURL(doc, doc.__lt__links, doc.location.href);
       if(linkToolbarPrefs.guessPrevAndNextFromURL)
-        linkToolbarLinkFinder.guessPrevAndNextFromURL(doc, doc.__lt__links, doc.location.href);
+        linkToolbarLinkFinder.guessPrevAndNextFromURL(doc, doc.__lt__links, doc.location);
     }
 
     if(doc != gBrowser.contentDocument) return;
