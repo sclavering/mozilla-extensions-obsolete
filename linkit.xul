@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.17 2003/05/28 21:14:44 cdn Exp $ -->
+<!-- $Id: linkit.xul,v 1.18 2003/05/28 21:18:15 cdn Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -22,9 +22,17 @@ function linkit() {
   var page = document.getElementById("content").contentDocument;
   var hydra = page.getElementsByTagName("head").item(0);
 
-  // prevent multiplication
-  if(!page.xxLinkItDone) {
-    page.xxLinkItDone = true;
+  // prevent multiplication - it may be horrible, but it is reliable
+  try {
+    hydra.removeChild(page.getElementById("linkit-top"));
+    hydra.removeChild(page.getElementById("linkit-up"));
+  }catch(e) {}
+  try {
+    hydra.removeChild(page.getElementById("linkit-prev"));
+  }catch(e) {}
+  try {
+    hydra.removeChild(page.getElementById("linkit-next"));
+  }catch(e) {}
 
   var linkN = page.createElement("link");
   var linkP = page.createElement("link");
@@ -91,7 +99,7 @@ function linkit() {
 
      }
     }
-   }
+//   }
 }
 
 
