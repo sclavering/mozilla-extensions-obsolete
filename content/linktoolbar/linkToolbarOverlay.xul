@@ -14,8 +14,8 @@
    -
    - The Original Code is Eric Hodel's <drbrain@segment7.net> code.
    -
-   - The Initial Developer of the Original Code is
-   - Eric Hodel.
+   - The Initial Developer of the Original Code is Eric Hodel.
+   -
    - Portions created by the Initial Developer are Copyright (C) 2001
    - the Initial Developer. All Rights Reserved.
    -
@@ -52,9 +52,7 @@
 ]>
 
 <overlay id="linkToolbarOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-         xmlns:html="http://www.w3.org/1999/xhtml"
-         xmlns:rdf="http://www.mozilla.org/rdf">
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <!-- classes -->
   <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarHandler.js" />
@@ -62,14 +60,8 @@
   <script type="application/x-javascript" src="chrome://linktoolbar/content/languageDictionary.js" />
 
   <!-- functions -->
-  <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarOverlay.js" />
+  <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarUI.js" />
   <script type="application/x-javascript" src="chrome://linktoolbar/content/styleselector.js"/>
-
-  <script type="application/x-javascript">
-    <![CDATA[
-      document.addEventListener("load", linkToolbarUI.initHandlers, true);
-    ]]>
-  </script>
 
 <!--  <menupopup id="menu_View"> > -->
 <!--  <menupopup id="view_toolbars_popup"> -->

@@ -59,12 +59,7 @@
   <script type="application/x-javascript" src="chrome://linktoolbar/content/languageDictionary.js"/>
 
   <!-- functions -->
-  <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarOverlay.js"/>
-  <script type="application/x-javascript">
-    <![CDATA[
-      document.addEventListener("load", linkToolbarUI.initHandlers, true);
-    ]]>
-  </script>
+  <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarUI.js"/>
 
   <menupopup id="view_toolbars_popup">
     <menu label="&linkToolbar.label;" position="3"
