@@ -1,0 +1,61 @@
+Bugzilla Bug 102992
+	  	Link Toolbar should be converted to XBL
+(we might well do this, because it would let us add a linkbar to the customisation palette v. easily)
+
+Bugzilla Bug 103204
+	  	link toolbar does not work with frames
+(do we care?)
+
+Bugzilla Bug 134436
+	  	Language attributes with country codes not recognized when building link toolbar
+(i.e.  hreflang=en works fine, but hreflang=en-GB might not be recognised as english.  haven't actually tested this)
+
+Bugzilla Bug 102907
+	  	Link toolbar doesn't support HTTP links headers
+(we have an idea how to implement this)
+
+Bugzilla Bug 102909
+	  	No keyboard access to link toolbar
+(probably going to add ctrl+< and ctrl+> (ctrl+, and ctrl+. technically))
+
+Bugzilla Bug 105109
+	  	Better handling of unrecognized link types
+(probably going to do pretty much what is suggested in the bug.  our code to support multiple prev/next/etc links will come in handy)
+
+Bugzilla Bug 109467
+	  	Proposed tweaks to Link Toolbar's rel->button mapping
+
+Bugzilla Bug 103436
+	  	`Top' in Links Bar needs a better name
+(considering calling it "Home" and reinstating the mapping for rel=home.  while non standard this *is* a useful feature, and authors *are* using it.  and that's what opera does)
+
+Bugzilla Bug 103474
+	  	Menus in Links Bar don't work with a single drag
+(hopefully not too hard to fix.  could listen for onmouseup events?)
+
+Bugzilla Bug 130807
+	  	Site navigation bar: The optional target attribute in link tag is disregarded
+(no frame support at all, but frames suck anyway)
+
+Bugzilla Bug 154193
+	  	RFE - Site navigation bar should be visible in full-screen mode
+(if we make the link toolbar an item in the toolbar customisation window then the user could make this happen (by adding it to the nav toolbar))
+
+Bugzilla Bug 195400
+	  	site navigation bar remembers links from previously loaded documents
+(probably fixed, but not yet tested)
+
+Bugzilla Bug 109307
+	  	Link bar not dynamically updated
+(this refers to updating for *removal* of links only, which doesn't have any good use cases that I can think of)
+
+Bugzilla Bug 109467
+	  	Proposed tweaks to Link Toolbar's rel->button mapping
+
+Bugzilla Bug 103428
+	  	SiteNavBar on autoshow should stay visible if any current tab has links
+(this would only be worth fixing as long as our linkbar makes the status bar taller when visible, ehich is a bug in itself, and one we plan to address)
+
+Bugzilla Bug 205455
+	  	Empty site navigation bar is show until page is loaded
+(not actually a bug in moz.  it's to avoid having the bar disappear on page unload only to reappear as soon as a link is added)
