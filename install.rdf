@@ -7,7 +7,7 @@
     <id>tabbin</id>
 
     <name>Tab Bin</name>
-    <version>0.1</version>
+    <version>0.1.1</version>
     <description>Retrieve accidentally-closed tabs</description>
 
     <creator>Stephen Clavering</creator>
