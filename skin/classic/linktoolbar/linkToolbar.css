@@ -173,6 +173,9 @@ html\:a {
   color: graytext !important;
 }
 
-#wrapper-linktoolbar > xul\:hbox > toolbaritem > .bookmarkitem {
-  display: none;
+// from chrome://navigator/content/navigator.css
+/* ::::: Hide the link toolbar if it is set to autohide and has no items. ::::: */
+
+#linktoolbar[hidden="maybe"][hasitems="false"] {
+  display:none;
 }
