@@ -105,7 +105,7 @@
     <!-- must use onclick not oncommand to get middleclick-opens-in-new-tab -->
     <statusbarpanel id="linktoolbar" class="chromeclass-directories" insertafter="statusbar-progresspanel"
         onclick="return linkToolbarUI.commanded(event);"
-        tbautostretch="always" hidden="true" hasitems="false">
+        tbautostretch="always" hidden="maybe" hasitems="false">
 
       <toolbarbutton disabled="true" id="link-top"
           label="&topButton.label;" tooltiptext="&topButton.tooltip;"/>

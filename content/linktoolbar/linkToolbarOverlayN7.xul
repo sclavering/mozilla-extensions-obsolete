@@ -84,7 +84,7 @@
     <!-- using onclick to get new tab/window for middle click -->
     <toolbar id="linktoolbar" class="chromeclass-directories"
         onclick="event.preventBubble(); return linkToolbarUI.commanded(event);"
-        tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar" grippytooltiptext="&linkToolbar.label;">
+        tbautostretch="always" hidden="maybe" hasitems="false" title="Link Toolbar" grippytooltiptext="&linkToolbar.label;">
 
       <toolbarbutton id="link-top" disabled="true"
           label="&topButton.label;" tooltiptext="&topButton.tooltip;"/>
