@@ -1,7 +1,7 @@
 const kDisplayName = "Flowing Tabs";
 const kName = "flowtabs";
 const kPackage = "/clav.mozdev.org/flowtabs";
-const kVersion = "0.3";
+const kVersion = "0.4";
 
 const kJarFile = "flowtabs.jar";
 const kContentFolder = "content/";

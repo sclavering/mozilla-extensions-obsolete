@@ -6,6 +6,6 @@
 }
 tabbrowser tab {
   display: inline;
-  min-width: 80px;
-  max-width: 200px;
+  min-width: 100px;
+  max-width: 150px;
 }

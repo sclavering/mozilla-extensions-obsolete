@@ -6,4 +6,4 @@
 <?xml-stylesheet href="chrome://flowtabs/content/flowtabs.css" type="text/css"?>
 <?xml-stylesheet href="chrome://flowtabs/skin/flowtabs.css" type="text/css"?>
 
-<window id="main-window"/>
+<overlay id="flowtabs"/>
