@@ -228,7 +228,7 @@ function linkToolbarLoadPage(e, isMiddleClick) {
   // close any menus if it was a middle-click
   // closeMenus() in utilityOverlay.js is poorly written (uses tagName, amongst other things), and appears incapable of handling nested menus
   if(!isMiddleClick) return;
-  var p = event.target.parentNode;
+  var p = e.target.parentNode;
   var linkbar = document.getElementById("linktoolbar");
   while(p!=linkbar) {
     if(p.localName=="menupopup") p.hidePopup();
