@@ -15,7 +15,7 @@
 
   <!-- override the Print button to do Print Preview instead :) -->
   <toolbarbutton id="print-button" oncommand="BrowserPrintPreview();"/>
-  
+
   <!-- allow all sidebars to be opened in a new tab when the toolbarbutton is middle clicked
        note: might replace dl and hsitory panel with something based on the old seamonkey
        Download Manager and History window later -->
@@ -101,7 +101,7 @@
       customiseContext="toolbar-customise-context-menu"
       palette="BrowserToolbarPalette"
       />
-  
+
   <!-- another toolbox at the bottom of the window -->
   <window id="main-window">
     <toolbox id="toolbarext-bottom-toolbox" insertbefore="status-bar"
@@ -113,7 +113,7 @@
       <toolbarset id="toolbarext-bottom-toolbars" context="toolbar-context-menu"/>
     </toolbox>
   </window>
-  
+
   <!-- toolboxes at left and right -->
   <hbox id="browser">
     <toolbox id="toolbarext-left-toolbox" insertbefore="sidebar-box"
@@ -133,7 +133,7 @@
       <toolbarset id="toolbarext-right-toolbars" context="toolbar-context-menu"/>
     </toolbox>
   </hbox>
-  
+
   <!-- a new context menu to use for toolbars while customising them -->
   <popupset id="mainPopupSet">
     <popup id="toolbar-customise-context-menu"
@@ -145,8 +145,9 @@
       <menuitem type="radio" name="mode" value="text"  label="&toolbarext-mode-text-only;"/>
       <menuseparator/>
       <menuitem type="checkbox" oncommand="toolbarextToggleSmallIcons(event);" label="&toolbarext-mode-small-icons;"/>
+      <menuseparator/>
+      <menuitem type="checkbox" oncommand="toolbarextToggleShowInFullscreen(event);" label="&toolbarext-show-in-fullscreen;"/>
     </popup>
   </popupset>
-      
-      
+
 </overlay>

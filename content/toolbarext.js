@@ -4,12 +4,12 @@ var ToolbarExt = {
     if(e.button!=1) return;
     openNewTabWith("view-source:"+doc.location.href);
   },
-  
+
   jsConsole: function(e) {
     if(e.button!=1) return;
     openNewTabWith("chrome://global/content/console.xul");
   },
-  
+
   // 2nd one handles clicks, first one command events
   bookmarkManager: function(e) {
     toOpenWindowByType('bookmarks:manager','chrome://browser/content/bookmarks/bookmarksManager.xul');
@@ -18,17 +18,17 @@ var ToolbarExt = {
     if(e.button!=1) return;
     openNewTabWith('chrome://browser/content/bookmarks/bookmarksManager.xul');
   },
-  
+
   downloadPanel: function(e) {
     if(e.button!=1) return;
     openNewTabWith("chrome://browser/content/downloads/downloadPanel.xul");
   },
-  
+
   historyPanel: function(e) {
     if(e.button!=1) return;
     openNewTabWith("chrome://browser/content/history/history-panel.xul");
   },
-  
+
   bookmarksPanel: function(e) {
     if(e.button!=1) return;
     openNewTabWith("chrome://browser/content/bookmarks/bookmarksPanel.xul");
@@ -48,7 +48,7 @@ function ToolbarExt_BrowserCustomizeToolbar() {
     
   var cmd = document.getElementById("cmd_CustomizeToolbars");
   cmd.setAttribute("disabled", "true");
-  
+
   var navbox = document.getElementById("navigator-toolbox");
   var bottomBox = document.getElementById("toolbarext-bottom-toolbox");
   var leftBox = document.getElementById("toolbarext-left-toolbox");
@@ -71,9 +71,9 @@ function onViewToolbarsPopupShowing(aEvent) {
   }
   
   var firstMenuItem = popup.firstChild;
-  
+
   var toolboxIds = ["navigator-toolbox","toolbarext-left-toolbox","toolbarext-bottom-toolbox","toolbarext-right-toolbox"];
-  
+
   for(var j = 0; j < toolboxIds.length; j++) {
     var toolbox = document.getElementById(toolboxIds[j]);
 
@@ -145,27 +145,30 @@ function updateToolbarStates(toolbarMenuElt) {
 function toolbarextInitCustomiseContext(evt, popup) {
   var toolbar = document.popupNode;
   while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
-  
+
   var mode = toolbar.getAttribute("mode");
-  
+
   var radio = popup.firstChild;
   for(var radio = popup.firstChild; radio && radio.localName=="menuitem"; radio = radio.nextSibling) {
     if(radio.value==mode) radio.setAttribute("checked","true");
     // radio menuitems do not sort this out themselves it seems :(
     else radio.removeAttribute("checked");
   }
-  
+
   var iconSize = toolbar.getAttribute("iconsize");
-  var smallicons = popup.lastChild;
+  var smallicons = popup.childNodes[5];
   if(mode=="text") smallicons.setAttribute("disabled",true);
   else smallicons.removeAttribute("disabled");
-  smallicons.setAttribute("checked", iconSize == "small"); 
+  smallicons.setAttribute("checked", iconSize == "small");
+
+  var showInFullScreen = toolbar.getAttribute("fullscreentoolbar");
+  popup.lastChild.setAttribute("checked", showInFullScreen=="true");
 }
 
 function toolbarextSetToolbarMode(evt) {
   var mode = evt.originalTarget.value;
   if(!mode) return; // ignore small-icons checkbox
-  
+
   var toolbar = document.popupNode;
   while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
 
@@ -176,33 +179,17 @@ function toolbarextToggleSmallIcons(evt) {
   var toolbar = document.popupNode;
   while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
 
-  // xxx: not taking effect until customisation finishes!
   var small = (evt.originalTarget.getAttribute("checked")=="true");
   if(small) toolbar.setAttribute("iconsize","small");
   else toolbar.removeAttribute("iconsize");
   document.persist(toolbar.id, "iconsize");
-} 
-  
-
-
-/*
-
-function updateIconSize(aUseSmallIcons)
-{
-  var val = aUseSmallIcons ? "small" : null;
-  
-  setAttribute(gToolbox, "iconsize", val);
-  gToolboxDocument.persist(gToolbox.id, "iconsize");
-  
-  for (var i = 0; i < gToolbox.childNodes.length; ++i) {
-    var toolbar = getToolbarAt(i);
-    if (isCustomizableToolbar(toolbar)) {
-      setAttribute(toolbar, "iconsize", val);
-      gToolboxDocument.persist(toolbar.id, "iconsize");
-    }
-  }
-
-  repositionDialog();
 }
 
-*/
+function toolbarextToggleShowInFullscreen(evt) {
+  var toolbar = document.popupNode;
+  while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
+
+  var showInFullScreen = evt.originalTarget.getAttribute("checked")=="true";
+  if(showInFullScreen) toolbar.setAttribute("fullscreentoolbar","true");
+  else toolbar.removeAttribute("fullscreentoolbar");
+}

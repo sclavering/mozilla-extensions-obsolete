@@ -151,12 +151,29 @@
 
       <constructor>
         <![CDATA[
-          var foo = false;
-        
+          // for compatibility with fb0.7 and nightlies pre sept 10ish
+          // for those builds toolbar elements get constructed before
+          // the toolbox that contains them, so the toolbar needs to
+          // initialise the palette, rather than the toolbox doing it
+          var toolbox = this.parentNode;
+          if(!(("palette" in toolbox) && toolbox.palette)) {
+            var paletteId = toolbox.getAttribute("palette");
+            if(!("toolbarpalettes" in document))
+              document.toolbarpalettes = new Array();
+            if(paletteId in document.toolbarpalettes) {
+              toolbox.palette = document.toolbarpalettes[paletteId];
+            } else {
+              var palette = document.getElementById(paletteId);
+              palette.parentNode.removeChild(palette);
+              document.toolbarpalettes[paletteId] = palette;
+              toolbox.palette = palette;
+            }
+          }
+
           this.firstPermanentChild = this.firstChild;
           this.lastPermanentChild = this.lastChild;
          
-          // Build up our contents from the palette.
+          // Build up our contents from the palette
           var currentSet = this.getAttribute("currentset");
           if(!currentSet) currentSet = this.getAttribute("defaultset");
           if(currentSet) this.currentSet = currentSet;
@@ -203,7 +220,7 @@
             while (toolbarset.hasAttribute("toolbar"+(++index))) {
               var toolbarInfo = toolbarset.getAttribute("toolbar"+index);
               var infoSplit = toolbarInfo.split(":");
-              this.appendCustomToolbar(infoSplit[0], infoSplit[1]);
+              this.appendCustomToolbar(infoSplit[0], infoSplit[1], false);
             }
           }
           
@@ -214,6 +231,7 @@
       <method name="appendCustomToolbar">
         <parameter name="aName"/>
         <parameter name="aCurrentSet"/>
+        <parameter name="inCustomisationMode"/>
         <body>
           <![CDATA[            
             var toolbar = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul",
@@ -225,8 +243,10 @@
             toolbar.setAttribute("currentset", aCurrentSet);
             toolbar.setAttribute("mode", this.getAttribute("mode"));
             toolbar.setAttribute("iconsize", this.getAttribute("iconsize"));
-            // while in customisation mode we use different context menus.
-            toolbar.setAttribute("oldcontext", this.toolbarset.getAttribute("context"));
+            // while in customisation mode we use different context menus,
+            // and store the normal-mode context menu in an |oldcontext| attr
+            var context = inCustomisationMode ? "oldcontext" : "context";
+            toolbar.setAttribute(context, this.toolbarset.getAttribute("context"));
             toolbar.setAttribute("class", "chromeclass-toolbar");
             
             this.insertBefore(toolbar, this.toolbarset);

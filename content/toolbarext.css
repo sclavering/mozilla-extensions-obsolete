@@ -1,13 +1,6 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
-/*
-tabs[closebutton="true"] {
-  -moz-binding: url("chrome://toolbarext/content/bindings.xml#tabs-closebutton");
-}
-*/
-
-
-toolbar { -moz-binding: url(chrome://toolbarext/content/bindings.xml#toolbar); }
+toolbox[palette] > toolbar { -moz-binding: url(chrome://toolbarext/content/bindings.xml#toolbar); }
 toolbox[palette] { -moz-binding: url(chrome://toolbarext/content/bindings.xml#customisable-toolbox); }
 
 

@@ -32,7 +32,7 @@ function removeToolboxListeners() {
     gToolboxes[i].removeEventListener("dragexit", onToolbarDragExit, false);
     gToolboxes[i].removeEventListener("dragdrop", onToolbarDragDrop, false);
   }
-  
+
   // we're already overriding this function, and it gets called at the right time
   // so we'll tag this in here
   restoreContextMenus();
@@ -42,28 +42,28 @@ function removeToolboxListeners() {
 function restoreContextMenus() {
   for(var i = 0; i < gToolboxes.length; i++) {
     var toolbox = gToolboxes[i];
-    
+
     toolbox.removeAttribute("context");
-    
+
     var oldcontext = toolbox.getAttribute("oldcontext");
     if(oldcontext) {
       toolbox.setAttribute("context",oldcontext);
       toolbox.removeAttribute("oldcontext");
     }
-    
+
     for(var j = 0; j < toolbox.childNodes.length; j++) {
       var toolbar = toolbox.childNodes[j];
       // must avoid messing with attrs on <toolbarset/>s
       if(toolbar.localName!="toolbar") continue;
-      
+
       toolbar.removeAttribute("context");
-      
+
       var oldcontext = toolbar.getAttribute("oldcontext");
       if(oldcontext) {
         toolbar.setAttribute("context",oldcontext);
         toolbar.removeAttribute("oldcontext");
       }
-    }  
+    }
   }
 }
 
@@ -87,15 +87,15 @@ function initDialog() {
 
   // Wrap all the items on the toolbar in toolbarpaletteitems.
   wrapToolbarItems();
-  
-  // extra 
+
+  // extra
   replaceContextMenus();
 }
 
 function replaceContextMenus() {
   for(var i = 0; i < gToolboxes.length; i++) {
     var toolbox = gToolboxes[i];
-    
+
     // always disable standard context menu
     var context = toolbox.getAttribute("contextmenu");
     if(context) {
@@ -104,18 +104,18 @@ function replaceContextMenus() {
     }
     var customiseContext = toolbox.getAttribute("customiseContext");
     if(customiseContext) toolbox.setAttribute("context",customiseContext);
-    
+
     for(var j = 0; j < toolbox.childNodes.length; j++) {
       var toolbar = toolbox.childNodes[j];
       // must avoid messing with attrs on <toolbarset/>s
       if(toolbar.localName!="toolbar") continue;
-      
+
       var tcontext = toolbar.getAttribute("context");
       if(tcontext) {
         toolbar.setAttribute("oldcontext",tcontext);
         toolbar.removeAttribute("context");
       }
-      
+
       var tCustomiseContext = toolbar.getAttribute("customise-context");
       if(tCustomiseContext) {
         toolbar.setAttribute("context",tCustomiseContext);
@@ -137,7 +137,7 @@ function persistCurrentSets() {
   // it would be nice to test for each individual toolbox, but that requires
   // replicating all the drag+drop code just to change one or two lines
   if(!gToolboxChanged) return;
-  
+
   for(var j = 0; j < gToolboxes.length; j++) {
     
     var toolbox = gToolboxes[j];
@@ -192,7 +192,7 @@ function wrapToolbarItems() {
 
       for(var k = 0; k < toolbar.childNodes.length; ++k) {
         var item = toolbar.childNodes[k];
-      
+
         if(!isToolbarItem(item)) continue;
         
         var nextSibling = item.nextSibling;
@@ -268,7 +268,7 @@ function addNewToolbar() {
   // customisable toolbars.  (or if Bookmarks Manager toolbars ever become customisable)
   if(gToolboxes.length > 1) {
     openDialog("chrome://toolbarext/content/newtoolbar.xul","add-new-toolbar",
-               "dependent,modal", gToolboxes);
+               "dependent,modal,centerscreen", gToolboxes);
     return;
   }
   
@@ -296,7 +296,7 @@ function addNewToolbar() {
     }
   }
     
-  gToolbox.appendCustomToolbar(name.value, "");
+  gToolbox.appendCustomToolbar(name.value, "", true);
 
   repositionDialog();
   gToolboxChanged = true;
@@ -306,7 +306,7 @@ function addNewToolbar() {
 // called from the new dialog window
 function doAddNewToolbar(toolboxIndex, name) {
   var toolbox = gToolboxes[toolboxIndex]
-  toolbox.appendCustomToolbar(name, "");
+  toolbox.appendCustomToolbar(name, "", true);
 
   repositionDialog();
   gToolboxChanged = true;
@@ -315,24 +315,64 @@ function doAddNewToolbar(toolboxIndex, name) {
 
 
 
-/* restoreDefaultSet is being left for later */
+/**
+ * Restore the default set of buttons to fixed toolbars,
+ * remove all custom toolbars, and rebuild the palette.
+ */
+function restoreDefaultSet() {
+  for(var i = 0; i < gToolboxes.length; i++) {
+    var toolbox = gToolboxes[i];
+
+    // Restore the defaultset for fixed toolbars.
+    var toolbar = toolbox.firstChild;
+    while (toolbar) {
+      if(isCustomizableToolbar(toolbar)) {
+        if(!toolbar.hasAttribute("customindex")) {
+          var defaultSet = toolbar.getAttribute("defaultset");
+          if(defaultSet)
+            toolbar.currentSet = defaultSet;
+        }
+      }
+      toolbar = toolbar.nextSibling;
+    }
+  
+    // Remove all of the customized toolbars.
+    var child = toolbox.lastChild;
+    while(child) {
+      if(child.hasAttribute("customindex")) {
+        var thisChild = child;
+        child = child.previousSibling;
+        toolbox.removeChild(thisChild);
+      } else {
+        child = child.previousSibling;
+      }
+    }
+  }
+  
+  // Now rebuild the palette.
+  buildPalette();
+
+  // Now re-wrap the items on the toolbar.
+  wrapToolbarItems();
+
+  repositionDialog();
+  gToolboxChanged = true;
+}
 
 
 
 
-/* we are deliberately not overriding updateIconSize and updateToolbarMode,
-   because I like it this way :) * /
 function updateIconSize(aUseSmallIcons) {
   var val = aUseSmallIcons ? "small" : null;
-  
+
   for(var j = 0; j < gToolboxes.length; j++) {
     var toolbox = gToolboxes[j];
-    
+
     // the default theme doens't use these, but other themes might be
     // (since they were in the original code)
     setAttribute(toolbox, "iconsize", val);
     gToolboxDocument.persist(toolbox.id, "iconsize");
-    
+
     for(var i = 0; i < toolbox.childNodes.length; ++i) {
       var toolbar = toolbox.childNodes[i];
       if(isCustomizableToolbar(toolbar)) {
@@ -347,10 +387,10 @@ function updateIconSize(aUseSmallIcons) {
 
 
 function updateToolbarMode(aModeValue) {
-  
+
   for(var j = 0; j < gToolboxes.length; j++) {
     var toolbox = gToolboxes[j];
-    
+
     setAttribute(toolbox, "mode", aModeValue);
     gToolboxDocument.persist(toolbox.id, "mode");
   
@@ -374,4 +414,3 @@ function updateToolbarMode(aModeValue) {
 
   repositionDialog();
 }
-*/
