@@ -7,11 +7,12 @@
     <id>goto</id>
 
     <name>Go To</name>
-    <version>0.5</version>
+    <version>0.5.1</version>
 
-    <description>Dig through URLs from the Go To menu on the context menu</description>
+    <description>Dig through URLs via the context menu</description>
 
     <creator>Stephen Clavering</creator>
+    <contributor>Andrea (Italian translation)</contributor>
     <homepageURL>http://clav.mozdev.org/</homepageURL>
     <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
 
@@ -26,7 +27,8 @@
     <file>
       <rdf:Description about="urn:mozilla:extension:file:goto.jar">
         <package>content/</package>
-        <locale>en/</locale>
+        <locale>locale/en/</locale>
+        <locale>locale/it/</locale>
       </rdf:Description>
     </file>
   </rdf:Description>
