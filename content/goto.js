@@ -1,63 +1,39 @@
-function gotoLoadURLInNewTab(e) {
-  var url = gURLBar.value;
-  BrowserOpenTab();
-  gURLBar.value = url;
-  BrowserLoadURL(e);
-}
-
 var GoTo = {
   init: function() {
-    document.getElementById("contentAreaContextMenu").addEventListener("popupshowing",GoTo.hideMenu,false);
+    document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", GoTo.show, false);
   },
 
-  commanded: function(e,menu) {
-    var t = e.target;
-    if(t.id == "goto-clear-url") {
-      // Clear Location
-      gURLBar.value = "";
-      gURLBar.focus();
-    } else {
-      // load url
-      var uriToLoad = t.getAttribute("label");
-    	if(e.button==1) BrowserOpenTab();
-      gURLBar.value = uriToLoad;
-     	loadURI(uriToLoad);
-      _content.focus();
-    }
-    if(e.button==1) menu.hidePopup();
-  },
-
-  // called onPopupShowing for the main context menu. hides GoTo if it's not relevant
-  hideMenu: function() {
+  show: function() {
     var cm = gContextMenu;
-    document.getElementById("context-goto").hidden = ( cm.isTextSelected || cm.onImage || cm.onTextInput );
+    cm.showItem("context-goto", cm.onLink || !(cm.isTextSelected || cm.onImage || cm.onTextInput));
+  },
+
+  commanded: function(e, menu) {
+    var t = e.target;
+    var url = t.getAttribute("label");
+
+    // load url
+    var uriToLoad = t.getAttribute("label");
+  	if(e.button==1) BrowserOpenTab();
+    gURLBar.value = uriToLoad;
+   	loadURI(uriToLoad);
+    _content.focus();
+    if(e.button==1) {
+      menu.hidePopup();
+      menu.parentNode.parentNode.hidPopup();
+    }
   },
 
   clearMenu: function(menu) {
     while(menu.hasChildNodes()) menu.removeChild(menu.lastChild);
   },
 
-  // wander out from the node the context menu was called on and try and find a link
-  // return the href attribute.
-  // in future this may need expanding to deal with xlinks, but we'll live without for now
-  getLink: function() {
-    var elem = document.popupNode;
-    while(elem) {
-      if(elem instanceof Components.interfaces.nsIDOMHTMLAnchorElement && elem.href)
-        return elem.href;
-      elem = elem.parentNode;
-    }
-    return null;
-  },
-
   buildMenu: function(menu) {
-    var url = this.getLink();
-    var matches, str, regexp, groupEnd, originalUrl = url;
+    var cm = gContextMenu;
+    var url = cm.onLink ? cm.linkURL() : document.location.href;
+    if(!url) return;
 
-    // if were not on a link, give Digger functionality
-    // XXX should retrieve current document location, not url bar value
-    if(!url) url = gURLBar.value;
-    if(url.length == 0) return;
+    var matches, str, regexp, groupEnd, originalUrl = url;
 
     // chop off a query string and deal woth urls like
     // http://www.example.com/redirect.php?http://www.foo.com/&foo=blah
@@ -130,10 +106,12 @@ var GoTo = {
   addSeperator: function(menu) {
     menu.appendChild(document.createElement("menuseparator"));
   },
+
   insertSeperatorAfter: function(menuitem) {
     var separator = document.createElement("menuseparator");
     menuitem.parentNode.insertBefore(separator, menuitem.nextSibling);
   },
+
   addItem: function(menu, url) {
     var menuitem = document.createElement("menuitem");
     menuitem.setAttribute("label",url);
@@ -141,4 +119,4 @@ var GoTo = {
   }
 };
 
-window.addEventListener("load",GoTo.init,false);
+window.addEventListener("load", GoTo.init, false);
