@@ -41,7 +41,7 @@
 /* ::::: Link toolbar items ::::: */
 
 #link-top {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/top.gif");
+  list-style-image: url("chrome://linktoolbar/skin/btn1/top.gif") !important;
 }
 
 #link-top[disabled="true"],
@@ -55,11 +55,11 @@
 
 #link-top:hover,
 #link-top:hover:active {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/top-hov.gif");
+  list-style-image: url("chrome://linktoolbar/skin/btn1/top-hov.gif") !important;
 }
 
 #link-up {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/up.gif");
+  list-style-image: url("chrome://linktoolbar/skin/btn1/up.gif") !important;
 }
 
 #link-up[disabled="true"],
@@ -73,11 +73,11 @@
 
 #link-up:hover,
 #link-up:hover:active {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/up-hov.gif");
+  list-style-image: url("chrome://linktoolbar/skin/btn1/up-hov.gif") !important;
 }
 
 #link-first {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/first.gif");
+  list-style-image: url("chrome://linktoolbar/skin/btn1/first.gif") !important;
 }
 
 #link-first[disabled="true"],
@@ -91,11 +91,11 @@
 
 #link-first:hover,
 #link-first:hover:active {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/first-hov.gif");
+  list-style-image: url("chrome://linktoolbar/skin/btn1/first-hov.gif") !important;
 }
 
 #link-prev {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/previous.gif");
+  list-style-image: url("chrome://linktoolbar/skin/btn1/previous.gif") !important;
 }
 
 #link-prev[disabled="true"],
@@ -109,11 +109,11 @@
 
 #link-prev:hover,
 #link-prev:hover:active {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/previous-hov.gif");
+  list-style-image: url("chrome://linktoolbar/skin/btn1/previous-hov.gif") !important;
 }
 
 #link-next {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/next.gif");
+  list-style-image: url("chrome://linktoolbar/skin/btn1/next.gif") !important;
 }
 
 #link-next[disabled="true"],
@@ -127,11 +127,11 @@
 
 #link-next:hover,
 #link-next:hover:active {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/next-hov.gif");
+  list-style-image: url("chrome://linktoolbar/skin/btn1/next-hov.gif") !important;
 }
 
 #link-last {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/last.gif");
+  list-style-image: url("chrome://linktoolbar/skin/btn1/last.gif") !important;
 }
 
 #link-last[disabled="true"],
@@ -145,7 +145,7 @@
 
 #link-last:hover,
 #link-last:hover:active {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/last-hov.gif");
+  list-style-image: url("chrome://linktoolbar/skin/btn1/last-hov.gif") !important;
 }
 
 #document-menu[disabled="true"],
