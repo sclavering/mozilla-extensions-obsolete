@@ -9,7 +9,7 @@
 
   <!-- package information -->
   <RDF:Description about="urn:mozilla:package:x"
-        chrome:displayName="x 0.1"
+        chrome:displayName="x 0.2"
         chrome:author="Chris Neale, Stephen Clavering"
         chrome:name="x"
         chrome:description="Adds a paranoia button to the toolbars."
