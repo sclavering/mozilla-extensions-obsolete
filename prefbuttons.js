@@ -66,10 +66,9 @@ const prefbuttons_menuitems = [
   "prefbuttons:proxymenu"
 ];
 
-window.addEventListener("load",startprefbuttons,true);
+window.addEventListener("load",startprefbuttons,false);
 
 function startprefbuttons(event) {
-  window.removeEventListener("load",startprefbuttons,true);
   window.addEventListener("unload",resetUAString,false);
   setChecksInit();
   // init menulists
