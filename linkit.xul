@@ -1,19 +1,84 @@
 <?xml version="1.0"?>
+<!-- $Id: linkit.xul,v 1.2 2003/05/27 16:15:41 cdn Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <script type="application/x-javascript"><![CDATA[
 
+// from NiceTitle.js by Stuart Langridge via grayrest's nicetitle.xpi
+
+function NB_innerText(el){
+    var s = "";
+    kids = el.childNodes;
+    for(var i = 0; i < kids.length; i++){
+        if(kids[i] != 3 && kids[i].firstChild){
+            s += NB_innerText(kids[i]);
+        } else {
+            s = kids[i].nodeValue;
+        }
+    }
+    return s;
+}
+
 function linkit() {
   var page = document.getElementById("content").contentDocument;
   var hydra = page.getElementsByTagName("head").item(0);
-  var linkX = page.createElement("LINK");
+
+  var linkN = page.createElement("link");
+  var linkP = page.createElement("link");
+
+  var linkX = page.createElement("link");
+  var linkY = page.createElement("LINK");
+
    linkX.setAttribute("href", "/");
+   linkX.setAttribute("id", "linkit-top");
    linkX.setAttribute("rel", "top");
    linkX.setAttribute("title", "LinkIt [/]");
 
   hydra.appendChild(linkX);
+
+   linkY.setAttribute("href", "..");
+   linkY.setAttribute("id", "linkit-up");
+   linkY.setAttribute("rel", "up");
+   linkY.setAttribute("title", "LinkIt [..]");
+
+  hydra.appendChild(linkY);
+
+    var instags = page.getElementsByTagName("a");
+    if (instags) {
+     for (ti=0;ti<instags.length;ti++) {
+        var instag = instags[ti];
+
+      if (instag.getAttribute("href") == '' || instag.getAttribute("name") != '') break;
+
+      if (/prev/i.test(NB_innerText(instag))) {
+        linkP.setAttribute("href", instag.getAttribute("href"));
+        linkP.setAttribute("id", "linkit-prev");
+        linkP.setAttribute("rel", "prev");
+        linkP.setAttribute("title", "Linkit [&lt;]");
+        hydra.appendChild(linkP);
+      }
+
+      if (/next/i.test(NB_innerText(instag))) {
+        linkN.setAttribute("href", instag.getAttribute("href"));
+        linkN.setAttribute("id", "linkit-next");
+        linkN.setAttribute("rel", "next");
+        linkN.setAttribute("title", "Linkit [&gt;]");
+        hydra.appendChild(linkN);
+      }
+
+/*
+        linkA.setAttribute("href", instag.getAttribute("href"));
+        linkA.setAttribute("class", "linkit-link");
+        linkA.setAttribute("rel", "linkit");
+        linkA.setAttribute("title", "Linkit [" + NB_innerText(instag)  + "]");
+        cerb.appendChild(linkA);
+*/
+
+     }
+    }
+
 
 }
 
