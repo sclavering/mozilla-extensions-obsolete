@@ -70,7 +70,10 @@ window.addEventListener("load",startprefbuttons,false);
 
 function startprefbuttons(event) {
   window.addEventListener("unload",resetUAString,false);
-  setChecksInit();
+  // Reload the prefs whenever the window receives focus
+  window.addEventListener("focus", setChecks, false);
+  // Reload the prefs right now (well, 500ms from now)
+  setTimeout("setChecks()", 500);
   // init menulists
   for(var i = 0; i < prefbuttons_menuitems.length; i++)
     setMenulist(prefbuttons_menuitems[i]);
@@ -87,11 +90,6 @@ function resetUAString(event) {
     prefBranch.clearUserPref("general.useragent.override");
 }
 
-
-function setChecksInit() {
-  addEventListener("focus", setChecks, false);  // Reload the prefs whenever the window receives focus
-  setTimeout("setChecks()", 500);  // Reload the prefs right now (well, 500ms from now)
-}
 
 function setChecks() {
   for(var i = 0; i < prefbuttons_checks.length; i++)
