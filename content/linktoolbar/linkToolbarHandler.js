@@ -141,6 +141,7 @@ const linkToolbarHandler = {
       case "toc":
         return "toc";
       case "prefetch":
+      case "sidebar":
         return null;
       default:
         return relValue.toLowerCase();
