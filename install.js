@@ -1,14 +1,14 @@
-const APP_DISPLAY_NAME = "SiteNav";
-const APP_NAME = "sitenav";
-const APP_PACKAGE = "/cdn.mozdev.org/sitenav";
+const APP_DISPLAY_NAME = "NavButtons";
+const APP_NAME = "navbuttons";
+const APP_PACKAGE = "/cdn.mozdev.org/navbuttons";
 const APP_VERSION = "0.0.1";
 
-const APP_JAR_FILE = "sitenav.jar";
+const APP_JAR_FILE = "navbuttons.jar";
 const APP_CONTENT_FOLDER = "content/";
 const APP_LOCALE_FOLDER  = "locale/en-US/";
 const APP_SKIN_FOLDER  = "skin/classic/";
 
-const APP_SUCCESS_MESSAGE = "The SiteNav toolbar buttons will be available when you restart Firebird";
+const APP_SUCCESS_MESSAGE = "The navigation buttons will be available when you restart Firebird";
 
 const INST_TO_PROFILE = "Do you wish to install "+APP_DISPLAY_NAME+" to your profile?\nThis will mean it does not need reinstalling when you update your browser.\n(Click Cancel if you want "+APP_DISPLAY_NAME+" installing to the main browser directory.)";
 
