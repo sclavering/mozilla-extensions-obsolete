@@ -7,11 +7,7 @@
 
 <overlay id="fusion">
 
-<!-- not strictly necessary, since it would be hidden anyway -->
+<!-- not absolutely necessary, since it would be hidden anyway -->
 <progressmeter id="statusbar-icon" removeelement="true"/>
-
-<script type="application/x-javascript"><![CDATA[
-throw("ping poing");
-]]></script>
 
 </overlay>
