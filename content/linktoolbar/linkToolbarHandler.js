@@ -75,7 +75,7 @@ LinkToolbarHandler.getLinkType =
 function(relAttribute)
 {
   switch (relAttribute.toLowerCase()) {
-    case "home":
+   // case "home":
     case "start":
     case "top":
     case "origin":

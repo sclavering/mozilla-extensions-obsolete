@@ -136,8 +136,8 @@ function()
   if (!linkToolbarUI.toolbarActive) {
     linkToolbarUI.toolbarActive = true;
     document.getElementById("linktoolbar").setAttribute("hasitems", "true");
-  //  var contentArea = document.getElementById("appcontent");
-    var contentArea = document.getElementById("content");
+    var contentArea = document.getElementById("appcontent");
+  //  var contentArea = document.getElementById("content");
     contentArea.addEventListener("unload", linkToolbarUI.clear, true);
     contentArea.addEventListener("load", linkToolbarUI.deactivate, true);
     contentArea.addEventListener("DOMHeadLoaded", linkToolbarUI.deactivate,
@@ -156,7 +156,7 @@ function()
   if (!linkToolbarHandler.hasItems) {
     linkToolbarUI.toolbarActive = false;
     document.getElementById("linktoolbar").setAttribute("hasitems", "false");
-    var contentArea = document.getElementById("content");
+    var contentArea = document.getElementById("appcontent");
     contentArea.removeEventListener("unload", linkToolbarUI.clear, true);
     contentArea.removeEventListener("load", linkToolbarUI.deactivate, true);
     contentArea.removeEventListener("DOMHeadLoaded", linkToolbarUI.deactivate,
@@ -185,11 +185,20 @@ function(event)
 	    Components.classes["@mozilla.org/network/standard-url;1"].
 	      createInstance(Components.interfaces.nsIURI);
 	referrer.spec = window.content.location.href;
-	loadURI(destURL, referrer);
+	loadURI(destURL, referrer); // if(event.button==1) // [middle]
   } catch (e) {
     dump("Error: it is not permitted to load this URI from a <link> element: " + e);
   }
 }
+
+/*
+function diggerLoadURLInNewTab(e) {
+  var url = gURLBar.value;
+  BrowserOpenTab();
+  gURLBar.value = url;
+  BrowserLoadURL(e);
+}
+*/
 
 // functions for twiddling XUL elements in the toolbar
 
@@ -231,7 +240,7 @@ LinkToolbarUI.prototype.addHandlerActive = false;
 LinkToolbarUI.prototype.initHandlers =
 function()
 {
-  var contentArea = document.getElementById("content");
+  var contentArea = document.getElementById("appcontent");
   if (linkToolbarUI.isLinkToolbarEnabled())
   {
     if (!linkToolbarUI.addHandlerActive) {
