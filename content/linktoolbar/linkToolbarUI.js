@@ -184,7 +184,7 @@ const linkToolbarUI = {
   pageLoaded: function(evt) {
     var doc = evt.originalTarget;
 
-    setTimeout(function(){linkFinder.findLinks(doc);}, 100);
+    linkFinder.findLinks(doc);
 
     if(doc != getBrowser().contentDocument) return;
     if(linkToolbarHandler.hasItems) return;
