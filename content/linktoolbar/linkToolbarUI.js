@@ -181,6 +181,9 @@ const linkToolbarUI = {
   // called whenever something on the toolbar gets an onclick event
   // (onclick used to get middle-clicks.  otherwise we would use oncommand)
   commanded: function(event) {
+    // ignore right clicks
+    if(event.button==2) return;
+    
     // Return if this is one of the menubuttons.
     if (event.target.getAttribute("type") == "menu") return;
     if (!event.target.getAttribute("href")) return;
