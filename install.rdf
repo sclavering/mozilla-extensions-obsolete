@@ -7,7 +7,7 @@
     <id>goto</id>
 
     <name>Go To</name>
-    <version>0.4.1</version>
+    <version>0.5</version>
 
     <description>Dig through URLs from the Go To menu on the context menu</description>
 
@@ -19,7 +19,7 @@
       <rdf:Description>
         <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
         <minVersion>0.9</minVersion>
-        <maxVersion>0.9+</maxVersion>
+        <maxVersion>1.0</maxVersion>
       </rdf:Description>
     </targetApplication>
 
