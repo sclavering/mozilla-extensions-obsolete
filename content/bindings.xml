@@ -10,7 +10,7 @@
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
           xmlns:xbl="http://www.mozilla.org/xbl">
 
-  <binding id="toolbar" extends="chrome://global/content/widgets/toolbar.xml#toolbar-base">
+  <binding id="toolbar" extends="chrome://global/content/bindings/toolbar.xml#toolbar-base">
     <implementation>
       <field name="firstPermanentChild">null</field>
       <field name="lastPermanentChild">null</field>
@@ -196,7 +196,7 @@
   </binding>
 
 
-  <binding id="customisable-toolbox" extends="chrome://global/content/widgets/toolbar.xml#toolbar-base">
+  <binding id="customisable-toolbox" extends="chrome://global/content/bindings/toolbar.xml#toolbar-base">
     <implementation>
       <field name="anonymous">false</field>
 
@@ -366,8 +366,8 @@
   </binding>
 
 
-  <!-- like chrome://global/content/widgets/toolbar.xml#toolbarpaletteitem, but with a vbox rather than hbox -->
-  <binding id="toolbarpaletteitem-vertical" extends="chrome://global/content/widgets/toolbar.xml#toolbar-base" display="xul:button">
+  <!-- like chrome://global/content/bindings/toolbar.xml#toolbarpaletteitem, but with a vbox rather than hbox -->
+  <binding id="toolbarpaletteitem-vertical" extends="chrome://global/content/bindings/toolbar.xml#toolbar-base" display="xul:button">
     <content>
       <xul:vbox class="toolbarpaletteitem-box" flex="1" xbl:inherits="type,place">
         <children/>
@@ -399,7 +399,7 @@
 
   <!-- binding attached to the <tabbox/> immediately inside <tabbrowser/> to insert a toolbox
        between it and the deck of <browser/>s -->
-  <binding id="tabbrowser-tabbox" display="xul:box" extends="chrome://global/content/widgets/tabbox.xml#tabbox">
+  <binding id="tabbrowser-tabbox" display="xul:box" extends="chrome://global/content/bindings/tabbox.xml#tabbox">
     <content>
       <children includes="hbox"/>
       <xul:toolbox anonid="tbx-toolbox-belowtabs" class="tbx-toolbox-belowtabs"
