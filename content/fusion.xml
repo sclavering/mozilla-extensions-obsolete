@@ -74,11 +74,13 @@
       <property name="value" onget="return this.getAttribute('value');">
         <setter><![CDATA[
           var p = Math.round(val);
+          if(p == 100) p = 0;
+
           var c = this.value;
           if(p == c) return p;
 
           var delta = p - c;
-          if(delta > 3 || p == 0 || p == 100 || delta < -3) this.setAttribute("value", p);
+          if(delta > 3 || p == 0 || delta < -3) this.setAttribute("value", p);
 
           if(p==0) this.urlbar.removeAttribute("progressMeterActive");
           else if(c==0) this.urlbar.setAttribute("progressMeterActive", "true");
