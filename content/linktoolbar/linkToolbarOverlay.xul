@@ -87,8 +87,9 @@
     </menu>
   </menupopup>
 
-  <vbox id="appcontent">
-    <toolbar id="linktoolbar" class="chromeclass-directories"
+  <!-- <vbox id="appcontent"> -->
+  <statusbar id="status-bar">
+    <statusbarpanel id="linktoolbar" class="chromeclass-directories" insertbefore="statusbar-progresspanel"
         oncommand="event.preventBubble(); return linkToolbarUI.commanded(event);"
         tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar">
 
@@ -200,6 +201,7 @@
       
       <toolbarbutton id="sharc-button" oncommand="window.openDialog('chrome://browser/content', 'Phoenix', 'chrome,all,dialog=no', 'http://cdn.mozdev.org/linkToolbar/');"/>
 
-    </toolbar>
-  </vbox>
+    </statusbarpanel>
+  <!-- </vbox> -->
+  </statusbar>
 </overlay>
