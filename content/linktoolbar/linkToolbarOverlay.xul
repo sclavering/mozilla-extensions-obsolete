@@ -42,7 +42,7 @@
 
 <?xml-stylesheet href="chrome://linktoolbar/skin/linkToolbar.css" type="text/css"?>
 
-<?xul-overlay href="chrome://global/content/globalOverlay.xul"?>
+<!-- <?xul-overlay href="chrome://global/content/globalOverlay.xul"?> -->
 <!DOCTYPE overlay [
 <!ENTITY % selfDTD SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
 %selfDTD;
