@@ -24,11 +24,10 @@ var GoTo = {
     }
   },
 
-  clearMenu: function(menu) {
-    while(menu.hasChildNodes()) menu.removeChild(menu.lastChild);
-  },
-
   buildMenu: function(menu) {
+    // clear the menu
+    while(menu.hasChildNodes()) menu.removeChild(menu.lastChild);
+
     var cm = gContextMenu;
     var url = cm.onLink ? cm.linkURL() : _content.document.location.href;
     if(!url) return;

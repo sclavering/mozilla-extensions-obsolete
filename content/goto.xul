@@ -12,7 +12,6 @@
         oncommand="GoTo.commanded(event,this);"
         onclick="GoTo.commanded(event,this);"
         onpopupshowing="GoTo.buildMenu(this);"
-        onpopuphidden="GoTo.clearMenu(this);"
         />
   </menu>
 </popup>
