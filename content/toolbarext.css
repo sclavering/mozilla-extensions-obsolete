@@ -18,3 +18,10 @@ toolbox[vertical="true"] > toolbar { -moz-box-orient: vertical; min-width: 5px; 
 toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] {
   -moz-binding: url(chrome://toolbarext/content/bindings.xml#toolbarpaletteitem-vertical);
 }
+
+
+/* binding to add a toolbar to the start and end of the tab strip */
+#appcontent tabbrowser .tabbrowser-strip {
+  -moz-binding: url(chrome://toolbarext/content/bindings.xml#tab-strip-toolbars);
+}
+

@@ -28,21 +28,21 @@ function init() {
   gToolboxDocument = toolboxes[0].ownerDocument;
   
   var list = document.getElementById("toolbox-list");
-  for(var i = 0; i < toolboxes.length; i++)
-    list.appendItem(toolboxes[i].getAttribute("toolboxname"),i);
+  for(var i = 0; i < toolboxes.length; i++) {
+    // we only list toolboxes that have a toolboxname attr, because the ones
+    // at the end of the tab strip for tabbrowser should not be listed.
+    // (those have a single fixed toolbar in them)
+    var name = toolboxes[i].getAttribute("toolboxname");
+    if(name) list.appendItem(name,i);
+  }
   list.selectedIndex = 0;
   
   document.getElementById("toolbar-name").focus();
 }
 
   
-function checkToolbarName(name) {
-  return true;
-}
-
 function accept(e) {
   var name = document.getElementById("toolbar-name").value;
-  if(!checkToolbarName(name)) return;
     
   var id = "__customToolbar_" + name.replace(" ", "");
   var existingToolbar = gToolboxDocument.getElementById(id);

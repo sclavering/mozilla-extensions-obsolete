@@ -157,3 +157,23 @@ toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] {
 }
 toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="left"] { border-top-color: #000000; }
 toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="right"] { border-bottom-color: #000000; }
+
+
+
+
+/* the toolars/boxes on the tab strip should have a very plain appearance */
+.toolbarext-tabbar-toolbox {
+  padding: 0;
+  -moz-box-orient: horizontal;
+}
+.toolbarext-tabbar-toolbox,
+.toolbarext-tabbar-toolbar {
+  margin: 0;
+  -moz-appearance: none;
+  border: none !important;
+}
+
+.toolbarext-tabbar-toolbox[incustomisemode="true"] > toolbar {
+  min-width: 10px;
+  min-height: 20px;
+}

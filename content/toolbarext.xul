@@ -94,6 +94,15 @@
         id="toolbarext-clearcache" oncommand="ToolbarExt.clearCache();"
         label="&toolbarext-clearcache.label;" tooltiptext="&toolbarext-clearcache.tooltip;"
         />
+
+    <!-- Close Tab
+    <toolbarbutton class="tabs-closebutton"
+        id="toolbarext-closetab"
+        label="&toolbarext-closetab.label;"
+        oncommand="BrowserCloseTabOrWindow();"
+        tooltiptext="&toolbarext-closetab.tooltip;"
+        />
+        -->
   </toolbarpalette>
 
 

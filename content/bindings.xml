@@ -175,6 +175,12 @@
          
           // Build up our contents from the palette
           var currentSet = this.getAttribute("currentset");
+          if(!currentSet && this.getAttribute("anonymous")=="true") {
+            // for the tab-strip toolbars, which are in XBL, so can't have their 
+            // attributes persisted.  use an attr on the document instead
+            var attr = "_toolbarset_"+this.getAttribute('anonid');
+            currentSet = document.documentElement.getAttribute(attr);
+          }
           if(!currentSet) currentSet = this.getAttribute("defaultset");
           if(currentSet) this.currentSet = currentSet;
 
@@ -334,6 +340,26 @@
       <xul:vbox class="toolbarpaletteitem-box" flex="1" xbl:inherits="type,place">
         <children/>
       </xul:vbox>
+    </content>
+  </binding>
+  
+  
+  
+  <!-- binding attached to the <hbox class="tabbrowser-strip"/> inside the 
+       <tabbrowser/> so that we can have a toolbar at each end of it -->
+  <binding id="tab-strip-toolbars">
+    <content>
+      <xul:toolbox anonid="toolbarext-toolbox-tableft" class="toolbarext-tabbar-toolbox"
+          palette="BrowserToolbarPalette">
+        <xul:toolbar anonid="toolbarext-toolbar-tableft" class="toolbarext-tabbar-toolbar"
+            anonymous="true" customizable="true" mode="icons" iconsize="small"/>
+      </xul:toolbox>  
+      <children/>
+      <xul:toolbox anonid="toolbarext-toolbox-tabright" class="toolbarext-tabbar-toolbox"
+          palette="BrowserToolbarPalette">
+        <xul:toolbar anonid="toolbarext-toolbar-tabright" class="toolbarext-tabbar-toolbar"
+            anonymous="true" customizable="true" mode="icons" iconsize="small"/>
+      </xul:toolbox>  
     </content>
   </binding>
   

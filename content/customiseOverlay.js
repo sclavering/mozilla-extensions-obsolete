@@ -14,6 +14,8 @@ function onLoad() {
     gToolboxes[i].addEventListener("dragover", onToolbarDragOver, false);
     gToolboxes[i].addEventListener("dragexit", onToolbarDragExit, false);
     gToolboxes[i].addEventListener("dragdrop", onToolbarDragDrop, false);
+    // useful for min-width styles and suchlike
+    gToolboxes[i].setAttribute("incustomisemode","true");
   }
 
   document.documentElement.setAttribute("hidechrome", "true");
@@ -31,6 +33,7 @@ function removeToolboxListeners() {
     gToolboxes[i].removeEventListener("dragover", onToolbarDragOver, false);
     gToolboxes[i].removeEventListener("dragexit", onToolbarDragExit, false);
     gToolboxes[i].removeEventListener("dragdrop", onToolbarDragDrop, false);
+    gToolboxes[i].removeAttribute("incustomisemode");
   }
 
   // we're already overriding this function, and it gets called at the right time
@@ -163,9 +166,15 @@ function persistCurrentSets() {
                                              toolbar.toolbarName + ":" + currentSet);
             gToolboxDocument.persist(toolbox.toolbarset.id, "toolbar"+customCount);
           }
-        }
+ 
+        } else if(toolbar.getAttribute('anonymous')=='true') {
+          // for the tab-strip toolbars.  they're in XBL, so persistence doesn't work
+          // instead we persist a custom attribute on the document.
+          var attr = "_toolbarset_"+toolbar.getAttribute('anonid');
+          gToolboxDocument.documentElement.setAttribute(attr,currentSet);
+          gToolboxDocument.persist(gToolboxDocument.documentElement.id,attr);
   
-        if (!customIndex) {
+        } else {
           // Persist the currentset attribute directly on hardcoded toolbars.
           gToolboxDocument.persist(toolbar.id, "currentset");
         }
@@ -173,9 +182,12 @@ function persistCurrentSets() {
     }
     
     // Remove toolbarX attributes for removed toolbars.
-    while (toolbox.toolbarset.hasAttribute("toolbar"+(++customCount))) {
-      toolbox.toolbarset.removeAttribute("toolbar"+customCount);
-      gToolboxDocument.persist(toolbox.toolbarset.id, "toolbar"+customCount);
+    // (we need the |if| because the toolboxes on the tabbar do not have a toolbarset)
+    if(toolbox.toolbarset) {
+      while(toolbox.toolbarset.hasAttribute("toolbar"+(++customCount))) {
+        toolbox.toolbarset.removeAttribute("toolbar"+customCount);
+        gToolboxDocument.persist(toolbox.toolbarset.id, "toolbar"+customCount);
+      }
     }
   }
 }
@@ -413,4 +425,14 @@ function updateToolbarMode(aModeValue) {
   }
 
   repositionDialog();
+}
+
+
+
+// called as window closes.  inform toolboxes that customisation is complete.
+// xxx: fire DOM events as well
+function notifyParentComplete() {
+  for(var i = 0; i < gToolboxes.length; i++) {
+    if("customizeDone" in gToolboxes[i]) gToolboxes[i].customizeDone(gToolboxChanged);
+  }
 }

@@ -39,6 +39,10 @@ var ToolbarExt = {
   	var cacheService = classID.getService(Components.interfaces.nsICacheService);
   	cacheService.evictEntries(Components.interfaces.nsICache.STORE_IN_MEMORY);
   	cacheService.evictEntries(Components.interfaces.nsICache.STORE_ON_DISK);
+  },
+  
+  closeTab: function() {
+    gBrowser.removeCurrentTab();
   }
 }
 
@@ -60,9 +64,19 @@ function ToolbarExt_BrowserCustomizeToolbar() {
   var bottomBox = document.getElementById("toolbarext-bottom-toolbox");
   var leftBox = document.getElementById("toolbarext-left-toolbox");
   var rightBox = document.getElementById("toolbarext-right-toolbox");
+  
+  // get the toolboxes at the left and right of the tab strip. this really
+  // does have to be this complex, because they're two xbl bindings down!
+  var tabbrowser = document.getElementById("content");
+  // there's nothing better to hook onto than the class attr :(
+  var tabstrip = document.getAnonymousElementByAttribute(tabbrowser, 'class', 'tabbrowser-strip chromeclass-toolbar');
+  var tableftBox = document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'toolbarext-toolbox-tableft');
+  var tabrightBox = document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'toolbarext-toolbox-tabright');
+  
   window.openDialog("chrome://global/content/customizeToolbar.xul", "CustomizeToolbar",
-                    "chrome,all,dependent", navbox, bottomBox, leftBox, rightBox);
+                    "chrome,all,dependent", navbox, bottomBox, leftBox, rightBox, tableftBox, tabrightBox);
 }
+
 
 
 // override to make it look at all 4 toolboxes
