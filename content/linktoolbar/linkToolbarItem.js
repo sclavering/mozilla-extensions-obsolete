@@ -64,7 +64,8 @@ var linkToolbarItems = {
   },
 
   clearAll: function() {
-    for(var linkType in this.items) this.items[linkType].clear();
+    const items = this.items;
+    for(var linkType in items) items[linkType].clear();
   }
 };
 
