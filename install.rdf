@@ -7,8 +7,8 @@
     <id>almostfullscreen</id>
 
     <name>Almost Full Screen</name>
-    <version>0.9</version>
-    <description>Keeps the Windows taskbar visible in Full Screen mode</description>
+    <version>0.10</version>
+    <description>Keeps Windows's taskbar visible in full-screen mode</description>
 
     <creator>Stephen Clavering</creator>
     <homepageURL>http://clav.mozdev.org/</homepageURL>
