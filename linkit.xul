@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.9 2003/05/28 17:49:40 cdn Exp $ -->
+<!-- $Id: linkit.xul,v 1.10 2003/05/28 18:57:24 clav Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -78,11 +78,8 @@ function linkit() {
       var instag = instags[ti];
       var text = linkit_getInnerText(instag);
 
-// how to break the code :
-//      if (instag.getAttribute("href") == '' || instag.getAttribute("name") != '') break;
-
-//    if ( instag.hasAttribute("href") == false )
-
+      // ignore non link <a>s
+      if(!instag.getAttribute("href")) continue;
 
 // \u00ab|\u00AB
       if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|&amp;laquo;|\u00ab|«/i.test(text)) {
