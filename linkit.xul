@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.23 2003/05/28 22:04:49 cdn Exp $ -->
+<!-- $Id: linkit.xul,v 1.24 2003/05/28 22:31:34 clav Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -21,6 +21,7 @@ function linkit() {
 
   var page = document.getElementById("content").contentDocument;
   var hydra = page.getElementsByTagName("head").item(0);
+  var location = page.location.href;
 
   // prevent multiplication
   if(page.xxLinkItDone) return;
@@ -29,21 +30,23 @@ function linkit() {
   var linkN = page.createElement("link");
   var linkP = page.createElement("link");
 
-  var linkT = page.createElement("LINK");
   var linkU = page.createElement("link");
 
-   linkT.setAttribute("href", "/");
-   linkT.setAttribute("id", "linkit-top");
-   linkT.setAttribute("rel", "top");
-   linkT.setAttribute("title", "LinkIt [/]");
-
-  hydra.appendChild(linkT);
+  // add a top link iff relevant
+  if(/^[^\/]*?:\/\/.*\/.+/.test(location)) {
+    var linkT = page.createElement("LINK");
+    linkT.setAttribute("href", "/");
+    linkT.setAttribute("id", "linkit-top");
+    linkT.setAttribute("rel", "top");
+    linkT.setAttribute("title", "LinkIt [/]");
+    hydra.appendChild(linkT);
+  }
 
 // javascript:if (location.pathname == "/"); else
 // if (location.pathname.charAt(location.pathname.length-1) == "/") location = ".."; else location = "."; void 0
 
    var lYlink = "..";
-   var location = gURLBar.value;
+//   var location = gURLBar.value;
      linkU.setAttribute("href", lYlink);
      linkU.setAttribute("id", "linkit-up");
      linkU.setAttribute("rel", "up");
