@@ -24,6 +24,9 @@
  *   Tim Taylor <tim@tool-man.org>
  *   Eric Hodel <drbrain@segment7.net>
  *
+ * Port to Px:
+ *      Chris Neale <orbit@cdn.gs>
+ *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
  * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
@@ -149,9 +152,20 @@
 }
 
 #sharc-box {
-  background: 50% 50% no-repeat url("chrome://linktoolbar/skin/sharc-2-8.50.png");
   height: 19px;
+}
+
+#sharc-button {
+  border: 0;
+  height: 19px;
+  list-style-image: url("chrome://linktoolbar/skin/sharc-2-8.50.png");
+  margin: 0;
+  padding: 0;
   width: 45px;
+}
+
+html\:a {
+  border: 0;
 }
 
 #document-menu[disabled="true"],

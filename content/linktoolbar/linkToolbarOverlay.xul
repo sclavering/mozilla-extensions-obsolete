@@ -65,30 +65,8 @@
     ]]>
   </script>
 
-  <menupopup id="menu_viewPopup">
-    <menu label="&linkToolbar.label;" position="3"
-          accesskey="&linkToolbar.accesskey;"
-          oncommand="linkToolbarUI.toggleLinkToolbar(event.target)"
-          onpopupshowing="linkToolbarUI.initLinkbarVisibilityMenu()">
-      <menupopup>
-        <menuitem label="&linkToolbarAlways.label;"
-                  accesskey="&linkToolbarAlways.accesskey;"
-                  class="menuitem-iconic" type="radio" value="false"
-                  name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_false" />
-        <menuitem label="&linkToolbarAsNeeded.label;"
-                  accesskey="&linkToolbarAsNeeded.accesskey;"
-                  class="menuitem-iconic" type="radio" value="maybe"
-                  name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_maybe" />
-        <menuitem label="&linkToolbarNever.label;"
-                  accesskey="&linkToolbarNever.accesskey;"
-                  class="menuitem-iconic" type="radio" value="true"
-                  name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_true" />
-      </menupopup>
-    </menu>
-  </menupopup>
-
-  <toolbox id="navigator-toolbox">
-    <toolbar id="linktoolbar" class="chromeclass-directories"
+  <toolbarpalette id="BrowserToolbarPalette">
+    <toolbaritem  id="linktoolbar" class="chromeclass-directories"
         oncommand="event.preventBubble(); return linkToolbarUI.commanded(event);"
         tbautostretch="always" hidden="true" hasitems="false">
 
@@ -195,11 +173,11 @@
 
         </menupopup>
       </toolbarbutton>
+      
+      <toolbarseparator />
+      
+      <toolbarbutton id="sharc-button" oncommand="window.openDialog('chrome://browser/content', 'Phoenix', 'chrome,all,dialog=no', 'http://cdn.mozdev.org/linkToolbar/');"/>
 
-      <spring flex="1"/>
-      
-      <hbox id="sharc-box"/>
-      
-    </toolbar>
-  </toolbox>
+    </toolbaritem>
+  </toolbarpalette>
 </overlay>
