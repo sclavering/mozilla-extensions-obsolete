@@ -172,7 +172,6 @@ function tbxInitCustomiseContext(evt, popup) {
 
   var mode = toolbar.getAttribute("mode");
 
-  var radio = popup.firstChild;
   for(var radio = popup.firstChild; radio && radio.localName=="menuitem"; radio = radio.nextSibling) {
     if(radio.value==mode) radio.setAttribute("checked","true");
     // radio menuitems do not sort this out themselves it seems :(
