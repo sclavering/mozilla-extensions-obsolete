@@ -21,7 +21,7 @@ the Initial Developer. All Rights Reserved.
 
 Contributor(s):
   Aaron Andersen <aaron@xulplanet.com>
-  Stephen Clavering <mozilla@clav.co.uk> (conversion to PrefButtons extension)
+  Stephen Clavering <mozilla@clav.co.uk> (conversion to PrefButtons extension, tabchecks)
 
 Alternatively, the contents of this file may be used under the terms of
 either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -52,53 +52,36 @@ const prefbuttons_checks = [
   "prefbuttons:referrer",
   "prefbuttons:pipelining",
 ];
-/* don't think this one is actually necessary */
-const prefbuttons_buttons = [
-  "prefbuttons:clearcache",
-  "prefbuttons:clearhist",
-  "prefbuttons:resize640",
-  "prefbuttons:resize800",
-  "prefbuttons:resize1024",
-  "prefbuttons:killflash"
-];
+
 const prefbuttons_menuitems = [
   "prefbuttons:useragent",
   "prefbuttons:proxymenu"
 ];
 
-window.addEventListener("load",startprefbuttons,false);
-
-function startprefbuttons(event) {
-  window.addEventListener("unload",resetUAString,false);
-  // Reload the prefs whenever the window receives focus
-  window.addEventListener("focus", setChecks, false);
-  // Reload the prefs right now (well, 500ms from now)
-  setTimeout("setChecks()", 500);
-  // init menulists
-  for(var i = 0; i < prefbuttons_menuitems.length; i++)
-    setMenulist(prefbuttons_menuitems[i]);
-}
-
-
-/* Prevent crash on next boot if someone was spoofing IE.  See bug 83376.
-   In PrefBar this checked if this was the last open window, but that code was causing
-   errors, and I couldn't be arsed figuring out why. New behaviour isn't bad anyway. */
-function resetUAString(event) {
-  var nsIPref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService)
-  prefBranch = nsIPref.getBranch("");
-  if(prefBranch.prefHasUserValue("general.useragent.override"))
-    prefBranch.clearUserPref("general.useragent.override");
-}
+// checkboxes which need updating when switching tabs
+const prefbuttons_tabchecks = [
+  "prefbuttons:images-tab",
+  "prefbuttons:javascript-tab",
+  "prefbuttons:plugins-tab"
+];
+// the functions used to update them on tab switch, in the same order
+const prefbuttons_tabcheck_updaters = [
+  function() { this.checked = getBrowser().docShell.allowImages; },
+  function() { this.checked = getBrowser().docShell.allowJavascript; },
+  function() { this.checked = getBrowser().docShell.allowPlugins; },
+];
 
 
 function setChecks() {
   for(var i = 0; i < prefbuttons_checks.length; i++)
     setCheck(prefbuttons_checks[i]);
+  
+  PrefButtons.initTabChecks();
 }
 
 function setCheck(itemId) {
   var item = document.getElementById(itemId);
-  // to allow for them not being shown because they're still on the palette. guessing really
+  // item will be null if the <toolbaritem> is still on the customisation palette
   if(!item) return;
   try {
     var value = navigator.preference(item.getAttribute("prefstring")); // Value is magic variable referenced in prefstring
@@ -115,13 +98,13 @@ function changePref(event) {
 
 function setMenulist(id) {
   var item = document.getElementById(id);
-  // guessing that if only in paletted getById doesn't find them.  hence give up.
+  // item will be null if the menulist has been left on the toolbar customisation palette
   if(!item) return;
 
   var prefstring = item.getAttribute("prefstring");
 
-  var nsIPref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService)
-  prefBranch = nsIPref.getBranch("");
+  var prefsvc = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService)
+  prefBranch = prefsvc.getBranch("");
 
   if(prefBranch.prefHasUserValue(prefstring)) {
     var prefvalue = navigator.preference(prefstring);
@@ -144,10 +127,6 @@ function setMenulist(id) {
 
 }
 
-
-function goLink(url) {
-  loadURI(url);
-}
 
 function processMenulist(item) {
   var nsIPref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService)
@@ -172,75 +151,121 @@ function processMenulist(item) {
 
 
 
-
-// ================ former buttonCommands.js ===================
-
-
-
-function clearHistory() {
-	var classID = Components.classes['@mozilla.org/browser/global-history;1'];
-	var browserHistory = classID.getService(Components.interfaces.nsIBrowserHistory)
-	browserHistory.removeAllPages();
+// command functions for the buttons and tabchecks
+const PrefButtonCommands = {
+  /** These functions control whether images, javascript, and plugins are allowed, and
+    * apply to *the current tab only*. They take effect only after the page is refreshed.
+    *
+    * could also use the allowAuth, allowMetaRedirects and allowSubframes flags of docShell.
+    */
+  toggleImagesInTab: function(newState) {
+    var docShell = getBrowser().docShell; // getBrowser() always gets the <browser> for the current tab
+    docShell.QueryInterface(Components.interfaces.nsIDocShell); // just to be sure
+    docShell.allowImages = newState;
+  },
+  toggleJavascriptInTab: function(newState) {
+    var docShell = getBrowser().docShell;
+    docShell.QueryInterface(Components.interfaces.nsIDocShell);
+    docShell.allowJavascript = newState;
+  },
+  togglePluginsInTab: function(newState) {
+    var docShell = getBrowser().docShell;
+    docShell.QueryInterface(Components.interfaces.nsIDocShell);
+    docShell.allowPlugins = newState;
+  },
+  
+  // other button commands
+  clearHistory: function() {
+  	var classID = Components.classes['@mozilla.org/browser/global-history;1'];
+  	var browserHistory = classID.getService(Components.interfaces.nsIBrowserHistory)
+  	browserHistory.removeAllPages();
+  },
+  clearCache: function(aType) {
+  	var classID = Components.classes["@mozilla.org/network/cache-service;1"];
+  	var cacheService = classID.getService(Components.interfaces.nsICacheService);
+  	cacheService.evictEntries(Components.interfaces.nsICache.STORE_IN_MEMORY);
+  	cacheService.evictEntries(Components.interfaces.nsICache.STORE_ON_DISK);
+  },
+  
+  // shouldn't this deal with <object> too?  and frames ?
+  killFlash: function() {
+  	var page = window._content.document;
+  	var flashes = page.getElementsByTagName("embed");
+  
+  	for(var i = 0; i < flashes.length; i++) {
+  		var current = flashes[0];
+  		if(current.getAttribute("type")!="application/x-shockwave-flash") continue;
+  
+  		var height = current.getAttribute("height");
+  		var width = current.getAttribute("width");
+  
+  		if(current.parentNode.nodeName.toLowerCase() == "object") {
+  			top = current.parentNode.parentNode;
+  			next = current.parentNode;
+  		}	else{
+  			top = current.parentNode;
+  			next = current;
+  		}
+  
+  		if(height && width) {
+  			div = document.createElement("DIV");
+  			text = document.createTextNode(" ");
+  			div.appendChild(text);
+  			top.replaceChild(div, next);
+  		} else {
+  			top.removeChild(current);
+  		}
+  
+  		div.setAttribute("style", "height: " + height + "px; width: " + width + "px; border: 1px solid black;");
+  
+  		i--;
+  	}
+  }
 }
 
-function clearLocationBar() {
-	var classID = Components.classes['@mozilla.org/browser/urlbarhistory;1']
-	var urlbarHistory = classID.getService(Components.interfaces.nsIUrlbarHistory)
-	urlbarHistory.clearHistory();
-
-	navigator.preference('general.open_location.last_url', '');
+const PrefButtons = {
+  /** Handling of checkbox "prefs" which apply to the current tab only
+    *
+    * tabChecks - an array of those items from prefbuttons_tabchecks
+    *     currently in use
+    * initTabChecks - called after customisation to update |tabChecks|,
+    *     and give each check an update() function
+    * setTabChecks - called on every tab switch to update the state of
+    *     each check
+    */
+  tabChecks: [],
+  
+  initTabChecks: function() {
+    this.tabChecks = [];
+    for(var i = 0; i < prefbuttons_tabchecks.length; i++) {
+      var check = document.getElementById(prefbuttons_tabchecks[i]);
+      if(!check) continue; // this check might not be in use
+      check.update = prefbuttons_tabcheck_updaters[i];
+      this.tabChecks.push(check);
+    }
+    this.setTabChecks();
+  },
+  
+  setTabChecks: function() {
+    for(var i = 0; i < this.tabChecks.length; i++)
+      this.tabChecks[i].update();
+  },
+  
+  
+  init: function() {
+    // reload tab based prefs on every tab switch
+    var appcontent = document.getElementById("appcontent");
+    appcontent.addEventListener("select", function(){PrefButtons.setTabChecks();}, false);
+    // Reload the prefs whenever the window receives focus
+    // (this is also used to update after toolbar customisation)
+    window.addEventListener("focus", setChecks, false);
+    // Reload the prefs right now (well, 500ms from now)
+    setTimeout("setChecks()", 500);
+    // init menulists
+    for(var i = 0; i < prefbuttons_menuitems.length; i++)
+      setMenulist(prefbuttons_menuitems[i]);
+  }  
 }
 
-function clearCache(aType) {
-	var classID = Components.classes["@mozilla.org/network/cache-service;1"];
-	var cacheService = classID.getService(Components.interfaces.nsICacheService);
-	cacheService.evictEntries(aType);
-}
+window.addEventListener("load",PrefButtons.init,false);
 
-function clearMemCache() {
-	clearCache(Components.interfaces.nsICache.STORE_IN_MEMORY);
-}
-
-function clearDiskCache() {
-	clearCache(Components.interfaces.nsICache.STORE_ON_DISK);
-}
-
-function clearAllCache() {
-	clearMemCache();
-	clearDiskCache();
-}
-
-// shouldn't this deal with <object> too?
-function killFlash() {
-	var page = document.getElementById("content").contentDocument;
-	var flashes = page.getElementsByTagName("embed");
-
-	for(var i = 0; i < flashes.length; i++) {
-		var current = flashes[0];
-		if(current.getAttribute("type")!="application/x-shockwave-flash") continue;
-
-		var height = current.getAttribute("height");
-		var width = current.getAttribute("width");
-
-		if(current.parentNode.nodeName.toLowerCase() == "object") {
-			top = current.parentNode.parentNode;
-			next = current.parentNode;
-		}	else{
-			top = current.parentNode;
-			next = current;
-		}
-
-		if(height && width) {
-			div = document.createElement("DIV");
-			text = document.createTextNode(" ");
-			div.appendChild(text);
-			top.replaceChild(div, next);
-		} else {
-			top.removeChild(current);
-		}
-
-		div.setAttribute("style", "height: " + height + "px; width: " + width + "px; border: 1px solid black;");
-
-		i--;
-	}
-}

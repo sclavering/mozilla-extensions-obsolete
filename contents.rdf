@@ -8,9 +8,9 @@
   </RDF:Seq>
 
   <RDF:Description about="urn:mozilla:package:prefbuttons"
-        chrome:displayName="Pref Buttons 0.1"
+        chrome:displayName="PrefButtons 0.2"
         chrome:author="Stephen Clavering"
-        chrome:description="Adds extra toolbar items for quickly accessing and changing common preferences."
+        chrome:description="Adds toolbar items for quickly changing common preferences."
         chrome:extension="true"
         chrome:name="prefbuttons"
         />

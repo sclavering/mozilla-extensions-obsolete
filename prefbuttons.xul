@@ -22,7 +22,7 @@ the Initial Developer. All Rights Reserved.
 
 Contributor(s):
   Aaron Andersen <aaron@xulplanet.com>
-  Stephen Clavering <mozilla@clav.co.uk> (conversion to PrefButtons extension)
+  Stephen Clavering <mozilla@clav.me.uk> (conversion to PrefButtons extension)
 
 Alternatively, the contents of this file may be used under the terms of
 either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -89,23 +89,14 @@ the terms of any one of the MPL, the GPL or the LGPL.
 </toolbaritem>
 
 <toolbaritem id="prefbuttons-clearcache">
-	<button id="prefbuttons:clearcache" onclick="clearCache()" label="Clear Cache"/>
+	<button id="prefbuttons:clearcache" onclick="PrefButtonCommands.clearCache()" label="Clear Cache"/>
 </toolbaritem>
-
-<toolbaritem id="prefbuttons-resize640">
-	<button id="prefbuttons:resize640" onclick="resizeTo(640,480);" label="Resize 640x480"/>
-</toolbaritem>
-
-<toolbaritem id="prefbuttons-resize800">
-	<button id="prefbuttons:resize800" onclick="resizeTo(800,600);" label="Resize 800x600"/>
-</toolbaritem>
-
-<toolbaritem id="prefbuttons-resize1024">
-	<button id="prefbuttons:resize1024" onclick="resizeTo(1024,768);" label="Resize 1024x768"/>
+<toolbaritem id="prefbuttons-clearhistory">
+	<button id="prefbuttons:clearhistory" onclick="PrefButtonCommands.clearHistory()" label="Clear History"/>
 </toolbaritem>
 
 <toolbaritem id="prefbuttons-killflash">
-	<button id="prefbuttons:killflash" onclick="killFlash()" label="Kill Flash"/>
+	<button id="prefbuttons:killflash" onclick="PrefButtonCommands.killFlash()" label="Kill Flash"/>
 </toolbaritem>
 
 <toolbaritem id="prefbuttons-proxymenu">
@@ -129,6 +120,18 @@ the terms of any one of the MPL, the GPL or the LGPL.
   </menulist>
 </toolbaritem>
 -->
+
+<!-- these 'prefs' apply to the current tab only (by design) -->
+<toolbaritem id="prefbuttons-images-tab">
+  <checkbox oncommand="PrefButtonCommands.toggleImagesInTab(this.checked);" id="prefbuttons:images-tab" label="Images (this tab)" tooltiptext="Enable/Disable Images in this tab only"/>
+</toolbaritem>
+<toolbaritem id="prefbuttons-javascript-tab">
+  <checkbox oncommand="PrefButtonCommands.toggleJavascriptInTab(this.checked);" id="prefbuttons:javascript-tab" label="Javascript (this tab)" tooltiptext="Enable/Disable Javascript in this tab only"/>
+</toolbaritem>
+<toolbaritem id="prefbuttons-plugins-tab">
+  <checkbox oncommand="PrefButtonCommands.togglePluginsInTab(this.checked);" id="prefbuttons:plugins-tab" label="Plug-ins (this tab)" tooltiptext="Enable/Disable Plug-ins in this tab only"/>
+</toolbaritem>
+
 </toolbarpalette>
 
 
