@@ -77,3 +77,14 @@
 <!ENTITY bookmarkButton.label "Bookmarks">
 
 <!ENTITY alternateButton.label "Other Versions">
+
+<!-- Tooltips for the buttons -->
+
+<!ENTITY topButton.tooltip "Top of website">
+<!ENTITY upButton.tooltip "Up a level in website">
+<!ENTITY firstButton.tooltip "First page in sequence">
+<!ENTITY prevButton.tooltip "Previous page in sequence">
+<!ENTITY nextButton.tooltip "Next page in sequence">
+<!ENTITY lastButton.tooltip "Last page in sequence">
+<!ENTITY documentButton.tooltip "Navigational aids">
+<!ENTITY moreButton.tooltip "Other related pages">
