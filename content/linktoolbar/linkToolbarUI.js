@@ -55,28 +55,37 @@ function toggleLinkToolbar() {
    toolbar.setAttribute("hidden", "true");
    btn.setAttribute("left", "true");
  }
-
 }
 
 
 const linkToolbarUI = {
   linkAdded: function(event) {
     var element = event.originalTarget;
-    if(element.ownerDocument != getBrowser().contentDocument
-        || !linkToolbarUI.isLinkToolbarEnabled()
+    var doc = element.ownerDocument;
+    if(!linkToolbarUI.isLinkToolbarEnabled()
         || !element instanceof Components.interfaces.nsIDOMHTMLLinkElement
         || !element.href
         || !(element.rel || element.rev))
       return;
-    linkToolbarHandler.handle(element);
+    
+    var linkInfo = (doc == getBrowser().contentDocument)
+      ? linkToolbarHandler.handleElement(element)
+      : linkToolbarHandler.getLinkElementInfo(element);
+    linkToolbarUI.rememberLink(linkInfo, doc);
+  },
+  
+  rememberLink: function(linkInfo, doc) {
+    // linkInfo will be null if the link was one that linkToolbarHandler.isLinkIgnored didn't like
+    if(!linkInfo) return;
+    if(!("__lt__links" in doc)) doc.__lt__links = new Array();
+    doc.__lt__links.push(linkInfo);
   },
 
   isLinkToolbarEnabled: function() {
     try {
       if (document.getElementById("linktoolbar").getAttribute("hidden") == "true")
         return false;
-      else
-        return true;
+      return true;
     } catch(e) { return false }
   },
 
@@ -93,7 +102,16 @@ const linkToolbarUI = {
         || !linkToolbarUI.isLinkToolbarEnabled())
       return;
     linkToolbarHandler.clearAllItems();
-    linkToolbarUI.fullSlowRefresh();
+    linkToolbarUI.refresh();
+//    linkToolbarUI.fullSlowRefresh();
+  },
+  
+  refresh: function() {
+    var currentdoc = window._content.document;
+    if(!("__lt__links" in currentdoc)) return;
+    var links = currentdoc.__lt__links;
+    for(var i = 0; i < links.length; i++)
+      linkToolbarHandler.handleLink(links[i]);
   },
 
   fullSlowRefresh: function() {
@@ -129,7 +147,6 @@ const linkToolbarUI = {
       linkToolbarUI.toolbarActive = true;
       document.getElementById("linktoolbar").setAttribute("hasitems", "true");
       var contentArea = document.getElementById("appcontent");
-    //  var contentArea = document.getElementById("content");
       contentArea.addEventListener("unload", linkToolbarUI.clear, true);
       contentArea.addEventListener("load", linkToolbarUI.deactivate, true);
       contentArea.addEventListener("DOMHeadLoaded", linkToolbarUI.deactivate, true);
@@ -175,30 +192,35 @@ const linkToolbarUI = {
       var ssm = Components.classes["@mozilla.org/scriptsecuritymanager;1"].getService()
   	  	                  .QueryInterface(Components.interfaces.nsIScriptSecurityManager);
     	ssm.checkLoadURIStr(window.content.location.href, destURL, 0);
-
-      var openTabs = true, openTabsInBackground = true;
-      try {
-    	  openTabs = gPrefService.getBoolPref("browser.tabs.opentabfor.middleclick")
-        openTabsInBackground = prefSvc.getBoolPref("browser.tabs.loadInBackground");
-      } catch(e) {}
-
-    	// handle middleclick/ctrl+click/shift+click (nearly) as for links in page
-    	if(event.button==1 && openTabs || event.ctrlKey) {
-        // This is a hack to invert the open-in-background behaviour for new tabs
-        // It ensures that a click opens in foreground, shift+click in background
-        var e = openTabsInBackground ? {shiftKey: !event.shiftKey} : event;
-        openNewTabWith(destURL, null, e, false);
-      } else if(event.button==1 || event.shiftKey) {
-        openNewWindowWith(destURL, null, false);
-    	} else {
-      	var referrer = Components.classes["@mozilla.org/network/standard-url;1"]
-      	                         .createInstance(Components.interfaces.nsIURI);
-      	referrer.spec = window.content.location.href;
-      	loadURI(destURL, referrer);
-      }
     } catch(e) {
-      dump("Error: it is not permitted to load this URI from a <link> element: " + e);
+      dump("LinkToolbar Error: it is not permitted to load this URI from a <link> element: " + e);
+      return;
     }
+
+    // XXX use pref listeners rather than checking every time
+    var openTabs = true, openTabsInBackground = true;
+    try {
+  	  openTabs = gPrefService.getBoolPref("browser.tabs.opentabfor.middleclick")
+      openTabsInBackground = gPrefService.getBoolPref("browser.tabs.loadInBackground");
+    } catch(e) {}
+
+  	// handle middleclick/ctrl+click/shift+click (nearly) as for links in page
+  	if(event.button==1 && openTabs || event.ctrlKey) {
+      // This is a hack to invert the open-in-background behaviour for new tabs
+      // It ensures that a click opens in foreground, shift+click in background
+      var e = openTabsInBackground ? {shiftKey: !event.shiftKey} : event;
+      openNewTabWith(destURL, null, e, false);
+      return;
+    }
+    if(event.button==1 || event.shiftKey) {
+      openNewWindowWith(destURL, null, false);
+      return;
+  	}
+  	
+  	var referrer = Components.classes["@mozilla.org/network/standard-url;1"]
+  	                         .createInstance(Components.interfaces.nsIURI);
+  	referrer.spec = window.content.location.href;
+  	loadURI(destURL, referrer);
   },
 
   toggleLinkToolbar: function(checkedItem) {

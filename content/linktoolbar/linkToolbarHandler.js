@@ -51,21 +51,23 @@ const linkToolbarHandler = {
   items: new Array(),
   hasItems: false,
 
-  handle: function(linkElement) {
-    if(this.isLinkIgnored(linkElement.rel)) return;
+  handleElement: function(linkElement) {
+    if(this.isLinkIgnored(linkElement.rel)) return null;
     if(!this.hasItems) {
       this.hasItems = true;
       linkToolbarUI.activate();
     }
     var linkInfo = this.getLinkElementInfo(linkElement);
+    this.handleLink(linkInfo);
+    return linkInfo;
+  },
+  
+  handleLink: function(linkInfo) {
     for(var rel in linkInfo.relValues)
       this.getItemForLinkType(rel).displayLink(linkInfo);
   },
 
   isLinkIgnored: function(relAttribute) {
-    // XXX: from reading the bug where the DOMLinkAdded event was implemented, it appears
-    // the event is *not fired* for stylesheet links, so the stylesheet part of this regex
-    // may be unnecessary.
     // XXX: should some of these possibilites just be handled by returning null in standardiseRelType
     // as we do for prefetch?  that would mean the link would still handled if it had other rel
     // values that were interesting
@@ -99,7 +101,7 @@ const linkToolbarHandler = {
     // XXX: use localized version of ":" separator
     if(element.media && !/\b(all|screen)\b/i.test(element.media))
       prefix += element.media + ": ";
-    if (element.hreflang)
+    if(element.hreflang)
       prefix += ltLanguageDictionary.lookupLanguageName(element.hreflang) + ": ";
     var longTitle = prefix;
     if(element.title&&element.title!="") longTitle += element.title;
@@ -216,41 +218,41 @@ const linkToolbarHandler = {
 
 
 
-/*
- * ltLanguageDictionary is a Singleton for looking up a language name
+
+/* ltLanguageDictionary is a Singleton for looking up a language name
  * given its language code.
- *
- * was languageDictionary.js
- *
- * XXX: if we just put a <stringbundle> in the overlay file we could
- * avoid this mess
  */
 const ltLanguageDictionary = {
   dictionary: null,
 
-  // XXX: could we handle non-standard language codes better?
   lookupLanguageName: function(languageCode) {
-    if (this.getDictionary()[languageCode])
-      return this.getDictionary()[languageCode];
-    else
-      return languageCode;
+    if(!this.dictionary) this.createDictionary();
+    
+    if(languageCode in this.dictionary)
+      return this.dictionary[languageCode];
+
+    // XXX: could we handle non-standard language codes better?
+    return languageCode;
   },
 
-  getDictionary: function() {
-    if(!this.dictionary) {
-      this.dictionary = new Array();
-      var e = this.getLanguageNames().getSimpleEnumeration();
-      while(e.hasMoreElements()) {
-        var property = e.getNext();
-        property = property.QueryInterface(Components.interfaces.nsIPropertyElement);
-        this.dictionary[property.key] = property.value;
-      }
+  // use xpcom to read the stringbundle with language codes into an array.
+  // if it doesn't work then we don't throw errors, just the array will be empty
+  // and the user will see the raw lang codes rather than the localised names.
+  createDictionary: function() {
+    this.dictionary = new Array();
+    var e = null;
+    try {
+      var svc = Components.classes["@mozilla.org/intl/stringbundle;1"]
+                          .getService(Components.interfaces.nsIStringBundleService);
+      var bundle = svc.createBundle("chrome://global/locale/languageNames.properties");    
+      e = bundle.getSimpleEnumeration();
+    } catch(ex) {}
+    if(!e) return;
+
+    while(e.hasMoreElements()) {
+      var property = e.getNext();
+      property = property.QueryInterface(Components.interfaces.nsIPropertyElement);
+      this.dictionary[property.key] = property.value;
     }
-    return this.dictionary;
-  },
-
-  getLanguageNames: function() {
-    // srGetStrBundle defined in /xpfe/global/resources/content/strres.js
-    return srGetStrBundle("chrome://global/locale/languageNames.properties");
   }
 }
