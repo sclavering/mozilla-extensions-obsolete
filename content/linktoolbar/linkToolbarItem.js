@@ -23,6 +23,7 @@
  *      Tim Taylor <tim@tool-man.org>
  *      Stuart Ballard <sballard@netreach.net>
  *      Chris Neale <cdn@mozdev.org> [Port to Px and other trivialities]
+ *      Stephen Clavering <mozilla@clav.co.uk>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -61,7 +62,6 @@ function LinkToolbarItem (linkType) {
 
   this.displayLink = function(linkElement) {
     if (this.getXULElement().hasAttribute("href")) return false;
-
     this.setItem(linkElement);
     this.enableParentMenuButton();
     return true;
@@ -89,20 +89,12 @@ function LinkToolbarItem (linkType) {
   }
 
   this.getParentMenuButton = function() {
-    if (!this.parentMenuButton)
-      this.parentMenuButton = getParentMenuButtonRecursive(
-          this.getXULElement());
-
+    if(!this.parentMenuButton) {
+      var node = this.getXULElement();
+      while(node.tagName!="toolbarbutton") node = node.parentNode;
+      this.parentMenuButton = node;
+    }
     return this.parentMenuButton;
-  }
-
-  function getParentMenuButtonRecursive(xulElement) {
-    if (!xulElement) return null;
-
-    if (xulElement.tagName == "toolbarbutton")
-      return xulElement;
-
-    return getParentMenuButtonRecursive(xulElement.parentNode)
   }
 }
 
