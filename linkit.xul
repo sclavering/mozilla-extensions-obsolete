@@ -49,12 +49,13 @@ function linkit(event) {
     // ignore non link <a>s
     if(!href) continue;
 
+    // lose odd whitespace - replace with ' '
     var iText = linkit_getInnerText(instag).replace(/\s+/g," ");
 
-    if(/^prev|prev$|previous$|^back|\bback$|^<<|^<-|\u00ab|«/i.test(iText))
+    if(/^prev|prev$|previous$|^back[^to\ top]|\bback$|^<<|^<=|^<-|\u00ab/i.test(iText))
       linkit_addLink(page,hydra,"prev",href,"LinkIt [<] (" +href+ ")")
 
-    else if(/^next|next$|>$|\u00bb|»/i.test(iText))
+    else if(/^next|continu|next$|>$|\u00bb/i.test(iText))
       linkit_addLink(page,hydra,"next",href,"LinkIt [>] (" +href+ ")");
   }
 }
