@@ -10,12 +10,20 @@
   <RDF:Description about="urn:mozilla:skin:classic/1.0">
     <chrome:packages>
       <RDF:Seq about="urn:mozilla:skin:classic/1.0:packages">
-        <RDF:li resource="urn:mozilla:skin:classic/1.0:linkToolbar"/>
+        <RDF:li resource="urn:mozilla:skin:classic/1.0:linktoolbar"/>
       </RDF:Seq>
     </chrome:packages>
   </RDF:Description>
 
-  <RDF:Description about="urn:mozilla:skin:classic/1.0:linkToolbar"
+  <RDF:Description about="urn:mozilla:skin:classic/1.0:linktoolbar"
     chrome:skinVersion="1.2"/>
+
+  <RDF:Seq about="urn:mozilla:stylesheets">
+    <RDF:li resource="chrome://browser/content/browser.xul"/>
+  </RDF:Seq>
+
+  <RDF:Seq about="chrome://browser/content/browser.xul">
+    <RDF:li>chrome://linktoolbar/skin/linkToolbar.css</RDF:li>
+  </RDF:Seq>
 
 </RDF:RDF>

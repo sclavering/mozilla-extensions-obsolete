@@ -24,6 +24,9 @@
  *      Henri Sivonen <henris@clinet.fi>
  *      Stuart Ballard <sballard@netreach.net>
  *
+ * Port to Px:
+ *      Chris Neale <orbit@cdn.gs>
+ *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
  * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
@@ -129,7 +132,8 @@ function()
   if (!linkToolbarUI.toolbarActive) {
     linkToolbarUI.toolbarActive = true;
     document.getElementById("linktoolbar").setAttribute("hasitems", "true");
-    var contentArea = document.getElementById("appcontent");
+  //  var contentArea = document.getElementById("appcontent");
+    var contentArea = document.getElementById("content");
     contentArea.addEventListener("unload", linkToolbarUI.clear, true);
     contentArea.addEventListener("load", linkToolbarUI.deactivate, true);
     contentArea.addEventListener("DOMHeadLoaded", linkToolbarUI.deactivate,
@@ -148,7 +152,7 @@ function()
   if (!linkToolbarHandler.hasItems) {
     linkToolbarUI.toolbarActive = false;
     document.getElementById("linktoolbar").setAttribute("hasitems", "false");
-    var contentArea = document.getElementById("appcontent");
+    var contentArea = document.getElementById("content");
     contentArea.removeEventListener("unload", linkToolbarUI.clear, true);
     contentArea.removeEventListener("load", linkToolbarUI.deactivate, true);
     contentArea.removeEventListener("DOMHeadLoaded", linkToolbarUI.deactivate,
@@ -223,7 +227,7 @@ LinkToolbarUI.prototype.addHandlerActive = false;
 LinkToolbarUI.prototype.initHandlers =
 function()
 {
-  var contentArea = document.getElementById("appcontent");
+  var contentArea = document.getElementById("content");
   if (linkToolbarUI.isLinkToolbarEnabled())
   {
     if (!linkToolbarUI.addHandlerActive) {

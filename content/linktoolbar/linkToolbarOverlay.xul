@@ -24,6 +24,9 @@
    -      Tim Taylor <tim@tool-man.org>
    -      Stuart Ballard <sballard@netreach.net>
    -
+   - Port to Px:
+   -      Chris Neale <orbit@cdn.gs>
+   -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
    - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
@@ -38,21 +41,22 @@
    -
    - ***** END LICENSE BLOCK ***** -->
 
-<?xml-stylesheet href="chrome://navigator/skin/linkToolbar.css" type="text/css"?> 
+<!-- <?xml-stylesheet href="chrome://navigator/skin/linkToolbar.css" type="text/css"?> -->
+<?xml-stylesheet href="chrome://linktoolbar/skin/linkToolbar.css" type="text/css"?>
 <?xul-overlay href="chrome://global/content/globalOverlay.xul"?>
-<!DOCTYPE overlay SYSTEM "chrome://navigator/locale/linkToolbar.dtd">
+<!DOCTYPE overlay SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
 
 <overlay id="linkToolbarOverlay" 
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
          xmlns:rdf="http://www.mozilla.org/rdf">
 
   <!-- classes -->
-  <script type="application/x-javascript" src="chrome://navigator/content/linkToolbarHandler.js" />
-  <script type="application/x-javascript" src="chrome://navigator/content/linkToolbarItem.js" />
-  <script type="application/x-javascript" src="chrome://navigator/content/languageDictionary.js" />
+  <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarHandler.js" />
+  <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarItem.js" />
+  <script type="application/x-javascript" src="chrome://linktoolbar/content/languageDictionary.js" />
 
   <!-- functions -->
-  <script type="application/x-javascript" src="chrome://navigator/content/linkToolbarOverlay.js" />
+  <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarOverlay.js" />
 
   <script type="application/x-javascript">
     <![CDATA[
@@ -60,7 +64,7 @@
     ]]>
   </script>
 
-  <menupopup id="view_toolbars_popup">
+  <menupopup id="menu_viewPopup">
     <menu label="&linkToolbar.label;" position="3"
           accesskey="&linkToolbar.accesskey;"
           oncommand="linkToolbarUI.toggleLinkToolbar(event.target)"
