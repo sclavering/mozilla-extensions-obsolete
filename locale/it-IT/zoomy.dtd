@@ -1,0 +1,8 @@
+<!ENTITY zoomin.label "Aumenta Zoom">
+<!ENTITY zoomin.tooltip "Aumenta dimensione testo">
+
+<!ENTITY zoomreset.label "Ripristina Zoom">
+<!ENTITY zoomreset.tooltip "Ripristina la dimensione originaria del testo">
+
+<!ENTITY zoomout.label "Diminuisci Zoom">
+<!ENTITY zoomout.tooltip "Diminuisci dimensione testo">

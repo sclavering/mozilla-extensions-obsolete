@@ -7,12 +7,14 @@
     <id>zoomy</id>
 
     <name>Zoomy</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <description>Toolbar buttons to change text size</description>
-
-    <creator>Stephen Clavering</creator>
     <homepageURL>http://clav.mozdev.org/</homepageURL>
     <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
+
+    <creator>Stephen Clavering</creator>
+    <contributor>Andrea of extenzilla.it (Italian translator)</contributor>
+    <contributor>Rob de Vries (Dutch translator)</contributor>
 
     <!-- Firefox -->
     <targetApplication>
@@ -35,8 +37,10 @@
     <file>
       <r:Description about="urn:mozilla:extension:file:zoomy.jar">
         <package>content/</package>
-        <locale>locale/en/</locale>
         <skin>skin/</skin>
+        <locale>locale/en/</locale>
+        <locale>locale/it-IT/</locale>
+        <locale>locale/nl-NL/</locale>
       </r:Description>
     </file>
   </r:Description>
