@@ -1,9 +1,11 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
 #x-button {
+  -moz-image-region: rect(0 32px 32px 0);
   list-style-image: url(x.png);
 }
 
 toolbar[iconsize="small"] #x-button {
+  -moz-image-region: rect(0 20px 20px 0);
   list-style-image: url(xs.png);
 }
