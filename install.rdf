@@ -7,12 +7,13 @@
     <id>x</id>
 
     <name>x</name>
-    <version>0.6.2</version>
-    <description>Adds a paranoia button to the toolbar.</description>
+    <version>0.6.3</version>
+    <description>Adds a paranoia button to the toolbar</description>
     <creator>Stephen Clavering</creator>
     <contributor>Chris Neale</contributor>
     <contributor>Gregory Hoppe (German translator)</contributor>
     <contributor>Giuliano Masseroni (Italian translator)</contributor>
+    <contributor>Sébastien Costes (French translator)</contributor>
 
     <iconURL>chrome://x/content/icon.png</iconURL>
     <homepageURL>http://cdn.mozdev.org/</homepageURL>
@@ -22,7 +23,7 @@
       <r:Description>
         <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
         <minVersion>0.9</minVersion>
-        <maxVersion>0.10</maxVersion>
+        <maxVersion>1.0</maxVersion>
       </r:Description>
     </targetApplication>
 
@@ -32,6 +33,7 @@
         <skin>skin/</skin>
         <locale>locale/en-US/x/</locale>
         <locale>locale/de-DE/</locale>
+        <locale>locale/fr-FR/</locale>
         <locale>locale/it-IT/</locale>
       </r:Description>
     </file>
