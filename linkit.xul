@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.25 2003/05/28 22:43:53 clav Exp $ -->
 
-<overlay id="linkitBrowserOverlay"
+<overlay id="linkitOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <script type="application/x-javascript"><![CDATA[
@@ -18,85 +17,54 @@ function linkit_getInnerText(el) {
 }
 
 function linkit() {
-
   var page = document.getElementById("content").contentDocument;
-  var hydra = page.getElementsByTagName("head").item(0);
+  var hydra = page.getElementsByTagName("head")[0];
   var location = page.location.href;
 
-  // prevent multiplication
+  // prevent duplication
   if(page.xxLinkItDone) return;
   page.xxLinkItDone = true;
 
-  var linkN = page.createElement("link");
-  var linkP = page.createElement("link");
-
-  var linkU = page.createElement("link");
-
   // add a top link iff relevant
-  if(/^[^\/]*?:\/\/.*\/.+/.test(location)) {
-    var linkT = page.createElement("LINK");
-    linkT.setAttribute("href", "/");
-    linkT.setAttribute("id", "linkit-top");
-    linkT.setAttribute("rel", "top");
-    linkT.setAttribute("title", "LinkIt [/]");
-    hydra.appendChild(linkT);
+  if(/^[^\/]*?:\/\/.*\/.+/.test(location))
+    linkit_addLink(page,hydra,"top","/")
+
+  // add a . or .. link
+  var matches = location.match(/(^.*\/)(.*)/);
+  if(!matches) return;  // we're on an about:blank or something weird
+  if(matches[2] && matches[2]!="" && !/(index|main).(html?|php)/i.test(matches[2]))
+    linkit_addLink(page,hydra,"up",".")
+  else if(matches[2]=="" && matches[1]!=location)
+    linkit_addLink(page,hydra,"up","..")
+
+  // add prev/next links
+  var instags = page.getElementsByTagName("a");
+  if(!instags) return;
+
+  for(var i = 0; i < instags.length; i++) {
+    var instag = instags[i];
+    var iText = linkit_getInnerText(instag);
+    var href = instag.getAttribute("href")
+
+    // ignore non link <a>s
+    if(!href) continue;
+
+    if(/^prev|prev$|previous$|^back|\bback$|^<<|^<-|\u00ab|«/i.test(iText))
+      linkit_addLink(page,hydra,"prev",href,"LinkIt [<] (" +href+ ")")
+
+    else if(/^next|next$|>$|\u00bb|»/i.test(iText))
+      linkit_addLink(page,hydra,"next",href,"LinkIt [>] (" +href+ ")");
   }
+}
 
-// javascript:if (location.pathname == "/"); else
-// if (location.pathname.charAt(location.pathname.length-1) == "/") location = ".."; else location = "."; void 0
-
-   var lYlink = "..";
-//   var location = gURLBar.value;
-     linkU.setAttribute("href", lYlink);
-     linkU.setAttribute("id", "linkit-up");
-     linkU.setAttribute("rel", "up");
-     linkU.setAttribute("title", "LinkIt [" + lYlink + "]");
-
-  hydra.appendChild(linkU);
-
-    var instags = page.getElementsByTagName("a");
-    if (instags) {
-     for (ti=0;ti<instags.length;ti++) {
-        var instag = instags[ti];
-
-      var iText = linkit_getInnerText(instag);
-
-      // ignore non link <a>s
-      if(!instag.getAttribute("href")) continue;
-
-//    alert(NB_innerText(instag));
-
-// \u00ab
-//      if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|&amp;laquo;|\u00ab|«/i.test(iText)) {
-      if(/^prev|prev$|previous$|^back|\bback$|^<<|^<-|\u00ab|«/i.test(iText)) {
-        linkP.setAttribute("href", instag.getAttribute("href"));
-        linkP.setAttribute("id", "linkit-prev");
-        linkP.setAttribute("rel", "prev");
-        linkP.setAttribute("title", "LinkIt [<] (" + instag.getAttribute("href") + ")");
-        hydra.appendChild(linkP);
-      }
-
-// \u00bb
-//      if (/next|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|&amp;raquo;|\u00bb|»/i.test(iText)) {
-      if(/^next|next$|>$|\u00bb|»/i.test(iText)) {
-        linkN.setAttribute("href", instag.getAttribute("href"));
-        linkN.setAttribute("id", "linkit-next");
-        linkN.setAttribute("rel", "next");
-        linkN.setAttribute("title", "LinkIt [>] (" + instag.getAttribute("href") + ")");
-        hydra.appendChild(linkN);
-      }
-
-/*
-        linkA.setAttribute("href", instag.getAttribute("href"));
-        linkA.setAttribute("class", "linkit-link");
-        linkA.setAttribute("rel", "linkit");
-        linkA.setAttribute("title", "LinkIt [" + NB_innerText(instag)  + "]");
-        cerb.appendChild(linkA);
-*/
-
-     }
-    }
-//   }
+function linkit_addLink(page,head,rel,url,title) {
+  var link = page.createElement("link");
+  link.setAttribute("href", url);
+  link.setAttribute("id", "linkit-"+rel);
+  link.setAttribute("rel", rel);
+  if(title) link.setAttribute("title", title);
+  else link.setAttribute("title", "LinkIt ["+url+"]");
+  head.appendChild(link);
 }
 
 
