@@ -55,13 +55,13 @@
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <!-- classes -->
-  <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarHandler.js" />
-  <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarItem.js" />
-  <script type="application/x-javascript" src="chrome://linktoolbar/content/languageDictionary.js" />
+  <script type="application/x-javascript" src="linkToolbarHandler.js" />
+  <script type="application/x-javascript" src="linkToolbarItem.js" />
+  <script type="application/x-javascript" src="languageDictionary.js" />
 
   <!-- functions -->
-  <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarUI.js" />
-  <script type="application/x-javascript" src="chrome://linktoolbar/content/styleselector.js"/>
+  <script type="application/x-javascript" src="linkToolbarUI.js" />
+  <script type="application/x-javascript" src="styleselector.js"/>
 
 <!--  <menupopup id="menu_View"> > -->
 <!--  <menupopup id="view_toolbars_popup"> -->
