@@ -1,25 +1,10 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.13 2003/05/28 20:55:22 cdn Exp $ -->
+<!-- $Id: linkit.xul,v 1.14 2003/05/28 21:00:01 clav Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <script type="application/x-javascript"><![CDATA[
-
-// from NiceTitle.js by Stuart Langridge via grayrest's nicetitle.xpi
-// MIT Licenced : http://www.opensource.org/licenses/mit-license.php
-
-function NB_innerText(el){
-    var s = "", kids = el.childNodes;
-    for(var i = 0; i < kids.length; i++){
-        if(kids[i] != 3 && kids[i].firstChild){
-            s += NB_innerText(kids[i]);
-        } else {
-            s = kids[i].nodeValue;
-        }
-    }
-    return s;
-}
 
 function linkit_getInnerText(el) {
   var s = "", kids = el.childNodes;
@@ -27,7 +12,7 @@ function linkit_getInnerText(el) {
     // add contents of CDATA or text nodes
     if(kids[i].nodeType==3 || kids[i].nodeType==2) s += kids[i].nodeValue;
     // call recursively for elements
-    else if(kids[i].nodeType==1) s += innerText(kids[i]);
+    else if(kids[i].nodeType==1) s += linkit_getInnerText(kids[i]);
   }
   return s;
 }
@@ -79,9 +64,9 @@ function linkit() {
      for (ti=0;ti<instags.length;ti++) {
         var instag = instags[ti];
 
-      var iText = NB_innerText(instag);
+//      var iText = NB_innerText(instag);
 // merely calling clav's func puts a damper on things
-//      var text = linkit_getInnerText(instag);
+      var iText = linkit_getInnerText(instag);
 
       // ignore non link <a>s
       if(!instag.getAttribute("href")) continue;
