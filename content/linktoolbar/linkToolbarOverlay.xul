@@ -198,7 +198,7 @@
 
       <spring flex="1"/>
       
-      <html:a href="http://cdn.mozdev.org/linkToolbar/" target="_content"><hbox flex="1" id="sharc-box"/></html:a>
+      <hbox id="sharc-box"/>
       
     </toolbar>
   </toolbox>
