@@ -5,9 +5,6 @@
 
 <script type="application/x-javascript"><![CDATA[
 
-// add the bookmarks menu to the bottom of the context menu.
-window.addEventListener("load", menutweakerInit, false);
-
 function menutweakerInit() {
   var sheet = document.styleSheets[0];
   var ids = "";
@@ -17,12 +14,15 @@ function menutweakerInit() {
   // the prefs won't be set until MenuTweaker settings dialogue has been used at least once
   // however it always sets all of them, so we can try-catch all together
   try {
-    function getPref(pref) { return gPrefService.getCharPref("extensions.menutweaker.hide." + pref); }
-    ids = getPref("by_id");
-    menulabels = getPref("menus_by_label");
-    menuitemlabels = getPref("menuitems_by_label");
-    selectors = getPref("by_selector");
-  } catch(e) {}
+    // gPrefService wasn't working
+    var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                          .getService(Components.interfaces.nsIPrefService);
+    prefs = prefs.getBranch("extensions.menutweaker.hide.");
+    ids = prefs.getCharPref("by_id");
+    menulabels = prefs.getCharPref("menus_by_label");
+    menuitemlabels = prefs.getCharPref("menuitems_by_label");
+    selectors = prefs.getCharPref("by_selector");
+  } catch(e) { dump("menutweaker: failed to read prefs!"); }
   // hide the id'd elements
   if(ids!="") {
     var cssselector = "#" + ids.replace(/\|/g,", #");
@@ -43,6 +43,8 @@ function menutweakerInit() {
     sheet.insertRule(selectors + " { display:none !important; }", sheet.cssRules.length);
   }
 }
+
+window.addEventListener("load", menutweakerInit, false);
 
 
 ]]></script>
