@@ -7,12 +7,13 @@
     <id>goto</id>
 
     <name>Go To</name>
-    <version>0.4</version>
+    <version>0.4.1</version>
 
     <description>Dig through URLs from the Go To menu on the context menu</description>
 
     <creator>Stephen Clavering</creator>
     <homepageURL>http://clav.mozdev.org/</homepageURL>
+    <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
 
     <targetApplication>
       <rdf:Description>
