@@ -8,7 +8,7 @@ const linkFinder = {
 
   // regular expressions used for identifying links based on the src url of contained images
   img_re_first: /first/i,
-  img_re_prev:  /p?rev/i,
+  img_re_prev:  /rev/i, // was /p?rev/
   img_re_next:  /ne?xt|more|fwd/i,
   img_re_last:  /last/i,
 
@@ -27,20 +27,58 @@ const linkFinder = {
       if("next" in link.relValues) noNext = false;
     }
 
-    // generate top and up links based on url
-    if(noTop) {
-      var topurl = doc.location.href.match(/^[^\/]*?:\/\/[^\/]*\//);
+    if(!noUp || !noTop || !noPrev || !noNext) return;
+
+    var addedLinks = this.scanPageLinks(doc);
+
+    // xxx it seems not all documents have this
+    var url = doc.location.href;
+
+    noTop = noTop && !("top" in addedLinks);
+    noUp  = noUp  && !("up"  in addedLinks);
+    noPrev = noPrev && !("prev" in addedLinks);
+    noNext = noNext && !("next" in addedLinks);
+    this.getLinksFromUrl(doc, url, noTop, noUp, noPrev, noNext);
+  },
+
+
+  getLinksFromUrl: function(doc, url, addTop, addUp, addPrev, addNext) {
+    if(addTop) {
+      var topurl = url.match(/^[^\/]*?:\/\/[^\/]*\//);
       if(topurl) this.addLink(doc, topurl[0], "top", null, null, null);
     }
-    if(noUp) {
-      var upurl = this.getUp(doc.location.href);
+    if(addUp) {
+      var upurl = this.getUp(url);
       if(upurl) this.addLink(doc, upurl, "up", null, null, null);
     }
 
-    // generate other links based on <a href="..."/> style links
+    if(!(addPrev || addNext)) return;
 
-    if(!noUp || !noTop || !noPrev || !noNext) return;
+    function isDigit(c) { return ("0" <= c && c <= "9") }
 
+    var e,s;
+    for(e = url.length; e > 0 && !isDigit(url[e-1]); --e);
+    if(e==0) return;
+    for(s = e - 1; s > 0 && isDigit(url[s-1]); --s);
+
+    var old = url.substring(s,e);
+    var num = parseInt(old, 10); // force base 10 because number could start with zeros
+
+    var pre = url.substring(0,s), post = url.substring(e);
+    if(addPrev) {
+      var prv = ""+(num-1);
+      while(prv.length < old.length) prv = "0" + prv;
+      this.addLink(doc, pre+prv+post, "prev", null, null, null);
+    }
+    if(addNext) {
+      var nxt = ""+(num+1);
+      while(nxt.length < old.length) nxt = "0" + nxt;
+      this.addLink(doc, pre+nxt+post, "next", null, null, null);
+    }
+  },
+
+
+  scanPageLinks: function(doc) {
     var addedLinks = [];
 
     // The user has to wait for linkFinder to finish before they can interact with the page
@@ -50,33 +88,27 @@ const linkFinder = {
     var max = Math.min(doc.links.length, 500);
 
     for(i = 0; i < max; i++) {
-      link = doc.links[i];
+      var link = doc.links[i];
       var href = link.href;
-      var rel = link.rel;
 
-      // ignore non link <a>s, and internal links
+      // ignore internal links
       if(!href || href.charAt(0)=='#') continue;
 
       var rels = [];
       var title = this.getTextAndImgRels(link, rels);
       title = title.replace(/\s+/g," ");
 
-      // Do The Right Thing for <a href="..." rel="..."/>  :)
-      if(rel) {
-        // get rel types
-        var rawRels = rel.split(/\s+/);
-        var rels = [];
-        for(j = 0; j < rawRels.length; j++) {
-          var aRel = linkToolbarHandler.standardiseRelType(rawRels[j]);
-          // avoid duplicate rel values
-          if(aRel) rels[aRel] = aRel;
+      if(link.rel || link.rev) {
+        var info = linkToolbarHandler.getLinkInfo(link.href, link.rel, link.rev, title, link.hreflang, null);
+        // avoid dupes
+        for(var relv in info.relValues) {
+          if(!(relv in addedLinks)) addedLinks[relv] = [];
+          if(!(info.href in addedLinks[relv])) {
+            addedLinks[relv][info.href] = true;
+            linkToolbarUI.addLink(info, doc);
+          }
         }
-        if(rels.length==0) continue;
-        // add the link
-        var info = {href: href, relValues: rels, title: title, longTitle: null};
-        linkToolbarUI.addLink(info, doc);
-        // don't bother with hackery below
-        continue;
+        continue; // no point using the regexps
       }
 
       if(this.re_next.test(title)) rels["next"] = true;
@@ -84,9 +116,12 @@ const linkFinder = {
       else if(this.re_first.test(title)) rels["first"] = true;
       else if(this.re_last.test(title)) rels["last"] = true;
 
-      for(var rell in rels) this.addLink(doc, href, rell, title, title, addedLinks);
+      for(var rel in rels) this.addLink(doc, href, rel, title, title, addedLinks);
     }
+
+    return addedLinks;
   },
+
 
   addLink: function(doc, url, rel, title, longTitle, addedLinks) {
     // avoid duplicate links
@@ -106,9 +141,7 @@ const linkFinder = {
     linkToolbarUI.addLink(info, doc);
   },
 
-  // borrowed from GoUp
-  // xxx: do something like !/(index|main)\.(html?|php3?)/i.test(matches[2])
-  // to choose btwn up==. or up==..
+
   getUp: function(url) {
     var matches, origUrl = url;
     // trim filename (this makes subdriectory digging easier)
@@ -130,11 +163,12 @@ const linkFinder = {
     return null;
   },
 
+
   // get the text contained in a link, and any guesses for rel based on img url
   getTextAndImgRels: function(el, rels) {
     var s = "";
     // use alt text for images
-    if(el instanceof Components.interfaces.nsIDOMHTMLImageElement ) {
+    if(el instanceof Components.interfaces.nsIDOMHTMLImageElement) {
       // should this have spaces wrapped round it?
       s = el.getAttribute("alt");
       if(s) return s;
