@@ -1,10 +1,10 @@
 #x-button {
   list-style-image: url(x.png);
-  -moz-image-region: rect(0 30px 30px 0);
+  -moz-image-region: rect(0 24px 24px 0);
   /* some fool applied this style to .toolbarbutton-1, rather than to all toolbarbuttons in the browser window */
   -moz-box-orient: vertical;
 }
 
 toolbar[iconsize="small"] #x-button {
-  -moz-image-region: rect(0 50px 20px 30px);
+  -moz-image-region: rect(0 40px 16px 24px);
 }

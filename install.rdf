@@ -1,43 +1,41 @@
 <?xml version="1.0"?>
 
-<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://www.mozilla.org/2004/em-rdf#">
 
-  <Description about="urn:mozilla:install-manifest">
-    <em:id>{f24bb9b4-c24b-47af-81c6-f7a54cee8681}</em:id>
-    <em:version>0.4.1</em:version>
-    
-    <!-- Target Application this extension can install into, 
-        with minimum and maximum supported versions. --> 
-    <em:targetApplication>
-      <Description>
-        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-        <em:minVersion>0.7+</em:minVersion>
-        <em:maxVersion>0.9</em:maxVersion>
-      </Description>
-    </em:targetApplication>
-    
-    <!-- Front End MetaData -->
-    <em:name>x</em:name>
-    <em:description>Adds a paranoia button to the toolbar.</em:description>
-    <em:creator>Stephen Clavering</em:creator>
-    <em:contributor>Chris Neale</contributor>
-    <!-- <em:homepageURL>http://cdn.mozdev.org/x/</em:homepageURL> -->
-    <!-- <em:updateURL>http://www.foo.com/update.cgi?id=%ITEM_ID%&version=%ITEM_VERSION%</em:updateURL> -->
+  <rdf:Description about="urn:mozilla:install-manifest">
+    <id>x</id>
 
-    <!-- Front End Integration Hooks (used by Extension Manager)-->
-    <!-- <em:optionsURL>chrome://compact/content/compactPrefOverlay.xul</em:optionsURL>
-    <em:aboutURL></em:aboutURL> -->
-    <em:iconURL>chrome://x/skin/x.em.png</em:iconURL>
-    
-    <!-- Packages, Skins and Locales that this extension registers -->
-    <em:file>
-      <Description about="urn:mozilla:extension:file:x.jar">
-        <em:package>content/x/</em:package>
-        <em:locale>locale/en-US/x/</em:locale>
-        <em:locale>locale/de-DE/</em:locale>
-        <em:skin>skin/classic/x/</em:skin>
-      </Description>
-    </em:file>
-  </Description>      
-</RDF>
+    <name>x</name>
+    <version>0.5</version>
+    <description>Adds a paranoia button to the toolbar.</description>
+    <creator>Stephen Clavering</creator>
+    <contributor>Chris Neale</contributor>
+
+    <iconURL>chrome://x/content/icon.png</iconURL>
+
+    <!--
+    <homepageURL>http://cdn.mozdev.org/x/</homepageURL>
+    <updateURL>http://www.foo.com/update.cgi?id=%ITEM_ID%&version=%ITEM_VERSION%</updateURL>
+    <optionsURL>chrome://compact/content/compactPrefOverlay.xul</optionsURL>
+    <aboutURL></aboutURL>
+    -->
+
+    <targetApplication>
+      <rdf:Description>
+        <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
+        <minVersion>0.9</minVersion>
+        <maxVersion>0.9+</maxVersion>
+      </rdf:Description>
+    </targetApplication>
+
+    <file>
+      <rdf:Description about="urn:mozilla:extension:file:x.jar">
+        <package>content/x/</package>
+        <skin>skin/</skin>
+        <locale>locale/en-US/x/</locale>
+        <locale>locale/de-DE/</locale>
+      </rdf:Description>
+    </file>
+  </rdf:Description>
+</rdf:RDF>
