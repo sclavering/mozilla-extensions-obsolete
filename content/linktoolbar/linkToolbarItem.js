@@ -128,6 +128,7 @@ LinkToolbarButton.prototype = new LinkToolbarItem;
 
 function LinkToolbarMenu (linkType) {
   this.constructor(linkType);
+  this.xulPopup = null;
 
   this.clear = function() {
     this.disableParentMenuButton();
@@ -141,7 +142,8 @@ function LinkToolbarMenu (linkType) {
   }
 
   this.getPopup = function() {
-    return document.getElementById(this.xulPopupId);
+    if(!this.xulPopup) this.xulPopup = document.getElementById(this.xulPopupId);
+    return this.xulPopup;
   }
 
   this.displayLink = function(linkElement) {
