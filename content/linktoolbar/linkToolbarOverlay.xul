@@ -103,7 +103,7 @@
   <!-- our two line tooltip -->
   <popupset id="mainPopupSet">
     <tooltip id="linktoolbar-tooltip" orient="vertical"
-        onpopupshowing="linkToolbarUI.fillTooltip(document.tooltipNode);">
+        onpopupshowing="return linkToolbarUI.fillTooltip(document.tooltipNode);">
       <label id="linktoolbar-tooltip-1"/>
       <label id="linktoolbar-tooltip-2"/>
     </tooltip>
