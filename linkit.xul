@@ -26,16 +26,17 @@ function linkit() {
   page.xxLinkItDone = true;
 
   // add a top link iff relevant
-  if(/^[^\/]*?:\/\/.*\/.+/.test(location))
-    linkit_addLink(page,hydra,"top","/")
+  if(/^[^\/]*?:\/\/.*\/.+/.test(location)) {
+    linkit_addLink(page,hydra,"top","/");
 
-  // add a . or .. link
-  var matches = location.match(/(^.*\/)(.*)/);
-  if(!matches) return;  // we're on an about:blank or something weird
-  if(matches[2] && matches[2]!="" && !/(index|main).(html?|php)/i.test(matches[2]))
-    linkit_addLink(page,hydra,"up",".")
-  else if(matches[2]=="" && matches[1]!=location)
-    linkit_addLink(page,hydra,"up","..")
+    // add a . or .. link
+    var matches = location.match(/(^.*\/)(.*)/);
+    if(!matches) return;  // we're on an about:blank or something weird
+    if(matches[2]!="" && !/(index|main).(html?|php)/i.test(matches[2]))
+      linkit_addLink(page,hydra,"up",".")
+    else if(matches[2]=="")
+      linkit_addLink(page,hydra,"up","..")
+  }
 
   // add prev/next links
   var instags = page.getElementsByTagName("a");
