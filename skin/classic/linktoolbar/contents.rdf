@@ -15,9 +15,6 @@
     </chrome:packages>
   </RDF:Description>
 
-  <RDF:Description about="urn:mozilla:skin:classic/1.0:linktoolbar"
-    chrome:skinVersion="1.2"/>
-
   <RDF:Seq about="urn:mozilla:stylesheets">
     <RDF:li resource="chrome://browser/content/browser.xul"/>
   </RDF:Seq>
