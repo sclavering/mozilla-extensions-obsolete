@@ -26,14 +26,20 @@ var gTabBinMaxTabsInBin = 5;
 
 function tabBinOnLoad() {
   gBrowser._preTabBin_removeTab = gBrowser.removeTab;
-  setTimeout(tabBinReplaceToolbarCustomizationCallback, 1); // so it happens after Fx's delayedStartup().
+  setTimeout(tabBinDelayedStartup, 1); // so it happens after Fx's delayedStartup().
   tabBinInit();
 }
 
 addEventListener("load", tabBinOnLoad, false);
 
 
-function tabBinReplaceToolbarCustomizationCallback() {
+function tabBinDelayedStartup() {
+  // load settings
+  try {
+    gTabBinMaxTabsInBin = gPrefService.getIntPref("extensions.tabbin.numTabsInBin");
+  } catch(e) {}
+
+  // replace the toolbar customisation callback
   var box = document.getElementById("navigator-toolbox");
   box._preTabBin_customizeDone = box.customizeDone;
   box.customizeDone = tabBinToolboxCustomizeDone;
@@ -119,10 +125,13 @@ function tabBinBuildTabList(popup) {
     var browser = gBrowser.getBrowserForTab(tab), doc = browser.contentDocument;
     var title = doc.__proto__.__lookupGetter__('title').call(doc);
     var uri = browser.currentURI.spec;
+    var icon = tab.getAttribute("image");
 
     var mi = document.createElement("menuitem");
     mi.setAttribute("label", title || uri);
     mi.setAttribute("tooltiptext", title ? uri : "");
+    mi.className = "menuitem-iconic tabbin-menuitem";
+    if(icon) mi.setAttribute("image", icon);
     mi.tabBinHiddenTabIndex = i;
     popup.appendChild(mi);
   }

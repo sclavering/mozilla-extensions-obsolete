@@ -7,3 +7,9 @@
 toolbar[iconsize=small] #tabbin { -moz-image-region: rect(0 40px 16px 24px); }
 toolbar[iconsize=small] #tabbin:hover { -moz-image-region: rect(16px 40px 32px 24px); }
 toolbar[iconsize=small] #tabbin[disabled=true] { -moz-image-region: rect(32px 40px 48px 24px); }
+
+/* show the std. page icon for menuitems without a favicon */
+.tabbin-menuitem {
+  list-style-image: url(chrome://global/skin/icons/folder-item.png);
+  -moz-image-region: rect(0 16px 16px 0);
+}
