@@ -4,9 +4,10 @@
          xmlns="http://www.mozilla.org/2004/em-rdf#">
 
   <rdf:Description about="urn:mozilla:install-manifest">
-    <id>tbx</id><!-- I scorn your GUIDs -->
-    <version>0.14</version>
+    <id>org.mozdev.clav.tbx</id>
+
     <name>Toolbar Enhancements</name>
+    <version>0.14</version>
     <description>Adds various toolbar buttons and increases toolbar configurability</description>
 
     <creator>Stephen Clavering</creator>

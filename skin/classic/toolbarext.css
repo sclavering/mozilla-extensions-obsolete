@@ -1,74 +1,58 @@
 /* extra toolbar buttons */
 
-.tbx-button { list-style-image: url(chrome://toolbarext/skin/large.png); }
-toolbar[iconsize="small"] .tbx-button { list-style-image: url(chrome://toolbarext/skin/small.png); }
+.tbx-button {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  /* -moz-box-orient: vertical;*/
+}
+toolbar[iconsize="small"] .tbx-button {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+}
 
-#tbx-options-button { -moz-image-region: rect(0 32px 32px 0); }
-toolbar[iconsize="small"] #tbx-options-button { -moz-image-region: rect(0 20px 20px 0); }
+#tbx-options-button         { -moz-image-region: rect(0 24px 24px 0); }
+#tbx-addbookmark-button     { -moz-image-region: rect(0 48px 24px 24px); }
+#tbx-managebookmarks-button { -moz-image-region: rect(0 72px 24px 48px); }
+#tbx-save-button            { -moz-image-region: rect(0 96px 24px 72px); }
+#tbx-viewsource-button      { -moz-image-region: rect(0 120px 24px 96px); }
+#tbx-jsconsole-button       { -moz-image-region: rect(0 144px 24px 120px); }
+#tbx-fullscreen-button      { -moz-image-region: rect(0 168px 24px 144px); }
+#tbx-zoomin-button          { -moz-image-region: rect(0 192px 24px 168px); }
+#tbx-zoomout-button         { -moz-image-region: rect(0 216px 24px 192px); }
+#tbx-pageinfo-button        { -moz-image-region: rect(0 240px 24px 216px); }
+#tbx-stopreload-button[state="stop"]       { -moz-image-region: rect(0 264px 24px 240px); }
+#tbx-stopreload-button                     { -moz-image-region: rect(0 288px 24px 264px); }
+#tbx-javascript-tabpref[checked="true"]    { -moz-image-region: rect(0 312px 24px 288px); }
+#tbx-javascript-tabpref                    { -moz-image-region: rect(0 336px 24px 312px); }
+#tbx-images-tabpref[checked="true"]        { -moz-image-region: rect(0 360px 24px 336px); }
+#tbx-images-tabpref                        { -moz-image-region: rect(0 384px 24px 360px); }
+#tbx-metaredirects-tabpref[checked="true"] { -moz-image-region: rect(0 408px 24px 384px); }
+#tbx-metaredirects-tabpref                 { -moz-image-region: rect(0 432px 24px 408px); }
+#tbx-plugins-tabpref[checked="true"]       { -moz-image-region: rect(0 456px 24px 432px); }
+#tbx-plugins-tabpref                       { -moz-image-region: rect(0 480px 24px 456px); }
 
-#tbx-addbookmark-button { -moz-image-region: rect(0 64px 32px 32px); }
-toolbar[iconsize="small"] #tbx-addbookmark-button { -moz-image-region: rect(0 40px 20px 20px); }
-
-#tbx-managebookmarks-button { -moz-image-region: rect(0 96px 32px 64px); }
-toolbar[iconsize="small"] #tbx-managebookmarks-button { -moz-image-region: rect(0 60px 20px 40px); }
-
-#tbx-save-button { -moz-image-region: rect(0 128px 32px 96px); }
-toolbar[iconsize="small"] #tbx-save-button { -moz-image-region: rect(0 80px 20px 60px); }
-
-#tbx-viewsource-button { -moz-image-region: rect(0 160px 32px 128px); }
-toolbar[iconsize="small"] #tbx-viewsource-button { -moz-image-region: rect(0 100px 20px 80px); }
-
-#tbx-jsconsole-button { -moz-image-region: rect(0 192px 32px 160px); }
-toolbar[iconsize="small"] #tbx-jsconsole-button { -moz-image-region: rect(0 120px 20px 100px); }
-
-#tbx-fullscreen-button { -moz-image-region: rect(0 224px 32px 192px); }
-toolbar[iconsize="small"] #tbx-fullscreen-button { -moz-image-region: rect(0 140px 20px 120px); }
-
-#tbx-zoomout-button { -moz-image-region: rect(0 256px 32px 224px); }
-toolbar[iconsize="small"] #tbx-zoomout-button { -moz-image-region: rect(0 160px 20px 140px); }
-
-#tbx-zoomreset-button { -moz-image-region: rect(0 288px 32px 256px); }
-toolbar[iconsize="small"] #tbx-zoomreset-button { -moz-image-region: rect(0 180px 20px 160px); }
-
-#tbx-zoomin-button { -moz-image-region: rect(0 320px 32px 288px); }
-toolbar[iconsize="small"] #tbx-zoomin-button { -moz-image-region: rect(0 200px 20px 180px); }
-
-#tbx-pageinfo-button { -moz-image-region: rect(0 352px 32px 320px); }
-toolbar[iconsize="small"] #tbx-pageinfo-button { -moz-image-region: rect(0 220px 20px 200px); }
-
-#tbx-stopreload-button[state="stop"] {  -moz-image-region: rect(0 448px 32px 416px); }
-toolbar[iconsize="small"] #tbx-stopreload-button[state="stop"] { -moz-image-region: rect(0 280px 20px 260px); }
-
-#tbx-stopreload-button { -moz-image-region: rect(0 480px 32px 448px); }
-toolbar[iconsize="small"] #tbx-stopreload-button { -moz-image-region: rect(0 300px 20px 280px); }
-
-#tbx-javascript-tabpref[checked="true"] { -moz-image-region: rect(0 512px 32px 480px); }
-toolbar[iconsize="small"] #tbx-javascript-tabpref[checked="true"] { -moz-image-region: rect(0 320px 20px 300px); }
-
-#tbx-javascript-tabpref { -moz-image-region: rect(0 544px 32px 512px); }
-toolbar[iconsize="small"] #tbx-javascript-tabpref { -moz-image-region: rect(0 340px 20px 320px); }
-
-#tbx-images-tabpref[checked="true"] { -moz-image-region: rect(0 576px 32px 544px); }
-toolbar[iconsize="small"] #tbx-images-tabpref[checked="true"] { -moz-image-region: rect(0 360px 20px 340px); }
-
-#tbx-images-tabpref { -moz-image-region: rect(0 608px 32px 576px); }
-toolbar[iconsize="small"] #tbx-images-tabpref { -moz-image-region: rect(0 380px 20px 360px); }
-
-#tbx-metaredirects-tabpref[checked="true"] { -moz-image-region: rect(0 640px 32px 608px); }
-toolbar[iconsize="small"] #tbx-metaredirects-tabpref[checked="true"] { -moz-image-region: rect(0 400px 20px 380px); }
-
-#tbx-metaredirects-tabpref { -moz-image-region: rect(0 672px 32px 640px); }
-toolbar[iconsize="small"] #tbx-metaredirects-tabpref { -moz-image-region: rect(0 420px 20px 400px); }
-
-#tbx-plugins-tabpref[checked="true"] { -moz-image-region: rect(0 704px 32px 672px); }
-toolbar[iconsize="small"] #tbx-plugins-tabpref[checked="true"] { -moz-image-region: rect(0 440px 20px 420px); }
-
-#tbx-plugins-tabpref { -moz-image-region: rect(0 736px 32px 704px); }
-toolbar[iconsize="small"] #tbx-plugins-tabpref { -moz-image-region: rect(0 460px 20px 440px); }
+toolbar[iconsize="small"] #tbx-options-button         { -moz-image-region: rect(0 16px 16px 0); }
+toolbar[iconsize="small"] #tbx-addbookmark-button     { -moz-image-region: rect(0 32px 16px 16px); }
+toolbar[iconsize="small"] #tbx-managebookmarks-button { -moz-image-region: rect(0 48px 16px 32px); }
+toolbar[iconsize="small"] #tbx-save-button            { -moz-image-region: rect(0 64px 16px 48px); }
+toolbar[iconsize="small"] #tbx-viewsource-button      { -moz-image-region: rect(0 80px 16px 64px); }
+toolbar[iconsize="small"] #tbx-jsconsole-button       { -moz-image-region: rect(0 96px 16px 80px); }
+toolbar[iconsize="small"] #tbx-fullscreen-button      { -moz-image-region: rect(0 112px 16px 96px); }
+toolbar[iconsize="small"] #tbx-zoomin-button          { -moz-image-region: rect(0 128px 16px 112px); }
+toolbar[iconsize="small"] #tbx-zoomout-button         { -moz-image-region: rect(0 144px 16px 128px); }
+toolbar[iconsize="small"] #tbx-pageinfo-button        { -moz-image-region: rect(0 160px 16px 144px); }
+toolbar[iconsize="small"] #tbx-stopreload-button[state="stop"]       { -moz-image-region: rect(0 176px 16px 160px); }
+toolbar[iconsize="small"] #tbx-stopreload-button                     { -moz-image-region: rect(0 192px 16px 176px); }
+toolbar[iconsize="small"] #tbx-javascript-tabpref[checked="true"]    { -moz-image-region: rect(0 208px 16px 192px); }
+toolbar[iconsize="small"] #tbx-javascript-tabpref                    { -moz-image-region: rect(0 224px 16px 208px); }
+toolbar[iconsize="small"] #tbx-images-tabpref[checked="true"]        { -moz-image-region: rect(0 240px 16px 224px); }
+toolbar[iconsize="small"] #tbx-images-tabpref                        { -moz-image-region: rect(0 256px 16px 240px); }
+toolbar[iconsize="small"] #tbx-metaredirects-tabpref[checked="true"] { -moz-image-region: rect(0 272px 16px 256px); }
+toolbar[iconsize="small"] #tbx-metaredirects-tabpref                 { -moz-image-region: rect(0 288px 16px 272px); }
+toolbar[iconsize="small"] #tbx-plugins-tabpref[checked="true"]       { -moz-image-region: rect(0 304px 16px 288px); }
+toolbar[iconsize="small"] #tbx-plugins-tabpref                       { -moz-image-region: rect(0 320px 16px 304px); }
 
 
 /* need a min-width so you can easily drag items onto a new toolbar */
-toolbox[vertical="true"] > toolbar { min-width: 20px; }
+toolbox[vertical="true"] > toolbar { min-width: 16px; }
 
 toolbox[vertical="true"] > toolbar > toolbarspacer { height: 15px; }
 
@@ -89,7 +73,7 @@ toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] > toolb
 
 /* drag drop feedback when in customisation mode. dragover=left really means dragover=before. */
 toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] {
-  margin: -2px 0;
+  margin: -2px -2px;
   border: none;
   border-top: 2px solid transparent;
   border-bottom: 2px solid transparent;
@@ -111,8 +95,21 @@ toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="right"] { bord
 }
 
 
+/* make items in the tab bar more compact */
+.tbx-tabbar-toolbar toolbarbutton,
+.tbx-tabbar-toolbar toolbaritem {
+  padding: 1px;
+  margin: 0;
+}
+
+
+/* toolbars are insanely large in winstripe if we don't do this
+   the !important is to override a stupid rule for toolbarbutton[checked="true"] in winstripe */
+toolbar[iconsize="small"][mode=icons] .tbx-button { padding: 0 !important; }
+
+
 /* need to have a min size so that items can be dragged into the tabbar/statusbar toolbars */
 .tbx-toolbox-plain[incustomisemode="true"] > .tbx-toolbar-plain {
   min-width: 10px;
-  min-height: 20px;
+  min-height: 16px;
 }

@@ -21,78 +21,65 @@
   <!-- new buttons -->
   <toolbarpalette id="BrowserToolbarPalette">
     <!-- Options -->
-    <toolbarbutton class="tbx-button" id="tbx-options-button"
+    <toolbarbutton class="tbx-button toolbarbutton-1" id="tbx-options-button"
         oncommand="openPreferences()"
         label="&tbx-options-button.label;" tooltiptext="&tbx-options-button.tooltip;"
         />
 
     <!-- Add Bookmark, Manage Bookmarks -->
-    <toolbarbutton class="tbx-button" id="tbx-addbookmark-button"
+    <toolbarbutton class="tbx-button toolbarbutton-1" id="tbx-addbookmark-button"
         command="Browser:AddBookmarkAs"
         label="&tbx-addbookmark-button.label;" tooltiptext="&tbx-addbookmark-button.tooltip;"
         />
-    <toolbarbutton class="tbx-button" id="tbx-managebookmarks-button"
+    <toolbarbutton class="tbx-button toolbarbutton-1" id="tbx-managebookmarks-button"
         oncommand="tbxCommands.bookmarkManager(event);"
         onclick="tbxCommands.bookmarkManager2(event);"
         label="&tbx-managebookmarks-button.label;" tooltiptext="&tbx-managebookmarks-button.tooltip;"
         />
 
     <!-- Save -->
-    <toolbarbutton class="tbx-button"
+    <toolbarbutton class="tbx-button toolbarbutton-1"
         id="tbx-save-button" command="Browser:SavePage"
         label="&tbx-save-button.label;" tooltiptext="&tbx-save-button.tooltip;"
         />
 
     <!-- View Source -->
-    <toolbarbutton class="tbx-button" id="tbx-viewsource-button"
+    <toolbarbutton class="tbx-button toolbarbutton-1" id="tbx-viewsource-button"
         command="View:PageSource"
         onclick="tbxCommands.viewSource(event,window._content.document);"
         label="&tbx-viewsource-button.label;" tooltiptext="&tbx-viewsource-button.tooltip;"
         />
 
     <!-- Javascript Console -->
-    <toolbarbutton class="tbx-button" id="tbx-jsconsole-button"
+    <toolbarbutton class="tbx-button toolbarbutton-1" id="tbx-jsconsole-button"
         oncommand="toJavaScriptConsole();" onclick="tbxCommands.jsConsole(event);"
         label="&tbx-jsconsole-button.label;" tooltiptext="&tbx-jsconsole-button.tooltip;"
         />
 
     <!-- Toggle Full Screen Mode -->
-    <toolbarbutton class="tbx-button" id="tbx-fullscreen-button"
+    <toolbarbutton class="tbx-button toolbarbutton-1" id="tbx-fullscreen-button"
         command="View:FullScreen"
         label="&tbx-fullscreen-button.label;" tooltiptext="&tbx-fullscreen-button.tooltip;"
         />
 
     <!-- Zoom Out/Reset/In -->
-    <toolbarbutton class="tbx-button"
+    <toolbarbutton class="tbx-button toolbarbutton-1"
         id="tbx-zoomout-button" command="cmd_textZoomReduce"
         label="&tbx-zoomout-button.label;" tooltiptext="&tbx-zoomout-button.tooltip;"
         />
-    <toolbarbutton class="tbx-button"
-        id="tbx-zoomreset-button" oncommand="ZoomManager.prototype.getInstance().reset();"
-        label="&tbx-zoomreset-button.label;" tooltiptext="&tbx-zoomreset-button.tooltip;"
-        />
-    <toolbarbutton class="tbx-button"
+    <toolbarbutton class="tbx-button toolbarbutton-1"
         id="tbx-zoomin-button" command="cmd_textZoomEnlarge"
         label="&tbx-zoomin-button.label;" tooltiptext="&tbx-zoomin-button.tooltip;"
         />
 
     <!-- View Page Info -->
-    <toolbarbutton class="tbx-button"
+    <toolbarbutton class="tbx-button toolbarbutton-1"
         id="tbx-pageinfo-button" command="View:PageInfo"
         label="&tbx-pageinfo-button.label;" tooltiptext="&tbx-pageinfo-button.tooltip;"
         />
 
-    <!-- Close Tab
-    <toolbarbutton class="tabs-closebutton"
-        id="tbx-closetab-button"
-        label="&tbx-closetab.label;"
-        oncommand="BrowserCloseTabOrWindow();"
-        tooltiptext="&tbx-closetab-button.tooltip;"
-        />
-        -->
-
     <!-- Stop/Reload combi-button -->
-    <toolbarbutton class="tbx-button"
+    <toolbarbutton class="tbx-button toolbarbutton-1"
         id="tbx-stopreload-button" oncommand="tbxCommands.stopOrReload(event, this);"
         label="&tbx-stopreload.default.label;" tooltiptext="&tbx-stopreload.reload.tooltip;"
         reloadlabel="&tbx-stopreload.reload.label;" reloadtooltip="&tbx-stopreload.reload.tooltip;"
@@ -100,19 +87,19 @@
         />
 
     <!-- Toggle Javascript, Images and Plugins for the current tab -->
-    <toolbarbutton class="tbx-button" type="checkbox" checked="true"
+    <toolbarbutton class="tbx-button toolbarbutton-1" type="checkbox" checked="true"
         id="tbx-javascript-tabpref" oncommand="tbxCommands.toggleJavascriptInTab();"
         label="&tbx-javascript-tabpref.label;" tooltiptext="&tbx-javascript-tabpref.tooltip;"
         />
-    <toolbarbutton class="tbx-button" type="checkbox" checked="true"
+    <toolbarbutton class="tbx-button toolbarbutton-1" type="checkbox" checked="true"
         id="tbx-images-tabpref" oncommand="tbxCommands.toggleImagesInTab();"
         label="&tbx-images-tabpref.label;" tooltiptext="&tbx-images-tabpref.tooltip;"
         />
-    <toolbarbutton class="tbx-button" type="checkbox" checked="true"
+    <toolbarbutton class="tbx-button toolbarbutton-1" type="checkbox" checked="true"
         id="tbx-metaredirects-tabpref" oncommand="tbxCommands.toggleMetaRedirectsInTab();"
         label="&tbx-metaredirects-tabpref.label;" tooltiptext="&tbx-metaredirects-tabpref.tooltip;"
         />
-    <toolbarbutton class="tbx-button" type="checkbox" checked="true"
+    <toolbarbutton class="tbx-button toolbarbutton-1" type="checkbox" checked="true"
         id="tbx-plugins-tabpref" oncommand="tbxCommands.togglePluginsInTab();"
         label="&tbx-plugins-tabpref.label;" tooltiptext="&tbx-plugins-tabpref.tooltip;"
         />
@@ -151,7 +138,7 @@
       <toolbarset id="tbx-left-toolbars" context="toolbar-context-menu"/>
     </toolbox>
     <toolbox id="tbx-right-toolbox" insertafter="appcontent"
-        vertical="true"
+       vertical="true"
         palette="BrowserToolbarPalette" context="toolbar-context-menu"
         customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
