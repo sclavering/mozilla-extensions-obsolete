@@ -71,6 +71,11 @@ toolbar[iconsize="small"] #tbx-metaredirects-tabpref[checked="true"] { -moz-imag
 #tbx-metaredirects-tabpref { -moz-image-region: rect(0 672px 32px 640px); }
 toolbar[iconsize="small"] #tbx-metaredirects-tabpref { -moz-image-region: rect(0 420px 20px 400px); }
 
+#tbx-plugins-tabpref[checked="true"] { -moz-image-region: rect(0 704px 32px 672px); }
+toolbar[iconsize="small"] #tbx-plugins-tabpref[checked="true"] { -moz-image-region: rect(0 440px 20px 420px); }
+
+#tbx-plugins-tabpref { -moz-image-region: rect(0 736px 32px 704px); }
+toolbar[iconsize="small"] #tbx-plugins-tabpref { -moz-image-region: rect(0 460px 20px 440px); }
 
 
 

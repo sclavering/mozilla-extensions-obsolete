@@ -130,12 +130,10 @@
         id="tbx-metaredirects-tabpref" oncommand="tbxCommands.toggleMetaRedirectsInTab();"
         label="&tbx-metaredirects-tabpref.label;" tooltiptext="&tbx-metaredirects-tabpref.tooltip;"
         />
-    <!--
     <toolbarbutton class="toolbarbutton-1 tbx-button" type="checkbox" checked="true"
         id="tbx-plugins-tabpref" oncommand="tbxCommands.togglePluginsInTab();"
         label="&tbx-plugins-tabpref.label;" tooltiptext="&tbx-plugins-tabpref.tooltip;"
         />
-        -->
 
   </toolbarpalette>
 
