@@ -69,7 +69,6 @@ const linkToolbarUI = {
         || !linkToolbarUI.isLinkToolbarEnabled()
         || !linkToolbarHandler.hasItems)
       return;
-
     linkToolbarHandler.clearAllItems();
   },
 
@@ -77,7 +76,6 @@ const linkToolbarUI = {
     if (event.originalTarget.localName != "tabs"
         || !linkToolbarUI.isLinkToolbarEnabled())
       return;
-
     linkToolbarHandler.clearAllItems();
     linkToolbarUI.fullSlowRefresh();
   },
