@@ -18,7 +18,9 @@ function linkit_getInnerText(el) {
 
 function linkit(event) {
   var page = event.originalTarget;
-  var hydra = page.getElementsByTagName("head")[0];
+  var hydra = page.getElementsByTagName("head");
+  if(!hydra) return;
+  hydra = hydra[0];
   var location = page.location.href;
 
   // prevent duplication
@@ -60,6 +62,10 @@ function linkit(event) {
     else if(/^next|continu|next$|>$|\u00bb/i.test(iText))
       if (/^#/i.test(href)); else
         linkit_addLink(page,hydra,"next",href,"LinkIt [>] (" +href+ ")");
+
+/*    else if(/^[0-9]{1,}$/i.test(iText))
+      if (/^#/i.test(href)); else
+        linkit_addLink(page,hydra,"linkit",href,"LinkIt [" + iText + "] (" +href+ ")");*/
   }
 }
 
