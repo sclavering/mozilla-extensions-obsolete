@@ -22,6 +22,9 @@
 <!ENTITY tbx-zoomin-button.label "Zoom In">
 <!ENTITY tbx-zoomin-button.tooltip "Increase text size">
 
+<!ENTITY tbx-zoomreset-button.label "Zoom Reset">
+<!ENTITY tbx-zoomreset-button.tooltip "Restore default text size">
+
 <!ENTITY tbx-zoomout-button.label "Zoom Out">
 <!ENTITY tbx-zoomout-button.tooltip "Decrease text size">
 
