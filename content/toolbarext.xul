@@ -98,13 +98,15 @@
        We also want a different context menu while customising
        -->
   <toolbox id="navigator-toolbox" toolboxname="&toolbarext-top-toolbox-name;"
-      customiseContext="toolbar-customise-context-menu"/>
+      customiseContext="toolbar-customise-context-menu"
+      palette="BrowserToolbarPalette"
+      />
   
   <!-- another toolbox at the bottom of the window -->
   <window id="main-window">
     <toolbox id="toolbarext-bottom-toolbox" insertbefore="status-bar"
         toolboxname="&toolbarext-bottom-toolbox-name;"
-        linkedto="navigator-toolbox" context="toolbar-context-menu"
+        palette="BrowserToolbarPalette" context="toolbar-context-menu"
         customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
         >
@@ -116,7 +118,7 @@
   <hbox id="browser">
     <toolbox id="toolbarext-left-toolbox" insertbefore="sidebar-box"
         vertical="true" toolboxname="&toolbarext-left-toolbox-name;"
-        linkedto="navigator-toolbox" context="toolbar-context-menu"
+        palette="BrowserToolbarPalette" context="toolbar-context-menu"
         customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
         >
@@ -124,7 +126,7 @@
     </toolbox>
     <toolbox id="toolbarext-right-toolbox" insertafter="appcontent"
         vertical="true" toolboxname="&toolbarext-right-toolbox-name;"
-        linkedto="navigator-toolbox" context="toolbar-context-menu"
+        palette="BrowserToolbarPalette" context="toolbar-context-menu"
         customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
         >

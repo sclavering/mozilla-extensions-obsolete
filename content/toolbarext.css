@@ -6,8 +6,9 @@ tabs[closebutton="true"] {
 }
 */
 
-toolbox { -moz-binding: url(chrome://toolbarext/content/bindings.xml#normal-toolbox); }
-toolbox[linkedto] { -moz-binding: url(chrome://toolbarext/content/bindings.xml#linked-toolbox); }
+
+toolbar { -moz-binding: url(chrome://toolbarext/content/bindings.xml#toolbar); }
+toolbox[palette] { -moz-binding: url(chrome://toolbarext/content/bindings.xml#customisable-toolbox); }
 
 
 /* the toolboxes down the left and right need to have horizontal orientation so the toolbars
