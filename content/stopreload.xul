@@ -7,7 +7,7 @@
 <overlay id="stopreloadOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <toolbarpalette id="BrowserToolbarPalette">
-  <toolbarbutton id="tbx-stopreload-button" class="toolbarbutton-1"
+  <toolbarbutton id="stopreload-button" class="toolbarbutton-1 stopreload-reload"
       oncommand="stopreload.oncommand(event, this);"
       label="&default.label;"
       reloadlabel="&reload.label;" reloadtooltip="&reload.tooltip;"
@@ -16,6 +16,9 @@
 </toolbarpalette>
 
 <script type="application/x-javascript"><![CDATA[
+
+const kStopReloadNormalClass = "toolbarbutton-1 stopreload-reload";
+const kStopReloadStopClass = "toolbarbutton-1 stopreload-stop";
 
 window.addEventListener("load", function() {
   stopreload.init();
@@ -34,7 +37,7 @@ var stopreload = {
   listenerAdded: false,
 
   init: function() {
-    this.button = document.getElementById('tbx-stopreload-button');
+    this.button = document.getElementById('stopreload-button');
     if(this.button) {
       if(this.listenerAdded) return;
       gBrowser.addProgressListener(this, Components.interfaces.nsIWebProgress.NOTIFY_STATE_ALL);
@@ -42,6 +45,7 @@ var stopreload = {
       this.listenerAdded = true;
       // default label is 'Stop/Reload', for when it's on the palette
       this.button.setAttribute('label', this.button.getAttribute('reloadlabel'));
+      this.button.stopOnCommand = false;
     } else {
       if(!this.listenerAdded) return;
       gBrowser.removeProgressListener(this);
@@ -50,7 +54,7 @@ var stopreload = {
   },
 
   oncommand: function(evt, button) {
-    if(button.getAttribute('state')=='stop') BrowserStop();
+    if(button.stopOnCommand) BrowserStop();
     else if(evt.shiftKey) BrowserReloadSkipCache();
     else BrowserReload();
   },
@@ -66,11 +70,13 @@ var stopreload = {
     const nsIWebProgressListener = Components.interfaces.nsIWebProgressListener;
     var btn = this.button;
     if(aStateFlags & nsIWebProgressListener.STATE_START) {
-      btn.setAttribute('state', 'stop');
+      btn.className = kStopReloadStopClass;
+      btn.stopOnCommand = true;
       btn.setAttribute('label', btn.getAttribute('stoplabel'));
       btn.setAttribute('tooltiptext',btn.getAttribute('stoptooltip'));
     } else if(aStateFlags & nsIWebProgressListener.STATE_STOP) {
-      btn.removeAttribute('state');
+      btn.className = kStopReloadNormalClass;
+      btn.stopOnCommand = false;
       btn.setAttribute('label', btn.getAttribute('reloadlabel'));
       btn.setAttribute('tooltiptext', btn.getAttribute('reloadtooltip'));
     }
@@ -81,8 +87,8 @@ var stopreload = {
   onStatusChange: function(aWebProgress, aRequest, aStatus, aMessage) {},
   onSecurityChange: function(aWebProgress, aRequest, aState) {},
 
-  // tabbrowser.xml#551 bogusly calls this for all registered progress listeners,
-  // even though it is *not* part of the nsIWebProgressListener interface
+  // tabbrowser.xml calls this for all registered progress listeners,
+  // even though it is not part of the nsIWebProgressListener interface
   onLinkIconAvailable: function(href) {}
 }
 

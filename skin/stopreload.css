@@ -1,27 +1,32 @@
-#tbx-stopreload-button {
+/*
+#stopreload-button {
   list-style-image: url(chrome://browser/skin/Toolbar.png);
+}*/
+.stopreload-reload {
   -moz-image-region: rect(0px 96px 24px 72px);
 }
-#tbx-stopreload-button:hover {
+.stopreload-reload:hover {
   -moz-image-region: rect(24px 96px 48px 72px);
 }
-#tbx-stopreload-button[state=stop] {
+.stopreload-stop {
   -moz-image-region: rect(0px 72px 24px 48px);
 }
-#tbx-stopreload-button[state=stop]:hover {
+.stopreload-stop:hover {
   -moz-image-region: rect(24px 72px 48px 48px);
 }
 
-toolbar[iconsize=small] #tbx-stopreload-button {
-  list-style-image: url(chrome://browser/skin/Toolbar-small.png);
+/*
+toolbar[iconsize=small]
+  list-style-image: url(chrome://browser/skin/Toolbar-small.png); */
+toolbar[iconsize=small] .stopreload-reload {
   -moz-image-region: rect(0px 64px 16px 48px);
 }
-toolbar[iconsize=small] #tbx-stopreload-button:hover {
+toolbar[iconsize=small] .stopreload-reload:hover {
   -moz-image-region: rect(16px 64px 32px 48px);
 }
-toolbar[iconsize=small] #tbx-stopreload-button[state=stop] {
+toolbar[iconsize=small] .stopreload-stop {
   -moz-image-region: rect(0px 48px 16px 32px);
 }
-toolbar[iconsize=small] #tbx-stopreload-button[state=stop]:hover {
+toolbar[iconsize=small] .stopreload-stop:hover {
   -moz-image-region: rect(16px 48px 32px 32px);
 }
