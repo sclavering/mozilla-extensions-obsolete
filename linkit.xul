@@ -11,6 +11,8 @@ const linkitRE_first = /^first|first$|^begin|\|</i; // ? >\u007c| ?
 const linkitRE_last  = /^last|last$|^end\b|>\|/i; // ? >\u007c| ?
 const linkitRE_next2 = /next/i;
 const linkitRE_prev2 = /prev/i;
+const linkitREfirst2 = /first/i;
+const linkitRE_last2 = /last/i;
 
 // recursively ding the internal text of an element
 function linkit_getInnerText(el) {
@@ -22,6 +24,8 @@ function linkit_getInnerText(el) {
     var src = el.getAttribute("src");
     if(linkitRE_next2.test(src)) s += " next";
     else if(linkitRE_prev2.test(src)) s += " prev";
+    else if(linkitREfirst2.test(src)) s += " first";
+    else if(linkitRE_last2.test(src)) s += " last";
     return s;
   }
   // deal with other elements
@@ -128,7 +132,10 @@ function linkit_addLink(page,head,rel,url,title) {
   link.setAttribute("rel", rel);
   if(title) link.setAttribute("title", title);
   else link.setAttribute("title", "LinkIt ["+url+"]");
-  head.appendChild(link);
+
+// if no link currently in head matches href and rel then add
+//  if (head.)
+    head.appendChild(link);
 }
 
 
