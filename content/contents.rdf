@@ -7,14 +7,14 @@
   </RDF:Seq>
 
   <RDF:Description about="urn:mozilla:package:tabx"
-        chrome:displayName="Tab X"
-        chrome:author="Stephen Clavering"
-        chrome:name="tabx"
-        chrome:description="Adds a close button to each of the browser tabs."
-        chrome:extension="true"
-        />
+      chrome:displayName="Tab X"
+      chrome:author="Stephen Clavering"
+      chrome:name="tabx"
+      chrome:description="Adds a close button to each of the browser tabs"
+      chrome:extension="true"
+      />
 
-  <!-- the overlay just provides a stylesheet! -->
+  <!-- the overlay just provides a stylesheet -->
   <RDF:Seq about="urn:mozilla:overlays">
     <RDF:li resource="chrome://browser/content/browser.xul"/>
   </RDF:Seq>

@@ -1,12 +1,12 @@
 const kDisplayName = "Tab X";
 const kName = "tabx";
 const kPackage = "/clav.mozdev.org/tabx";
-const kVersion = "0.1";
+const kVersion = "0.2";
 
 const kJarFile = "tabx.jar";
-const kContentFolder = "/";
+const kContentFolder = "content/";
 const kLocaleFolders = [];
-const kSkinFolder = ""; // leave blank if not applicable
+const kSkinFolder = "skin/"; // leave blank if not applicable
 
 
 var kMsg = "Do you wish to install "+kDisplayName+" to your profile?\n\nClick OK to install to your profile.\n\nClick Cancel if you want to install globally.";

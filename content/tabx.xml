@@ -1,29 +1,22 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE bindings [
-<!ENTITY % tbx SYSTEM "chrome://toolbarext/locale/">
-%tbx;
-]>
-
-<bindings id="toolbarext-bindings"
+<bindings id="tabx-bindings"
           xmlns="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
           xmlns:xbl="http://www.mozilla.org/xbl">
 
   <binding id="browser-tab" display="xul:tab"
-     extends="chrome://global/content/bindings/tabbox.xml#tab">
+      extends="chrome://global/content/bindings/tabbox.xml#tab">
     <content>
       <xul:image class="tab-icon" xbl:inherits="validate,src=image"/>
       <xul:label class="tab-text" xbl:inherits="value=label,accesskey,crop,disabled" flex="1"/>
-      <xul:toolbarbutton class="plain tab-close-button" label="X"
-        oncommand="/*this.parentNode.parentNode.parentNode.parentNode.parentNode.removeTab(this.parentNode);
-                   event.stopPropagation();*/"/>
+      <xul:image class="tabx-tab-close-button"/>
     </content>
 
     <handlers>
       <handler event="click" button="0">
       <![CDATA[
-        if(event.originalTarget.localName=="toolbarbutton")
+        if(event.originalTarget.className=="tabx-tab-close-button")
           this.parentNode.parentNode.parentNode.parentNode.removeTab(this);
         else
           this.parentNode.selectedItem = this;
