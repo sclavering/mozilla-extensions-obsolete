@@ -9,7 +9,7 @@ const linkFinder = {
   // regular expressions used for identifying links based on the src url of contained images
   img_re_first: /first/i,
   img_re_prev:  /p?rev/i,
-  img_re_next:  /next|more|fwd/i,
+  img_re_next:  /ne?xt|more|fwd/i,
   img_re_last:  /last/i,
 
   findLinks: function(doc) {
