@@ -194,12 +194,12 @@
 
     <statusbarpanel id="styleselector-panel" insertafter="linktoolbar" insertbefore="statusbar-progresspanel">
       <toolbarbutton id="linktoolbar-toggle" oncommand="toggleLinkToolbar();" persist="left" />
-      <toolbarbutton id="linktoolbar-digger" label="&upButton.label;"
+<!--      <toolbarbutton id="linktoolbar-digger" label="&upButton.label;"
                      tooltiptext="&upButton.tooltip;" type="menu">
         <menupopup onpopupshowing="return linkToolbarUrlDigger.buildMenu(this);"
           onpopuphiding="linkToolbarUrlDigger.clearMenu(this);"
-          onclick="return linkToolbarUrlDigger.commanded(event,this);"/><!-- position="before_end" -->
-      </toolbarbutton>
+          onclick="return linkToolbarUrlDigger.commanded(event,this);"/>< ! - - position="before_end" - - >
+      </toolbarbutton> -->
       <toolbarbutton id="styleselector" type="menu" label="&styleselector.label;"
           tooltiptext="&styleselector.tooltip;">
         <menupopup id="styleselector-popup" position="before_end"
