@@ -1,7 +1,7 @@
 const APP_DISPLAY_NAME = "GoTo";
 const APP_NAME = "goto";
 const APP_PACKAGE = "/clav.co.uk/goto";
-const APP_VERSION = "0.1.1";
+const APP_VERSION = "0.2.0";
 
 const APP_JAR_FILE = "goto.jar";
 const APP_CONTENT_FOLDER = "content/goto/";
