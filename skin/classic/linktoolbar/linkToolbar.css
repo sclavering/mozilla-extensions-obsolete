@@ -175,7 +175,7 @@
   color: graytext !important;
 }
 
-// from chrome://navigator/content/navigator.css
+/* from chrome://navigator/content/navigator.css */
 /* ::::: Hide the link toolbar if it is set to autohide and has no items. ::::: */
 
 #linktoolbar[hidden="maybe"][hasitems="false"] {
