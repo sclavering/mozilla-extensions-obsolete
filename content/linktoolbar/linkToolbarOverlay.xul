@@ -183,8 +183,8 @@
             onpopupshowing="StyleSelector.buildMenu(this);"
             onpopuphiding="StyleSelector.emptyMenu(this);"
             oncommand="event.preventBubble(); StyleSelector.commanded(event, this, window._content);">
-          <menuitem label="&styleselectorNoPageStyle;" type="radio"/>
-          <menuitem label="&styleselectorPersistentStyle;" type="radio"/>
+          <menuitem label="&styleselectorNoPageStyle;" tooltiptext="&styleselectorNoPageStyle;" type="radio"/>
+          <menuitem label="&styleselectorPersistentStyle;" tooltiptext="&styleselectorPersistentStyle;" type="radio"/>
         </menupopup>
       </toolbarbutton>
     </statusbarpanel>
