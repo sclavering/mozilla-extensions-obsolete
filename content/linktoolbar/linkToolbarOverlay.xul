@@ -55,7 +55,7 @@
     <tooltip id="linktoolbar-tooltip" orient="vertical"
         onpopupshowing="if(!linkToolbarUI.fillTooltip(document.tooltipNode)) event.preventDefault();">
       <label id="linktoolbar-tooltip-1"/>
-      <label id="linktoolbar-tooltip-2"/>
+      <label id="linktoolbar-tooltip-2" crop="center"/>
     </tooltip>
   </popupset>
 
