@@ -11,7 +11,6 @@
       <menupopup id="goto-menu" oncommand="GoTo.commanded(event,this);"
           onclick="GoTo.commanded(event,this);"
           onpopupshowing="GoTo.buildMenu(this);" onpopuphiding="GoTo.clearMenu(this);">
-        <!-- menuitem id="goto-decode-uri" label="&gotoDecodeURI.label;"/ -->
       </menupopup>
     </menu>
   </popup>
