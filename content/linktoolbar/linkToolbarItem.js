@@ -221,13 +221,5 @@ function LinkToolbarTransientMenu (linkType) {
     popup.setAttribute("id", this.xulPopupId);
     return popup;
   }
-
-  this.displayLink = function(linkElement) {
-    if(!this.__proto__.displayLink.apply(this, [linkElement])) return false;
-    this.getXULElement().hidden = false;
-    // Show the 'miscellaneous' separator
-   // document.getElementById("misc-separator").hidden = false;
-    return true;
-  }
 }
 LinkToolbarTransientMenu.prototype = new LinkToolbarMenu;
