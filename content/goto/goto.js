@@ -12,9 +12,6 @@ var GoTo = {
       // Clear Location
       gURLBar.value = "";
       gURLBar.focus();
-    } else if(t.id == "goto-decode-uri") {
-      gURLBar.value = unescape(gURLBar.value);
-      gURLBar.focus();
     } else {
       // load url
       var uriToLoad = t.getAttribute("label");
@@ -34,7 +31,6 @@ var GoTo = {
   // return the href attribute.
   // in future this may need expanding to deal with xlinks, but we'll live without for now
   getLink: function() {
-    // Bubble out, looking for items of interest
     var elem = document.popupNode;
     while(elem) {
       if(elem instanceof Components.interfaces.nsIDOMHTMLAnchorElement && elem.href)
@@ -48,7 +44,7 @@ var GoTo = {
     var url = this.getLink();
     var matches, regexp, groupEnd, originalUrl = url;
 
-    // if were not on a link, give Spade-like functionality
+    // if were not on a link, give Digger functionality
     // XXX should retrieve current document location, not url bar value
     if(!url) url = gURLBar.value;
     if(url.length == 0) return;
