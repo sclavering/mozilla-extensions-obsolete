@@ -1,13 +1,8 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE overlay [
-<!-- tabbrowser has the closetab label in its dtd for the tab context menus -->
-<!ENTITY % tabBrowserDTD SYSTEM "chrome://global/locale/tabbrowser.dtd" >
-%tabBrowserDTD;
-]>
+<!DOCTYPE overlay SYSTEM "chrome://ctc/locale/">
 
-<overlay id="CTCOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="CTCOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <script type="application/x-javascript"><![CDATA[
 
@@ -27,7 +22,7 @@ function ctc_hide() {
 ]]></script>
 
 <popup id="contentAreaContextMenu">
-  <menuitem id="context-closetab" label="&closeTab.label;" oncommand="gBrowser.removeCurrentTab()" insertafter="context-stop"/>
+  <menuitem id="context-closetab" label="&closetab;" oncommand="gBrowser.removeCurrentTab()" insertafter="context-stop"/>
 </popup>
 
 </overlay>
