@@ -153,14 +153,6 @@ var linkToolbarUtils = {
 var linkToolbarItems = {
   items: [],
 
-  handleElement: function(linkElement) {
-    var linkInfo = linkToolbarUtils.getLinkElementInfo(linkElement);
-    if(!linkInfo) return null;
-
-    this.handleLink(linkInfo);
-    return linkInfo;
-  },
-
   handleLink: function(linkInfo) {
     for(var rel in linkInfo.relValues)
       this.getItemForLinkType(rel).displayLink(linkInfo);

@@ -78,7 +78,6 @@ var linkToolbarPrefs = {
 
 
 var linkToolbarUI = {
-  // scope is weird throught this function (|this| refers to the function itself)
   linkAdded: function(event) {
     var element = event.originalTarget;
     var doc = element.ownerDocument;
@@ -88,7 +87,6 @@ var linkToolbarUI = {
     linkToolbarUI.addLink(linkInfo, doc);
   },
 
-  // rels is a map from link rel values to |true|
   addLink: function(linkInfo, doc) {
     if(!linkInfo) return;
     if(doc == window._content.document) {
@@ -97,14 +95,17 @@ var linkToolbarUI = {
     }
     // remember the link in an array on the document
     // xxx we'd prefer not to pollute the document's DOM of course, but javascript
-    // doesn't have hashtables (only string->anything maps), so there isn't all that
-    // much choice.
+    // doesn't have real hashtables (only string->anything maps), so there isn't
+    // all that much choice.
     if(!("__lt__links" in doc)) doc.__lt__links = [];
     var doclinks = doc.__lt__links;
     if(doclinks.empty) doclinks.empty = false; // |length| is 0 for hashtables
     for(var r in linkInfo.relValues) {
       if(!(r in doclinks)) doclinks[r] = [];
-      doclinks[r].push(linkInfo);
+      // we leave any existing link with the same URL alone so that linkFinder-generated
+      // links don't replace page-provided ones (which are likely to have better descriptions)
+      var url = linkInfo.href;
+      if(!(url in doclinks[r])) doclinks[r][url] = linkInfo;
     }
   },
 
@@ -151,7 +152,11 @@ var linkToolbarUI = {
       doc.__lt__links.empty = true; // |length| is 0 for hashtables. ltUI.addLink sets this to false
     }
 
-    if((doc instanceof HTMLDocument) && linkToolbarPrefs.useLinkGuessing) linkFinder.findLinks(doc);
+    if((doc instanceof HTMLDocument) && linkToolbarPrefs.useLinkGuessing) {
+      linkFinder.scanPageLinks(doc, doc.__lt__links);
+      // is doc.location.href always defined? and are there any security issues with it?
+      linkFinder.getLinksFromUrl(doc, doc.__lt__links, doc.location.href);
+    }
 
     if(doc != gBrowser.contentDocument) return;
 

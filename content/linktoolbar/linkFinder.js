@@ -12,37 +12,20 @@ var linkFinder = {
   img_re_next:  /ne?xt|more|fwd/i,
   img_re_last:  /last/i,
 
-  findLinks: function(doc) {
-    var i, j, link;
 
-    var noTop = !("top" in doc.__lt__links);
-    var noUp = !("up" in doc.__lt__links);
-    var noPrev = !("prev" in doc.__lt__links);
-    var noNext = !("next" in doc.__lt__links);
+  getLinksFromUrl: function(doc, doclinks, url) {
+    var addTop = !("top" in doclinks);
+    var addUp = !("up" in doclinks);
+    var addPrev = !("prev" in doclinks);
+    var addNext = !("next" in doclinks);
 
-    if(!noUp || !noTop || !noPrev || !noNext) return;
-
-    var addedLinks = this.scanPageLinks(doc);
-
-    // xxx it seems not all documents have this
-    var url = doc.location.href;
-
-    noTop = noTop && !("top" in addedLinks);
-    noUp  = noUp  && !("up"  in addedLinks);
-    noPrev = noPrev && !("prev" in addedLinks);
-    noNext = noNext && !("next" in addedLinks);
-    this.getLinksFromUrl(doc, url, noTop, noUp, noPrev, noNext);
-  },
-
-
-  getLinksFromUrl: function(doc, url, addTop, addUp, addPrev, addNext) {
     if(addTop) {
       var topurl = url.match(/^[^\/]*?:\/\/[^\/]*\//);
-      if(topurl) this.addLink(doc, topurl[0], "top", null, null, null);
+      if(topurl) this.addLink(doc, topurl[0], "top", null, null);
     }
     if(addUp) {
       var upurl = this.getUp(url);
-      if(upurl) this.addLink(doc, upurl, "up", null, null, null);
+      if(upurl) this.addLink(doc, upurl, "up", null, null);
     }
 
     if(!(addPrev || addNext)) return;
@@ -61,19 +44,17 @@ var linkFinder = {
     if(addPrev) {
       var prv = ""+(num-1);
       while(prv.length < old.length) prv = "0" + prv;
-      this.addLink(doc, pre+prv+post, "prev", null, null, null);
+      this.addLink(doc, pre+prv+post, "prev", null, null);
     }
     if(addNext) {
       var nxt = ""+(num+1);
       while(nxt.length < old.length) nxt = "0" + nxt;
-      this.addLink(doc, pre+nxt+post, "next", null, null, null);
+      this.addLink(doc, pre+nxt+post, "next", null, null);
     }
   },
 
 
-  scanPageLinks: function(doc) {
-    var addedLinks = [];
-
+  scanPageLinks: function(doc, links) {
     // The user has to wait for linkFinder to finish before they can interact with the page
     // that has just loaded.  On pages with lots of links linkFinder could make Firefox
     // unresponsive for several seconds if we didn't cap the number of links we inspect.
@@ -92,15 +73,8 @@ var linkFinder = {
       title = title.replace(/\s+/g," ");
 
       if(link.rel || link.rev) {
-        var info = linkToolbarHandler.getLinkInfo(link.href, link.rel, link.rev, title, link.hreflang, null);
-        // avoid dupes
-        for(var relv in info.relValues) {
-          if(!(relv in addedLinks)) addedLinks[relv] = [];
-          if(!(info.href in addedLinks[relv])) {
-            addedLinks[relv][info.href] = true;
-            linkToolbarUI.addLink(info, doc);
-          }
-        }
+        var info = linkToolbarUtils.getLinkInfo(link.href, link.rel, link.rev, title, link.hreflang, null);
+        for(var relv in info.relValues) linkToolbarUI.addLink(info, doc);
         continue; // no point using the regexps
       }
 
@@ -109,25 +83,12 @@ var linkFinder = {
       else if(this.re_first.test(title)) rels["first"] = true;
       else if(this.re_last.test(title)) rels["last"] = true;
 
-      for(var rel in rels) this.addLink(doc, href, rel, title, title, addedLinks);
+      for(var rel in rels) this.addLink(doc, href, rel, title, title);
     }
-
-    return addedLinks;
   },
 
 
-  addLink: function(doc, url, rel, title, longTitle, addedLinks) {
-    // avoid duplicate links
-    if(addedLinks) {
-      if(rel in addedLinks) {
-        if(url in addedLinks[rel]) return; // it's a dup.
-        addedLinks[rel][url] = true;
-      } else {
-        addedLinks[rel] = [];
-        addedLinks[rel][url] = true;
-      }
-    }
-    // add the link
+  addLink: function(doc, url, rel, title, longTitle) {
     var rels = [];
     rels[rel] = rel;
     var info = {href: url, relValues: rels, title: title, longTitle: longTitle};
@@ -163,7 +124,7 @@ var linkFinder = {
     // use alt text for images
     if(el instanceof HTMLImageElement) {
       // should this have spaces wrapped round it?
-      s = el.getAttribute("alt");
+      s = el.alt;
       if(s) return s;
 
       // guess some rel values from the url.
@@ -177,7 +138,7 @@ var linkFinder = {
     }
     // deal with other elements
     var kids = el.childNodes;
-    for(var i = 0; i < kids.length; i++) {
+    for(var i = 0; i != kids.length; i++) {
       var kid = kids[i];
       // add contents of CDATA or text nodes
       if(kid.nodeType==3 || kid.nodeType==2) s += kid.nodeValue;
