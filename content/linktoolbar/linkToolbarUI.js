@@ -11,10 +11,10 @@
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is Eric Hodel's <drbrain@segment7.net> code.
+ * The Original Code is the Link Toolbar from Mozilla Seamonkey.
  *
- * The Initial Developer of the Original Code is
- * Eric Hodel.
+ * The Initial Developer of the Original Code is Eric Hodel <drbrain@segment7.net>
+ *
  * Portions created by the Initial Developer are Copyright (C) 2001
  * the Initial Developer. All Rights Reserved.
  *
@@ -24,7 +24,7 @@
  *   Henri Sivonen <henris@clinet.fi>
  *   Stuart Ballard <sballard@netreach.net>
  *   Chris Neale <cdn@mozdev.org> [Port to Px]
- *   Stephen Clavering <mozilla@clav.co.uk>
+ *   Stephen Clavering <mozilla@clav.me.uk>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -58,12 +58,11 @@ function toggleLinkToolbar() {
 
 }
 
-// formerly linkToolbarOverlay.js, but heavily reformatted
 
 const linkToolbarUI = {
   linkAdded: function(event) {
     var element = event.originalTarget;
-    if (element.ownerDocument != getBrowser().contentDocument
+    if(element.ownerDocument != getBrowser().contentDocument
         || !linkToolbarUI.isLinkToolbarEnabled()
         || !element instanceof Components.interfaces.nsIDOMHTMLLinkElement
         || !element.href
@@ -122,6 +121,7 @@ const linkToolbarUI = {
     }
   },
 
+  // XXX : is there any real need for the (de)activate functions ?
   toolbarActive: false,
 
   activate: function() {
@@ -239,18 +239,18 @@ const linkToolbarUI = {
       }
     }
   },
-  
-  // multiline tooltips.  text is loaded from tooltiptext[12] attributes
+
+  // multiline tooltips.  text is loaded from tooltiptext[012] attributes
   fillTooltip: function(tooltipElement) {
     var text1 = tooltipElement.getAttribute("tooltiptext1");
     // for items on the toolbar itself
     if(text1=="") text1 = tooltipElement.getAttribute("tooltiptext0");
+    var line1 = document.getElementById("linktoolbar-tooltip-1");
+    linkToolbarUI.fillTooltipLine(line1,text1);
     var text2 = tooltipElement.getAttribute("tooltiptext2");
-    var line = document.getElementById("linktoolbar-tooltip-1");
-    linkToolbarUI.fillTooltipLine(line,text1);
-    line = document.getElementById("linktoolbar-tooltip-2");
-    linkToolbarUI.fillTooltipLine(line,text2);
-    // stop the tooltip showing if we have no text for it
+    var line2 = document.getElementById("linktoolbar-tooltip-2");
+    linkToolbarUI.fillTooltipLine(line2,text2);
+    // return value indicates if the tooltip should be allowed to show
     return ((text1 && text1!="") || (text2 && text2!=""));
   },
   fillTooltipLine: function(line, text) {
@@ -261,10 +261,10 @@ const linkToolbarUI = {
       line.hidden = true;
     }
   },
-      
+
   onload: function() {
     linkToolbarUI.initHandlers();
   }
 }
 
-document.addEventListener("load", linkToolbarUI.onload, false);
+window.addEventListener("load", linkToolbarUI.onload, false);

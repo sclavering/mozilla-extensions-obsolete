@@ -12,9 +12,9 @@
    - for the specific language governing rights and limitations under the
    - License.
    -
-   - The Original Code is Eric Hodel's <drbrain@segment7.net> code.
+   - The Original Code is the Link Toolbar from Mozilla Seamonkey.
    -
-   - The Initial Developer of the Original Code is Eric Hodel.
+   - The Initial Developer of the Original Code is Eric Hodel <drbrain@segment7.net>.
    -
    - Portions created by the Initial Developer are Copyright (C) 2001
    - the Initial Developer. All Rights Reserved.
@@ -24,7 +24,7 @@
    -      Tim Taylor <tim@tool-man.org>
    -      Stuart Ballard <sballard@netreach.net>
    -      Chris Neale <cdn@mozdev.org>  (Port to Px/Fb)
-   -      Stephen Clavering <mozilla@clav.co.uk>
+   -      Stephen Clavering <mozilla@clav.me.uk>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -57,8 +57,8 @@
   
   <script type="application/x-javascript" src="linkToolbarHandler.js"/>
   <script type="application/x-javascript" src="linkToolbarItem.js"/>
-
   <script type="application/x-javascript" src="linkToolbarUI.js"/>
+
   <script type="application/x-javascript" src="styleselector.js"/>
 
 <!--  <menupopup id="menu_View"> > -->
@@ -102,7 +102,7 @@
   <!-- our two line tooltip -->
   <popupset id="mainPopupSet">
     <tooltip id="linktoolbar-tooltip" orient="vertical"
-        onpopupshowing="return linkToolbarUI.fillTooltip(document.tooltipNode);">
+        onpopupshowing="if(!linkToolbarUI.fillTooltip(document.tooltipNode)) event.preventDefault();">
       <label id="linktoolbar-tooltip-1"/>
       <label id="linktoolbar-tooltip-2"/>
     </tooltip>
@@ -294,17 +294,14 @@
               class="menuitem-iconic bookmark-item"/>
           <menuitem id="link-search" label="&searchButton.label;" hidden="true"
               class="menuitem-iconic bookmark-item"/>
-         <!-- <menuseparator/> -->
           <menuitem id="link-author" label="&authorButton.label;" hidden="true"
               class="menuitem-iconic bookmark-item"/>
           <menuitem id="link-copyright" label="&copyrightButton.label;" hidden="true"
               class="menuitem-iconic bookmark-item"/>
-         <!-- <menuseparator/> -->
           <menu id="link-bookmark" label="&bookmarkButton.label;" hidden="true"
               class="menu-iconic bookmark-item" container="true">
             <menupopup id="link-bookmark-popup"/>
           </menu>
-         <!-- <menuseparator/> -->
           <menu id="link-alternate" label="&alternateButton.label;" hidden="true"
               class="menu-iconic bookmark-item" container="true">
             <menupopup id="link-alternate-popup"/>
