@@ -108,8 +108,22 @@ const linkToolbarHandler = {
   },
 
   createItemForLinkType: function(linkType) {
-    if(!document.getElementById("link-" + linkType))
-      return new LinkToolbarTransientMenu(linkType);
+    if(!document.getElementById("link-" + linkType)) {
+      // create a new menu
+      var menu = document.createElement("menu");
+      menu.setAttribute("id","link-"+linkType);
+      menu.setAttribute("label",linkType);
+      menu.setAttribute("hidden", "true");
+      menu.setAttribute("class", "menu-iconic bookmark-item");
+      menu.setAttribute("container", "true");
+      // create the popup to go with it
+      var popup = document.createElement("menupopup");
+      popup.setAttribute("id","link-"+linkType+"-popup");
+      menu.appendChild(popup);
+      // add to link toolbar
+      document.getElementById("more-menu-popup").appendChild(menu);
+      return new LinkToolbarMenu(linkType,menu);
+    }  
     // XXX: replace switch with polymorphism
     switch(document.getElementById("link-" + linkType).localName) {
       case "toolbarbutton":
@@ -119,7 +133,8 @@ const linkToolbarHandler = {
       case "menu":
         return new LinkToolbarMenu(linkType);
       default:
-        return new LinkToolbarTransientMenu(linkType);
+        // very bad/odd things are happening if we reach this
+        throw ("Link Toolbar Error: unrecognised element exists for rel="+linkType);
     }
   },
 
