@@ -40,12 +40,39 @@
  * ***** END LICENSE BLOCK ***** */
 
 
-var linkToolbarUtils = {
-  getLinkElementInfo: function(elt) {
-    return this.getLinkInfo(elt.href, elt.rel, elt.rev, elt.title, elt.hreflang, elt.media);
-  },
+function LTLinkInfo(url, title, lang, media) {
+  this.href = this.url = url;
+  this.title = title;
+  this.lang = lang;
+  this.media = media;
+}
+LTLinkInfo.prototype = {
+  _longTitle: null,
 
-  getLinkInfo: function(url, relStr, revStr, title, hreflang, media) {
+  // this is only needed when showing a tooltip, or for items on the More menu, so we
+  // often won't use it at all, hence using a getter function
+  get longTitle() {
+    if(!this._longTitle) {
+      var longTitle = "";
+      // XXX: lookup more meaningful and localized version of media,
+      //   i.e. media="print" becomes "Printable" or some such
+      // XXX: use localized version of ":" separator
+      if(this.media && !/\b(all|screen)\b/i.test(this.media))
+        longTitle += this.media + ": ";
+      if(this.hreflang) longTitle += ltLanguageDictionary.lookup(this.hreflang) + ": ";
+      if(this.title) longTitle += this.title;
+      // the 'if' here is to ensure the long title isn't just the url
+      else if(longTitle) longTitle += this.url;
+      this._longTitle = longTitle;
+    }
+    return this._longTitle;
+  }
+};
+
+
+
+var linkToolbarUtils = {
+  getLinkRels: function(relStr, revStr) {
     // Ignore certain rel values for links
     // XXX: should some of these possibilites just be handled by returning null in standardiseRelType
     // as we do for prefetch?  that would mean the link would still be handled if it had other rel
@@ -59,7 +86,7 @@ var linkToolbarUtils = {
       for(i = 0; i < rawRelValues.length; i++) {
         rel = this.standardiseRelType(rawRelValues[i]);
         // avoid duplicate rel values
-        if(rel) relValues[rel] = rel;
+        if(rel) relValues[rel] = true;
       }
     }
     // get relValues from rev
@@ -67,29 +94,11 @@ var linkToolbarUtils = {
       var revValues = revStr.split(/\s+/);
       for(i = 0; i < revValues.length; i++) {
         rel = this.convertRevToRel(revValues[i]);
-        if(rel) relValues[rel] = rel;
+        if(rel) relValues[rel] = true;
       }
     }
 
-    var prefix = "";
-    // XXX: lookup more meaningful and localized version of media,
-    //   i.e. media="print" becomes "Printable" or some such
-    // XXX: use localized version of ":" separator
-    if(media && !/\b(all|screen)\b/i.test(media))
-      prefix += media + ": ";
-    if(hreflang) prefix += ltLanguageDictionary.lookup(hreflang) + ": ";
-    var longTitle = prefix;
-    if(title) longTitle += title;
-    // the 'if' here is to ensure the longtitle isn't just the url
-    else if(longTitle) longTitle += url;
-
-    // bundle everything into an object to be passed to a LinkToolbarItem (or a subclass)
-    return {
-      relValues: relValues,  // xxx: kill this? it's redundant, since doc.__lt__links is indexed by rel
-      longTitle: longTitle,
-      href:  url,
-      title: title
-    }
+    return relValues;
   },
 
   standardiseRelType: function(relValue) {
@@ -153,12 +162,10 @@ var linkToolbarUtils = {
 var linkToolbarItems = {
   items: [],
 
-  handleLink: function(linkInfo) {
-    for(var rel in linkInfo.relValues)
-      this.getItemForLinkType(rel).displayLink(linkInfo);
+  handleLinkForRels: function(linkInfo, rels) {
+    for(var rel in rels) this.getItemForLinkType(rel).displayLink(linkInfo);
   },
 
-  // from ltUI.tabSelected it makes sense to pass links once per rel
   handleLinkForRel: function(linkInfo, rel) {
     this.getItemForLinkType(rel).displayLink(linkInfo);
   },

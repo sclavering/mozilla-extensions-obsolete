@@ -13,6 +13,7 @@ Original Author:
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     id="linkToolbarOptions"
+    title="&title;"
     buttons="accept,cancel"
     onload="loadPrefs();"
     ondialogaccept="savePrefs();"
@@ -20,8 +21,7 @@ Original Author:
 
 <script type="application/x-javascript">
 <![CDATA[
-//const ids = ["showOnlyWhenNeeded","iconsOnly","guessUpAndTopFromURL","guessNextAndPrevFromURL","scanHyperlinks"];
-const ids = ["showOnlyWhenNeeded","iconsOnly","useLinkGuessing"];
+const ids = ["showOnlyWhenNeeded","iconsOnly","guessUpAndTopFromURL","guessPrevAndNextFromURL","scanHyperlinks"];
 
 var gPrefs = null;
 
@@ -58,14 +58,10 @@ function savePrefs() {
   <groupbox id="linkGuessing">
     <caption label="&linkGuessing;"/>
 
-    <checkbox id="useLinkGuessing" label="&useLinkGuessing;"/>
-
-<!-- for the future. above checkbox is temporary
     <description>&linkGuessingDescription;</description>
 
-    <checkbox id="guessUpAndTopFromURL" label="&guessUpAndTopFromURL;"/>
-    <checkbox id="guessNextAndPrevFromURL" label="&guessNextAndPrevFromURL;"/>
     <checkbox id="scanHyperlinks" label="&scanHyperlinks;"/>
--->
+    <checkbox id="guessUpAndTopFromURL" label="&guessUpAndTopFromURL;"/>
+    <checkbox id="guessPrevAndNextFromURL" label="&guessPrevAndNextFromURL;"/>
   </groupbox>
 </dialog>

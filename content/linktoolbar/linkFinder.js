@@ -13,22 +13,22 @@ var linkFinder = {
   img_re_last:  /last/i,
 
 
-  getLinksFromUrl: function(doc, doclinks, url) {
-    var addTop = !("top" in doclinks);
-    var addUp = !("up" in doclinks);
-    var addPrev = !("prev" in doclinks);
-    var addNext = !("next" in doclinks);
-
-    if(addTop) {
+  guessUpAndTopFromURL: function(doc, doclinks, url) {
+    if(!("top" in doclinks)) {
       var topurl = url.match(/^[^\/]*?:\/\/[^\/]*\//);
       if(topurl) this.addLink(doc, topurl[0], "top", null, null);
     }
-    if(addUp) {
+    if(!("up" in doclinks)) {
       var upurl = this.getUp(url);
       if(upurl) this.addLink(doc, upurl, "up", null, null);
     }
+  },
 
-    if(!(addPrev || addNext)) return;
+
+  guessPrevAndNextFromURL: function(doc, doclinks, url) {
+    var addPrev = !("prev" in doclinks);
+    var addNext = !("next" in doclinks);
+    if(!addPrev && !addNext) return;
 
     function isDigit(c) { return ("0" <= c && c <= "9") }
 
@@ -73,8 +73,9 @@ var linkFinder = {
       title = title.replace(/\s+/g," ");
 
       if(link.rel || link.rev) {
-        var info = linkToolbarUtils.getLinkInfo(link.href, link.rel, link.rev, title, link.hreflang, null);
-        linkToolbarUI.addLink(info, doc);
+        rels = linkToolbarUtils.getLinkRels(link.rel, link.rev);
+        var info = new LTLinkInfo(link.href, title, link.hreflang, null);
+        linkToolbarUI.addLink(info, doc, rels);
         continue; // no point using the regexps
       }
 
@@ -90,9 +91,9 @@ var linkFinder = {
 
   addLink: function(doc, url, rel, title, longTitle) {
     var rels = [];
-    rels[rel] = rel;
-    var info = {href: url, relValues: rels, title: title, longTitle: longTitle};
-    linkToolbarUI.addLink(info, doc);
+    rels[rel] = true;
+    var info = {href: url, title: title, longTitle: longTitle};
+    linkToolbarUI.addLink(info, doc, rels);
   },
 
 

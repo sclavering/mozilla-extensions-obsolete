@@ -42,29 +42,25 @@
 
 
 var linkToolbarPrefs = {
-  showOnlyWhenNeeded: false,
-  iconsOnly: false,
-
   useLinkGuessing: false,
   guessUpAndTopFromURL: false,
-  guessNextAndPrevFromURL: false,
+  guessPrevAndNextFromURL: false,
   scanHyperlinks: false,
 
   load: function() {
-//    const prefs = ["showOnlyWhenNeeded","iconsOnly","guessUpAndTopFromURL","guessNextAndPrevFromURL","scanHyperlinks"];
-    const prefs = ["showOnlyWhenNeeded","iconsOnly","useLinkGuessing"];
+    const prefs = ["scanHyperlinks","guessUpAndTopFromURL","guessPrevAndNextFromURL"];
 
     var branch = Components.classes["@mozilla.org/preferences;1"]
                            .getService(Components.interfaces.nsIPrefService)
                            .getBranch("extensions.linktoolbar.");
     for(var i in prefs) this[prefs[i]] = branch.getBoolPref(prefs[i]);
 
-//    this.useLinkGuessing = this.guessUpAndTopFromURL || this.guessNextAndPrevFromURL || this.scanHyperlinks;
+    this.useLinkGuessing = this.scanHyperlinks || this.guessUpAndTopFromURL || this.guessPrevAndNextFromURL;
 
     var lt = document.getElementById("linktoolbar");
-    if(this.showOnlyWhenNeeded) lt.setAttribute("showOnlyWhenNeeded","true");
+    if(branch.getBoolPref("showOnlyWhenNeeded")) lt.setAttribute("showOnlyWhenNeeded","true");
     else lt.removeAttribute("showOnlyWhenNeeded");
-    if(this.iconsOnly) lt.setAttribute("iconsonly","true");
+    if(branch.getBoolPref("iconsOnly")) lt.setAttribute("iconsonly","true");
     else lt.removeAttribute("iconsonly");
   },
 
@@ -93,18 +89,19 @@ var linkToolbarPrefs = {
 
 var linkToolbarUI = {
   linkAdded: function(event) {
-    var element = event.originalTarget;
-    var doc = element.ownerDocument;
-    if(!((element instanceof HTMLLinkElement) && element.href && (element.rel || element.rev))) return;
+    var elt = event.originalTarget;
+    var doc = elt.ownerDocument;
+    if(!((elt instanceof HTMLLinkElement) && elt.href && (elt.rel || elt.rev))) return;
 
-    var linkInfo = linkToolbarUtils.getLinkElementInfo(element);
-    linkToolbarUI.addLink(linkInfo, doc);
+    var rels = linkToolbarUtils.getLinkRels(elt.rel, elt.rev);
+    if(!rels) return;
+    var linkInfo = new LTLinkInfo(elt.href, elt.title, elt.hreflang, elt.media);
+    linkToolbarUI.addLink(linkInfo, doc, rels);
   },
 
-  addLink: function(linkInfo, doc) {
-    if(!linkInfo) return;
+  addLink: function(linkInfo, doc, rels) {
     if(doc == window._content.document) {
-      linkToolbarItems.handleLink(linkInfo);
+      linkToolbarItems.handleLinkForRels(linkInfo, rels);
       this.hasItems = true;
     }
     // remember the link in an array on the document
@@ -114,7 +111,7 @@ var linkToolbarUI = {
     if(!("__lt__links" in doc)) doc.__lt__links = [];
     var doclinks = doc.__lt__links;
     if(doclinks.empty) doclinks.empty = false; // |length| is 0 for hashtables
-    for(var r in linkInfo.relValues) {
+    for(var r in rels) {
       if(!(r in doclinks)) doclinks[r] = [];
       // we leave any existing link with the same URL alone so that linkFinder-generated
       // links don't replace page-provided ones (which are likely to have better descriptions)
@@ -166,15 +163,18 @@ var linkToolbarUI = {
       doc.__lt__links.empty = true; // |length| is 0 for hashtables. ltUI.addLink sets this to false
     }
 
-    if((doc instanceof HTMLDocument) && linkToolbarPrefs.useLinkGuessing) {
-      linkFinder.scanPageLinks(doc, doc.__lt__links);
+    if(linkToolbarPrefs.useLinkGuessing && (doc instanceof HTMLDocument)) {
+      if(linkToolbarPrefs.scanHyperlinks)
+        linkFinder.scanPageLinks(doc, doc.__lt__links);
       // is doc.location.href always defined? and are there any security issues with it?
-      linkFinder.getLinksFromUrl(doc, doc.__lt__links, doc.location.href);
+      if(linkToolbarPrefs.guessUpAndTopFromURL)
+        linkFinder.guessUpAndTopFromURL(doc, doc.__lt__links, doc.location.href);
+      if(linkToolbarPrefs.guessPrevAndNextFromURL)
+        linkFinder.guessPrevAndNextFromURL(doc, doc.__lt__links, doc.location.href);
     }
 
     if(doc != gBrowser.contentDocument) return;
 
-    // xxx can we just set this to false?
     linkToolbarUI.hasItems = !doc.__lt__links.empty;
   },
 
