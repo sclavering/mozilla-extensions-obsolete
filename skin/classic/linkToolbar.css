@@ -111,3 +111,9 @@ bookmark folders or the Document+More menus still have a text label */
 #linktoolbar[iconsonly="true"] > toolbarseparator {
   display: none;
 }
+
+/*
+tab {
+  -moz-binding: url(chrome://linktoolbar/skin/blip.xml#tab);
+}
+*/

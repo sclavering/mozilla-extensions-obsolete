@@ -166,12 +166,37 @@ const linkToolbarUI = {
    * (In theory this should happen for DOMHeadLoaded, but the event has not been
    *  implemented yet)
    */
-  pageLoaded: function(evt) {
+  _pageLoaded: function(evt) {
     var doc = evt.originalTarget;
 
     if(doc instanceof HTMLDocument) {
       linkFinder.findLinks(doc);
       linkToolbarUI.getMetaLinks(doc);
+    }
+
+    if(doc != gBrowser.contentDocument) return;
+    if(linkToolbarHandler.hasItems) return;
+
+    linkToolbarUI.hasItems = false;
+  },
+
+  pageLoaded: function(evt) {
+    var doc = evt.originalTarget;
+    var flibble;
+    var lt_prefs = Components.classes["@mozilla.org/preferences-service;1"].
+                          getService(Components.interfaces.nsIPrefService).getBranch("extensions.linkToolbar.");
+
+    try {
+      flibble = lt_prefs.getBoolPref('finderActive');
+    }
+    catch(ex) {
+      lt_prefs.setBoolPref('finderActive', false);
+    }
+    
+    if((doc instanceof HTMLDocument) &&
+         lt_prefs.getBoolPref('finderActive')) {
+        linkFinder.findLinks(doc);
+        linkToolbarUI.getMetaLinks(doc);
     }
 
     if(doc != gBrowser.contentDocument) return;
@@ -251,6 +276,7 @@ const linkToolbarUI = {
     loadURI(destURL, referrer);
   },
 
+
   toggleLinkToolbar: function(target) {
     if(target.id=="linktoolbar-iconsonly") {
       this.toggleIconsOnlyMode(target);
@@ -268,6 +294,7 @@ const linkToolbarUI = {
       this.fullSlowRefresh();
     }
   },
+
   toggleIconsOnlyMode: function(menuitem) {
     var toolbar = document.getElementById("linktoolbar");
     if(menuitem.getAttribute("checked")=="true")

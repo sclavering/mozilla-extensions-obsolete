@@ -52,6 +52,19 @@
   <script type="application/x-javascript" src="linkToolbarHandler.js"/>
   <script type="application/x-javascript" src="linkToolbarItem.js"/>
   <script type="application/x-javascript" src="linkToolbarUI.js"/>
+  <script type="application/x-javascript">
+
+  /*
+    var toolbox = document.getElementById("navigator-toolbox");
+    var flurp = toolbox.customizeDone;
+
+    toolbox.customizeDone = function() {
+      flurp();
+      linkToolbarUI.initHandlers();
+    };
+  */
+
+  </script>
 
   <menupopup id="menu_viewPopup">
     <menu label="&linkToolbar.label;" position="3"

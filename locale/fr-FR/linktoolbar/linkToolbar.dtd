@@ -72,14 +72,14 @@
 <!ENTITY moreButton.label "Plus">
 
 <!ENTITY helpButton.label "Aide">
-<!ENTITY searchButton.label "Rechercher">
+<!ENTITY searchButton.label "Recherche">
 
 <!ENTITY authorButton.label "Auteur(s)">
 <!ENTITY copyrightButton.label "Copyright">
 
 <!ENTITY bookmarkButton.label "Marque-pages">
 
-<!ENTITY alternateButton.label "Autres versions">
+<!ENTITY alternateButton.label "Autres Versions">
 
 <!-- Tooltips for the buttons choess 102972 -->
 
