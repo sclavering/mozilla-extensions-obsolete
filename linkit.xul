@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.8 2003/05/28 17:18:24 clav Exp $ -->
+<!-- $Id: linkit.xul,v 1.9 2003/05/28 17:49:40 cdn Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -83,10 +83,9 @@ function linkit() {
 
 //    if ( instag.hasAttribute("href") == false )
 
-//    alert(NB_innerText(instag));
 
 // \u00ab|\u00AB
-      if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|\u00ab|«/i.test(text)) {
+      if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|&amp;laquo;|\u00ab|«/i.test(text)) {
         linkP.setAttribute("href", instag.getAttribute("href"));
         linkP.setAttribute("id", "linkit-prev");
         linkP.setAttribute("rel", "prev");
@@ -95,7 +94,7 @@ function linkit() {
       }
 
 // \u00bb|\u00BB
-      if (/next|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|\u00bb|»/i.test(text)) {
+      if (/next|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|&amp;raquo;|\u00bb|»/i.test(text)) {
         linkN.setAttribute("href", instag.getAttribute("href"));
         linkN.setAttribute("id", "linkit-next");
         linkN.setAttribute("rel", "next");
