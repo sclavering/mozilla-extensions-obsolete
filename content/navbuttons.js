@@ -150,23 +150,34 @@ const NavButtons = {
   },
 
   init: function() {
-    var contentArea = document.getElementById("appcontent");
-    contentArea.addEventListener("select", NavButtons.tabSelected, false);
-    contentArea.addEventListener("DOMLinkAdded", NavButtons.linkAdded, true);
-    contentArea.addEventListener("unload", NavButtons.clear, true);
-    // do we need these as well?  they were in activate()
-    //contentArea.addEventListener("load", NavButtons.deactivate, true);
-    // need to manually init the items array
+    // init the items array (which should be called 'buttons')
+    this.items = [];
     var linktypes = ["top","up","first","prev","next","last"];
     for(var i = 0; i < linktypes.length; i++) {
       // if button has not been added to the toolbar this will fail, which is OK
       var button = document.getElementById("navbutton-"+linktypes[i]);
-      if(button) NavButtons.items[linktypes[i]] = new NavButton(linktypes[i],button);
+      if(button) this.items[linktypes[i]] = new NavButton(linktypes[i],button);
     }
+  },
+
+  reinit: function() {
+    this.init();
+    this.clear();
+    this.fullSlowRefresh();
   }
 }
 
-window.addEventListener("load", NavButtons.init, false);
+window.addEventListener("load", function() {
+  NavButtons.init();
+  // update the buttons
+  var contentArea = document.getElementById("appcontent");
+  contentArea.addEventListener("select", NavButtons.tabSelected, false);
+  contentArea.addEventListener("DOMLinkAdded", NavButtons.linkAdded, true);
+  contentArea.addEventListener("unload", NavButtons.clear, true);
+  // ideally we wouldn't do this on every window focus,
+  // but there's no event for toolbar customisation
+  window.addEventListener("focus", function(){NavButtons.reinit();}, false);
+}, false);
 
 function NavButton(linkType,element) {
   this.linkType = linkType;

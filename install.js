@@ -1,7 +1,7 @@
 const APP_DISPLAY_NAME = "NavButtons";
 const APP_NAME = "navbuttons";
 const APP_PACKAGE = "/cdn.mozdev.org/navbuttons";
-const APP_VERSION = "0.1";
+const APP_VERSION = "0.3";
 
 const APP_JAR_FILE = "navbuttons.jar";
 const APP_CONTENT_FOLDER = "content/";
