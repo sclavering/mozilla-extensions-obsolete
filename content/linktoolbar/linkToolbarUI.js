@@ -100,10 +100,6 @@ var linkToolbarUI = {
   },
 
   addLink: function(linkInfo, doc, rels) {
-    if(doc == window._content.document) {
-      linkToolbarItems.handleLinkForRels(linkInfo, rels);
-      this.hasItems = true;
-    }
     // remember the link in an array on the document
     // xxx we'd prefer not to pollute the document's DOM of course, but javascript
     // doesn't have real hashtables (only string->anything maps), so there isn't
@@ -116,7 +112,13 @@ var linkToolbarUI = {
       // we leave any existing link with the same URL alone so that linkFinder-generated
       // links don't replace page-provided ones (which are likely to have better descriptions)
       var url = linkInfo.href;
-      if(!(url in doclinks[r])) doclinks[r][url] = linkInfo;
+      if(url in doclinks[r]) delete rels[r];
+      else doclinks[r][url] = linkInfo;
+    }
+
+    if(doc == window._content.document) {
+      linkToolbarItems.handleLinkForRels(linkInfo, rels);
+      this.hasItems = true;
     }
   },
 
