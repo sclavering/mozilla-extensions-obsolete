@@ -113,30 +113,3 @@ const linkToolbarUrlDigger = {
     menu.appendChild(menuitem);
   }
 };
-
-window.addEventListener("load", diggerListener, false);
-
-function diggerListener () {
-
-  window.removeEventListener("load", diggerListener, false);
-  document.getElementById("appcontent").addEventListener("load", diggerLinkAdder, true);
-//  document.getElementById("appcontent").addEventListener("focus", diggerLinkAdder, true);
-// adds every time window gets focus - dupli/tripli/quadruplication ...
-}
-
-function diggerLinkAdder () {
-
-//document.getElementById("appcontent").removeEventListener("load", diggerLinkAdder, true);
-
-  var fred=document.getElementById("content").contentDocument;
-  var hydra=fred.getElementsByTagName("head").item(0);
-  var linkX = fred.createElement("link");
-   linkX.setAttribute("href", "");
-   linkX.setAttribute("id", "digger-self");
-   linkX.setAttribute("rel", "self");
-   linkX.setAttribute("title", "Digger [.]");
-
-  if(hydra.lastChild.getAttribute("id") != "digger-self")
-    hydra.appendChild(linkX);
-
-}
