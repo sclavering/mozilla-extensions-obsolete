@@ -1,0 +1,29 @@
+<!ENTITY toolbarext-options.label "Options">
+<!ENTITY toolbarext-options.tooltip "Open the Options window">
+
+<!ENTITY toolbarext-addBookmark.label "Add Bookmark">
+<!ENTITY toolbarext-addBookmark.tooltip "Bookmark this page...">
+
+<!ENTITY toolbarext-manageBookmarks.label "Bookmarks...">
+<!ENTITY toolbarext-manageBookmarks.tooltip "Manage Bookmarks">
+
+<!ENTITY toolbarext-save.label "Save">
+<!ENTITY toolbarext-save.tooltip "Save Page ...">
+
+<!ENTITY toolbarext-jsconsole.label "JS Console">
+<!ENTITY toolbarext-jsconsole.tooltip "Open the Javascript Console">
+
+<!ENTITY toolbarext-viewsource.label "Source">
+<!ENTITY toolbarext-viewsource.tooltip "View page source">
+
+<!ENTITY toolbarext-fullscreen.label "Fullscreen">
+<!ENTITY toolbarext-fullscreen.tooltip "Toggle full screen mode">
+
+<!ENTITY toolbarext-zoomin.label "Zoom In">
+<!ENTITY toolbarext-zoomin.tooltip "Increase text size">
+
+<!ENTITY toolbarext-zoomout.label "Zoom Out">
+<!ENTITY toolbarext-zoomout.tooltip "Decrease text size">
+
+<!ENTITY toolbarext-pageinfo.label "Info">
+<!ENTITY toolbarext-pageinfo.tooltip "Page Info">

@@ -1,0 +1,98 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#toolbarext-options {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 32px 32px 0);
+}
+toolbar[iconsize="small"] #toolbarext-options {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 20px 20px 0);
+}
+
+#toolbarext-add-bookmark {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 64px 32px 32px);
+}
+toolbar[iconsize="small"] #toolbarext-add-bookmark {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 40px 20px 20px);
+}
+
+#toolbarext-manage-bookmarks {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 96px 32px 64px);
+}
+toolbar[iconsize="small"] #toolbarext-manage-bookmarks {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 60px 20px 40px);
+}
+
+#toolbarext-save {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 128px 32px 96px);
+}
+toolbar[iconsize="small"] #toolbarext-save {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 80px 20px 60px);
+}
+
+#toolbarext-viewsource {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 160px 32px 128px);
+}
+toolbar[iconsize="small"] #toolbarext-viewsource {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 100px 20px 80px);
+}
+
+#toolbarext-jsconsole {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 192px 32px 160px);
+}
+toolbar[iconsize="small"] #toolbarext-jsconsole {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 120px 20px 100px);
+}
+
+#toolbarext-fullscreen {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 224px 32px 192px);
+}
+toolbar[iconsize="small"] #toolbarext-fullscreen {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 140px 20px 120px);
+}
+
+#toolbarext-zoomin {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 256px 32px 224px);
+}
+toolbar[iconsize="small"] #toolbarext-zoomin {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 160px 20px 140px);
+}
+
+#toolbarext-zoomout {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 288px 32px 256px);
+}
+toolbar[iconsize="small"] #toolbarext-zoomout {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 180px 20px 160px);
+}
+
+#toolbarext-pageinfo {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 320px 32px 288px);
+}
+toolbar[iconsize="small"] #toolbarext-pageinfo {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 200px 20px 180px);
+}
+
+.tabs-newbutton {
+  -moz-image-region: rect(0px, 8px, 8px, 0px);
+  margin: 1px 2px;
+  padding: 3px 2px 3px 4px;
+  list-style-image: url(chrome://toolbarext/skin/newtab.png);
+}

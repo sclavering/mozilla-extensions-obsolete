@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://toolbarext/content/toolbarext.css" type="text/css"?>
+<?xml-stylesheet href="chrome://toolbarext/skin/" type="text/css"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % identityDTD SYSTEM "chrome://toolbarext/locale/">
+%identityDTD;
+]>
+
+<overlay id="toolbarextBrowserOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="toolbarext.js" type="application/x-javascript"/>
+
+  <!-- override the Print button to do Print Preview instead :) -->
+  <toolbarbutton id="print-button" oncommand="BrowserPrintPreview();"/>
+  
+  <!-- allow all sidebars to be opened in a new tab when the toolbarbutton is middle clicked
+       note: might replace dl and hsitory panel with something based on the old seamonkey
+       Download Manager and History window later -->
+  <toolbarbutton id="downloads-button" onclick="ToolbarExt.downloadPanel(event);"/>
+  <toolbarbutton id="history-button" onclick="ToolbarExt.historyPanel(event);"/>
+  <toolbarbutton id="bookmarks-button" onclick="ToolbarExt.bookmarksPanel(event);"/>
+
+  <!-- override the bookmarks toolbar folder and make it rooted on the bookmarks root -->
+  <hbox id="bookmarks-ptf" ref="NC:BookmarksRoot"/>
+
+  <!-- add new buttons -->
+  <toolbarpalette id="BrowserToolbarPalette">
+    <!-- Options -->
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-options" oncommand="openPreferences()"
+        label="&toolbarext-options.label;" tooltiptext="&toolbarext-options.tooltip;"
+        />
+
+    <!-- Add Bookmark, Manage Bookmarks -->
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-add-bookmark" command="Browser:AddBookmarkAs"
+        label="&toolbarext-addBookmark.label;" tooltiptext="&toolbarext-addBookmark.tooltip;"
+        />
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-manage-bookmarks" oncommand="ToolbarExt.bookmarkManager(event);"
+        onclick="ToolbarExt.bookmarkManager(event);"
+        label="&toolbarext-manageBookmarks.label;" tooltiptext="&toolbarext-manageBookmarks.tooltip;"
+        />
+
+    <!-- Save -->
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-save" command="Browser:SavePage"
+        label="&toolbarext-save.label;" tooltiptext="&toolbarext-save.tooltip;"
+        />
+
+    <!-- View Source -->
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-viewsource" oncommand="BrowserViewSourceOfDocument(window._content.document);"
+        onclick="ToolbarExt.viewSource(event,window._content.document);"
+        label="&toolbarext-viewsource.label;" tooltiptext="&toolbarext-viewsource.tooltip;"
+        />
+
+    <!-- Javascript Console -->
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-jsconsole" oncommand="toJavaScriptConsole();"
+        onclick="ToolbarExt.jsConsole(event);"
+        label="&toolbarext-jsconsole.label;" tooltiptext="&toolbarext-jsconsole.tooltip;"
+        />
+
+    <!-- View Page Info -->
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-pageinfo" command="View:PageInfo"
+        label="&toolbarext-pageinfo.label;" tooltiptext="&toolbarext-pageinfo.tooltip;"
+        />
+
+    <!-- Toggle Fullscreen Mode -->
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-fullscreen" oncommand="BrowserFullScreen();"
+        label="&toolbarext-fullscreen.label;" tooltiptext="&toolbarext-fullscreen.tooltip;"
+        />
+
+    <!-- Zoom In/Out -->
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-zoomin" command="cmd_textZoomEnlarge"
+        label="&toolbarext-zoomin.label;" tooltiptext="&toolbarext-zoomin.tooltip;"
+        />
+    <toolbarbutton class="toolbarbutton-1"
+        id="toolbarext-zoomout" command="cmd_textZoomReduce"
+        label="&toolbarext-zoomout.label;" tooltiptext="&toolbarext-zoomout.tooltip;"
+        />
+  </toolbarpalette>
+
+</overlay>
