@@ -89,7 +89,9 @@ LinkToolbarItem.prototype = {
 // Hackery employed to disable the dropmarker if there is just one link.
 function initLinkToolbarButton(linkType, elt) {
   elt.linkType = linkType;
-  elt.popup = document.getElementById("link-"+linkType+"-popup");
+  var popup = elt.popup = document.createElement("menupopup");
+  elt.appendChild(popup);
+  //elt.popup = document.getElementById("link-"+linkType+"-popup");
   // hackish
   var anonKids = document.getAnonymousNodes(elt);
   elt.dropMarker = anonKids[anonKids.length-1];

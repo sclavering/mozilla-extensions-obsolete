@@ -67,30 +67,18 @@
         >
 
       <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="link-top" label="&topButton.label;" tooltiptext0="&topButton.tooltip;">
-        <menupopup id="link-top-popup"/>
-      </toolbarbutton>
+          id="link-top" label="&topButton.label;" tooltiptext0="&topButton.tooltip;"/>
       <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="link-up" label="&upButton.label;" tooltiptext0="&upButton.tooltip;">
-        <menupopup id="link-up-popup"/>
-      </toolbarbutton>
+          id="link-up" label="&upButton.label;" tooltiptext0="&upButton.tooltip;"/>
       <toolbarseparator/>
       <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="link-first" label="&firstButton.label;" tooltiptext0="&firstButton.tooltip;">
-        <menupopup id="link-first-popup"/>
-      </toolbarbutton>
+          id="link-first" label="&firstButton.label;" tooltiptext0="&firstButton.tooltip;"/>
       <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="link-prev" label="&prevButton.label;" tooltiptext0="&prevButton.tooltip;">
-        <menupopup id="link-prev-popup"/>
-      </toolbarbutton>
+          id="link-prev" label="&prevButton.label;" tooltiptext0="&prevButton.tooltip;"/>
       <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="link-next" label="&nextButton.label;" tooltiptext0="&nextButton.tooltip;">
-        <menupopup id="link-next-popup"/>
-      </toolbarbutton>
+          id="link-next" label="&nextButton.label;" tooltiptext0="&nextButton.tooltip;"/>
       <toolbarbutton disabled="true" type="menu-button" class="linktoolbar-button"
-          id="link-last" label="&lastButton.label;" tooltiptext0="&lastButton.tooltip;">
-        <menupopup id="link-last-popup"/>
-      </toolbarbutton>
+          id="link-last" label="&lastButton.label;" tooltiptext0="&lastButton.tooltip;"/>
       <toolbarseparator/>
 
       <toolbarbutton id="more-menu" class="bookmark-item" type="menu" container="true"
