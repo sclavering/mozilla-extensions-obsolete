@@ -6,13 +6,7 @@
     <li resource="urn:mozilla:package:flowtabs"/>
   </Seq>
 
-  <Description about="urn:mozilla:package:flowtabs"
-      c:displayName="Flowing Tabs"
-      c:author="Stephen Clavering"
-      c:name="flowtabs"
-      c:description="Makes the browser tabs use multiple rows when there are too many to fit on a single row"
-      c:extension="true"
-      />
+  <Description about="urn:mozilla:package:flowtabs" c:name="flowtabs"/>
 
   <!-- the overlay just provides a stylesheet -->
   <Seq about="urn:mozilla:overlays">

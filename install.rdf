@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://www.mozilla.org/2004/em-rdf#">
+
+  <rdf:Description about="urn:mozilla:install-manifest">
+    <id>org.mozdev.clav.flowtabs</id>
+
+    <name>Flowing Tabs</name>
+    <version>0.3</version>
+    <description>Makes the browser tabs use multiple rows when there are too many to fit on a single row.</description>
+
+    <creator>Stephen Clavering</creator>
+    <homepageURL>http://clav.mozdev.org/</homepageURL>
+
+    <targetApplication>
+      <rdf:Description>
+        <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
+        <!-- this minversion is a lie, but Firefox won't install the extension if it's set to 0.9 -->
+        <minVersion>0.8</minVersion>
+        <maxVersion>0.9</maxVersion>
+      </rdf:Description>
+    </targetApplication>
+
+    <file>
+      <rdf:Description about="urn:mozilla:extension:file:flowtabs.jar">
+        <package>content/</package>
+        <skin>skin/</skin>
+      </rdf:Description>
+    </file>
+  </rdf:Description>
+</rdf:RDF>
