@@ -47,8 +47,8 @@ toolbar[iconsize="small"] #navbutton-first[disabled="true"] { -moz-image-region:
 toolbar[iconsize="small"] #navbutton-prev { -moz-image-region: rect(1px 103px 25px 79px); }
 toolbar[iconsize="small"] #navbutton-prev[disabled="true"] { -moz-image-region: rect(27px 103px 51px 79px); }
 
-toolbar[iconsize="small"] #navbutton-next { -moz-image-region: rect(1px 125px 25px 105px); }
-toolbar[iconsize="small"] #navbutton-next[disabled="true"] { -moz-image-region: rect(27px 125px 51px 105px); }
+toolbar[iconsize="small"] #navbutton-next { -moz-image-region: rect(1px 129px 25px 105px); }
+toolbar[iconsize="small"] #navbutton-next[disabled="true"] { -moz-image-region: rect(27px 129px 51px 105px); }
 
-toolbar[iconsize="small"] #navbutton-last { -moz-image-region: rect(1px 151px 25px 127px); }
-toolbar[iconsize="small"] #navbutton-last[disabled="true"] { -moz-image-region: rect(27px 151px 51px 127px); }
+toolbar[iconsize="small"] #navbutton-last { -moz-image-region: rect(1px 155px 25px 131px); }
+toolbar[iconsize="small"] #navbutton-last[disabled="true"] { -moz-image-region: rect(27px 155px 51px 131px); }

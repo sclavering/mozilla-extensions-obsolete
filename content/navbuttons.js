@@ -56,8 +56,9 @@ const NavButtons = {
         || !element.href
         || !element.rel)
       return;
-    var linkType = this.getLinkType(element.rel);
-    if(linkType) this.items[linkType].displayLink(element);
+    // 'this' would refer to this function
+    var linkType = NavButtons.getLinkType(element.rel);
+    if(linkType && NavButtons.items[linkType]) NavButtons.items[linkType].displayLink(element);
   },
 
   getLinkType: function(relAttribute) {
@@ -78,8 +79,7 @@ const NavButtons = {
   },
 
   clear: function(event) {
-    if(event.originalTarget != getBrowser().contentDocument) return;
-    for(var linkType in this.items) this.items[linkType].clear();
+    for(var linkType in NavButtons.items) NavButtons.items[linkType].clear();
   },
 
   tabSelected: function(event) {
@@ -153,15 +153,15 @@ const NavButtons = {
     var contentArea = document.getElementById("appcontent");
     contentArea.addEventListener("select", NavButtons.tabSelected, false);
     contentArea.addEventListener("DOMLinkAdded", NavButtons.linkAdded, true);
+    contentArea.addEventListener("unload", NavButtons.clear, true);
     // do we need these as well?  they were in activate()
-    //contentArea.addEventListener("unload", NavButtons.clear, true);
     //contentArea.addEventListener("load", NavButtons.deactivate, true);
     // need to manually init the items array
     var linktypes = ["top","up","first","prev","next","last"];
     for(var i = 0; i < linktypes.length; i++) {
       // if button has not been added to the toolbar this will fail, which is OK
       var button = document.getElementById("navbutton-"+linktypes[i]);
-      if(button) Navbuttons.items[linktypes[i]] = new NavButton(linktypes[i],button);
+      if(button) NavButtons.items[linktypes[i]] = new NavButton(linktypes[i],button);
     }
   }
 }
@@ -191,7 +191,6 @@ function NavButton(linkType,element) {
       this.xulElement.setAttribute("tooltiptext", linkElement.title + ' [' + linkElement.href + ']');
     else
       this.xulElement.setAttribute("tooltiptext", linkElement.href);
-    this.xulElement.setAttribute("tooltiptext", linkElement.getTooltip());
     return true;
   }
 }

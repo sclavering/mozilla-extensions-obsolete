@@ -24,7 +24,6 @@
         disabled="true" label="&next.label;"/>
     <toolbarbutton id="navbutton-last" onclick="NavButtons.commanded(event);"
         disabled="true" label="&last.label;"/>
-    <toolbarseparator/>
   </toolbarpalette>
 
 </overlay>
