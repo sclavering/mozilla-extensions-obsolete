@@ -41,7 +41,6 @@ const linkFinder = {
 
     if(!(noPrev || noNext)) return;
 
-
     var addedLinks = [];
 
     for(i = 0; i < doc.links.length; i++) {
@@ -85,12 +84,12 @@ const linkFinder = {
   },
 
   addLink: function(doc, url, base, rel, title, longTitle, addedLinks) {
-  	// resolve relative urls
-  	if(base) {
-    	var baseuri = Components.classes["@mozilla.org/network/standard-url;1"]//.createInstance();
-    	                        .createInstance(Components.interfaces.nsIURI);
-    	baseuri.spec = base;
-    	url = baseuri.resolve(url);
+    // resolve relative urls
+    if(base) {
+      var baseuri = Components.classes["@mozilla.org/network/standard-url;1"]//.createInstance();
+                              .createInstance(Components.interfaces.nsIURI);
+      baseuri.spec = base;
+      url = baseuri.resolve(url);
     }
     // avoid duplicate links
     if(addedLinks) {
