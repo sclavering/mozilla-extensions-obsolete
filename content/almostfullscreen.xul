@@ -1,36 +1,31 @@
 <?xml version="1.0"?>
 
-<overlay id="almostfullscreen"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="almostfullscreen" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <script type="application/x-javascript"><![CDATA[
 var gAlmostFullScreen = false;
-// position+dimensions before goind full screen
-var gAFSwidth = 0, gAFSheight = 0, gAFSleft = 0, gAFStop = 0;
+// position, dimensions, and state before going full screen
+var gAFSwidth = 0, gAFSheight = 0, gAFSleft = 0, gAFStop = 0, gAFSWasMaximized = false;
 
 // override the normal behaviour
+// many properties of Window objects that people forget exist are used here
 function BrowserFullScreen() {
   if(gAlmostFullScreen) {
     document.documentElement.removeAttribute("hidechrome");
-    resizeTo(gAFSwidth,gAFSheight);
-    moveTo(gAFSleft,gAFStop);
+    resizeTo(gAFSwidth, gAFSheight);
+    moveTo(gAFSleft, gAFStop);
+    if(gAFSWasMaximized) maximize();
   } else {
+    gAFSWasMaximized = windowState==STATE_MAXIMIZED;
+    if(gAFSWasMaximized) restore(); // otherwise we get the dimensions of the maximized window
     // setting outerWidth etc. seems to not always work, but getting it works fine
     gAFSwidth = outerWidth;
     gAFSheight = outerHeight;
     gAFSleft = screenX;
     gAFStop = screenY;
-
-    // find out how big window should be
-    var sm = Components.classes["@mozilla.org/gfx/screenmanager;1"]
-                       .getService(Components.interfaces.nsIScreenManager);
-    var s = sm.primaryScreen; // an nsIScreen
-    var a={},b={},c={},d={};
-    // left, top, width, height
-    s.GetAvailRect(a,b,c,d);
     document.documentElement.setAttribute("hidechrome","true");
-    moveTo(a.value,b.value);
-    resizeTo(c.value,d.value);
+    moveTo(screen.availLeft, screen.availTop);
+    resizeTo(screen.availWidth, screen.availHeight);
   }
   gAlmostFullScreen = !gAlmostFullScreen;
 }

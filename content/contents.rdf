@@ -4,15 +4,16 @@
      xmlns:c="http://www.mozilla.org/rdf/chrome#">
 
   <Seq about="urn:mozilla:package:root">
-    <li resource="urn:mozilla:package:almostfullscreen"/>
+    <li>
+      <Description about="urn:mozilla:package:almostfullscreen" c:name="almostfullscreen"/>
+    </li>
   </Seq>
-
-  <Description about="urn:mozilla:package:almostfullscreen" c:name="almostfullscreen"/>
 
   <Seq about="urn:mozilla:overlays">
-    <li resource="chrome://browser/content/browser.xul"/>
-  </Seq>
-  <Seq about="chrome://browser/content/browser.xul">
-    <li>chrome://almostfullscreen/content/almostfullscreen.xul</li>
+    <li>
+      <Seq about="chrome://browser/content/browser.xul">
+        <li>chrome://almostfullscreen/content/almostfullscreen.xul</li>
+      </Seq>
+    </li>
   </Seq>
 </RDF>
