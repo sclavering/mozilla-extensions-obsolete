@@ -6,6 +6,7 @@
 
 <title>Link Toolbar test page</title>
 
+<!-- stylesheet links should not show -->
 <link rel="stylesheet" type="text/css" href="foo.css" title="foo style">
 
 <!-- some general rel type tests -->
@@ -35,7 +36,7 @@
 <link rel="Search" title="Site Search" href="http://www.mrflip.com/search.html">
 
 <!-- the all important rev=made test ;) -->
-<link rev="Made" title="Email Author" href="mailto:flip@mrflip.com">
+<link rev="made" title="Email Author" href="mailto:noone@example.com">
 
 <!-- extra 'next' links -->
 <link rel="Next" href="#foo2" title="2nd 'next' link">
@@ -49,11 +50,11 @@
 
 <!-- some hreflang tests -->
 <link rel="alternate" hreflang="en" title="an english page" href="http://example.com/">
-<link rel="alternate" hreflang="es" title="spanish? page" href="http://example.com/">
+<link rel="alternate" hreflang="es" title="spanish page" href="http://example.com/">
 <link rel="alternate" hreflang="de" title="german page" href="http://example.com/">
 
 <!-- nonsensical language code test -->
-<link rel="alternate" hreflang="cdn" title="a cdn-ish page :)" href="http://cdn.mozdev.org/">
+<link rel="alternate" hreflang="gibberish" title="an hreflang=gibberish page :)" href="http://example.com/">
 
 <!-- some media tests (to show hpw badly we handle these at the moment) -->
 <link rel="alternate" media="print" title="the page title" href="http://example.com/">
@@ -61,18 +62,28 @@
 
 <!-- XXX should we test <meta http-equiv="link">, or whatever that silly syntax is ? -->
 
-<!-- XXX add some links with multiple rel (and rev?) values -->
+<!-- some links with multiple rel/rev values -->
+<link rel="next child" href="http://example.com/" title="A rel='next child' link. could be shown twice if we're careless">
+<link rel="next" rev="prev" href="http://example.com" title="A rel=next,rev=prev link, which is probably valid">
+<link rel="next last" href="http://example.com/" title="A page which is both next and last">
 
-<!-- XXX add some links with rel types we want to ignore, jsut to be sure it's working correctly -->
+<link rel="next prefetch" href="http://example.com" title="rel='next prefetch'. should show">
 
+<!-- some links with rel types we want to ignore, to be sure it's working correctly -->
+<link rel="prefetch" href="http://example.com" title="A prefetch link. should not show">
+<link rel="icon" href="http://example.com" title="an icon link. should not show">
+
+<!-- some rev only tests -->
+<link rev="prev" href="http://example.com" title="rev=prev test">
+
+<!-- a rel=made test. the moz link toolbar would map this onto the Author link, which is incorrect
+     (though it probably doesn't matter, since it's unlikely to be used) -->
+<link rel="made" href="http://example.com" title="rel=made, useful for web-design company maybe?">
 </head>
 
 
 <body>
-<p>based of some random page i found on the web, with some extra links to test the more obscure
-parts of the linktoolbar code.</p>
-
-<p>add new tests as required, but to this file rather than making a new one</p>
+<p>you're expected (for the moment) to view the source for this page to work out what links should show</p>
 </body>
 
 </html>
