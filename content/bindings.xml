@@ -197,7 +197,9 @@
 
 
   <binding id="customisable-toolbox" extends="chrome://global/content/widgets/toolbar.xml#toolbar-base">  
-    <implementation>     
+    <implementation>
+      <field name="anonymous">false</field>
+     
       <field name="palette">null</field>
       
       <field name="toolbarset">null</field>
@@ -206,6 +208,11 @@
       
       <constructor>
         <![CDATA[
+          // is this toolbox anonymous (in a xbl binding)
+          // (if so it can't have attrs persisted on it, so state
+          // will be stored in attrs of the documentElement)
+          if(this.getAttribute('anonymous')=='true') this.anonymous = true;
+        
           // initialise palette.  we leave it in a hash on the document
           // for other toolboxes to use too.
           var paletteId = this.getAttribute("palette");
@@ -226,45 +233,39 @@
             toolbarset = toolbarset.nextSibling;
           this.toolbarset = toolbarset;
           
+          var elt, attr;
+          
           if(toolbarset) {
-            if(toolbarset.getAttribute('anonymous')=='true') {
-              // the toolbox below the tab bar is in xbl, so can't have attrs
-              // persisted.  they're persisted on the document instead.
-              var index = 0;
-              var docElt = document.documentElement;
-              var attrPrefix = '_toolbarset_' + toolbarset.getAttribute('anonid') + '_toolbar';
-              while(docElt.hasAttribute(attrPrefix+(++index))) {
-                var toolbarInfo = docElt.getAttribute(attrPrefix+index);
-                var infoSplit = toolbarInfo.split(":");
-                this.appendCustomToolbar(infoSplit[0], infoSplit[1], false);
-              }
-            } else {
-              // (normal toolboxes)
-              // Create each toolbar described by the toolbarset.
-              var index = 0;
-              while (toolbarset.hasAttribute("toolbar"+(++index))) {
-                var toolbarInfo = toolbarset.getAttribute("toolbar"+index);
-                var infoSplit = toolbarInfo.split(":");
-                this.appendCustomToolbar(infoSplit[0], infoSplit[1], false);
-              }
+            // attr indicated that the toolbox below the tab bar is in xbl, so can't
+            // have attrs persisted.  they're persisted on the document instead.
+            elt = this.anonymous ? document.documentElement : toolbarset;
+            attr = this.anonymous ? '_toolbarset_' + toolbarset.getAttribute('anonid') + '_toolbar' : 'toolbar';
+            
+            var index = 0;
+            while(elt.hasAttribute(attr+(++index))) {
+              var toolbarInfo = elt.getAttribute(attr+index);
+              var infoSplit = toolbarInfo.split(":");
+              this.appendCustomToolbar(infoSplit[0], infoSplit[1], false);
             }
           }
           
           // restore toolbar modes, collapsed-ness, and icon size
+          elt = document.documentElement;
           for(var node = this.firstChild; node; node = node.nextSibling) {
             if(node.localName!="toolbar") continue;
-            var id = node.id;
             
-            var collapsed = this.getAttribute(id+"-collapsed")=="true";
+            attr = '_toolbox_' + this.id + '_toolbar_' + node.id;
+            
+            var collapsed = elt.getAttribute(attr+"-collapsed")=="true";
             node.collapsed = collapsed;
 
-            var mode = this.getAttribute(id+"-mode");
+            var mode = elt.getAttribute(attr+"-mode");
             if(mode) node.setAttribute("mode",mode);
             
-            var iconsize = this.getAttribute(id+"-iconsize");
+            var iconsize = elt.getAttribute(attr+"-iconsize");
             if(iconsize) node.setAttribute("iconsize",iconsize);
             
-            var fullscreen = this.getAttribute(id+"-showfullscreen");
+            var fullscreen = elt.getAttribute(attr+"-showfullscreen");
             if(fullscreen) node.setAttribute("fullscreentoolbar","true");
           }
           //throw "toolbox bound. id="+this.id;
@@ -300,16 +301,22 @@
       
       <!-- the following methods are used because we can't just persist() the state of the
            various attributes they set on toolbars, because the toolbars haven't been created
-           at the point where persisted attributes are restored. -->
+           at the point where persisted attributes are restored.
+           
+           also for the toolbars below the tabbar, the entire toolbox is in xbl, so can't have
+           attributes persisted, so we have to store the state on the documentElement!
+           -->
       <method name="hideToolbar">
         <parameter name="aToolbar"/>
         <parameter name="aHide"/>
         <body><![CDATA[
           aToolbar.collapsed = aHide;
-          var attr = aToolbar.id+"-collapsed";
-          if(aHide) this.setAttribute(attr,aHide);
-          else this.removeAttribute(attr);
-          document.persist(this.id,attr);
+
+          var elt = document.documentElement;
+          var attr = '_toolbox_' + this.id + '_toolbar_' + aToolbar.id + "-collapsed";
+          if(aHide) elt.setAttribute(attr,aHide);
+          else elt.removeAttribute(attr);
+          document.persist(elt.id,attr);
         ]]></body>
       </method>
 
@@ -318,9 +325,11 @@
         <parameter name="aMode"/>
         <body><![CDATA[
           aToolbar.setAttribute("mode",aMode);
-          var attr = aToolbar.id+"-mode"
-          this.setAttribute(attr,aMode);
-          document.persist(this.id,attr);
+
+          var elt = document.documentElement;
+          var attr = '_toolbox_' + this.id + '_toolbar_' + aToolbar.id + "-mode";
+          elt.setAttribute(attr,aMode);
+          document.persist(elt.id,attr);
         ]]></body>
       </method>
       
@@ -328,10 +337,12 @@
         <parameter name="aToolbar"/>
         <parameter name="aSize"/>
         <body><![CDATA[
-          var attr = aToolbar.id+"-iconsize";
           aToolbar.setAttribute("iconsize",aSize);
-          this.setAttribute(attr,aSize);
-          document.persist(this.id,attr);
+
+          var elt = document.documentElement;
+          var attr = '_toolbox_' + this.id + '_toolbar_' + aToolbar.id + "-iconsize";
+          elt.setAttribute(attr,aSize);
+          document.persist(elt.id,attr);
         ]]></body>
       </method>
 
@@ -339,15 +350,16 @@
         <parameter name="aToolbar"/>
         <parameter name="aShow"/>
         <body><![CDATA[
-          var attr = aToolbar.id+"-showfullscreen";
+          var elt = document.documentElement;
+          var attr = '_toolbox_' + this.id + '_toolbar_' + aToolbar.id + "-showfullscreen";
           if(aShow) {
             aToolbar.setAttribute("fullscreentoolbar","true");
-            this.setAttribute(attr,aShow);
+            elt.setAttribute(attr,aShow);
           } else {
             aToolbar.removeAttribute("fullscreentoolbar");
-            this.removeAttribute(attr);
+            elt.removeAttribute(attr);
           }
-          document.persist(this.id,attr);
+          document.persist(elt.id,attr);
         ]]></body>
       </method>
     </implementation>

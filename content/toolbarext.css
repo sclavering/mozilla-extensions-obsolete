@@ -28,3 +28,6 @@ toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] {
   -moz-binding: url(chrome://toolbarext/content/bindings.xml#tabbrowser-tabbox);
 }
 
+
+/* allow the fullscreen toggle button to remove the normal fullscreen window controls */
+#window-controls[hidecontrols="true"] { display: none !important; }

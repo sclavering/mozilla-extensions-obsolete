@@ -111,6 +111,3 @@ var tbextStopReloadButton = {
   // even though it is *not* part of the nsIWebProgressListener interface
   onLinkIconAvailable: function(href) {}
 }
-
-
-window.addEventListener("load",function(e){tbextStopReloadButton.init();}, false);

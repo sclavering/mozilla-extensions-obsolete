@@ -1,5 +1,30 @@
 // javascript for enhancing toolbar customisation.
 
+var gTbextToolboxes = null;
+
+// xxx: this code is duplicated in ToolbarExt_BrowserCustomizeToolbar
+// because we have to pass each toolbox as a seperate argument for the moment
+function tbextGetToolboxes() {
+  gTbextToolboxes = [];
+  gTbextToolboxes.push(document.getElementById("navigator-toolbox"));
+  gTbextToolboxes.push(document.getElementById("toolbarext-bottom-toolbox"));
+  gTbextToolboxes.push(document.getElementById("toolbarext-left-toolbox"));
+  gTbextToolboxes.push(document.getElementById("toolbarext-right-toolbox"));
+
+  // get the toolboxes at the left and right of the tab strip. this really
+  // does have to be this complex, because they're two xbl bindings down!
+  var tabbrowser = document.getElementById("content");
+  // there's nothing better to hook onto than the class attr :(
+  var tabstrip = document.getAnonymousElementByAttribute(tabbrowser, 'class', 'tabbrowser-strip chromeclass-toolbar');
+  gTbextToolboxes.push(document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'toolbarext-toolbox-tableft'));
+  gTbextToolboxes.push(document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'toolbarext-toolbox-tabright'));
+  
+  // get the toolbox below the tab bar
+  var tabbox = document.getAnonymousNodes(tabbrowser)[1];
+  gTbextToolboxes.push(document.getAnonymousElementByAttribute(tabbox, 'anonid', 'toolbarext-toolbox-belowtabs'));
+}
+
+
 
 // replacement start-customisation function that passes all our toolboxes as args to the window
 
@@ -36,11 +61,25 @@ function ToolbarExt_BrowserCustomizeToolbar() {
 }
 
 
-// toolboxChanged means *any* toolbox, not just the one with this callback on
-function tbextCustomiseDone(toolboxChanged) {
+function tbextCustomiseDone(anyToolboxChanged) {
+  if(anyToolboxChanged) tbextInit();
+}
+
+function tbextInit() {
   // update the Stop/Reload combi-button
   tbextStopReloadButton.init();
+  
+  // if our fullscreen toggle is present, and on a fullscreen toolbar, then remove the built-in
+  // window controls. (using a custom attr, to avoid breaking the normal hiding-when-not-fullscreen)
+  var fullscreen = document.getElementById('toolbarext-fullscreen');
+  var controls = document.getElementById('window-controls');
+  var hideControls = fullscreen && fullscreen.parentNode.getAttribute('fullscreentoolbar')=='true';
+  if(hideControls) controls.setAttribute('hidecontrols','true');
+  else controls.removeAttribute('hidecontrols');
 }
+
+window.addEventListener("load", tbextInit, false);
+
 
 
 
