@@ -70,7 +70,7 @@ function linkit(event) {
       if (/^#/i.test(href)); else
         linkit_addLink(page,hydra,"next",href,"LinkIt [>] (" +href+ ")");
 
-    else if(/^last|\/last|last$|>\|/i.test(iText)) // ? >\u007c| ?
+    else if(/^last|\/last|last$|^end|\/end|>\|/i.test(iText)) // ? >\u007c| ?
       if (/^#/i.test(href)); else
         linkit_addLink(page,hydra,"last",href,"LinkIt [>|] (" +href+ ")");
 
