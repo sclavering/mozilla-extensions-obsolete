@@ -102,6 +102,7 @@ var linkToolbarUtils = {
     return haveRels ? relValues : null;
   },
 
+  // mimetype and title are optional
   standardiseRelType: function(relValue, mimetype, title) {
     switch (relValue.toLowerCase()) {
       case "top":
