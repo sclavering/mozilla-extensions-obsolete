@@ -6,7 +6,7 @@
 <script type="application/x-javascript"><![CDATA[
 
 const linkitRE_next  = /^next|continue\b|next$|>$|\u00bb/i;
-const linkitRE_prev  = /^prev|prev$|previous$|^back|\bback$|^<|\u00ab/i;
+const linkitRE_prev  = /^prev(ious)?\b|prev$|previous$|^back|\bback$|^<|\u00ab/i;
 const linkitRE_first = /^first|first$|^begin|\|</i; // ? >\u007c| ?
 const linkitRE_last  = /^last|last$|^end|>\|/i; // ? >\u007c| ?
 const linkitRE_next2 = /next/i;
