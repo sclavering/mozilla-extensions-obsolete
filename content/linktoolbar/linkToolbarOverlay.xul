@@ -25,7 +25,7 @@
    -      Stuart Ballard <sballard@netreach.net>
    -
    - Port to Px:
-   -      Chris Neale <orbit@cdn.gs>
+   -      Chris Neale <cdn@mozdev.org>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -46,7 +46,7 @@
 <?xul-overlay href="chrome://global/content/globalOverlay.xul"?>
 <!DOCTYPE overlay SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
 
-<overlay id="linkToolbarOverlay" 
+<overlay id="linkToolbarOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:rdf="http://www.mozilla.org/rdf">
@@ -58,6 +58,8 @@
 
   <!-- functions -->
   <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarOverlay.js" />
+  
+  <script type="application/x-javascript" src="chrome://linktoolbar/content/styleswitcher.js" />
 
   <script type="application/x-javascript">
     <![CDATA[
@@ -157,17 +159,17 @@
               rdf:type="rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
             <menupopup id="link-appendix-popup" />
           </menu>
-          <menuitem id="link-glossary" label="&glossaryButton.label;" disabled="true" 
+          <menuitem id="link-glossary" label="&glossaryButton.label;" disabled="true"
               class="menuitem-iconic bookmark-item"
               rdf:type="rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type" />
-          <menuitem id="link-index" label="&indexButton.label;" disabled="true" 
+          <menuitem id="link-index" label="&indexButton.label;" disabled="true"
               class="menuitem-iconic bookmark-item"
               rdf:type="rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type" />
 
         </menupopup>
       </toolbarbutton>
 
-      <toolbarbutton id="more-menu" class="bookmark-item" 
+      <toolbarbutton id="more-menu" class="bookmark-item"
           type="menu"
           container="true"
           label="&moreButton.label;" disabled="true"
@@ -186,13 +188,13 @@
           <menuitem id="link-author" label="&authorButton.label;" disabled="true"
               class="menuitem-iconic bookmark-item"
               rdf:type="rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type" />
-          <menuitem id="link-copyright" label="&copyrightButton.label;" disabled="true" 
+          <menuitem id="link-copyright" label="&copyrightButton.label;" disabled="true"
               class="menuitem-iconic bookmark-item"
               rdf:type="rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type" />
 
           <menuseparator />
 
-          <menu id="link-bookmark" label="&bookmarkButton.label;" disabled="true"  
+          <menu id="link-bookmark" label="&bookmarkButton.label;" disabled="true"
               class="menu-iconic bookmark-item" container="true"
               rdf:type="rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
             <menupopup id="link-bookmark-popup" />
@@ -200,7 +202,7 @@
 
           <menuseparator />
 
-          <menu id="link-alternate" label="&alternateButton.label;" disabled="true"  
+          <menu id="link-alternate" label="&alternateButton.label;" disabled="true"
               class="menu-iconic bookmark-item" container="true"
               rdf:type="rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
             <menupopup id="link-alternate-popup" />
@@ -210,9 +212,31 @@
 
         </menupopup>
       </toolbarbutton>
-<!--      
+
       <toolbarseparator />
-      
+
+      <toolbarbutton id="style-menu" class="bookmark-item"
+          type="menu"
+          container="true"
+          label="&styleButton.label;"
+          tooltiptext="&styleButton.tooltip;">
+        <menupopup id="styleswitcher-popup" onpopupshowing="styleswitcherBuildMenu(this);"
+          oncommand="styleswitcherMenuClickHandler(event, this, window._content);">
+          <menuitem label="&styleswitcherNoPageStylesheets;" type="radio"/>
+          <menuitem label="&styleswitcherPersistentPageStylesheets;" type="radio"/>
+     <!--     <menu label="Standard" oncommand="stylesheetSwitchToStandard(window._content, event.target.data, event.target.label);"> -->
+   <!--         <menuitem label="Ultramarine" oncommand="stylesheetSwitchAllToStandard(window._content, this); event.stopPropagation();"/>
+            <menuitem label="Forest"      oncommand="stylesheetSwitchAllToStandard(window._content, this); event.stopPropagation();"/>
+            <menuitem label="Midnight"    oncommand="stylesheetSwitchAllToStandard(window._content, this); event.stopPropagation();"/>
+            <menuitem label="OldStyle"    oncommand="stylesheetSwitchAllToStandard(window._content, this); event.stopPropagation();"/>
+< ! - -          </menu> - - >
+          <menuseparator/> - - >
+          <menuitem label="&styleswitcherBasicPageStyle;" type="radio"/> -->
+        </menupopup>
+      </toolbarbutton>
+<!--
+      <toolbarseparator />
+
       <toolbarbutton id="sharc-button" oncommand="window.openDialog('chrome://browser/content', 'Phoenix', 'chrome,all,dialog=no', 'http://cdn.mozdev.org/linkToolbar/');"/>
 -->
     </statusbarpanel>
