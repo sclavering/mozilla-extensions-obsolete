@@ -11,21 +11,12 @@
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is mozilla.org code.
- *
- * The Initial Developer of the Original Code is
- * Netscape Communications Corporation.
- * Portions created by the Initial Developer are Copyright (C) 1998
- * the Initial Developer. All Rights Reserved.
+ * The Original Code is the LinkToolbar for Firebird/NN7 extension
  *
  * Contributor(s):
- *   Ben Goodger <ben@netscape.com>
- *   Josh Soref <timeless@mac.com>
- *   Tim Taylor <tim@tool-man.org>
- *   Eric Hodel <drbrain@segment7.net>
+ *   Stephen Clavering <mozilla@clav.co.uk>   (Complete rewrite 2003-04-17)
+ *   Chris Neale <cdn@mozdev.org>  [ tweaks and email icon for [mailto:]s ]
  *
- * Port to Px:
- *      Chris Neale <cdn@mozdev.org>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -41,144 +32,81 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/* ::::: Link toolbar items ::::: */
+
+/* Link toolbar items
+!imp needed on image to override bookmark style images from class attr */
+
+#link-top, #link-up, #link-first,
+#link-prev, #link-next, #link-last {
+  list-style-image: url("chrome://linktoolbar/skin/btn1/buttons.png") !important;
+}
 
 #link-top {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/top.gif") !important;
-  -moz-image-region: rect(0px 16px 16px 0px);
+  -moz-image-region: rect(0 16px 16px 0);
 }
-
-#link-top[disabled="true"],
-#link-top[disabled="true"]:hover,
-#link-top[disabled="true"]:hover:active,
-#link-top[disabled="true"][buttonover="true"] {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/top-dis.gif") !important;
+#link-top:hover {
+  -moz-image-region: rect(16px 16px 32px 0);
+}
+#link-top[disabled="true"] {
+  -moz-image-region: rect(32px 16px 48px 0);
   color: graytext !important;
   text-decoration: none !important;
-}
-
-#link-top:hover,
-#link-top:hover:active {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/top-hov.gif") !important;
 }
 
 #link-up {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/up.gif") !important;
-  -moz-image-region: rect(0px 16px 16px 0px);
+  -moz-image-region: rect(0 32px 16px 16px);
 }
-
-#link-up[disabled="true"],
-#link-up[disabled="true"]:hover,
-#link-up[disabled="true"]:hover:active,
-#link-up[disabled="true"][buttonover="true"] {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/up-dis.gif") !important;
+#link-up:hover {
+  -moz-image-region: rect(16px 32px 32px 16px);
+}
+#link-up[disabled="true"] {
+  -moz-image-region: rect(32px 32px 48px 16px);
   color: graytext !important;
   text-decoration: none !important;
-}
-
-#link-up:hover,
-#link-up:hover:active {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/up-hov.gif") !important;
 }
 
 #link-first {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/first.gif") !important;
-  -moz-image-region: rect(0px 16px 16px 0px);
+  -moz-image-region: rect(0 48px 16px 32px);
 }
-
-#link-first[disabled="true"],
-#link-first[disabled="true"]:hover,
-#link-first[disabled="true"]:hover:active,
-#link-first[disabled="true"][buttonover="true"] {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/first-dis.gif") !important;
+#link-first:hover {
+  -moz-image-region: rect(16px 48px 32px 32px);
+}
+#link-first[disabled="true"] {
+  -moz-image-region: rect(32px 48px 48px 32px);
   color: graytext !important;
   text-decoration: none !important;
 }
 
-#link-first:hover,
-#link-first:hover:active {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/first-hov.gif") !important;
-}
-
-#link-prev {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/previous.gif") !important;
-  -moz-image-region: rect(0px 16px 16px 0px);
-}
-
-#link-prev[disabled="true"],
-#link-prev[disabled="true"]:hover,
-#link-prev[disabled="true"]:hover:active,
-#link-prev[disabled="true"][buttonover="true"] {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/previous-dis.gif") !important;
+#link-prev { -moz-image-region: rect(0 64px 16px 48px); }
+#link-prev:hover { -moz-image-region: rect(16px 64px 32px 48px); }
+#link-prev[disabled="true"] {
+  -moz-image-region: rect(32px 64px 48px 48px);
   color: graytext !important;
   text-decoration: none !important;
 }
 
-#link-prev:hover,
-#link-prev:hover:active {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/previous-hov.gif") !important;
-}
-
-#link-next {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/next.gif") !important;
-  -moz-image-region: rect(0px 16px 16px 0px);
-}
-
-#link-next[disabled="true"],
-#link-next[disabled="true"]:hover,
-#link-next[disabled="true"]:hover:active,
-#link-next[disabled="true"][buttonover="true"] {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/next-dis.gif") !important;
+#link-next { -moz-image-region: rect(0 80px 16px 64px); }
+#link-next:hover { -moz-image-region: rect(16px 80px 32px 64px); }
+#link-next[disabled="true"] {
+  -moz-image-region: rect(32px 80px 48px 64px);
   color: graytext !important;
   text-decoration: none !important;
 }
 
-#link-next:hover,
-#link-next:hover:active {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/next-hov.gif") !important;
-}
-
-#link-last {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/last.gif") !important;
-  -moz-image-region: rect(0px 16px 16px 0px);
-}
-
-#link-last[disabled="true"],
-#link-last[disabled="true"]:hover,
-#link-last[disabled="true"]:hover:active,
-#link-last[disabled="true"][buttonover="true"] {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/last-dis.gif") !important;
+#link-last { -moz-image-region: rect(0 96px 16px 80px); }
+#link-last:hover { -moz-image-region: rect(16px 96px 32px 80px); }
+#link-last[disabled="true"] {
+  -moz-image-region: rect(32px 96px 48px 80px);
   color: graytext !important;
   text-decoration: none !important;
 }
 
-#link-last:hover,
-#link-last:hover:active {
-  list-style-image: url("chrome://linktoolbar/skin/btn1/last-hov.gif") !important;
-}
 
-#sharc-box {
-  height: 19px;
-}
-
-#sharc-button {
-  border: 0;
-  height: 19px;
-  list-style-image: url("chrome://linktoolbar/skin/sharc-2-8.50.png");
-  margin: 0;
-  padding: 0;
-  width: 45px;
-}
-
-#document-menu[disabled="true"],
-#more-menu[disabled="true"] {
+#document-menu[disabled="true"], #more-menu[disabled="true"] {
   color: graytext !important;
 }
 
-/*
-#linktoolbar *[href^="mailto:"],
-#linktoolbar *[statustext^="mailto:"],
-*/
+
 #linktoolbar menuitem[href^="mailto:"],
 #linktoolbar menuitem[statustext^="mailto:"],
 #linktoolbar .bookmark-item[href^="mailto:"],
@@ -186,11 +114,10 @@
   border-bottom: 1px dashed red;
   list-style-image: url("chrome://linktoolbar/skin/btn1/mail.png") !important;
 /* would be unnecessary but for !importants sprinkled throughout browser.css and related files */
-}
+}                                                             
 
 
-/* from chrome://navigator/content/navigator.css */
-/* ::::: Hide the link toolbar if it is set to autohide and has no items. ::::: */
+/* Hide the link toolbar if it is set to autohide is empty */
 
 #linktoolbar[hidden="maybe"][hasitems="false"] {
   display:none;
