@@ -44,9 +44,9 @@
 
 <!ENTITY topButton.tooltip "Pagina principale del sito">
 <!ENTITY upButton.tooltip "Sali di livello nel sito">
-<!ENTITY firstButton.tooltip "Prima pagina della sequenza">
-<!ENTITY prevButton.tooltip "Pagina precedente nella sequenza">
-<!ENTITY nextButton.tooltip "Prossima pagina nella sequenza">
-<!ENTITY lastButton.tooltip "Ultima pagina della sequenza">
+<!ENTITY firstButton.tooltip "Prima pagina">
+<!ENTITY prevButton.tooltip "Pagina precedente">
+<!ENTITY nextButton.tooltip "Pagina successiva">
+<!ENTITY lastButton.tooltip "Ultima pagina">
 <!ENTITY documentButton.tooltip "Aiuti alla navigazione">
-<!ENTITY moreButton.tooltip "Pagine simili">
+<!ENTITY moreButton.tooltip "Altre pagine">
