@@ -102,42 +102,38 @@ function LinkToolbarItem (linkType, element) {
 }
 
 
-// new version, which morphs to type="menu" if
-// there are multiple links for the linkType
-function LinkToolbarButton (linkType, element) {
+// Top, Up, First, Prev, Next, and Last menu-buttons
+// Hackery employed to disable the dropmarker if there is just one link.
+function LinkToolbarButton(linkType, element) {
   this.constructor(linkType, element);
 
+  var anonKids = document.getAnonymousNodes(this.xulElement);
+  this.xulDropMarker = anonKids[anonKids.length-1];
+
   this.haveLink = false;  // indicates the button is showing 1 or more links
-  this.haveLinks = false; // indicates the button is showing 2 or more links
+  this.haveLinks = false; // indicates the button has >= 2 links
 
   this.clear = function() {
-    this.haveLink = false;
-    this.haveLinks = false;
+    this.haveLink = this.haveLinks = false;
     this.xulElement.disabled = true;
     this.xulElement.removeAttribute("href");
     this.xulElement.removeAttribute("tooltiptext1");
     this.xulElement.removeAttribute("tooltiptext2");
-    // clear type="menu"
-    this.xulElement.removeAttribute("type");
     while(this.xulPopup.hasChildNodes())
       this.xulPopup.removeChild(this.xulPopup.lastChild);
   }
 
   this.displayLink = function(linkElement) {
-    // handle the first link
     if(!this.haveLink) {
       this.haveLink = true;
       this.setItem(linkElement);
+      // just setting .disabled will not do anything, presumably because the
+      // dropmarker xbl:inherits the toolbarbutton's disabled attribute.
+      this.xulDropMarker.setAttribute("disabled","true");
     } else if(!this.haveLinks) {
-      // we are now handling a second link, so morph to type=menu
       this.haveLinks = true;
-      this.xulElement.setAttribute("type","menu");
-      // must clear href or menu never shows
-      this.xulElement.removeAttribute("href");
-      this.xulElement.removeAttribute("tooltiptext1");
-      this.xulElement.removeAttribute("tooltiptext2");
+      this.xulDropMarker.removeAttribute("disabled");
     }
-    // add the link to the xul popup
     this.addMenuItem(linkElement);
   }
 

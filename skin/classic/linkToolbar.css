@@ -9,62 +9,44 @@ Contributor(s):
 */
 
 
-#link-top, #link-up, #link-first,
-#link-prev, #link-next, #link-last {
+.linktoolbar-button {
   -moz-appearance: none;
   list-style-image: url(chrome://linktoolbar/skin/buttons.png);
   padding: 0;
 }
-#link-top[disabled="true"], #link-up[disabled="true"], #link-first[disabled="true"],
-#link-prev[disabled="true"], #link-next[disabled="true"], #link-last[disabled="true"],
-#more-menu[disabled="true"] {
+.linktoolbar-button[disabled="true"], #more-menu[disabled="true"] {
   color: graytext !important;
   text-decoration: none;
 }
-
-/* don't show drop markers, because they make the toolbar expand when
-buttons switch to type=menu. we change the button icon instead  */
-#linktoolbar > toolbarbutton > .toolbarbutton-menu-dropmarker {
-  display: none !important;
+.linktoolbar-button > .toolbarbutton-menubutton-button {
+  -moz-box-orient: horizontal;
+  padding: 0; /* winstripe's padding is very annoying */
 }
 
 
 #link-top       { -moz-image-region: rect(0 16px 16px 0); }
 #link-top:hover { -moz-image-region: rect(16px 16px 32px 0); }
 #linktoolbar > #link-top[disabled="true"] { -moz-image-region: rect(32px 16px 48px 0); }
-#link-top[type="menu"]       { -moz-image-region: rect(48px 16px 64px 0); }
-#link-top[type="menu"]:hover { -moz-image-region: rect(64px 16px 80px 0); }
 
 #link-up       { -moz-image-region: rect(0 32px 16px 16px); }
 #link-up:hover { -moz-image-region: rect(16px 32px 32px 16px); }
 #link-up[disabled="true"]   { -moz-image-region: rect(32px 32px 48px 16px); }
-#link-up[type="menu"]       { -moz-image-region: rect(48px 32px 64px 16px); }
-#link-up[type="menu"]:hover { -moz-image-region: rect(64px 32px 80px 16px); }
 
 #link-first       { -moz-image-region: rect(0 48px 16px 32px); }
 #link-first:hover { -moz-image-region: rect(16px 48px 32px 32px); }
 #link-first[disabled="true"]   { -moz-image-region: rect(32px 48px 48px 32px); }
-#link-first[type="menu"]       { -moz-image-region: rect(48px 48px 64px 32px); }
-#link-first[type="menu"]:hover { -moz-image-region: rect(64px 48px 80px 32px); }
 
 #link-prev       { -moz-image-region: rect(0 64px 16px 48px); }
 #link-prev:hover { -moz-image-region: rect(16px 64px 32px 48px); }
 #link-prev[disabled="true"]   { -moz-image-region: rect(32px 64px 48px 48px); }
-#link-prev[type="menu"]       { -moz-image-region: rect(48px 64px 64px 48px); }
-#link-prev[type="menu"]:hover { -moz-image-region: rect(64px 64px 80px 48px); }
 
 #link-next       { -moz-image-region: rect(0 80px 16px 64px); }
 #link-next:hover { -moz-image-region: rect(16px 80px 32px 64px); }
 #link-next[disabled="true"]   { -moz-image-region: rect(32px 80px 48px 64px); }
-#link-next[type="menu"]       { -moz-image-region: rect(48px 80px 64px 64px); }
-#link-next[type="menu"]:hover { -moz-image-region: rect(64px 80px 80px 64px); }
 
 #link-last       { -moz-image-region: rect(0 96px 16px 80px); }
 #link-last:hover { -moz-image-region: rect(16px 96px 32px 80px); }
 #link-last[disabled="true"]   { -moz-image-region: rect(32px 96px 48px 80px); }
-#link-last[type="menu"]       { -moz-image-region: rect(48px 96px 64px 80px); }
-#link-last[type="menu"]:hover { -moz-image-region: rect(64px 96px 80px 80px); }
-
 
 
 #linktoolbar menuitem[href^="mailto:"],
@@ -74,13 +56,7 @@ buttons switch to type=menu. we change the button icon instead  */
 }
 
 
-
-#linktoolbar > toolbarbutton > .toolbarbutton-text {
-  display: block !important;
-}
-
 /* Hide the link toolbar if it is set to autohide and empty */
-
 #linktoolbar[showOnlyWhenNeeded="true"][hasitems="false"] {
   display:none;
 }
@@ -90,9 +66,7 @@ buttons switch to type=menu. we change the button icon instead  */
 Have to use !important to override a rule in Fx's browser.css for
 bookmark folders or the More menu still has a text label */
 
-#linktoolbar[iconsonly="true"] > toolbarbutton > .toolbarbutton-text {
-  display: none !important;
-}
+#linktoolbar[iconsonly="true"] .toolbarbutton-text,
 #linktoolbar[iconsonly="true"] > toolbarseparator {
-  display: none;
+  display: none !important;
 }
