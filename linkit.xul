@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.16 2003/05/28 21:09:47 cdn Exp $ -->
+<!-- $Id: linkit.xul,v 1.17 2003/05/28 21:14:44 cdn Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -22,7 +22,7 @@ function linkit() {
   var page = document.getElementById("content").contentDocument;
   var hydra = page.getElementsByTagName("head").item(0);
 
-  // better way to prevent multiplication
+  // prevent multiplication
   if(!page.xxLinkItDone) {
     page.xxLinkItDone = true;
 
@@ -56,7 +56,7 @@ function linkit() {
      for (ti=0;ti<instags.length;ti++) {
         var instag = instags[ti];
 
-      var text = linkit_getInnerText(instag);
+      var iText = linkit_getInnerText(instag);
 
       // ignore non link <a>s
       if(!instag.getAttribute("href")) continue;
@@ -64,7 +64,7 @@ function linkit() {
 //    alert(NB_innerText(instag));
 
 // \u00ab
-      if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|&amp;laquo;|\u00ab|«/i.test(text)) {
+      if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|&amp;laquo;|\u00ab|«/i.test(iText)) {
         linkP.setAttribute("href", instag.getAttribute("href"));
         linkP.setAttribute("id", "linkit-prev");
         linkP.setAttribute("rel", "prev");
@@ -73,7 +73,7 @@ function linkit() {
       }
 
 // \u00bb
-      if (/next|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|&amp;raquo;|\u00bb|»/i.test(text)) {
+      if (/next|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|&amp;raquo;|\u00bb|»/i.test(iText)) {
         linkN.setAttribute("href", instag.getAttribute("href"));
         linkN.setAttribute("id", "linkit-next");
         linkN.setAttribute("rel", "next");
@@ -91,7 +91,7 @@ function linkit() {
 
      }
     }
-
+   }
 }
 
 
