@@ -40,6 +40,11 @@
 #link-prev, #link-next, #link-last {
   list-style-image: url("chrome://linktoolbar/skin/btn1/buttons.png") !important;
 }
+#link-top[disabled="true"], #link-up[disabled="true"], #link-first[disabled="true"],
+#link-prev[disabled="true"], #link-next[disabled="true"], #link-last[disabled="true"] {
+  color: graytext !important;
+  text-decoration: none;
+}
 
 #link-top {
   -moz-image-region: rect(0 16px 16px 0);
@@ -49,8 +54,6 @@
 }
 #linktoolbar > #link-top[disabled="true"] {
   -moz-image-region: rect(32px 16px 48px 0);
-  color: graytext !important;
-  text-decoration: none;
 }
 
 #link-up {
@@ -61,8 +64,6 @@
 }
 #link-up[disabled="true"] {
   -moz-image-region: rect(32px 32px 48px 16px);
-  color: graytext !important;
-  text-decoration: none !important;
 }
 
 #link-first {
@@ -73,32 +74,24 @@
 }
 #link-first[disabled="true"] {
   -moz-image-region: rect(32px 48px 48px 32px);
-  color: graytext !important;
-  text-decoration: none !important;
 }
 
 #link-prev { -moz-image-region: rect(0 64px 16px 48px); }
 #link-prev:hover { -moz-image-region: rect(16px 64px 32px 48px); }
 #link-prev[disabled="true"] {
   -moz-image-region: rect(32px 64px 48px 48px);
-  color: graytext !important;
-  text-decoration: none !important;
 }
 
 #link-next { -moz-image-region: rect(0 80px 16px 64px); }
 #link-next:hover { -moz-image-region: rect(16px 80px 32px 64px); }
 #link-next[disabled="true"] {
   -moz-image-region: rect(32px 80px 48px 64px);
-  color: graytext !important;
-  text-decoration: none !important;
 }
 
 #link-last { -moz-image-region: rect(0 96px 16px 80px); }
 #link-last:hover { -moz-image-region: rect(16px 96px 32px 80px); }
 #link-last[disabled="true"] {
   -moz-image-region: rect(32px 96px 48px 80px);
-  color: graytext !important;
-  text-decoration: none !important;
 }
 
 
