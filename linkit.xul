@@ -5,23 +5,36 @@
 
 <script type="application/x-javascript"><![CDATA[
 
+const linkitRE_next  = /^next|continue|next$|>$|\u00bb/i;
+const linkitRE_prev  = /^prev|prev$|previous$|^back|\bback$|^<|\u00ab/i;
+const linkitRE_first = /^first|first$|^begin|\|</i; // ? >\u007c| ?
+const linkitRE_last  = /^last|last$|^end|>\|/i; // ? >\u007c| ?
+const linkitRE_next2 = /next/i;
+const linkitRE_prev2 = /prev/i;
+
+// recursively ding the internal text of an element
 function linkit_getInnerText(el) {
+  // use alt text for images
+  if(el.nodeName.toLowerCase() == "img") {
+    // should this have spaces wrapped round it?
+    s = el.getAttribute("alt");
+    // hacky test of image src url because authors don't use alt :(
+    var src = el.getAttribute("src");
+    if(linkitRE_next2.test(src)) s += " next";
+    else if(linkitRE_prev2.test(src)) s += " prev";
+    return s;
+  }
+  // deal with other elements
   var s = "", kids = el.childNodes;
   for(var i = 0; i < kids.length; i++) {
     // add contents of CDATA or text nodes
     if(kids[i].nodeType==3 || kids[i].nodeType==2) s += kids[i].nodeValue;
     // call recursively for elements
     else if(kids[i].nodeType==1) s += linkit_getInnerText(kids[i]);
-
-    if(kids[i].nodeName.toLowerCase() == "img") {
-      var img_att = kids[i].attributes;
-      for(var k = 0; k < img_att.length; k++) {
-        s += img_att.item(k).value;
-      }
-    }
   }
   return s;
 }
+
 
 function linkit(event) {
   var page = event.originalTarget;
@@ -30,18 +43,17 @@ function linkit(event) {
   hydra = hydra[0];
   var location = page.location.href;
 
-  // prevent duplication
+  // prevent duplication, probably unnecessary
   if(page.xxLinkItDone) return;
   page.xxLinkItDone = true;
 
   // add a top link iff relevant
   if(/^[^\/]*?:\/\/.*\/.+/.test(location)) {
     linkit_addLink(page,hydra,"top","/");
-
     // add a . or .. link
     var matches = location.match(/(^.*\/)(.*)/);
     if(!matches) return;  // we're on an about:blank or something weird
-    if(matches[2]!="" && !/(index|main).(html?|php)/i.test(matches[2]))
+    if(matches[2]!="" && !/(index|main)\.(html?|php3?)/i.test(matches[2]))
       linkit_addLink(page,hydra,"up",".")
     else if(matches[2]=="")
       linkit_addLink(page,hydra,"up","..")
@@ -53,34 +65,25 @@ function linkit(event) {
 
   for(var i = 0; i < instags.length; i++) {
     var instag = instags[i];
-    var href = instag.getAttribute("href")
+    var href = instag.getAttribute("href");
 
-    // ignore non link <a>s
-    if(!href) continue;
+    // ignore non link <a>s, and internal links
+    if(!href) continue; // || /^#/i.test(href)) continue;
 
     // lose odd whitespace - replace with ' '
     var iText = linkit_getInnerText(instag).replace(/\s+/g," ");
 
-    // ^back[^to\ top] could go back to ^back
-    if(/^prev|prev$|previous$|\/prev|^back|\bback$|^<<|^<=|^<-|\u00ab/i.test(iText))
-      if (/^#/i.test(href)); else
-        linkit_addLink(page,hydra,"prev",href,"LinkIt [<] (" +href+ ")")
-
-    else if(/^next|continue|\/next|next$|>$|\u00bb/i.test(iText))
-      if (/^#/i.test(href)); else
-        linkit_addLink(page,hydra,"next",href,"LinkIt [>] (" +href+ ")");
-
-    else if(/^first|\/first|first$|^begin|\/begin|\|</i.test(iText)) // ? >\u007c| ?
-      if (/^#/i.test(href)); else
-        linkit_addLink(page,hydra,"first",href,"LinkIt [|<] (" +href+ ")");
-
-    else if(/^last|\/last|last$|^end|\/end|>\|/i.test(iText)) // ? >\u007c| ?
-      if (/^#/i.test(href)); else
-        linkit_addLink(page,hydra,"last",href,"LinkIt [>|] (" +href+ ")");
+    if(linkitRE_prev.test(iText))
+      linkit_addLink(page,hydra,"prev",href,"LinkIt [<] (" +href+ ")")
+    else if(linkitRE_next.test(iText))
+      linkit_addLink(page,hydra,"next",href,"LinkIt [>] (" +href+ ")");
+    else if(linkitRE_first.test(iText))
+      linkit_addLink(page,hydra,"first",href,"LinkIt [|<] (" +href+ ")");
+    else if(linkitRE_last.test(iText))
+      linkit_addLink(page,hydra,"last",href,"LinkIt [>|] (" +href+ ")");
 
 /*    else if(/^[0-9]{1,}$/i.test(iText))
-      if (/^#/i.test(href)); else
-        linkit_addLink(page,hydra,"linkit",href,"LinkIt [" + iText + "] (" +href+ ")");*/
+      linkit_addLink(page,hydra,"linkit",href,"LinkIt [" + iText + "] (" +href+ ")");*/
   }
 }
 
