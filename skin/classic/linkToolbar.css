@@ -12,17 +12,15 @@ Contributor(s):
 .linktoolbar-button {
   -moz-appearance: none;
   list-style-image: url(chrome://linktoolbar/skin/buttons.png);
-  padding: 0;
-}
-.linktoolbar-button[disabled="true"], #more-menu[disabled="true"] {
-  color: graytext !important;
-  text-decoration: none;
-}
-.linktoolbar-button > .toolbarbutton-menubutton-button {
-  -moz-box-orient: horizontal;
-  padding: 0; /* winstripe's padding is very annoying */
+  padding: 0 !important;
+  margin: 0 2px;
 }
 
+.linktoolbar-button > .toolbarbutton-menubutton-button { -moz-box-orient: horizontal; padding: 0 1px !important; }
+.linktoolbar-button > .toolbarbutton-menubutton-button:hover:active:not([disabled]) { padding: 0 0 0 2px !important; }
+#linktoolbar .toolbarbutton-text { padding: 0 2px 0 0; }
+#more-menu { padding: 0 1px !important; }
+#more-menu:hover:active:not([disabled]), #more-menu[open] { padding: 0 0 0 2px !important; }
 
 #link-top       { -moz-image-region: rect(0 16px 16px 0); }
 #link-top:hover { -moz-image-region: rect(16px 16px 32px 0); }
@@ -70,3 +68,5 @@ bookmark folders or the More menu still has a text label */
 #linktoolbar[iconsonly="true"] > toolbarseparator {
   display: none !important;
 }
+/* we don't need a small gap btwn. icon and text when there is no text */
+#linktoolbar[iconsonly="true"] .toolbarbutton-icon { margin: 0; }
