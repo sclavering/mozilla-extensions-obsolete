@@ -39,8 +39,21 @@
 
 // extracted from /chrome/comm/navigator/browser.js in Mozilla 1.1
 
+/* -- scragz
+var ShowTheColor = false;
+var LinkTagArray = document.commandDispatcher.focusedWindow.document.getElementsByTagName("link");
+if (LinkTagArray.length > 0) {
+   for (var i=0; i < LinkTagArray.length; i++) {
+      if (LinkTagArray[i].getAttribute("rel").toLowerCase() == "alternate stylesheet" &&
+         LinkTagArray[i].getAttribute("media").toLowerCase() != "print") {
+         ShowTheColor = true;
+      }
+   }
+}
 
+'alternative stylesheet' / 'alt stylesheet' ?
 
+*/
 var StyleSelector = {
   contentArea: null,
   button: null, // styleswitcher toolbarbutton
@@ -62,8 +75,23 @@ var StyleSelector = {
     //if(styleSheets.length>1) StyleSelector.button.setAttribute("hasstyles","true");
     //else StyleSelector.button.removeAttribute("hasstyles");
     var btn = document.getElementById("styleselector");
+    
     if(styleSheets.length>1) btn.setAttribute("hasstyles","true");
     else btn.removeAttribute("hasstyles");
+
+    /*
+      var LinkTagArray = document.commandDispatcher.focusedWindow.document.getElementsByTagName("link");
+      if (LinkTagArray.length > 0) {
+        for (var i=0; i < LinkTagArray.length; i++) {
+          if ((LinkTagArray[i].getAttribute("rel").toLowerCase() == "alternative stylesheet" ||
+               LinkTagArray[i].getAttribute("rel").toLowerCase() == "alternate stylesheet" ||
+               LinkTagArray[i].getAttribute("rel").toLowerCase() == "alt stylesheet") &&
+            LinkTagArray[i].getAttribute("media").toLowerCase() != "print") {
+             btn.setAttribute("hasstyles","true");
+          }
+        }
+      }
+    */
   },
 
   commanded: function(evt, menu, page) {

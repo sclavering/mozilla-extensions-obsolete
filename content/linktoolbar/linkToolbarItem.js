@@ -98,7 +98,7 @@ function LinkToolbarItem (linkType) {
   function getParentMenuButtonRecursive(xulElement) {
     if (!xulElement) return null;
 
-    if (xulElement.tagName == "toolbarbutton")
+    if (xulElement.tagName == "toolbarbutton") 
       return xulElement;
 
     return getParentMenuButtonRecursive(xulElement.parentNode)
@@ -130,13 +130,10 @@ LinkToolbarButton.prototype = new LinkToolbarItem;
 function LinkToolbarMenu (linkType) {
   this.constructor(linkType);
 
-  this.knownLinks = null;
-
   this.clear = function() {
     this.disableParentMenuButton();
     this.getXULElement().setAttribute("disabled", "true");
     clearPopup(this.getPopup());
-    this.knownLinks = null;
   }
 
   function clearPopup(popup) {
@@ -149,23 +146,10 @@ function LinkToolbarMenu (linkType) {
   }
 
   this.displayLink = function(linkElement) {
-    if (this.isAlreadyAdded(linkElement)) return false;
-
-    this.getKnownLinks()[linkElement.href] = true;
     this.addMenuItem(linkElement);
     this.getXULElement().removeAttribute("disabled");
     this.enableParentMenuButton();
     return true;
-  }
-
-  this.isAlreadyAdded = function(linkElement) {
-    return this.getKnownLinks()[linkElement.href];
-  }
-
-  this.getKnownLinks = function() {
-    if (!this.knownLinks)
-      this.knownLinks = new Array();
-    return this.knownLinks;
   }
 
   function match(first, second) {
@@ -192,7 +176,7 @@ function LinkToolbarMenu (linkType) {
     menuitem.setAttribute("label", linkElement.getLabel());
     menuitem.setAttribute("href", linkElement.href);
     menuitem.setAttribute("class", "menuitem-iconic bookmark-item");
-    menuitem.setAttribute("rdf:type",
+    menuitem.setAttribute("rdf:type", 
         "rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#linkType");
 
     return menuitem;
@@ -205,7 +189,7 @@ function LinkToolbarTransientMenu (linkType) {
   this.constructor(linkType);
 
   this.getXULElement = function() {
-    if (this.__proto__.getXULElement.apply(this))
+    if (this.__proto__.getXULElement.apply(this)) 
       return this.__proto__.getXULElement.apply(this);
     else
       return this.createXULElement();
@@ -265,7 +249,7 @@ function LinkToolbarTransientMenu (linkType) {
     this.getXULElement().hidden = false;
 
     // Show the 'miscellaneous' separator
-    document.getElementById("misc-separator").hidden = false;
+    document.getElementById("misc-separator").hidden = false;    
     return true;
   }
 }
