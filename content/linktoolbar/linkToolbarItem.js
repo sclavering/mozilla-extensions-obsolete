@@ -260,12 +260,12 @@ function LinkToolbarTransientItem(linkType) {
     // XXX: use longTitle for tooltip too ?
     menuitem.setAttribute("tooltiptext1", linkInfo.title);
     menuitem.setAttribute("tooltiptext2", linkInfo.href);
-    menuitem.setAttribute("label", linkInfo.longTitle);
+    menuitem.setAttribute("label", linkInfo.longTitle || linkInfo.href);
     menuitem.setAttribute("href", linkInfo.href);
     menuitem.className = "menuitem-iconic bookmark-item";
     this.popup.appendChild(menuitem);
   }
-  
+
   // duplicated from ltItem.  will fix things to use inheritance later
 
   this.enableParentMenuButton = function() {
