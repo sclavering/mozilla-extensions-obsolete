@@ -11,10 +11,10 @@
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is Eric Hodel's <drbrain@segment7.net> code.
+ * The Original Code is the Link Toolbar from Mozilla Seamonkey.
  *
- * The Initial Developer of the Original Code is
- * Eric Hodel.
+ * The Initial Developer of the Original Code is Eric Hodel <drbrain@segment7.net>
+ *
  * Portions created by the Initial Developer are Copyright (C) 2001
  * the Initial Developer. All Rights Reserved.
  *
@@ -23,7 +23,7 @@
  *      Tim Taylor <tim@tool-man.org>
  *      Stuart Ballard <sballard@netreach.net>
  *      Chris Neale <cdn@mozdev.org>  [Port to Px]
- *      Stephen Clavering <mozilla@clav.co.uk>
+ *      Stephen Clavering <mozilla@clav.me.uk>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -52,22 +52,70 @@ const linkToolbarHandler = {
   hasItems: false,
 
   handle: function(linkElement) {
-    // add some methods to all link elements if we haven't done so already.
-    if(!linkElement.linkToolbarExtensionsAdded) this.extendLinkElements(linkElement);
-    if(linkElement.isIgnored()) return;
+    if(this.isLinkIgnored(linkElement.rel)) return;
     if(!this.hasItems) {
       this.hasItems = true;
       linkToolbarUI.activate();
     }
-    var relValues = linkElement.getRelValues();
-    for(var i = 0; i < relValues.length; i++) {
-      var linkType = this.getLinkType(relValues[i]);
-        this.getItemForLinkType(linkType).displayLink(linkElement);
+    var linkInfo = this.getLinkElementInfo(linkElement);
+    for(var rel in linkInfo.relValues)
+      this.getItemForLinkType(rel).displayLink(linkInfo);
+  },
+
+  isLinkIgnored: function(relAttribute) {
+    // XXX: from reading the bug where the DOMLinkAdded event was implemented, it appears
+    // the event is *not fired* for stylesheet links, so the stylesheet part of this regex
+    // may be unnecessary.
+    // XXX: should some of these possibilites just be handled by returning null in standardiseRelType
+    // as we do for prefetch?  that would mean the link would still handled if it had other rel
+    // values that were interesting
+    return /\b(stylesheet\b|icon\b|pingback\b|fontdef\b|p3pv|schema\.)/i.test(relAttribute);
+  },
+
+  // find all the info we need to show a link on the link toolbar
+  getLinkElementInfo: function(element) {
+    var relValues = [], rel, i;
+    // get relValues from rel attribute
+    if(element.rel) {
+      var rawRelValues = element.rel.split(/\s+/);
+      for(i = 0; i < rawRelValues.length; i++) {
+        rel = this.standardiseRelType(rawRelValues[i]);
+        // avoid duplicate rel values
+        if(rel) relValues[rel] = rel;
+      }
+    }
+    // get relValues from rel attribute
+    if(element.rev) {
+      var revValues = element.rev.split(/\s+/);
+      for(i = 0; i < revValues.length; i++) {
+        rel = this.convertRevToRel(revValues[i]);
+        if(rel) relValues[rel] = rel;
+      }
+    }
+
+    var prefix = "";
+    // XXX: lookup more meaningful and localized version of media,
+    //   i.e. media="print" becomes "Printable" or some such
+    // XXX: use localized version of ":" separator
+    if(element.media && !/\b(all|screen)\b/i.test(element.media))
+      prefix += element.media + ": ";
+    if (element.hreflang)
+      prefix += ltLanguageDictionary.lookupLanguageName(element.hreflang) + ": ";
+    var longTitle = prefix;
+    if(element.title&&element.title!="") longTitle += element.title;
+
+    // bundle everything into an object to be passed to a LinkToolbarItem (or a subclass)
+    return {
+      linkElement: element,
+      relValues: relValues,
+      longTitle: longTitle,
+      href:  element.href,
+      title: element.title
     }
   },
 
-  getLinkType: function(relAttribute) {
-    switch (relAttribute.toLowerCase()) {
+  standardiseRelType: function(relValue) {
+    switch (relValue.toLowerCase()) {
       case "start":
       case "top":
       case "origin":
@@ -88,7 +136,6 @@ const linkToolbarHandler = {
       case "last":
         return "last";
       case "author":
-      case "made":
         return "author";
       case "contents":
       case "toc":
@@ -96,107 +143,74 @@ const linkToolbarHandler = {
       case "prefetch":
         return null;
       default:
-        return relAttribute.toLowerCase();
+        return relValue.toLowerCase();
     }
   },
+
+  convertRevToRel: function(revValue) {
+    switch(revValue.toLowerCase()) {
+      case "made":
+        return "author";
+      case "next":
+        return "prev";
+      case "prev":
+      case "previous":
+        return "next";
+      default:
+        // returning the revValue is not an option, because the
+        // toolbar is based on rel types, not rev types
+        return null;
+    }
+  },
+
 
   getItemForLinkType: function(linkType) {
     if(!(linkType in this.items && this.items[linkType]))
       this.items[linkType] = this.createItemForLinkType(linkType);
-
     return this.items[linkType];
   },
 
   createItemForLinkType: function(linkType) {
-    if(!document.getElementById("link-" + linkType)) {
-      // create a new menu
-      var menu = document.createElement("menu");
-      menu.setAttribute("id","link-"+linkType);
-      menu.setAttribute("label",linkType);
-      menu.setAttribute("hidden", "true");
-      menu.setAttribute("class", "menu-iconic bookmark-item");
-      menu.setAttribute("container", "true");
-      // create the popup to go with it
-      var popup = document.createElement("menupopup");
-      popup.setAttribute("id","link-"+linkType+"-popup");
-      menu.appendChild(popup);
-      // add to link toolbar
+    var linkTypeElement = document.getElementById("link-" + linkType);
+    if(!linkTypeElement) {
+      var menu = this.createNewMenuForLinkType(linkType);
       document.getElementById("more-menu-popup").appendChild(menu);
       return new LinkToolbarMenu(linkType,menu);
-    }  
-    // XXX: replace switch with polymorphism
-    switch(document.getElementById("link-" + linkType).localName) {
+    }
+    switch(linkTypeElement.localName) {
       case "toolbarbutton":
-        return new LinkToolbarButton(linkType);
+        return new LinkToolbarButton(linkType,linkTypeElement);
       case "menuitem":
-        return new LinkToolbarItem(linkType);
+        return new LinkToolbarItem(linkType,linkTypeElement);
       case "menu":
-        return new LinkToolbarMenu(linkType);
+        return new LinkToolbarMenu(linkType,linkTypeElement);
       default:
-        // very bad/odd things are happening if we reach this
+        // should never reach this
         throw ("Link Toolbar Error: unrecognised element exists for rel="+linkType);
     }
   },
 
-  clearAllItems: function() {
-    // Hide the 'miscellaneous' separator
-    document.getElementById("misc-separator").hidden = true;
-    // Disable the individual items
-    for(var linkType in this.items) this.items[linkType].clear();
-    // Store the fact that the toolbar is empty
-    this.hasItems = false;
+  createNewMenuForLinkType: function(linkType) {
+    var menu = document.createElement("menu");
+    menu.id = "link-"+linkType;
+    menu.setAttribute("label",linkType);
+    menu.hidden = true;
+    menu.className = "menu-iconic bookmark-item";
+    menu.setAttribute("container", "true");
+    // create the popup to go with it
+    var popup = document.createElement("menupopup");
+    popup.id = "link-"+linkType+"-popup";
+    menu.appendChild(popup);
+    return menu;
   },
 
-  /* This code replaces the old LinkElementDecorator.
-   * The first time a <link> is handled this function is called, and adds some
-   * functions that we need to the prototype for all <link>s
-   */
-  extendLinkElements: function(element) {
-    var c = element.constructor;
-    // set a flag so this is only executed once
-    c.prototype.linkToolbarExtensionsAdded = true;
-    c.prototype.getRelValues = function() {
-      if(!this._relValues) {
-        // convert rev=made to rel=made, which is handled the same as rel=author
-        var rel = (!this.rel && this.rev && /\bmade\b/i.test(this.rev)) ? this.rev : this.rel;
-        // XXX should this be changed to split round any whitespace ? probably yes
-        if(rel) this._relValues = rel.split(" ");
-        else this._relValues = null;
-      }
-      return this._relValues;
-    };
-    c.prototype.isIgnored = function() {
-      // XXX should we cache the value that's returned? would cause problems if page changes rel= ?
-      var relValues = this.getRelValues()
-      if(!relValues) return true;
-      for(var i = 0; i < relValues.length; i++)
-        if(/^stylesheet$|^icon$|^pingback$|^fontdef$|^p3pv|^schema./i.test(relValues[i]))
-          return true;
-      return false;
-    };
-    c.prototype.getTooltip = function() {
-      return this.getLongTitle() != "" ? this.getLongTitle() : this.href;
-    };
-    c.prototype.getLabel = function() {
-      return this.getLongTitle() != "" ? this.getLongTitle() : this.rel;
-    };
-    c.prototype.getLongTitle = function() {
-      if(!this.longTitle) {
-        var prefix = "";
-        // XXX: lookup more meaningful and localized version of media,
-        //   i.e. media="print" becomes "Printable" or some such
-        // XXX: use localized version of ":" separator
-        if (this.media && !/\ball\b|\bscreen\b/i.test(this.media))
-          prefix += this.media + ": ";
-        if (this.hreflang)
-          prefix += ltLanguageDictionary.lookupLanguageName(this.hreflang) + ": ";
-        this.longTitle = this.title ? prefix + this.title : prefix;
-      }
-      return this.longTitle;
-    };
+  clearAllItems: function() {
+    // Disable the individual items
+    for(var linkType in this.items) this.items[linkType].clear();
+    // remember that the toolbar is empty
+    this.hasItems = false;
   }
 }
-
 
 
 
@@ -204,18 +218,20 @@ const linkToolbarHandler = {
 /*
  * ltLanguageDictionary is a Singleton for looking up a language name
  * given its language code.
- * 
- * from languageDictionary.js
+ *
+ * was languageDictionary.js
+ *
+ * XXX: if we just put a <stringbundle> in the overlay file we could
+ * avoid this mess
  */
 const ltLanguageDictionary = {
   dictionary: null,
 
+  // XXX: could we handle non-standard language codes better?
   lookupLanguageName: function(languageCode) {
     if (this.getDictionary()[languageCode])
       return this.getDictionary()[languageCode];
     else
-      // XXX: handle non-standard language code's per
-      //    hixie's spec (see bug 2800)
       return languageCode;
   },
 

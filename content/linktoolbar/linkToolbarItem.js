@@ -11,9 +11,9 @@
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is Eric Hodel's <drbrain@segment7.net> code.
+ * The Original Code is the Link Toolbar from Mozilla Seamonkey.
  *
- * The Initial Developer of the Original Code is Eric Hodel.
+ * The Initial Developer of the Original Code is Eric Hodel <drbrain@segment7.net>
  *
  * Portions created by the Initial Developer are Copyright (C) 2001
  * the Initial Developer. All Rights Reserved.
@@ -23,7 +23,7 @@
  *      Tim Taylor <tim@tool-man.org>
  *      Stuart Ballard <sballard@netreach.net>
  *      Chris Neale <cdn@mozdev.org> [Port to Px and other trivialities]
- *      Stephen Clavering <mozilla@clav.co.uk>
+ *      Stephen Clavering <mozilla@clav.me.uk>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -42,13 +42,16 @@
 /*
  * LinkToolbarItem and its subclasses represent the buttons, menuitems,
  * and menus that handle the various link types.
+ *
+ * |element| is the XUL menu/menuitem/toolbarbutton that will be used to
+ * show the |linkType| in question
  */
-function LinkToolbarItem (linkType) {
+function LinkToolbarItem (linkType, element) {
   this.linkType = linkType;
-  this.xulElementId = "link-" + linkType;
-  this.xulPopupId = this.xulElementId + "-popup";
+  this.xulElement = element; // || document.getElementById("link-"+linkType);
+  // will be null for a LinkToolbarItem, but both LTMenu and LTButton use this
+  this.xulPopup = document.getElementById("link-"+linkType+"-popup");
   this.parentMenuButton = null;
-  this.xulElement = document.getElementById(this.xulElementId);
 
   this.clear = function() {
     this.disableParentMenuButton();
@@ -71,7 +74,7 @@ function LinkToolbarItem (linkType) {
     this.xulElement.disabled = false;
     this.xulElement.hidden = false;
     // lines will be hidden if blank
-    this.xulElement.setAttribute("tooltiptext1", linkElement.getLongTitle());
+    this.xulElement.setAttribute("tooltiptext1", linkElement.longTitle);
     this.xulElement.setAttribute("tooltiptext2", linkElement.href);
   }
 
@@ -83,7 +86,7 @@ function LinkToolbarItem (linkType) {
   }
 
   this.disableParentMenuButton = function() {
-    if (!this.parentMenuButton) return;
+    if(!this.parentMenuButton) return;
     this.parentMenuButton.disabled = true;
     this.parentMenuButton = null;
   }
@@ -101,12 +104,11 @@ function LinkToolbarItem (linkType) {
 
 // new version, which morphs to type="menu" if
 // there are multiple links for the linkType
-function LinkToolbarButton (linkType) {
-  this.constructor(linkType);
-  this.popup = document.getElementById(this.xulPopupId);
-  
-  this.haveLink = false;
-  this.haveLinks = false;
+function LinkToolbarButton (linkType, element) {
+  this.constructor(linkType, element);
+
+  this.haveLink = false;  // indicates the button is showing 1 or more links
+  this.haveLinks = false; // indicates the button is showing 2 or more links
 
   this.clear = function() {
     this.haveLink = false;
@@ -117,17 +119,17 @@ function LinkToolbarButton (linkType) {
     this.xulElement.removeAttribute("tooltiptext2");
     // clear type="menu"
     this.xulElement.removeAttribute("type");
-    while(this.popup.hasChildNodes())
-      this.popup.removeChild(this.popup.lastChild);
+    while(this.xulPopup.hasChildNodes())
+      this.xulPopup.removeChild(this.xulPopup.lastChild);
   }
-  
+
   this.displayLink = function(linkElement) {
     // handle the first link
     if(!this.haveLink) {
       this.haveLink = true;
       this.setItem(linkElement);
     } else if(!this.haveLinks) {
-      // morph to type=menu
+      // we are now handling a second link, so morph to type=menu
       this.haveLinks = true;
       this.xulElement.setAttribute("type","menu");
       // must clear href or menu never shows
@@ -135,18 +137,19 @@ function LinkToolbarButton (linkType) {
       this.xulElement.removeAttribute("tooltiptext1");
       this.xulElement.removeAttribute("tooltiptext2");
     }
-    // add the link to the popup
+    // add the link to the xul popup
     this.addMenuItem(linkElement);
   }
 
   this.addMenuItem = function(linkElement) {
     var menuitem = document.createElement("menuitem");
+    // XXX: use longTitle for tooltip too ?
     menuitem.setAttribute("tooltiptext1", linkElement.title);
     menuitem.setAttribute("tooltiptext2", linkElement.href);
-    menuitem.setAttribute("label", linkElement.getLabel());
+    menuitem.setAttribute("label", linkElement.longTitle);
     menuitem.setAttribute("href", linkElement.href);
     menuitem.className = "menuitem-iconic bookmark-item";
-    this.popup.appendChild(menuitem);
+    this.xulPopup.appendChild(menuitem);
   }
 
   // do nothing.  unneeded?
@@ -156,17 +159,15 @@ function LinkToolbarButton (linkType) {
 LinkToolbarButton.prototype = new LinkToolbarItem;
 
 
-function LinkToolbarMenu (linkType) {
-  this.constructor(linkType);
-  this.xulPopup = document.getElementById(this.xulPopupId);
+function LinkToolbarMenu (linkType, element) {
+  this.constructor(linkType, element);
 
   this.clear = function() {
     this.disableParentMenuButton();
     this.xulElement.disabled = true;
     this.xulElement.hidden = true;
-    var popup = this.xulPopup;
-    while (popup.hasChildNodes())
-      popup.removeChild(popup.lastChild);
+    while(this.xulPopup.hasChildNodes())
+      this.xulPopup.removeChild(this.xulPopup.lastChild);
   }
 
   this.displayLink = function(linkElement) {
@@ -181,7 +182,7 @@ function LinkToolbarMenu (linkType) {
     var menuitem = document.createElement("menuitem");
     menuitem.setAttribute("tooltiptext1", linkElement.title);
     menuitem.setAttribute("tooltiptext2", linkElement.href);
-    menuitem.setAttribute("label", linkElement.getLabel());
+    menuitem.setAttribute("label", linkElement.longTitle);
     menuitem.setAttribute("href", linkElement.href);
     menuitem.className = "menuitem-iconic bookmark-item";
     this.xulPopup.appendChild(menuitem);
