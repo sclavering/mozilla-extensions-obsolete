@@ -43,7 +43,13 @@ const linkFinder = {
 
     var addedLinks = [];
 
-    for(i = 0; i < doc.links.length; i++) {
+    // The user has to wait for linkFinder to finish before they can interact with the page
+    // that has just loaded.  On pages with lots of links linkFinder could make Firefox
+    // unresponsive for several seconds if we didn't cap the number of links we inspect.
+    // xxx think more about what cap to use (500 is probably excessively high)
+    var max = Math.min(doc.links.length, 500);
+
+    for(i = 0; i < max; i++) {
       link = doc.links[i];
       var href = link.href;
       var rel = link.rel;
