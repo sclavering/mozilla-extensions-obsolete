@@ -1,11 +1,10 @@
-@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
-
 #x-button {
-  -moz-image-region: rect(0 32px 32px 0);
   list-style-image: url(x.png);
+  -moz-image-region: rect(0 30px 30px 0);
+  /* some fool applied this style to .toolbarbutton-1, rather than to all toolbarbuttons in the browser window */
+  -moz-box-orient: vertical;
 }
 
 toolbar[iconsize="small"] #x-button {
-  -moz-image-region: rect(0 20px 20px 0);
-  list-style-image: url(xs.png);
+  -moz-image-region: rect(0 50px 20px 30px);
 }
