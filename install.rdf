@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://www.mozilla.org/2004/em-rdf#">
+
+  <rdf:Description about="urn:mozilla:install-manifest">
+    <id>stopreload</id>
+
+    <name>Stop/Reload</name>
+    <version>1.0</version>
+    <description>A combined Stop and Reload toolbar button</description>
+
+    <creator>Stephen Clavering</creator>
+    <homepageURL>http://clav.mozdev.org/</homepageURL>
+    <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
+
+    <targetApplication>
+      <rdf:Description>
+        <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
+        <minVersion>0.9</minVersion>
+        <maxVersion>0.10</maxVersion>
+      </rdf:Description>
+    </targetApplication>
+
+    <file>
+      <rdf:Description about="urn:mozilla:extension:file:stopreload.jar">
+        <package>content/</package>
+        <locale>locale/en/</locale>
+        <skin>skin/</skin>
+      </rdf:Description>
+    </file>
+  </rdf:Description>
+</rdf:RDF>
