@@ -41,14 +41,11 @@
    - ***** END LICENSE BLOCK ***** -->
 
 <?xml-stylesheet href="chrome://linktoolbar/skin/linkToolbar.css" type="text/css"?>
-<?xml-stylesheet href="chrome://linktoolbar/skin/styleselector.css" type="text/css"?>
 
 <?xul-overlay href="chrome://global/content/globalOverlay.xul"?>
 <!DOCTYPE overlay [
 <!ENTITY % selfDTD SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
 %selfDTD;
-<!ENTITY % styleDTD SYSTEM "chrome://linktoolbar/locale/styleselector.dtd">
-%styleDTD;
 ]>
 
 <overlay id="linkToolbarOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -58,8 +55,6 @@
   <script type="application/x-javascript" src="linkToolbarHandler.js"/>
   <script type="application/x-javascript" src="linkToolbarItem.js"/>
   <script type="application/x-javascript" src="linkToolbarUI.js"/>
-
-  <script type="application/x-javascript" src="styleselector.js"/>
 
 <!--  <menupopup id="menu_View"> > -->
 <!--  <menupopup id="view_toolbars_popup"> -->
@@ -311,18 +306,8 @@
       </toolbarbutton>
     </statusbarpanel>
 
-    <statusbarpanel id="styleselector-panel" insertafter="linktoolbar" insertbefore="statusbar-progresspanel">
+    <statusbarpanel id="styleselector-panel" insertafter="linktoolbar">
       <toolbarbutton id="linktoolbar-toggle" oncommand="toggleLinkToolbar();" persist="left" />
-      <toolbarbutton id="styleselector" type="menu" label="&styleselector.label;"
-          tooltiptext="&styleselector.tooltip;">
-        <menupopup id="styleselector-popup" position="before_end"
-            onpopupshowing="StyleSelector.buildMenu(this);"
-            onpopuphiding="StyleSelector.emptyMenu(this);"
-            oncommand="event.preventBubble(); StyleSelector.commanded(event, this, window._content);">
-          <menuitem label="&styleselectorNoPageStyle;" tooltiptext="&styleselectorNoPageStyle;" type="radio"/>
-          <menuitem label="&styleselectorPersistentStyle;" tooltiptext="&styleselectorPersistentStyle;" type="radio"/>
-        </menupopup>
-      </toolbarbutton>
     </statusbarpanel>
   </statusbar>
 </overlay>
