@@ -10,11 +10,14 @@ const linkFinder = {
       if("up" in link.relValues) noUp = false;
     }
     if(noTop) {
-      var toprels = [];
-      toprels["top"] = "top";
-      var topurl = doc.location.href.match(/^[^\/]*?:\/\/[^\/]*\//)[0];
-      var top = {href: topurl, relValues: toprels, title: null, longTitle: null};
-      linkToolbarUI.addLink(top, doc);
+      var topurl = doc.location.href.match(/^[^\/]*?:\/\/[^\/]*\//);
+      if(topurl) {
+        topurl = topurl[0];
+        var toprels = [];
+        toprels["top"] = "top";
+        var top = {href: topurl, relValues: toprels, title: null, longTitle: null};
+        linkToolbarUI.addLink(top, doc);
+      }
     }
     if(noUp) {
       var uprels = [];
