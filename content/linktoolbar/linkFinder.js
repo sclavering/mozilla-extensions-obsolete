@@ -30,11 +30,11 @@ const linkFinder = {
     // generate top and up links based on url
     if(noTop) {
       var topurl = doc.location.href.match(/^[^\/]*?:\/\/[^\/]*\//);
-      if(topurl) this.addLink(doc, topurl[0], null, "top", null, null);
+      if(topurl) this.addLink(doc, topurl[0], null, "top", null, null, null);
     }
     if(noUp) {
       var upurl = this.getUp(doc.location.href);
-      if(upurl) this.addLink(doc, upurl, null, "up", null, null);
+      if(upurl) this.addLink(doc, upurl, null, "up", null, null, null);
     }
 
     // generate other links based on <a href="..."/> style links
@@ -44,6 +44,8 @@ const linkFinder = {
 
     // xxx use NS version of function?
     var links = doc.getElementsByTagName('a');
+
+    var addedLinks = [];
 
     for(i = 0; i < links.length; i++) {
       link = links[i];
@@ -64,7 +66,7 @@ const linkFinder = {
         for(j = 0; j < rawRels.length; j++) {
           var aRel = linkToolbarHandler.standardiseRelType(rawRels[j]);
           // avoid duplicate rel values
-          if(rel) rels[aRel] = aRel;
+          if(aRel) rels[aRel] = aRel;
         }
         if(rels.length==0) continue;
         // add the link
@@ -75,23 +77,33 @@ const linkFinder = {
       }
 
       if(this.re_next.test(title))
-        this.addLink(doc, href, base, "next", title, null);
+        this.addLink(doc, href, base, "next", title, null, addedLinks);
       else if(this.re_prev.test(title))
-        this.addLink(doc, href, base, "prev", title, null);
+        this.addLink(doc, href, base, "prev", title, null, addedLinks);
       else if(this.re_first.test(title))
-        this.addLink(doc, href, base, "first", title, null);
+        this.addLink(doc, href, base, "first", title, null, addedLinks);
       else if(this.re_last.test(title))
-        this.addLink(doc, href, base, "last", title, null);
+        this.addLink(doc, href, base, "last", title, null, addedLinks);
     }
   },
 
-  addLink: function(doc, url, base, rel, title, longTitle) {
+  addLink: function(doc, url, base, rel, title, longTitle, addedLinks) {
   	// resolve relative urls
   	if(base) {
     	var baseuri = Components.classes["@mozilla.org/network/standard-url;1"]//.createInstance();
     	                        .createInstance(Components.interfaces.nsIURI);
     	baseuri.spec = base;
     	url = baseuri.resolve(url);
+    }
+    // avoid duplicate links
+    if(addedLinks) {
+      if(rel in addedLinks) {
+        if(url in addedLinks[rel]) return; // it's a dup.
+        addedLinks[rel][url] = true;
+      } else {
+        addedLinks[rel] = [];
+        addedLinks[rel][url] = true;
+      }
     }
     // add the link
     var rels = [];
