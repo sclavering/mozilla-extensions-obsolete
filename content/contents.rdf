@@ -7,8 +7,8 @@
   </RDF:Seq>
 
   <RDF:Description about="urn:mozilla:package:toolbarext"
-        chrome:displayName="Toolbar Enhancements v0.8a"
-        chrome:author="Stephen Clavering"
+        chrome:displayName="Toolbar Enhancements v0.8"
+        chrome:author="Stephen Clavering, Chris Neale"
         chrome:name="toolbarext"
         chrome:description="Adds a variety of toolbar buttons and allows for toolbars on the left, right or bottom of the window, and at each end of the tab bar."
         chrome:extension="true"
