@@ -1,12 +1,12 @@
-const APP_DISPLAY_NAME = "x";
-const APP_NAME = "x";
-const APP_PACKAGE = "/cdn.mozdev.org/x";
+const APP_DISPLAY_NAME = "xkiosk";
+const APP_NAME = "xkiosk";
+const APP_PACKAGE = "/cdn.mozdev.org/xkiosk";
 const APP_VERSION = "0.1";
 
-const APP_JAR_FILE = "x.jar";
-const APP_CONTENT_FOLDER = "content/x/";
-const APP_LOCALE_FOLDER  = "locale/en-US/x/";
-const APP_SKIN_FOLDER  = "skin/classic/x/";
+const APP_JAR_FILE = "xkiosk.jar";
+const APP_CONTENT_FOLDER = "content/xkiosk/";
+const APP_LOCALE_FOLDER  = "locale/en-US/xkiosk/";
+const APP_SKIN_FOLDER  = "skin/classic/xkiosk/";
 
 const APP_SUCCESS_MESSAGE = "You will need to restart Firebird first.";
 
