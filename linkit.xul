@@ -44,11 +44,12 @@ function linkit(event) {
 
   for(var i = 0; i < instags.length; i++) {
     var instag = instags[i];
-    var iText = linkit_getInnerText(instag).replace(/\s+/g," ");
     var href = instag.getAttribute("href")
 
     // ignore non link <a>s
     if(!href) continue;
+
+    var iText = linkit_getInnerText(instag).replace(/\s+/g," ");
 
     if(/^prev|prev$|previous$|^back|\bback$|^<<|^<-|\u00ab|«/i.test(iText))
       linkit_addLink(page,hydra,"prev",href,"LinkIt [<] (" +href+ ")")
