@@ -141,10 +141,6 @@ function LinkToolbarMenu (linkType) {
   }
 
   this.addMenuItem = function(linkElement) {
-    this.xulPopup.appendChild(this.createMenuItem(linkElement));
-  }
-
-  this.createMenuItem = function(linkElement) {
     var menuitem = document.createElement("menuitem");
 
     menuitem.setAttribute("tooltiptext1", linkElement.title);
@@ -154,7 +150,7 @@ function LinkToolbarMenu (linkType) {
     menuitem.setAttribute("href", linkElement.href);
     menuitem.className = "menuitem-iconic bookmark-item";
 
-    return menuitem;
+    this.xulPopup.appendChild(menuitem);
   }
 }
 LinkToolbarMenu.prototype = new LinkToolbarItem;
