@@ -49,20 +49,13 @@ function LinkToolbarItem (linkType) {
   this.xulPopupId = this.xulElementId + "-popup";
   this.parentMenuButton = null;
 
-  // would like to just set this straight off, but I think this object might
-  // be being created before the element has been added to the document
-  this.xulElement = null;
-
-  this.getXULElement = function() {
-    if(!this.xulElement)
-      this.xulElement = document.getElementById(this.xulElementId);
-    return this.xulElement;
-  }
+  this.xulElement = document.getElementById(this.xulElementId);
+  this.getXULElement = function() { return this.xulElement; }
 
   this.clear = function() {
     this.disableParentMenuButton();
     this.getXULElement().setAttribute("disabled", "true");
-    this.getXULElement().setAttribute("hidden", "true");
+    this.xulElement.hidden = true;
     this.getXULElement().removeAttribute("href");
     this.getXULElement().removeAttribute("tooltiptext1");
     this.getXULElement().removeAttribute("tooltiptext2");
@@ -78,7 +71,7 @@ function LinkToolbarItem (linkType) {
   this.setItem = function(linkElement) {
     this.getXULElement().setAttribute("href", linkElement.href);
     this.getXULElement().removeAttribute("disabled");
-    this.getXULElement().removeAttribute("hidden");
+    this.xulElement.hidden = false;
     // lines will be hidden if blank
     this.getXULElement().setAttribute("tooltiptext1", linkElement.getLongTitle());
     this.getXULElement().setAttribute("tooltiptext2", linkElement.href);
@@ -87,16 +80,13 @@ function LinkToolbarItem (linkType) {
   this.enableParentMenuButton = function() {
     if(this.getParentMenuButton()) {
       this.getParentMenuButton().removeAttribute("disabled");
-      this.getParentMenuButton().removeAttribute("hidden");
+      this.getParentMenuButton().hidden = false;
     }
   }
 
   this.disableParentMenuButton = function() {
     if (!this.parentMenuButton) return;
     this.parentMenuButton.setAttribute("disabled", "true");
-    if (this.parentMenuButton.id != 'document-menu' &&
-        this.parentMenuButton.id != 'more-menu')
-      this.parentMenuButton.setAttribute("hidden", "true");
     this.parentMenuButton = null;
   }
 
@@ -136,7 +126,7 @@ function LinkToolbarMenu (linkType) {
   this.clear = function() {
     this.disableParentMenuButton();
     this.getXULElement().setAttribute("disabled", "true");
-    this.getXULElement().setAttribute("hidden", "true");
+    this.xulElement.hidden = true;
     var popup = this.getPopup();
     while (popup.hasChildNodes())
       popup.removeChild(popup.lastChild);
@@ -150,15 +140,9 @@ function LinkToolbarMenu (linkType) {
   this.displayLink = function(linkElement) {
     this.addMenuItem(linkElement);
     this.getXULElement().removeAttribute("disabled");
-    this.getXULElement().removeAttribute("hidden");
+    this.xulElement.hidden = false;
     this.enableParentMenuButton();
     return true;
-  }
-
-  function match(first, second) {
-    if (!first && !second) return true;
-    if (!first || !second) return false;
-    return first == second;
   }
 
   this.addMenuItem = function(linkElement) {
@@ -175,7 +159,7 @@ function LinkToolbarMenu (linkType) {
 
     menuitem.setAttribute("label", linkElement.getLabel());
     menuitem.setAttribute("href", linkElement.href);
-    menuitem.setAttribute("class", "menuitem-iconic bookmark-item");
+    menuitem.className = "menuitem-iconic bookmark-item";
 
     return menuitem;
   }
