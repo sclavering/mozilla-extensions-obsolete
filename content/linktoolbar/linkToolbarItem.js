@@ -101,15 +101,54 @@ function LinkToolbarItem (linkType) {
 }
 
 
+// new version, which morphs to type="menu" if
+// there are multiple links for the linkType
 function LinkToolbarButton (linkType) {
   this.constructor(linkType);
+  this.popup = document.getElementById(this.xulPopupId);
+  
+  this.haveLink = false;
+  this.haveLinks = false;
 
-  // override because we want buttons disabled, not hidden
   this.clear = function() {
+    this.haveLink = false;
+    this.haveLinks = false;
     this.xulElement.disabled = true;
-    this.getXULElement().removeAttribute("href");
-    this.getXULElement().removeAttribute("tooltiptext1");
-    this.getXULElement().removeAttribute("tooltiptext2");
+    this.xulElement.removeAttribute("href");
+    this.xulElement.removeAttribute("tooltiptext1");
+    this.xulElement.removeAttribute("tooltiptext2");
+    // clear type="menu"
+    this.xulElement.removeAttribute("type");
+    while(this.popup.hasChildNodes())
+      this.popup.removeChild(this.popup.lastChild);
+  }
+  
+  this.displayLink = function(linkElement) {
+    // handle the first link
+    if(!this.haveLink) {
+      this.haveLink = true;
+      this.setItem(linkElement);
+    } else if(!this.haveLinks) {
+      // morph to type=menu
+      this.haveLinks = true;
+      this.xulElement.setAttribute("type","menu");
+      // must clear href or menu never shows
+      this.xulElement.removeAttribute("href");
+      this.xulElement.removeAttribute("tooltiptext1");
+      this.xulElement.removeAttribute("tooltiptext2");
+    }
+    // add the link to the popup
+    this.addMenuItem(linkElement);
+  }
+
+  this.addMenuItem = function(linkElement) {
+    var menuitem = document.createElement("menuitem");
+    menuitem.setAttribute("tooltiptext1", linkElement.title);
+    menuitem.setAttribute("tooltiptext2", linkElement.href);
+    menuitem.setAttribute("label", linkElement.getLabel());
+    menuitem.setAttribute("href", linkElement.href);
+    menuitem.className = "menuitem-iconic bookmark-item";
+    this.popup.appendChild(menuitem);
   }
 
   // do nothing.  unneeded?
@@ -142,14 +181,11 @@ function LinkToolbarMenu (linkType) {
 
   this.addMenuItem = function(linkElement) {
     var menuitem = document.createElement("menuitem");
-
     menuitem.setAttribute("tooltiptext1", linkElement.title);
     menuitem.setAttribute("tooltiptext2", linkElement.href);
-
     menuitem.setAttribute("label", linkElement.getLabel());
     menuitem.setAttribute("href", linkElement.href);
     menuitem.className = "menuitem-iconic bookmark-item";
-
     this.xulPopup.appendChild(menuitem);
   }
 }

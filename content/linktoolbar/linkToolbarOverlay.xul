@@ -231,30 +231,31 @@
         tooltip="linktoolbar-tooltip"
         >
 
-      <toolbarbutton disabled="true" id="link-top"
-          label="&topButton.label;" tooltiptext0="&topButton.tooltip;"/>
-      <toolbarbutton disabled="true" id="link-up"
-          label="&upButton.label;" tooltiptext0="&upButton.tooltip;">
-        <menupopup position="before_end" />
+      <toolbarbutton id="link-top" disabled="true"
+          label="&topButton.label;" tooltiptext0="&topButton.tooltip;">
+        <menupopup id="link-top-popup"/>
       </toolbarbutton>
-<!--      <toolbarbutton id="link-up" class="bookmark-item"
-        onclick="return linkToolbarUI.commanded(event);"
-          label="&upButton.label;" disabled="true"
-          tooltiptext="&upButton.tooltip;" type="menu-button"
-          context="link-up-menu">
-        <menupopup onpopupshowing="return linkToolbarUrlDigger.buildMenu(this);"
-          onpopuphiding="linkToolbarUrlDigger.clearMenu(this);" />
-      </toolbarbutton> -->
-
+      <toolbarbutton id="link-up" disabled="true"
+          label="&upButton.label;" tooltiptext0="&upButton.tooltip;">
+        <menupopup id="link-up-popup"/>
+      </toolbarbutton>
       <toolbarseparator/>
-      <toolbarbutton disabled="true" id="link-first"
-          label="&firstButton.label;" tooltiptext0="&firstButton.tooltip;"/>
-      <toolbarbutton disabled="true" id="link-prev"
-          label="&prevButton.label;" tooltiptext0="&prevButton.tooltip;"/>
+      <toolbarbutton id="link-first" disabled="true"
+          label="&firstButton.label;" tooltiptext0="&firstButton.tooltip;">
+        <menupopup id="link-first-popup"/>
+      </toolbarbutton>
+      <toolbarbutton id="link-prev" disabled="true"
+          label="&prevButton.label;" tooltiptext0="&prevButton.tooltip;">
+        <menupopup id="link-prev-popup"/>
+      </toolbarbutton>
       <toolbarbutton id="link-next" disabled="true"
-          label="&nextButton.label;" tooltiptext0="&nextButton.tooltip;"/>
+          label="&nextButton.label;" tooltiptext0="&nextButton.tooltip;">
+        <menupopup id="link-next-popup"/>
+      </toolbarbutton>
       <toolbarbutton id="link-last" disabled="true"
-          label="&lastButton.label;" tooltiptext0="&lastButton.tooltip;"/>
+          label="&lastButton.label;" tooltiptext0="&lastButton.tooltip;">
+        <menupopup id="link-last-popup"/>
+      </toolbarbutton>
       <toolbarseparator/>
 
       <toolbarbutton id="document-menu" class="bookmark-item" type="menu" container="true"
