@@ -6,4 +6,4 @@
 <?xml-stylesheet href="chrome://tabx/content/tabx.css" type="text/css"?>
 <?xml-stylesheet href="chrome://tabx/skin/tabx.css" type="text/css"?>
 
-<window id="main-window"/>
+<overlay id="tabx"/>

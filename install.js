@@ -1,7 +1,7 @@
 const kDisplayName = "Tab X";
 const kName = "tabx";
 const kPackage = "/clav.mozdev.org/tabx";
-const kVersion = "0.2";
+const kVersion = "0.3";
 
 const kJarFile = "tabx.jar";
 const kContentFolder = "content/";
