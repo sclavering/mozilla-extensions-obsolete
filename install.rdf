@@ -7,12 +7,14 @@
     <id>stopreload</id>
 
     <name>Stop/Reload</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <description>A combined Stop and Reload toolbar button</description>
-
-    <creator>Stephen Clavering</creator>
     <homepageURL>http://clav.mozdev.org/</homepageURL>
     <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
+
+    <creator>Stephen Clavering</creator>
+    <contributor>Andrea of extenzilla.it (Italian translator)</contributor>
+    <contributor>Rob de Vries (Dutch translator)</contributor>
 
     <targetApplication>
       <r:Description>
@@ -25,8 +27,10 @@
     <file>
       <r:Description about="urn:mozilla:extension:file:stopreload.jar">
         <package>content/</package>
-        <locale>locale/en/</locale>
         <skin>skin/</skin>
+        <locale>locale/en/</locale>
+        <locale>locale/it-IT/</locale>
+        <locale>locale/nl-NL/</locale>
       </r:Description>
     </file>
   </r:Description>

@@ -45,6 +45,7 @@ var stopreload = {
       this.listenerAdded = true;
       // default label is 'Stop/Reload', for when it's on the palette
       this.button.setAttribute('label', this.button.getAttribute('reloadlabel'));
+      this.button.setAttribute('tooltiptext', this.button.getAttribute('reloadtooltip'));
       this.button.stopOnCommand = false;
     } else {
       if(!this.listenerAdded) return;
