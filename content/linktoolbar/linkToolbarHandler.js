@@ -144,6 +144,7 @@ var linkToolbarUtils = {
         return "chapter";
       case "prefetch":
       case "sidebar":
+      case "nofollow":
         return null;
       default:
         // might as well preserve case
