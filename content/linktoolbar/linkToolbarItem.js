@@ -55,6 +55,7 @@ function LinkToolbarItem (linkType) {
     this.disableParentMenuButton();
     this.getXULElement().setAttribute("disabled", "true");
     this.getXULElement().removeAttribute("href");
+    this.getXULElement().removeAttribute("tooltiptext");
   }
 
   this.displayLink = function(linkElement) {
@@ -68,6 +69,10 @@ function LinkToolbarItem (linkType) {
   this.setItem = function(linkElement) {
     this.getXULElement().setAttribute("href", linkElement.href);
     this.getXULElement().removeAttribute("disabled");
+    if (linkElement.title != '')
+      this.getXULElement().setAttribute("tooltiptext", linkElement.title);
+    else
+      this.getXULElement().setAttribute("tooltiptext", linkElement.href);
   }
 
   this.enableParentMenuButton = function() {
@@ -93,7 +98,7 @@ function LinkToolbarItem (linkType) {
   function getParentMenuButtonRecursive(xulElement) {
     if (!xulElement) return null;
 
-    if (xulElement.tagName == "toolbarbutton") 
+    if (xulElement.tagName == "toolbarbutton")
       return xulElement;
 
     return getParentMenuButtonRecursive(xulElement.parentNode)
@@ -162,10 +167,16 @@ function LinkToolbarMenu (linkType) {
     // XXX: clone a prototypical XUL element instead of hardcoding these
     //   attributes
     var menuitem = document.createElement("menuitem");
+    
+    if (linkElement.title != '')
+      menuitem.setAttribute("tooltiptext", linkElement.title);
+    else
+      menuitem.setAttribute("tooltiptext", linkElement.href);
+
     menuitem.setAttribute("label", linkElement.getLabel());
     menuitem.setAttribute("href", linkElement.href);
     menuitem.setAttribute("class", "menuitem-iconic bookmark-item");
-    menuitem.setAttribute("rdf:type", 
+    menuitem.setAttribute("rdf:type",
         "rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#linkType");
 
     return menuitem;
@@ -178,7 +189,7 @@ function LinkToolbarTransientMenu (linkType) {
   this.constructor(linkType);
 
   this.getXULElement = function() {
-    if (this.__proto__.getXULElement.apply(this)) 
+    if (this.__proto__.getXULElement.apply(this))
       return this.__proto__.getXULElement.apply(this);
     else
       return this.createXULElement();

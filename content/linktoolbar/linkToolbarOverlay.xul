@@ -58,7 +58,7 @@
 
   <!-- functions -->
   <script type="application/x-javascript" src="chrome://linktoolbar/content/linkToolbarOverlay.js" />
-  
+
   <script type="application/x-javascript" src="chrome://linktoolbar/content/styleswitcher.js" />
 
   <script type="application/x-javascript">
@@ -96,15 +96,12 @@
   <!--  <toolbar id="linktoolbar" class="chromeclass-directories" insertafter="statusbar-display" insertbefore="statusbar-progresspanel"
         oncommand="event.preventBubble(); return linkToolbarUI.commanded(event);"
         tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar">        grippytooltiptext="&linkToolbar.label;"> -->
-<!--  <statusbar id="status-bar">
+  <statusbar id="status-bar">
+    <!-- must use onclick not oncommand to get middleclick-opens-in-new-tab -->
     <statusbarpanel id="linktoolbar" class="chromeclass-directories" insertafter="statusbar-display" insertbefore="statusbar-progresspanel"
-        oncommand="event.preventBubble(); return linkToolbarUI.commanded(event);"
-        tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar"> -->
-
-   <vbox id="appcontent">
-    <toolbar id="linktoolbar" class="chromeclass-directories" insertafter="content"
-        oncommand="event.preventBubble(); return linkToolbarUI.commanded(event);"
+        onclick="event.preventBubble(); return linkToolbarUI.commanded(event);"
         tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar">
+
       <toolbarbutton id="link-top" class="bookmark-item"
           label="&topButton.label;" disabled="true"
           tooltiptext="&topButton.tooltip;" />
@@ -119,46 +116,46 @@
           label="&firstButton.label;" disabled="true"
           tooltiptext="&firstButton.tooltip;" />
 
-      <toolbarbutton id="link-prev" class="bookmark-item" 
+      <toolbarbutton id="link-prev" class="bookmark-item"
           label="&prevButton.label;" disabled="true"
           tooltiptext="&prevButton.tooltip;" />
 
-      <toolbarbutton id="link-next" class="bookmark-item" 
+      <toolbarbutton id="link-next" class="bookmark-item"
           label="&nextButton.label;" disabled="true"
           tooltiptext="&nextButton.tooltip;" />
 
-      <toolbarbutton id="link-last" class="bookmark-item" 
+      <toolbarbutton id="link-last" class="bookmark-item"
           label="&lastButton.label;" disabled="true"
           tooltiptext="&lastButton.tooltip;" />
 
       <toolbarseparator />
 
-      <toolbarbutton id="document-menu" class="bookmark-item" 
+      <toolbarbutton id="document-menu" class="bookmark-item"
           type="menu"
           container="true"
           label="&documentButton.label;" disabled="true"
           tooltip="aTooltip" tooltiptext="&documentButton.tooltip;">
         <menupopup id="document-menu-popup">
 
-          <menuitem id="link-toc" label="&tocButton.label;" disabled="true" 
+          <menuitem id="link-toc" label="&tocButton.label;" disabled="true"
               class="menuitem-iconic bookmark-item"
               rdf:type="rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type" />
-          <menu id="link-chapter" label="&chapterButton.label;" disabled="true" 
+          <menu id="link-chapter" label="&chapterButton.label;" disabled="true"
               class="menu-iconic bookmark-item" container="true"
               rdf:type="rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
             <menupopup id="link-chapter-popup" />
           </menu>
-          <menu id="link-section" label="&sectionButton.label;" disabled="true"  
+          <menu id="link-section" label="&sectionButton.label;" disabled="true"
               class="menu-iconic bookmark-item" container="true"
               rdf:type="rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
             <menupopup id="link-section-popup" />
           </menu>
-          <menu id="link-subsection" label="&subSectionButton.label;" disabled="true"  
+          <menu id="link-subsection" label="&subSectionButton.label;" disabled="true"
               class="menu-iconic bookmark-item" container="true"
               rdf:type="rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
             <menupopup id="link-subsection-popup" />
           </menu>
-          <menu id="link-appendix" label="&appendixButton.label;" disabled="true"  
+          <menu id="link-appendix" label="&appendixButton.label;" disabled="true"
               class="menu-iconic bookmark-item" container="true"
               rdf:type="rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
             <menupopup id="link-appendix-popup" />
@@ -243,11 +240,9 @@
 
       <toolbarbutton id="sharc-button" oncommand="window.openDialog('chrome://browser/content', 'Phoenix', 'chrome,all,dialog=no', 'http://cdn.mozdev.org/linkToolbar/');"/>
 -->
-    <!-- </statusbarpanel> -->
+    </statusbarpanel>
     <!-- </toolbar> -->
   <!-- </vbox> -->
-    </toolbar>
-  </vbox>
-  <!-- </statusbar> -->
+  </statusbar>
   <!-- </toolbox> -->
 </overlay>
