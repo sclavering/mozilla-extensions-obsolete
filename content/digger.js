@@ -1,10 +1,3 @@
-function diggerLoadURLInNewTab(e) {
-  var url = gURLBar.value;
-  BrowserOpenTab();
-  gURLBar.value = url;
-  BrowserLoadURL(e);
-}
-
 function diggerMenuCommand(e,menu) {
   var t = e.target;
   if(t.id == "digger-clear-url") {
@@ -28,12 +21,7 @@ function diggerMenuCommand(e,menu) {
 }
 
 function diggerClearMenu(menu) {
-  var fst = menu.firstChild, cur = menu.lastChild, nxt;
-  while(cur!=fst) {
-    nxt = cur.previousSibling;
-    menu.removeChild(cur);
-    cur = nxt;
-  }
+  while(menu.hasChildNodes()) menu.removeChild(menu.lastChild);
 }
 
 function diggerBuildMenu(menu) {
@@ -42,10 +30,7 @@ function diggerBuildMenu(menu) {
   var matches, regexp, groupEnd;
 
   // abort if urlbar empty
-  if(url.length == 0) {
-    menu.hidePopup();
-    return;
-  }
+  if(!url) return false;
 
   // chop off a query string
   matches = url.match(/^([^\?]*?)\?.*/);
@@ -56,7 +41,7 @@ function diggerBuildMenu(menu) {
 
   // trim filename (this makes subdriectory digging easier)
   matches = url.match(/(^.*\/).*/);
-  if(!matches) return; //only fails if "url" has no /'s
+  if(!matches) return true; //only fails if "url" has no /'s
   url = matches[1];
   if(url!=originalUrl) diggerAddMenuItem(menu, url);
 
@@ -69,7 +54,7 @@ function diggerBuildMenu(menu) {
     matches = url.match(regexp);
   }
   // above regexp returns null once we hit a domain
-  if(url!=originalUrl) diggerInsertSeperatorAfter(menu.firstChild);
+  //if(url!=originalUrl) diggerInsertSeperatorAfter(menu.firstChild);
   groupEnd = menu.lastChild;
 
   // if http offer ftp alternative
@@ -90,7 +75,7 @@ function diggerBuildMenu(menu) {
 
   // climb up through subdomains
   var urlchunks = url.split("://");
-  if(urlchunks.length == 1) return;  // quit if "url" doesn't contain "://"
+  if(urlchunks.length == 1) return true;  // quit if "url" doesn't contain "://"
   var protocol = urlchunks[0] + "://";
   var domain = urlchunks[1];
   regexp = /^[^\.]*\.(.*)/;
@@ -104,6 +89,8 @@ function diggerBuildMenu(menu) {
     menu.removeChild(menu.lastChild); //the http://org/ type item
     diggerInsertSeperatorAfter(groupEnd);
   }
+
+  return true;
 }
 
 function diggerAddMenuSeparator(aParent) {
