@@ -3,14 +3,37 @@
 <overlay id="titleless"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-<window id="main-window" hidechrome="true"/>
+<script type="application/x-javascript"><![CDATA[
+var gAlmostFullScreen = false;
+// position+dimensions before goind full screen
+var gAFSwidth = 0, gAFSheight = 0, gAFSleft = 0, gAFStop = 0;
 
-<toolbar id="toolbar-menubar" position="500">
-  <hbox id="menubar-window-controls">
-    <toolbarbutton id="minimize-button" class="toolbarbutton-1" oncommand="window.minimize();"/>
-    <toolbarbutton id="restore-button" class="toolbarbutton-1" oncommand="BrowserFullScreen();"/>
-    <toolbarbutton id="close-button" class="toolbarbutton-1" oncommand="window.close();"/>
-  </hbox>
-</toolbar>
+// override the normal behaviour
+function BrowserFullScreen() {
+  if(gAlmostFullScreen) {
+    document.documentElement.removeAttribute("hidechrome");
+    resizeTo(gAFSwidth,gAFSheight);
+    moveTo(gAFSleft,gAFStop);
+  } else {
+    // setting outerWidth etc. seems to not always work, but getting it works fine
+    gAFSwidth = outerWidth;
+    gAFSheight = outerHeight;
+    gAFSleft = screenX;
+    gAFStop = screenY;
+
+    // find out how big window should be
+    var sm = Components.classes["@mozilla.org/gfx/screenmanager;1"]
+                       .getService(Components.interfaces.nsIScreenManager);
+    var s = sm.primaryScreen; // an nsIScreen
+    var a={},b={},c={},d={};
+    // left, top, width, height
+    s.GetAvailRect(a,b,c,d);
+    document.documentElement.setAttribute("hidechrome","true");
+    moveTo(a.value,b.value);
+    resizeTo(c.value,d.value);
+  }
+  gAlmostFullScreen = !gAlmostFullScreen;
+}
+]]></script>
 
 </overlay>
