@@ -12,8 +12,10 @@
 
     <creator>Stephen Clavering</creator>
     <contributor>Rob de Vries (Dutch translation)</contributor>
+    <contributor>Andrea (Italian translation)</contributor>
     <homepageURL>http://clav.mozdev.org/</homepageURL>
     <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
+    <iconURL>chrome://tabbin/content/icon.png</iconURL>
 
     <targetApplication>
       <r:Description>
@@ -29,6 +31,7 @@
         <skin>skin/</skin>
         <locale>locale/en/</locale>
         <locale>locale/nl-NL/</locale>
+        <locale>locale/it/</locale>
       </r:Description>
     </file>
   </r:Description>
