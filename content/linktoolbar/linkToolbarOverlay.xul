@@ -23,8 +23,8 @@
    -      Christopher Hoess <choess@force.stwing.upenn.edu>
    -      Tim Taylor <tim@tool-man.org>
    -      Stuart Ballard <sballard@netreach.net>
-   -      Chris Neale <cdn@mozdev.org>  (Port to Px/Fb)
-   -      Stephen Clavering <mozilla@clav.me.uk>
+   -      Chris Neale <cdn@mozdev.org>  (Port to Px/Fb/Fx)
+   -      Stephen Clavering <mozilla@clav.me.uk> (Multiple js rewrites)
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -42,7 +42,6 @@
 
 <?xml-stylesheet href="chrome://linktoolbar/skin/linkToolbar.css" type="text/css"?>
 
-<!-- <?xul-overlay href="chrome://global/content/globalOverlay.xul"?> -->
 <!DOCTYPE overlay [
 <!ENTITY % selfDTD SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
 %selfDTD;
