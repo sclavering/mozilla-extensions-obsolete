@@ -53,12 +53,11 @@
 <!ENTITY tbx-plugins-tabpref.tooltip "Enable/Disable Plug-ins in the current tab">
 
 
-
-<!ENTITY tbx-top-toolbox-name "Top">
-<!ENTITY tbx-right-toolbox-name "Right">
-<!ENTITY tbx-bottom-toolbox-name "Bottom">
-<!ENTITY tbx-left-toolbox-name "Left">
-<!ENTITY tbx-belowtabs-toolbox-name "Below Tabs">
+<!ENTITY tbx-toolbar-position-top       "Top">
+<!ENTITY tbx-toolbar-position-belowtabs "Below Tabs">
+<!ENTITY tbx-toolbar-position-left      "Left">
+<!ENTITY tbx-toolbar-position-right     "Right">
+<!ENTITY tbx-toolbar-position-bottom    "Bottom">
 
 
 

@@ -1,5 +1,3 @@
-// javascript for enhancing toolbar customisation.
-
 var gTbxToolboxes = null;
 var gTbxNavToolbox = null;
 
@@ -19,18 +17,12 @@ function tbxGetToolboxes() {
   gTbxToolboxes.push(document.getElementById("tbx-toolbox-statusbar-left"));
   gTbxToolboxes.push(document.getElementById("tbx-toolbox-statusbar-right"));
 
-  // get the toolboxes at the left and right of the tab strip. this really
-  // does have to be this complex, because they're two xbl bindings down!
-  var tabbrowser = document.getElementById("content");
-  // there's nothing better to hook onto than the class attr :(
-  var tabstrip = document.getAnonymousElementByAttribute(tabbrowser, 'class', 'tabbrowser-strip chromeclass-toolbar');
-  gTbxToolboxes.push(document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'tbx-toolbox-tableft'));
-  gTbxToolboxes.push(document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'tbx-toolbox-tabright'));
+  // get the toolboxes at each end of the tab strip. (they're anonymous, but getEltById still works)
+  gTbxToolboxes.push(document.getElementById("tbx-tableft-toolbox"));
+  gTbxToolboxes.push(document.getElementById("tbx-tabright-toolbox"));
 
   // get the toolbox below the tab bar
-  var tabbox = document.getAnonymousNodes(tabbrowser)[1];
-  gTbxToolboxes.push(document.getAnonymousElementByAttribute(tabbox, 'anonid', 'tbx-toolbox-belowtabs'));
-
+  gTbxToolboxes.push(document.getElementById("tbx-belowtabs-toolbox"));
 
   // might as well hook this up here
   document.getElementById("tbx-bottom-toolbox").customizeDone = tbxCustomiseDone;
@@ -40,10 +32,10 @@ function tbxGetToolboxes() {
 
 // replacement start-customisation function that passes all our toolboxes as args to the window
 
-function ToolbarExt_BrowserCustomizeToolbar() {
+function tbxBrowserCustomizeToolbar() {
   // Disable the toolbar context menu items
   var menubar = document.getElementById("main-menubar");
-  for (var i = 0; i < menubar.childNodes.length; ++i)
+  for(var i = 0; i < menubar.childNodes.length; ++i)
     menubar.childNodes[i].setAttribute("disabled", true);
 
   // in practice this is irrelevant, because we replace the context menus anyway.
@@ -186,13 +178,36 @@ function tbxInitCustomiseContext(evt, popup) {
 
   var showInFullScreen = toolbar.getAttribute("fullscreentoolbar")=="true";
   popup.lastChild.setAttribute("checked", showInFullScreen);
+
+  // We mustn't allow the default toolbars (Menubar, Navigation, Bookmarks) to be moved, because
+  // it breaks things.  They can be identified because they have a defaultset attribute
+  // Also we don't want the toolbars in the status bar and tab bar to be moved, and it just so
+  // happends that they're toolboxes will have toolbarset==null.
+  var toolbox = toolbar.parentNode;
+  if(toolbar.getAttribute("defaultset") || !toolbox.toolbarset) {
+    // hide the menuitems
+    for(radio = popup.lastChild; radio.localName=="menuitem"; radio = radio.previousSibling)
+      radio.hidden = true;
+    // hide the menuseparator
+    radio.previousSibling.hidden = true;
+  } else {
+    // show the menuitems, and check the appropriate one
+    for(radio = popup.lastChild; radio.localName=="menuitem"; radio = radio.previousSibling) {
+      radio.hidden = false;
+      if(toolbox.id==radio.value) radio.setAttribute("checked","true");
+      else radio.removeAttribute("checked");
+    }
+    // show the menuseparator
+    radio.previousSibling.hidden = false;
+  }
 }
 
-function tbxSetToolbarMode(evt) {
+function tbxAdjustToolbar(evt) {
   var toolbar = document.popupNode;
   while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
 
   var value = evt.originalTarget.value;
+  var group = evt.originalTarget.getAttribute("name"); // radio group
   if(value=="smallicons") {
     var small = evt.originalTarget.getAttribute("checked")=="true";
     var size = small ? "small" : "large";
@@ -200,7 +215,22 @@ function tbxSetToolbarMode(evt) {
   } else if(value=="fullscreen") {
     var showInFullScreen = evt.originalTarget.getAttribute("checked")=="true";
     toolbar.parentNode.showToolbarInFullscreen(toolbar,showInFullScreen);
-  } else {
+  } else if(group=="mode") {
     toolbar.parentNode.setToolbarMode(toolbar, value);
+  } else if(group=="position") {
+    // We could just remove the <toolbar/> from its current location and append to the
+    // desired toolbox, but that would mean we wouldn't respect the rule that custom
+    // toolbars appear wherever the <toolbarset/> is.  Also it caused an interesting
+    // bug where all the items on the toolbar would be duplicated sometimes after the
+    // toolbar was moved.  Finally, we can't just get the currentSet of the existing
+    // toolbar and pass it to appendCustomToolbar because currentSet always returns
+    // "__empty" during customisation, because all the items are wrapped in extra elements.
+    var items = [];
+    while(toolbar.hasChildNodes()) items.push(toolbar.removeChild(toolbar.lastChild));
+    toolbar.parentNode.removeChild(toolbar);
+
+    var newToolbox = document.getElementById(value);
+    var newToolbar = newToolbox.appendCustomToolbar(toolbar.toolbarName, "__empty", true);
+    while(items.length) newToolbar.appendChild(items.pop());
   }
 }

@@ -140,11 +140,11 @@
 
 
   <!-- override customise toolbars, so we can pass all our toolboxes as extra args to the palette window -->
-  <command id="cmd_CustomizeToolbars" oncommand="ToolbarExt_BrowserCustomizeToolbar();"/>
+  <command id="cmd_CustomizeToolbars" oncommand="tbxBrowserCustomizeToolbar();"/>
 
-  <!-- Toolboxes need a name for the Add Toolbar feature (We use "Top", "Right", etc.), a |palette|
-       attribute so they use the new xbl widget, and a different context menu while customising -->
-  <toolbox id="navigator-toolbox" toolboxname="&tbx-top-toolbox-name;"
+  <!-- Toolboxes need a |palette| attribute so they use the new xbl widget, and a different
+       context menu while customising -->
+  <toolbox id="navigator-toolbox"
       customiseContext="toolbar-customise-context-menu"
       palette="BrowserToolbarPalette"
       />
@@ -152,7 +152,6 @@
   <!-- another toolbox at the bottom of the window -->
   <window id="main-window">
     <toolbox id="tbx-bottom-toolbox" insertbefore="status-bar"
-        toolboxname="&tbx-bottom-toolbox-name;"
         palette="BrowserToolbarPalette" context="toolbar-context-menu"
         customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
@@ -164,7 +163,7 @@
   <!-- toolboxes at left and right -->
   <hbox id="browser">
     <toolbox id="tbx-left-toolbox" insertbefore="sidebar-box"
-        vertical="true" toolboxname="&tbx-left-toolbox-name;"
+        vertical="true"
         palette="BrowserToolbarPalette" context="toolbar-context-menu"
         customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
@@ -172,7 +171,7 @@
       <toolbarset id="tbx-left-toolbars" context="toolbar-context-menu"/>
     </toolbox>
     <toolbox id="tbx-right-toolbox" insertafter="appcontent"
-        vertical="true" toolboxname="&tbx-right-toolbox-name;"
+        vertical="true"
         palette="BrowserToolbarPalette" context="toolbar-context-menu"
         customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
@@ -209,7 +208,7 @@
   <popupset id="mainPopupSet">
     <popup id="toolbar-customise-context-menu"
         onpopupshowing="tbxInitCustomiseContext(event, this);"
-        oncommand="tbxSetToolbarMode(event);"
+        oncommand="tbxAdjustToolbar(event);"
         >
       <menuitem type="radio" name="mode" value="icons" label="&tbx-mode-icons-only;"/>
       <menuitem type="radio" name="mode" value="full"  label="&tbx-mode-icons-text;"/>
@@ -218,6 +217,17 @@
       <menuitem type="checkbox" value="smallicons" label="&tbx-mode-small-icons;"/>
       <menuseparator/>
       <menuitem type="checkbox" value="fullscreen" label="&tbx-mode-show-in-fullscreen;"/>
+      <menuseparator/>
+      <menuitem type="radio" name="position" value="navigator-toolbox"
+        label="&tbx-toolbar-position-top;"/>
+      <menuitem type="radio" name="position" value="tbx-belowtabs-toolbox"
+        label="&tbx-toolbar-position-belowtabs;"/>
+      <menuitem type="radio" name="position" value="tbx-left-toolbox"
+        label="&tbx-toolbar-position-left;"/>
+      <menuitem type="radio" name="position" value="tbx-right-toolbox"
+        label="&tbx-toolbar-position-right;"/>
+      <menuitem type="radio" name="position" value="tbx-bottom-toolbox"
+        label="&tbx-toolbar-position-bottom;"/>
     </popup>
   </popupset>
 

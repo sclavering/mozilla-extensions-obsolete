@@ -296,16 +296,7 @@ function getCurrentItemIds()
 
 
 
-
 function addNewToolbar() {
-  // just in case someone happens to have another extension installed which uses it's own
-  // customisable toolbars.  (or if Bookmarks Manager toolbars ever become customisable)
-  if(gToolboxes.length > 1) {
-    openDialog("chrome://toolbarext/content/newtoolbar.xul","add-new-toolbar",
-               "dependent,modal,centerscreen", gToolboxes);
-    return;
-  }
-
   var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
                                 .getService(Components.interfaces.nsIPromptService);
 
@@ -314,19 +305,17 @@ function addNewToolbar() {
   var title = stringBundle.getString("enterToolbarTitle");
 
   var name = {};
-  while (1) {
-    if (!promptService.prompt(window, title, message, name, null, {})) {
-      return;
+  while(true) {
+    if(!promptService.prompt(window, title, message, name, null, {})) return;
+
+    // Check for an existing toolbar with the same name and prompt again
+    // if a conflict is found
+    var nameToId = "__customToolbar_" + name.value.replace(" ", "");
+    var existingToolbar = gToolboxDocument.getElementById(nameToId);
+    if(existingToolbar) {
+      message = stringBundle.getFormattedString("enterToolbarDup", [name.value]);
     } else {
-      // Check for an existing toolbar with the same name and prompt again
-      // if a conflict is found
-      var nameToId = "__customToolbar_" + name.value.replace(" ", "");
-      var existingToolbar = gToolboxDocument.getElementById(nameToId);
-      if (existingToolbar) {
-        message = stringBundle.getFormattedString("enterToolbarDup", [name.value]);
-      } else {
-        break;
-      }
+      break;
     }
   }
 
@@ -337,14 +326,6 @@ function addNewToolbar() {
 }
 
 
-// called from the new dialog window
-function doAddNewToolbar(toolboxIndex, name) {
-  var toolbox = gToolboxes[toolboxIndex]
-  toolbox.appendCustomToolbar(name, "", true);
-
-  repositionDialog();
-  gToolboxChanged = true;
-}
 
 
 

@@ -169,8 +169,6 @@
           }
           if(!currentSet) currentSet = this.getAttribute("defaultset");
           if(currentSet) this.currentSet = currentSet;
-
-          //throw "Toolbar bound. id="+this.id;
         ]]>
       </constructor>
     </implementation>
@@ -249,7 +247,6 @@
             var fullscreen = elt.getAttribute(attr+"-showfullscreen");
             if(fullscreen) node.setAttribute("fullscreentoolbar","true");
           }
-          //throw "toolbox bound. id="+this.id;
         ]]>
       </constructor>
 
@@ -364,14 +361,18 @@
     <content>
       <xul:toolbox anonid="tbx-toolbox-tableft" class="tbx-toolbox-plain"
           palette="BrowserToolbarPalette" context="toolbar-context-menu"
-          customiseContext="toolbar-customise-context-menu">
+          customiseContext="toolbar-customise-context-menu"
+          id="tbx-tableft-toolbox"
+          >
         <xul:toolbar anonid="tbx-toolbar-tableft" class="tbx-toolbar-plain"
             anonymous="true" customizable="true" mode="icons" iconsize="small"/>
       </xul:toolbox>
       <children/>
       <xul:toolbox anonid="tbx-toolbox-tabright" class="tbx-toolbox-plain"
           palette="BrowserToolbarPalette" context="toolbar-context-menu"
-          customiseContext="toolbar-customise-context-menu">
+          customiseContext="toolbar-customise-context-menu"
+          id="tbx-tabright-toolbox"
+          >
         <xul:toolbar anonid="tbx-toolbar-tabright" class="tbx-toolbar-plain"
             anonymous="true" customizable="true" mode="icons" iconsize="small"/>
       </xul:toolbox>
@@ -384,9 +385,10 @@
     <content>
       <children includes="hbox"/>
       <xul:toolbox anonid="tbx-toolbox-belowtabs" class="tbx-toolbox-belowtabs"
-          toolboxname="&tbx-belowtabs-toolbox-name;"
           palette="BrowserToolbarPalette" anonymous="true"
-          context="toolbar-context-menu" customiseContext="toolbar-customise-context-menu">
+          context="toolbar-context-menu" customiseContext="toolbar-customise-context-menu"
+          id="tbx-belowtabs-toolbox"
+          >
         <xul:toolbarset anonymous="true" anonid="tbx-toolbarset-belowtabs"/>
       </xul:toolbox>
       <children includes="tabpanels"/>
