@@ -6,13 +6,7 @@
     <RDF:li resource="urn:mozilla:package:fusion"/>
   </RDF:Seq>
 
-  <RDF:Description about="urn:mozilla:package:fusion"
-      chrome:displayName="Fusion"
-      chrome:author="Stephen Clavering"
-      chrome:name="fusion"
-      chrome:description="Amalgamates the location bar and the progress bar"
-      chrome:extension="true"
-      />
+  <RDF:Description about="urn:mozilla:package:fusion" chrome:name="fusion"/>
 
   <RDF:Seq about="urn:mozilla:overlays">
     <RDF:li resource="chrome://browser/content/browser.xul"/>
