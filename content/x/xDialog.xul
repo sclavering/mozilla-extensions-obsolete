@@ -9,10 +9,8 @@
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         title="&xdialog.title;"
         buttons="accept,cancel"
-        width="260"
-        height="200"
         ondialogaccept="clearStuff();"
-        persist="screenX screenY width height checkeditems"
+        persist="screenX screenY checkeditems"
         checkeditems="history forminfo passwords downloads cookies cache"
         >
 
