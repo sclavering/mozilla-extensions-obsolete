@@ -1,46 +1,50 @@
-const APP_DISPLAY_NAME = "x";
-const APP_NAME = "x";
-const APP_PACKAGE = "/cdn.mozdev.org/x";
-const APP_VERSION = "0.2";
+const kDisplayName = "x";
+const kName = "x";
+const kPackage = "/cdn.mozdev.org/x";
+const kVersion = "0.3";
 
-const APP_JAR_FILE = "x.jar";
-const APP_CONTENT_FOLDER = "content/x/";
-const APP_LOCALE_FOLDER  = "locale/en-US/x/";
-const APP_SKIN_FOLDER  = "skin/classic/x/";
+const kJarFile = "x.jar";
+const kContentFolder = "content/x/";
+const kLocaleFolders = ["locale/en-US/x"];
+const kSkinFolder = "skin/classic/x/"; // leave blank if not applicable
 
-const APP_SUCCESS_MESSAGE = "You will need to restart Firebird first.";
 
-const INST_TO_PROFILE = "Do you wish to install "+APP_DISPLAY_NAME+" to your profile?\nThis will mean it does not need reinstalling when you update Phoenix.\n(Click Cancel if you want "+APP_DISPLAY_NAME+" installing to the Firebird directory.)";
+var kMsg = "Do you wish to install "+kDisplayName+" to your profile?\n\nClick OK to install to your profile.\n\nClick Cancel if you want to install globally.";
 
-initInstall(APP_NAME, APP_PACKAGE, APP_VERSION);
+initInstall(kName, kPackage, kVersion);
 
-// profile installs only work since 2003-03-06
-var instToProfile = (buildID>2003030600 && confirm(INST_TO_PROFILE));
+var chromef = getFolder("chrome");
+var pchromef = getFolder("Profile", "chrome");
 
-var chromef = instToProfile ? getFolder("Profile", "chrome") : getFolder("chrome");
-var err = addFile(APP_PACKAGE, APP_VERSION, APP_JAR_FILE, chromef, null)
+
+var existsInApp     = File.exists(getFolder(chromef,  kJarFile));
+var existsInProfile = File.exists(getFolder(pchromef, kJarFile));
+
+var instToProfile = !existsInApp && (existsInProfile || confirm(kMsg));
+
+var folder = instToProfile ? pchromef : chromef;
+var flag = instToProfile ? PROFILE_CHROME : DELAYED_CHROME;
+
+var err = addFile(kPackage, kVersion, kJarFile, folder, null)
+
 if(err == SUCCESS) {
-	var jar = getFolder(chromef, APP_JAR_FILE);
-  if(instToProfile) {
-  	registerChrome(CONTENT | PROFILE_CHROME, jar, APP_CONTENT_FOLDER);
-  	registerChrome(LOCALE  | PROFILE_CHROME, jar, APP_LOCALE_FOLDER);
-  	registerChrome(SKIN  | PROFILE_CHROME, jar, APP_SKIN_FOLDER);
-  } else {
-  	registerChrome(CONTENT | DELAYED_CHROME, jar, APP_CONTENT_FOLDER);
-  	registerChrome(LOCALE  | DELAYED_CHROME, jar, APP_LOCALE_FOLDER);
-  	registerChrome(SKIN  | DELAYED_CHROME, jar, APP_SKIN_FOLDER);
+  var jar = getFolder(folder, kJarFile);
+
+  registerChrome(CONTENT | flag, jar, kContentFolder);
+  for(var i = 0; i < kLocaleFolders.length; i++)
+    registerChrome(LOCALE | flag, jar, kLocaleFolders[i]);
+  if(kSkinFolder) registerChrome(SKIN | flag, jar, kSkinFolder);
+
+  err = performInstall();
+
+  if(err!=SUCCESS && err!=999) {
+    alert("Install failed. Error code:" + err);
+    cancelInstall(err);
   }
-	err = performInstall();
-	if(err == SUCCESS || err == 999) {
-		alert(APP_DISPLAY_NAME+" "+APP_VERSION+" has been succesfully installed.\n"+APP_SUCCESS_MESSAGE);
-	} else {
-		alert("Install failed. Error code:" + err);
-		cancelInstall(err);
-	}
 } else {
-	alert("Failed to create " +APP_JAR_FILE +"\n"
-		+"You probably don't have appropriate permissions \n"
-		+"(write access to your profile or chrome directory). \n"
-		+"_____________________________\nError code:" + err);
-	cancelInstall(err);
+  alert("Failed to create " +kJarFile +"\n"
+    +"You probably don't have appropriate permissions \n"
+    +"(write access to firebird/chrome directory). \n"
+    +"_____________________________\nError code:" + err);
+  cancelInstall(err);
 }
