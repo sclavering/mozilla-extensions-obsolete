@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<!-- $Id: xOverlay.xul,v 1.1 2003/05/20 22:32:51 cdn Exp $ -->
+
+<?xml-stylesheet href="chrome://x/skin/x.css" type="text/css"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
+%browserDTD;
+<!ENTITY % piracyDTD SYSTEM "chrome://browser/locale/pref/pref-privacy.dtd" >
+%piracyDTD;
+<!ENTITY % identityDTD SYSTEM "chrome://x/locale/x.dtd">
+%identityDTD;
+]>
+
+<overlay id="xBrowserOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="chrome://browser/content/pref/pref-privacy.js"/>
+
+    <toolbar id="nav-bar">
+      <toolbarbutton
+        class="toolbarbutton-1"
+        id="x-button"
+        insertbefore="window-controls"
+        label="&x.label;"
+        oncommand="PrivacyPanel.clearAll();"
+        tooltiptext="&x.tooltip;"
+        />
+    </toolbar>
+
+</overlay>
