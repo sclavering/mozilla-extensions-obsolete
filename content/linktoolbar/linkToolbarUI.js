@@ -232,10 +232,14 @@ const linkToolbarUI = {
   	loadURI(destURL, referrer);
   },
 
-  toggleLinkToolbar: function(checkedItem) {
+  toggleLinkToolbar: function(target) {
+    if(target.id=="linktoolbar-iconsonly") {
+      this.toggleIconsOnly(target);
+      return;
+    }
     var toolbar = document.getElementById("linktoolbar");
     if(toolbar) {
-      toolbar.setAttribute("hidden", checkedItem.value);
+      toolbar.setAttribute("hidden", target.value);
       document.persist("linktoolbar", "hidden");
     }
     if(this.isLinkToolbarEnabled()) {
