@@ -181,7 +181,7 @@ const linkToolbarUI = {
       	loadURI(destURL, referrer);
       }
     } catch(e) {
-      alert("Error: it is not permitted to load this URI from a <link> element: " + e);
+      dump("Error: it is not permitted to load this URI from a <link> element: " + e);
     }
   },
 
