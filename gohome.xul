@@ -10,12 +10,22 @@
 
 <script type="application/x-javascript"><![CDATA[
 
-// XXX add stuff to hide the menuitem when it doesn't make sense to show it
+window.addEventListener("load",goHomeInit,false);
+
+function goHomeInit() {
+  document.getElementById("contentAreaContextMenu").addEventListener("popupshowing",goHomeHide,false);
+}
+
+// hide the Home item when approproiate (use same logic as for Back, Stop etc.)
+function goHomeHide() {
+  var cm = gContextMenu;
+  document.getElementById("context-home").hidden = ( cm.isTextSelected || cm.onLink || cm.onImage || cm.onTextInput );
+}
 
 ]]></script>
 
 <popup id="contentAreaContextMenu">
-  <menuitem label="&goHomeCmd.label;" command="Browser:Home" insertafter="context-stop"/>
+  <menuitem id="context-home" label="&goHomeCmd.label;" command="Browser:Home" insertafter="context-stop"/>
 </popup>
 
 </overlay>
