@@ -1,0 +1,5 @@
+<!ENTITY xkiosk.label   "Paranoia">
+<!ENTITY xkiosk.tooltip "Paranoia - Delete all information.">
+
+<!ENTITY xkiosk.prompttitle "Clear All Data">
+<!ENTITY xkiosk.promptmsg   "Do you wish to clear all saved privacy data?">
