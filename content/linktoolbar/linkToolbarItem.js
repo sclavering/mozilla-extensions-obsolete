@@ -37,8 +37,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/* 
- * LinkToolbarItem and its subclasses represent the buttons, menuitems, 
+/*
+ * LinkToolbarItem and its subclasses represent the buttons, menuitems,
  * and menus that handle the various link types.
  */
 function LinkToolbarItem (linkType) {
@@ -98,7 +98,7 @@ function LinkToolbarItem (linkType) {
   function getParentMenuButtonRecursive(xulElement) {
     if (!xulElement) return null;
 
-    if (xulElement.tagName == "toolbarbutton") 
+    if (xulElement.tagName == "toolbarbutton")
       return xulElement;
 
     return getParentMenuButtonRecursive(xulElement.parentNode)
@@ -176,8 +176,6 @@ function LinkToolbarMenu (linkType) {
     menuitem.setAttribute("label", linkElement.getLabel());
     menuitem.setAttribute("href", linkElement.href);
     menuitem.setAttribute("class", "menuitem-iconic bookmark-item");
-    menuitem.setAttribute("rdf:type", 
-        "rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#linkType");
 
     return menuitem;
   }
@@ -189,7 +187,7 @@ function LinkToolbarTransientMenu (linkType) {
   this.constructor(linkType);
 
   this.getXULElement = function() {
-    if (this.__proto__.getXULElement.apply(this)) 
+    if (this.__proto__.getXULElement.apply(this))
       return this.__proto__.getXULElement.apply(this);
     else
       return this.createXULElement();
@@ -204,7 +202,6 @@ function LinkToolbarTransientMenu (linkType) {
     menu.setAttribute("disabled", "true");
     menu.setAttribute("class", "menu-iconic bookmark-item");
     menu.setAttribute("container", "true");
-    menu.setAttribute("type", "rdf:http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
 
     document.getElementById("more-menu-popup").appendChild(menu);
 
@@ -215,7 +212,7 @@ function LinkToolbarTransientMenu (linkType) {
     if (!this.__proto__.getPopup.apply(this))
       this.getXULElement().appendChild(this.createPopup());
 
-    return this.__proto__.getPopup.apply(this) 
+    return this.__proto__.getPopup.apply(this)
   }
 
   this.createPopup = function() {
@@ -227,19 +224,6 @@ function LinkToolbarTransientMenu (linkType) {
 
   this.clear = function() {
     this.__proto__.clear.apply(this);
-
-    // XXX: we really want to use this instead of removeXULElement
-    this.hideXULElement();
-    //this.removeXULElement();
-  }
-
-  this.hideXULElement = function() {
-    /*
-     * XXX: using "hidden" or "collapsed" leads to a crash when you 
-     *        open the More menu under certain circumstances.  Maybe
-     *        related to bug 83906.  As of 0.9.2 I it doesn't seem
-     *        to crash anymore.
-     */
     this.getXULElement().hidden = true;
   }
 
@@ -249,7 +233,7 @@ function LinkToolbarTransientMenu (linkType) {
     this.getXULElement().hidden = false;
 
     // Show the 'miscellaneous' separator
-    document.getElementById("misc-separator").hidden = false;    
+    document.getElementById("misc-separator").hidden = false;
     return true;
   }
 }
