@@ -74,7 +74,7 @@ var linkFinder = {
 
       if(link.rel || link.rev) {
         var info = linkToolbarUtils.getLinkInfo(link.href, link.rel, link.rev, title, link.hreflang, null);
-        for(var relv in info.relValues) linkToolbarUI.addLink(info, doc);
+        linkToolbarUI.addLink(info, doc);
         continue; // no point using the regexps
       }
 
