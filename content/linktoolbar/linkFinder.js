@@ -3,8 +3,8 @@ const linkFinder = {
   // XXX some pages use << for first and < for prev, so we should handle things like that differently
   re_first: /^first\b|\bfirst$|^begin|\|<|\u00ab/i, // ? >\u007c| ?
   re_prev:  /^prev(ious)?\b|prev$|previous$|^back\b|\bback$|^<<?-?$|\u00ab/i, // \u003c / = | <=
-  re_next:  /^next\b|continue\b|next$|^-?>?>$|\u00bb$/i,
-  re_last:  /^last|last$|^end\b|>\|/i, // ? >\u007c| ?
+  re_next:  /^next\b|\bcontinue\b|next$|^-?>?>$|\u00bb$/i,
+  re_last:  /^last\b|\blast$|^end\b|>\|/i, // ? >\u007c| ?
 
   // regular expressions used for identifying links based on the src url of contained images
   img_re_first: /first/i,
