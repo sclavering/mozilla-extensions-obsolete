@@ -102,16 +102,18 @@ LinkToolbarItem.prototype = {
 // Top, Up, First, Prev, Next, and Last menu-buttons
 // Hackery employed to disable the dropmarker if there is just one link.
 function initLinkToolbarButton(linkType, elt) {
+  for(var i in linkToolbarButton) elt[i] = linkToolbarButton[i];
+
   elt.linkType = linkType;
   elt.links = []; // must do this so each button has its own array rather than a reference to a shared one
   var popup = elt.popup = document.createElement("menupopup");
   elt.appendChild(popup);
   popup.setAttribute("onpopupshowing", "return this.parentNode.buildMenu();");
+  // use right click to open the full list of links
+  elt.setAttribute("onclick", "if(event.button==2 && this.haveLinks) this.firstChild.showPopup();");
   // hackish
   var anonKids = document.getAnonymousNodes(elt);
   elt.dropMarker = anonKids[anonKids.length-1];
-  // copy methods
-  for(var i in linkToolbarButton) elt[i] = linkToolbarButton[i];
   return elt;
 }
 
