@@ -55,7 +55,6 @@ function init() {
   if(ids!="") {
     ids = ids.split('|');
     for(var i = 0; i < ids.length; i++) {
-//      document.getElementById(ids[i]).setAttribute("checked","true");
       document.getElementById(ids[i]).checked = true;
     }
   }
@@ -69,7 +68,6 @@ function init() {
     menulabels = menulabels.split('|');
     for(var i = 0; i < menulabels.length; i++) {
       var menu = menus[menulabels[i]];
-//      if(menu) menu.setAttribute("checked","true");
       if(menu) menu.checked = true;
     }
   }
@@ -83,7 +81,6 @@ function init() {
     menuitemlabels = menuitemlabels.split('|');
     for(var i = 0; i < menuitemlabels.length; i++) {
       var menuitem = menuitems[menuitemlabels[i]];
-//      if(menuitem) menuitem.setAttribute("checked","true");
       if(menuitem) menuitem.checked = true;
     }
   }
@@ -98,7 +95,6 @@ function init() {
     selectors = selectors.split(", ");
     for(var i = 0; i < selectors.length; i++) {
       var widget = byselectors[selectors[i]];
-//      if(widget) widget.setAttribute("checked","true");
       if(widget) widget.checked = true;
     }
   }
@@ -111,7 +107,6 @@ function save() {
   var selectors = [];
   for(var i = 0; i < checkboxes.length; i++) {
     var check = checkboxes[i];
-//    if(check.getAttribute("checked")!="true") continue;
     if(!check.checked) continue;
     // ids
     if(check.id) ids.push(check.id);
@@ -136,7 +131,7 @@ function save() {
   return true;
 }  
 
-// onload attriubte wasn't working :-|
+// onload attribute wasn't working :-|
 window.addEventListener("load",init,false);
 
 ]]></script>
