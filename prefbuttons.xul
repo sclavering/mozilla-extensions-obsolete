@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+Version: MPL 1.1/GPL 2.0/LGPL 2.1
+
+The contents of this file are subject to the Mozilla Public License Version
+1.1 (the "License"); you may not use this file except in compliance with
+the License. You may obtain a copy of the License at
+http://www.mozilla.org/MPL/
+
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+for the specific language governing rights and limitations under the
+License.
+
+The Original Code is the Preferences Toolbar 2
+
+The Initial Developer of the Original Code is Aaron Andersen.
+
+Portions created by the Initial Developer are Copyright (C) 2002
+the Initial Developer. All Rights Reserved.
+
+Contributor(s):
+  Aaron Andersen <aaron@xulplanet.com>
+  Stephen Clavering <mozilla@clav.co.uk> (conversion to PrefButtons extension)
+
+Alternatively, the contents of this file may be used under the terms of
+either the GNU General Public License Version 2 or later (the "GPL"), or
+the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+in which case the provisions of the GPL or the LGPL are applicable instead
+of those above. If you wish to allow use of your version of this file only
+under the terms of either the GPL or the LGPL, and not to allow others to
+use your version of this file under the terms of the MPL, indicate your
+decision by deleting the provisions above and replace them with the notice
+and other provisions required by the LGPL or the GPL. If you do not delete
+the provisions above, a recipient may use your version of this file under
+the terms of any one of the MPL, the GPL or the LGPL.
+
+***** END LICENSE BLOCK ***** -->
+
+<overlay id="prefbuttonsOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="text/javascript" src="prefbuttons.js"/>
+
+<toolbarpalette id="BrowserToolbarPalette">
+
+<toolbaritem id="prefbuttons-fonts">
+  <checkbox onclick="changePref(event);" id="prefbuttons:fonts" prefstring="browser.display.use_document_fonts" topref="Number(value)" frompref="Boolean(value)" label="Fonts"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-colors">
+  <checkbox onclick="changePref(event);" id="prefbuttons:colors" prefstring="browser.display.use_document_colors" topref="value" frompref="value" label="Colors"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-systemcolors">
+  <checkbox onclick="changePref(event);" id="prefbuttons:systemcolors" prefstring="browser.display.use_system_colors" topref="value" frompref="value" label="System Colors"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-images">
+  <checkbox onclick="changePref(event);" id="prefbuttons:images" prefstring="network.image.imageBehavior" topref="2*Number(!value)" frompref="Boolean(!value)" label="Images"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-javascript">
+  <checkbox onclick="changePref(event);" id="prefbuttons:javascript" prefstring="javascript.enabled" topref="value" frompref="value" label="JavaScript"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-java">
+  <checkbox onclick="changePref(event);" id="prefbuttons:java" prefstring="security.enable_java" topref="value" frompref="value" label="Java"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-proxycheck">
+  <checkbox onclick="changePref(event);" id="prefbuttons:proxycheck" prefstring="network.proxy.type" topref="Number(value)" frompref="Boolean(value)" label="Proxies"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-cookies">
+  <checkbox onclick="changePref(event);" id="prefbuttons:cookies" prefstring="network.cookie.cookieBehavior" topref="2*Number(!value)" frompref="Boolean(!value)" label="Cookies"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-cookieask">
+  <checkbox onclick="changePref(event);" id="prefbuttons:cookieask" prefstring="network.cookie.warnAboutCookies" topref="value" frompref="value" label="Cookie Warning"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-referrer">
+  <checkbox onclick="changePref(event);" id="prefbuttons:referrer" prefstring="network.http.sendRefererHeader" topref="2*Number(value)" frompref="Boolean(value)" label="Send Referrer"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-pipelining">
+  <checkbox onclick="changePref(event);" id="prefbuttons:pipelining" prefstring="network.http.pipelining" topref="value" frompref="value" label="Pipelining"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-clearcache">
+	<button id="prefbuttons:clearcache" onclick="clearCache()" label="Clear Cache"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-resize640">
+	<button id="prefbuttons:resize640" onclick="resizeTo(640,480);" label="Resize 640x480"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-resize800">
+	<button id="prefbuttons:resize800" onclick="resizeTo(800,600);" label="Resize 800x600"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-resize1024">
+	<button id="prefbuttons:resize1024" onclick="resizeTo(1024,768);" label="Resize 1024x768"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-killflash">
+	<button id="prefbuttons:killflash" onclick="killFlash()" label="Kill Flash"/>
+</toolbaritem>
+
+<toolbaritem id="prefbuttons-proxymenu">
+  <menulist id="prefbuttons:proxymenu" label="Proxy Menulist" prefstring="network.proxy.type" default="0" oncommand="processMenulist(this,event)">
+    <menupopup>
+      <menuitem label="No Proxies" value="0"/>
+      <menuitem label="Manual Proxy" value="1"/>
+      <menuitem label="Automatic Proxy" value="2"/>
+    </menupopup>
+  </menulist>
+</toolbaritem>
+
+<!-- XXX not done
+<toolbaritem id="prefbuttons-animation">
+  <menulist id="prefbuttons:animation" tooltip="Image Animation" label="Animation" prefstring="image.animation_mode" default="normal" oncommand="processMenulist(this,event)">
+    <menupopup>
+      <menuitem label="Allow" value="normal"/>
+      <menuitem label="Allow Once" value="once"/>
+      <menuitem label="Disable" value="never"/>
+    </menupopup>
+  </menulist>
+</toolbaritem>
+-->
+</toolbarpalette>
+
+
+</overlay>
