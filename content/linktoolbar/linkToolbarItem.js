@@ -222,11 +222,6 @@ function LinkToolbarTransientMenu (linkType) {
     return popup;
   }
 
-  this.clear = function() {
-    this.__proto__.clear.apply(this);
-    this.getXULElement().hidden = true;
-  }
-
   this.displayLink = function(linkElement) {
     if(!this.__proto__.displayLink.apply(this, [linkElement])) return false;
     this.getXULElement().hidden = false;
