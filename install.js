@@ -9,7 +9,7 @@ const APP_LOCALE_FOLDER  = "locale/en-US/goto/";
 
 const APP_SUCCESS_MESSAGE = "GoTo should now be available on the context menu for links! You may need to restart Firebird before this works.";
 
-const INST_TO_PROFILE = "Do you wish to install "+APP_DISPLAY_NAME+" to you profile?\nThis will mean it does not need reinstalling when you update Firebird.\n(Click Cancel if you want "+APP_DISPLAY_NAME+" installing to the Firebird directory.)";
+const INST_TO_PROFILE = "Do you wish to install "+APP_DISPLAY_NAME+" to your profile?\nThis will mean it does not need reinstalling when you update Firebird.\n(Click Cancel if you want "+APP_DISPLAY_NAME+" installing to the Firebird directory.)";
 
 initInstall(APP_NAME, APP_PACKAGE, APP_VERSION);
 
