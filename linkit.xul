@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.18 2003/05/28 21:18:15 cdn Exp $ -->
+<!-- $Id: linkit.xul,v 1.19 2003/05/28 21:27:17 clav Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -22,7 +22,11 @@ function linkit() {
   var page = document.getElementById("content").contentDocument;
   var hydra = page.getElementsByTagName("head").item(0);
 
-  // prevent multiplication - it may be horrible, but it is reliable
+  // prevent multiplication. it may even work this time
+  if(page.xxLinkItDone) return;
+  page.xxLinkItDone = true;
+
+/*  // prevent multiplication - it may be horrible, but it is reliable
   try {
     hydra.removeChild(page.getElementById("linkit-top"));
     hydra.removeChild(page.getElementById("linkit-up"));
@@ -33,6 +37,7 @@ function linkit() {
   try {
     hydra.removeChild(page.getElementById("linkit-next"));
   }catch(e) {}
+  */
 
   var linkN = page.createElement("link");
   var linkP = page.createElement("link");
