@@ -60,7 +60,7 @@
   </popupset>
 
   <statusbar id="status-bar">
-    <statusbarpanel id="linktoolbar" insertafter="statusbar-progresspanel"
+    <statusbarpanel id="linktoolbar" insertafter="livemark-button"
         class="chromeclass-directories" hasitems="false"
         oncommand="return linkToolbarLoadPage(event, false);"
         onclick="return event.button==1 &amp;&amp; linkToolbarLoadPage(event, true);"
