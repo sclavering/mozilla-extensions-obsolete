@@ -1,11 +1,7 @@
-<!-- $Id: x.dtd,v 1.1 2004/04/27 15:10:35 clav Exp $ -->
+<!ENTITY label   "Paranoia">
+<!ENTITY tooltip "Löscht private Informationen">
 
-<!ENTITY x.label   "Paranoia">
-
-<!ENTITY x.tooltip "Paranoia - Löscht private Informationen.">
-
-<!ENTITY xdialog.title "Informationen löschen">
-
+<!ENTITY dialogtitle "Informationen löschen">
 <!ENTITY clearHistory   "Chronik löschen">
 <!ENTITY clearFormInfo  "Formulardaten löschen">
 <!ENTITY clearPasswords "Passwörter löschen">

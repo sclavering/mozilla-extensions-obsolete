@@ -1,12 +1,8 @@
-<!-- $Id: x.dtd,v 1.3 2003/05/21 14:34:44 clav Exp $ -->
+<!ENTITY label   "Paranoia">
+<!ENTITY tooltip "Protect your privacy">
 
-<!ENTITY x.label   "Paranoia">
-
-<!ENTITY x.tooltip "Paranoia - Delete all information.">
-
-<!ENTITY xdialog.title "Clear Privacy Information">
-
-<!ENTITY clearHistory   "Clear the history">
+<!ENTITY dialogtitle "Clear Privacy Information">
+<!ENTITY clearHistory   "Clear the history of visited pages">
 <!ENTITY clearFormInfo  "Clear saved form information">
 <!ENTITY clearPasswords "Clear stored passwords">
 <!ENTITY clearDownloads "Clear the download history">

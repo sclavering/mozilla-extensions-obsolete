@@ -42,8 +42,8 @@
 // restore the items which were checked last time
 window.addEventListener("load", function() {
   var checkeditems = document.documentElement.getAttribute("checkeditems");
-  if(!checkeditems || checkeditems=="") return;
-  checkeditems = checkeditems.split(/\s+/);
+  if(!checkeditems) return;
+  checkeditems = checkeditems.split(" ");
   for(var i = 0; i < checkeditems.length; i++) {
     var elem = document.getElementById(checkeditems[i]);
     if(elem) elem.checked = true;
@@ -67,6 +67,7 @@ function clearStuff() {
   document.documentElement.setAttribute("checkeditems",checkeditems);
 }
 
+
 function clearHistory() {
   // builds from 20040210ish onward use the second class.  the relevant parts
   // of the nsIBrowserHistory are not altered though.
@@ -82,11 +83,13 @@ function clearHistory() {
   os.notifyObservers(null, "browser:purge-session-history", "");
 }
 
+
 function clearFormInfo() {
   var formHistory = Components.classes["@mozilla.org/satchel/form-history;1"]
                               .getService(Components.interfaces.nsIFormHistory);
   formHistory.removeAllEntries();
 }
+
 
 function clearPasswords() {
   var passwdMgr = Components.classes["@mozilla.org/passwordmanager;1"].getService();
@@ -102,6 +105,7 @@ function clearPasswords() {
   for (var i = 0; i < passwds.length; ++i)
     passwdMgr.removeUser(passwds[i].host, passwds[i].user);
 }
+
 
 function clearDownloads() {
   var dlMgr = Components.classes["@mozilla.org/download-manager;1"].getService(Components.interfaces.nsIDownloadManager);
@@ -154,12 +158,9 @@ function clearCookies() {
   cookieman.removeAll();
 }
 
+
 function clearCache() {
-  function clearCacheOfType(aType) {
-    var classID = Components.classes["@mozilla.org/network/cache-service;1"];
-    var cacheService = classID.getService(Components.interfaces.nsICacheService);
-    cacheService.evictEntries(aType);
-  }
-  clearCacheOfType(Components.interfaces.nsICache.STORE_ON_DISK);
-  clearCacheOfType(Components.interfaces.nsICache.STORE_IN_MEMORY);
+  var cacheService = Components.classes["@mozilla.org/network/cache-service;1"].getService(Components.interfaces.nsICacheService);
+  cacheService.evictEntries(Components.interfaces.nsICache.STORE_ON_DISK);
+  cacheService.evictEntries(Components.interfaces.nsICache.STORE_IN_MEMORY);
 }

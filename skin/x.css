@@ -1,10 +1,7 @@
 #x-button {
   list-style-image: url(x.png);
   -moz-image-region: rect(0 24px 24px 0);
-  -moz-box-orient: vertical;
-  padding: 7px;
 }
-
 toolbar[iconsize="small"] #x-button {
   -moz-image-region: rect(0 40px 16px 24px);
 }

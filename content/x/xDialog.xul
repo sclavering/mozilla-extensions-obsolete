@@ -7,7 +7,7 @@
 
 <dialog id="xDialog"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        title="&xdialog.title;"
+        title="&dialogtitle;"
         buttons="accept,cancel"
         ondialogaccept="clearStuff();"
         persist="screenX screenY checkeditems"
