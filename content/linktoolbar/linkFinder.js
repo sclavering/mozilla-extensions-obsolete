@@ -29,6 +29,8 @@ const linkFinder = {
   },
 
   // borrowed from GoUp
+  // xxx: do something like !/(index|main)\.(html?|php3?)/i.test(matches[2])
+  // to choose btwn up==. or up==..
   getUp: function(url) {
     var matches, origUrl = url;
     // trim filename (this makes subdriectory digging easier)
