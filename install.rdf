@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>{b09532de-8fa4-4ea5-a9cb-4764e5bdb700}</em:id>
+    <em:version>0.7.1.1 (2004-03-11,2004-05-28)</em:version>
+    
+    <!-- Target Application this extension can install into, 
+        with minimum and maximum supported versions. --> 
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>0.7+</em:minVersion>
+        <em:maxVersion>0.9</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+    
+    <!-- Front End MetaData -->
+    <em:name>Link Toolbar</em:name>
+    <em:description></em:description>
+    <em:creator>Chris Neale</em:creator>
+    <em:contributor>Stephen Clavering</em:contributor>
+    <em:homepageURL>http://cdn.mozdev.org/linkToolbar/</em:homepageURL>
+    <!-- <em:updateURL>http://www.foo.com/update.cgi?id=%ITEM_ID%&version=%ITEM_VERSION%</em:updateURL> -->
+
+    <!-- Front End Integration Hooks (used by Extension Manager)-->
+    <!-- <em:optionsURL>chrome://linktoolbar/content/linktoolbarPrefOverlay.xul</em:optionsURL>
+    <em:aboutURL></em:aboutURL> -->
+    <em:iconURL></em:iconURL>
+    
+    <!-- Packages, Skins and Locales that this extension registers -->
+    <em:file>
+      <Description about="urn:mozilla:extension:file:linkToolbar.jar">
+        <em:package>content/linktoolbar/</em:package>
+        <em:locale>locale/en-US/linktoolbar/</em:locale>
+        <em:locale>locale/de-AT/linktoolbar/</em:locale>
+        <em:locale>locale/fr-FR/linktoolbar/</em:locale>
+        <em:locale>locale/it-IT/linktoolbar/</em:locale>
+        <em:locale>locale/nl-NL/linktoolbar/</em:locale>
+        <em:locale>locale/sv-SE/linktoolbar/</em:locale>
+        <em:skin>skin/classic/</em:skin>
+      </Description>
+    </em:file>
+  </Description>      
+</RDF>
