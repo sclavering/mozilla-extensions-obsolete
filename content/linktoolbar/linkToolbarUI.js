@@ -154,43 +154,35 @@ const linkToolbarUI = {
     }
 
     var destURL = event.target.getAttribute("href");
+	  try {
+	    // we need to do a security check because we're loading this url from chrome
+      var ssm = Components.classes["@mozilla.org/scriptsecuritymanager;1"].getService()
+  	  	                  .QueryInterface(Components.interfaces.nsIScriptSecurityManager);
+    	ssm.checkLoadURIStr(window.content.location.href, destURL, 0);
 
-    // Note that unlike Moz Linkbar code, we do *not* need to do a security check,
-    // because it is taken care of for us in openNew[Tab|Window]With
+      var openTabs = true, openTabsInBackground = true;
+      try {
+    	  openTabs = gPrefService.getBoolPref("browser.tabs.opentabfor.middleclick")
+        openTabsInBackground = prefSvc.getBoolPref("browser.tabs.loadInBackground");
+      } catch(e) {}
 
-    var openTabs = true, openTabsInBackground = true;
-    try {
-  	  openTabs = gPrefService.getBoolPref("browser.tabs.opentabfor.middleclick")
-      openTabsInBackground = prefSvc.getBoolPref("browser.tabs.loadInBackground");
-    } catch(e) {}
-
-  	// handle middleclick/ctrl+click/shift+click (nearly) as for links in page
-  	if(event.button==1 && openTabs || event.ctrlKey) {
-      // This is a hack to invert the open-in-background behaviour for new tabs
-      // It ensures that a click opens in foreground, shift+click in background
-      var e = openTabsInBackground ? {shiftKey: !event.shiftKey} : event;
-      openNewTabWith(destURL, null, e, true);
-    } else if(event.button==1 || event.shiftKey) {
-      openNewWindowWith(destURL, null, true);
-  	} else {
-    	var referrer = Components.classes["@mozilla.org/network/standard-url;1"]
-    	                         .createInstance(Components.interfaces.nsIURI);
-    	referrer.spec = window.content.location.href;
-    	loadURI(destURL, referrer);
+    	// handle middleclick/ctrl+click/shift+click (nearly) as for links in page
+    	if(event.button==1 && openTabs || event.ctrlKey) {
+        // This is a hack to invert the open-in-background behaviour for new tabs
+        // It ensures that a click opens in foreground, shift+click in background
+        var e = openTabsInBackground ? {shiftKey: !event.shiftKey} : event;
+        openNewTabWith(destURL, null, e, false);
+      } else if(event.button==1 || event.shiftKey) {
+        openNewWindowWith(destURL, null, false);
+    	} else {
+      	var referrer = Components.classes["@mozilla.org/network/standard-url;1"]
+      	                         .createInstance(Components.interfaces.nsIURI);
+      	referrer.spec = window.content.location.href;
+      	loadURI(destURL, referrer);
+      }
+    } catch(e) {
+      alert("Error: it is not permitted to load this URI from a <link> element: " + e);
     }
-  },
-
-  toggleLinkToolbar: function(checkedItem) {
-    var toolbar = document.getElementById("linktoolbar");
-    if(toolbar) {
-      toolbar.setAttribute("hidden", checkedItem.value);
-      document.persist("linktoolbar", "hidden");
-    }
-    this.initHandlers();
-    if(this.isLinkToolbarEnabled())
-      this.fullSlowRefresh();
-    else
-      linkToolbarHandler.clearAllItems();
   },
 
   initLinkbarVisibilityMenu: function() {
