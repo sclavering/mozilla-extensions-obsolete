@@ -16,6 +16,7 @@
 <!ENTITY toc "Table des matières">
 <!ENTITY chapters "Chapitres">
 <!ENTITY sections "Sections">
+<!ENTITY subsections "Sous-sections">
 <!ENTITY appendices "Appendices">
 <!ENTITY glossary "Glossaire">
 <!ENTITY index "Index">

@@ -28,6 +28,7 @@ Translated from en-US version, which was by:
 <!ENTITY toc "Indice degli Argomenti">
 <!ENTITY chapters "Capitoli">
 <!ENTITY sections "Sezioni">
+<!ENTITY subsections "Sottosezioni">
 <!ENTITY appendices "Appendici">
 <!ENTITY glossary "Glossario">
 <!ENTITY index "Indice">

@@ -22,6 +22,7 @@ Author: Rob de Vries
 <!ENTITY toc "Inhoudsopgave">
 <!ENTITY chapters "Hoofdstukken">
 <!ENTITY sections "Secties">
+<!ENTITY subsections "Subsecties">
 <!ENTITY appendices "Bijlagen">
 <!ENTITY glossary "Verklarende woordenlijst">
 <!ENTITY index "Index">

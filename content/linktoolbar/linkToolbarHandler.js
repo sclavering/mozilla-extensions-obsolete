@@ -137,8 +137,9 @@ var linkToolbarUtils = {
       case "toc":
         return "toc";
       case "section":
-      case "subsection":
         return "section";
+      case "subsection":
+        return "subsection";
       case "chapter":
         return "chapter";
       case "prefetch":

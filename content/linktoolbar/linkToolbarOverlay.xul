@@ -116,6 +116,7 @@
           <menuitem id="linktoolbar-toc" label="&toc;" hidden="true" class="menuitem-iconic"/>
           <menu id="linktoolbar-chapter" label="&chapters;" hidden="true" class="menu-iconic"/>
           <menu id="linktoolbar-section" label="&sections;" hidden="true" class="menu-iconic"/>
+          <menu id="linktoolbar-subsection" label="&subsections;" hidden="true" class="menu-iconic"/>
           <menu id="linktoolbar-appendix" label="&appendices;" hidden="true" class="menu-iconic"/>
           <menuitem id="linktoolbar-glossary" label="&glossary;" hidden="true" class="menuitem-iconic"/>
           <menuitem id="linktoolbar-index" label="&index;" hidden="true" class="menuitem-iconic"/>

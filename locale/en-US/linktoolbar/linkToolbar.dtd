@@ -54,6 +54,7 @@
 <!ENTITY toc "Table of Contents">
 <!ENTITY chapters "Chapters">
 <!ENTITY sections "Sections">
+<!ENTITY subsections "Subsections">
 <!ENTITY appendices "Appendices">
 <!ENTITY glossary "Glossary">
 <!ENTITY index "Index">
