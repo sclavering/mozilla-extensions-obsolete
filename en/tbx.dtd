@@ -19,26 +19,11 @@
 <!ENTITY tbx-fullscreen-button.label "Full Screen">
 <!ENTITY tbx-fullscreen-button.tooltip "Toggle full screen mode">
 
-<!ENTITY tbx-zoomin-button.label "Zoom In">
-<!ENTITY tbx-zoomin-button.tooltip "Increase text size">
-
-<!ENTITY tbx-zoomreset-button.label "Zoom Reset">
-<!ENTITY tbx-zoomreset-button.tooltip "Restore default text size">
-
-<!ENTITY tbx-zoomout-button.label "Zoom Out">
-<!ENTITY tbx-zoomout-button.tooltip "Decrease text size">
-
 <!ENTITY tbx-clearcache-button.label "Clear Cache">
 <!ENTITY tbx-clearcache-button.tooltip "Clear the cache">
 
 <!ENTITY tbx-pageinfo-button.label "Info">
 <!ENTITY tbx-pageinfo-button.tooltip "View Page Info">
-
-<!ENTITY tbx-stopreload.default.label "Stop/Reload">
-<!ENTITY tbx-stopreload.reload.label "Reload">
-<!ENTITY tbx-stopreload.reload.tooltip "Reload the current page">
-<!ENTITY tbx-stopreload.stop.label "Stop">
-<!ENTITY tbx-stopreload.stop.tooltip "Stop loading the current page">
 
 <!ENTITY tbx-javascript-tabpref.label "Javascript">
 <!ENTITY tbx-javascript-tabpref.tooltip "Enable/Disable Javascript in the current tab">

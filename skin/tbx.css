@@ -15,8 +15,6 @@ toolbar[iconsize="small"] .tbx-button {
 #tbx-viewsource-button      { -moz-image-region: rect(0 120px 24px 96px); }
 #tbx-jsconsole-button       { -moz-image-region: rect(0 144px 24px 120px); }
 #tbx-fullscreen-button      { -moz-image-region: rect(0 168px 24px 144px); }
-#tbx-zoomin-button          { -moz-image-region: rect(0 192px 24px 168px); }
-#tbx-zoomout-button         { -moz-image-region: rect(0 216px 24px 192px); }
 #tbx-clearcache-button      { -moz-image-region: rect(0 264px 24px 240px); }
 #tbx-pageinfo-button        { -moz-image-region: rect(0 288px 24px 264px); }
 #tbx-javascript-tabpref[checked="true"]    { -moz-image-region: rect(0 312px 24px 288px); }
@@ -28,15 +26,6 @@ toolbar[iconsize="small"] .tbx-button {
 #tbx-plugins-tabpref[checked="true"]       { -moz-image-region: rect(0 456px 24px 432px); }
 #tbx-plugins-tabpref                       { -moz-image-region: rect(0 480px 24px 456px); }
 
-#tbx-stopreload-button {
-  list-style-image: url(chrome://browser/skin/Toolbar.png);
-  -moz-image-region: rect(0px, 96px, 24px, 72px);
-}
-#tbx-stopreload-button[state=stop] {
-  -moz-image-region: rect(0px, 72px, 24px, 48px);
-}
-
-
 
 toolbar[iconsize="small"] #tbx-options-button         { -moz-image-region: rect(0 16px 16px 0); }
 toolbar[iconsize="small"] #tbx-addbookmark-button     { -moz-image-region: rect(0 32px 16px 16px); }
@@ -45,8 +34,6 @@ toolbar[iconsize="small"] #tbx-save-button            { -moz-image-region: rect(
 toolbar[iconsize="small"] #tbx-viewsource-button      { -moz-image-region: rect(0 80px 16px 64px); }
 toolbar[iconsize="small"] #tbx-jsconsole-button       { -moz-image-region: rect(0 96px 16px 80px); }
 toolbar[iconsize="small"] #tbx-fullscreen-button      { -moz-image-region: rect(0 112px 16px 96px); }
-toolbar[iconsize="small"] #tbx-zoomin-button          { -moz-image-region: rect(0 128px 16px 112px); }
-toolbar[iconsize="small"] #tbx-zoomout-button         { -moz-image-region: rect(0 144px 16px 128px); }
 toolbar[iconsize="small"] #tbx-clearcache-button      { -moz-image-region: rect(0 176px 16px 160px); }
 toolbar[iconsize="small"] #tbx-pageinfo-button        { -moz-image-region: rect(0 192px 16px 176px); }
 toolbar[iconsize="small"] #tbx-javascript-tabpref[checked="true"]    { -moz-image-region: rect(0 208px 16px 192px); }
@@ -57,14 +44,6 @@ toolbar[iconsize="small"] #tbx-metaredirects-tabpref[checked="true"] { -moz-imag
 toolbar[iconsize="small"] #tbx-metaredirects-tabpref                 { -moz-image-region: rect(0 288px 16px 272px); }
 toolbar[iconsize="small"] #tbx-plugins-tabpref[checked="true"]       { -moz-image-region: rect(0 304px 16px 288px); }
 toolbar[iconsize="small"] #tbx-plugins-tabpref                       { -moz-image-region: rect(0 320px 16px 304px); }
-
-toolbar[iconsize=small] #tbx-stopreload-button {
-  list-style-image: url(chrome://browser/skin/Toolbar-small.png);
-  -moz-image-region: rect(0px, 64px, 16px, 48px);
-}
-toolbar[iconsize=small] #tbx-stopreload-button[state=stop] {
-  -moz-image-region: rect(0px, 48px, 16px, 32px);
-}
 
 
 /* need a min-width so you can easily drag items onto a new toolbar */

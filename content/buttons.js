@@ -45,12 +45,6 @@ var tbxCommands = {
     gBrowser.removeCurrentTab();
   },
 
-  stopOrReload: function(evt, button) {
-    if(button.getAttribute('state')=='stop') BrowserStop();
-    else if(evt.shiftKey) BrowserReloadSkipCache();
-    else BrowserReload();
-  },
-
   // These functions control whether images, javascript, and plugins are allowed, and
   // apply to *the current tab only*. They take effect only after the page is refreshed.
   // (could also use the allowAuth, and allowSubframes flags of docShell.)
@@ -76,64 +70,6 @@ var tbxCommands = {
   }
 }
 
-
-
-
-// combined Stop and Reload button.  (like Opera's one)
-var tbxWebProgressListener = {
-  stopReloadButton: null,
-
-  listenerAdded: false,
-
-  init: function() {
-    this.stopReloadButton = document.getElementById('tbx-stopreload-button');
-    if(this.stopReloadButton) {
-      if(this.listenerAdded) return;
-      gBrowser.addProgressListener(this, Components.interfaces.nsIWebProgress.NOTIFY_STATE_ALL);
-//      gBrowser.addProgressListener(this, Components.interfaces.nsIWebProgress.NOTIFY_ALL);
-      this.listenerAdded = true;
-      // default label is 'Stop/Reload', for when it's on the palette
-      this.stopReloadButton.setAttribute('label',this.stopReloadButton.getAttribute('reloadlabel'));
-    } else {
-      if(!this.listenerAdded) return;
-      gBrowser.removeProgressListener(this);
-      this.listenerAdded = false;
-    }
-  },
-
-  QueryInterface: function(aIID) {
-    if(aIID.equals(Components.interfaces.nsIWebProgressListener)
-        || aIID.equals(Components.interfaces.nsISupports))
-      return this;
-    throw Components.results.NS_NOINTERFACE;
-  },
-
-  onStateChange: function(aWebProgress, aRequest, aStateFlags, aStatus) {
-    const nsIWebProgressListener = Components.interfaces.nsIWebProgressListener;
-    var btn = this.stopReloadButton;
-    if(aStateFlags & nsIWebProgressListener.STATE_START) {
-      btn.setAttribute('state','stop');
-      btn.setAttribute('label',btn.getAttribute('stoplabel'));
-      btn.setAttribute('tooltiptext',btn.getAttribute('stoptooltip'));
-    } else if(aStateFlags & nsIWebProgressListener.STATE_STOP) {
-      btn.removeAttribute('state');
-      btn.setAttribute('label',btn.getAttribute('reloadlabel'));
-      btn.setAttribute('tooltiptext',btn.getAttribute('reloadtooltip'));
-   }
-  },
-
-  onProgressChange: function(aWebProgress, aRequest, aCurSelfProgress, aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {},
-
-  onLocationChange: function(aWebProgress, aRequest, aLocation) {},
-
-  onStatusChange: function(aWebProgress, aRequest, aStatus, aMessage) {},
-
-  onSecurityChange: function(aWebProgress, aRequest, aState) {},
-
-  // tabbrowser.xml#551 bogusly calls this for all registered progress listeners,
-  // even though it is *not* part of the nsIWebProgressListener interface
-  onLinkIconAvailable: function(href) {}
-}
 
 
 
@@ -182,6 +118,6 @@ var tbxTabPrefToggles = {
 }
 
 function tbxUpdateTabPrefToggles(evt) {
-  for(var i = 0; i < tbxTabPrefToggles.active.length; i++)
+  for(var i = 0; i != tbxTabPrefToggles.active.length; i++)
     tbxTabPrefToggles.active[i].update();
 }

@@ -53,9 +53,6 @@ function tbxCustomiseDone(anyToolboxChanged) {
 }
 
 function tbxInit() {
-  // update the Stop/Reload combi-button
-  tbxWebProgressListener.init();
-
   // update the js, image, and plugin per-tab pref toggles.
   tbxTabPrefToggles.init();
 
