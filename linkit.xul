@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.2 2003/05/27 16:15:41 cdn Exp $ -->
+<!-- $Id: linkit.xul,v 1.3 2003/05/27 17:52:28 cdn Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -7,6 +7,7 @@
 <script type="application/x-javascript"><![CDATA[
 
 // from NiceTitle.js by Stuart Langridge via grayrest's nicetitle.xpi
+// MIT Licenced : http://www.opensource.org/licenses/mit-license.php
 
 function NB_innerText(el){
     var s = "";
@@ -50,21 +51,24 @@ function linkit() {
      for (ti=0;ti<instags.length;ti++) {
         var instag = instags[ti];
 
-      if (instag.getAttribute("href") == '' || instag.getAttribute("name") != '') break;
+// how to break the code :
+//      if (instag.getAttribute("href") == '' || instag.getAttribute("name") != '') break;
 
-      if (/prev/i.test(NB_innerText(instag))) {
+//alert(NB_innerText(instag));
+
+      if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|«/i.test(NB_innerText(instag))) {
         linkP.setAttribute("href", instag.getAttribute("href"));
         linkP.setAttribute("id", "linkit-prev");
         linkP.setAttribute("rel", "prev");
-        linkP.setAttribute("title", "Linkit [&lt;]");
+        linkP.setAttribute("title", "Linkit [<]");
         hydra.appendChild(linkP);
       }
 
-      if (/next/i.test(NB_innerText(instag))) {
+      if (/^next|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|»/i.test(NB_innerText(instag))) {
         linkN.setAttribute("href", instag.getAttribute("href"));
         linkN.setAttribute("id", "linkit-next");
         linkN.setAttribute("rel", "next");
-        linkN.setAttribute("title", "Linkit [&gt;]");
+        linkN.setAttribute("title", "Linkit [>]");
         hydra.appendChild(linkN);
       }
 
