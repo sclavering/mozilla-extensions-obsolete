@@ -85,10 +85,6 @@ var linkToolbarItems = {
     }
   },
 
-  //handleLinkForRel: function(linkInfo, rel) {
-    //this.getItem(rel).displayLink(linkInfo);
-  //},
-
   getItem: function(linkType) {
     const items = this.items;
     if(!(linkType in items)) {
