@@ -1,9 +1,0 @@
-@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
-
-#xkiosk-button {
-  list-style-image: url(x.png);
-}
-
-toolbar[iconsize="small"] #xkiosk-button {
-  list-style-image: url(xs.png);
-}
