@@ -172,3 +172,7 @@ html\:a {
 #more-menu[disabled="true"] {
   color: graytext !important;
 }
+
+#wrapper-linktoolbar > xul\:hbox > toolbaritem > .bookmarkitem {
+  display: none;
+}
