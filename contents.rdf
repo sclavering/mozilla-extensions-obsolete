@@ -13,8 +13,7 @@
         chrome:description="Adds extra toolbar items for quickly accessing and changing common preferences."
         chrome:extension="true"
         chrome:name="prefbuttons"
-        >
-  </RDF:Description>
+        />
 
 	<RDF:Seq about="urn:mozilla:overlays">
      <RDF:li resource="chrome://browser/content/browser.xul"/>
