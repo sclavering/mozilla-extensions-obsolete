@@ -197,36 +197,41 @@ var linkToolbarItems = {
 
 
 
-// a dictionary for looking up readable names for 2/3-letter lang codes
-// e.g. "en" -> "English", "de" -> "German"
-// xxx doesn't handle things like "en-GB" nicely
+// a lazily-initialised dictionary for looking up readable names for 2/3-letter lang codes
+// e.g. "en" -> "English", "de" -> "German" (or en->Englisch, de->Deutsch)
 var ltLanguageDictionary = {
-  dictionary: null,
+  // code is a language code, e.g. en, en-GB, es, fr-FR
+  lookup: function(code) {
+    var dict = this.dictionary;
+    if(code in dict) return dict[code];
 
-  lookup: function(languageCode) {
-    if(!this.dictionary) this.createDictionary();
-
-    if(languageCode in this.dictionary)
-      return this.dictionary[languageCode];
+    // see if we have something like "en-GB", and if so change to "English (GB)"
+    var parts = code.match(/^(.{2,3})-(.*)$/);
+    // xxx make the parentheses localizable
+    if(parts && parts[1] in dict) return dict[parts[1]]+" ("+parts[2]+")";
 
     return languageCode;
   },
 
-  // convert the stringbundle into a js hashtable
-  createDictionary: function() {
-    this.dictionary = [];
+  get dictionary() {
+    delete this.dictionary; // remove this getter function, so that we can replace with an array
+
+    // convert the stringbundle into a js hashtable
+    var dict = this.dictionary = [];
     try {
       var bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
                    .getService(Components.interfaces.nsIStringBundleService)
                    .createBundle("chrome://global/locale/languageNames.properties")
                    .getSimpleEnumeration();
     } catch(ex) {
-      return; // we'll just live without pretty-printing
+      return []; // we'll just live without pretty-printing
     }
 
     while(bundle.hasMoreElements()) {
       var item = bundle.getNext().QueryInterface(Components.interfaces.nsIPropertyElement);
-      this.dictionary[item.key] = item.value;
+      dict[item.key] = item.value;
     }
+
+    return dict;
   }
 };
