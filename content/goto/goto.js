@@ -42,18 +42,26 @@ var GoTo = {
 
   buildMenu: function(menu) {
     var url = this.getLink();
-    var matches, regexp, groupEnd, originalUrl = url;
+    var matches, str, regexp, groupEnd, originalUrl = url;
 
     // if were not on a link, give Digger functionality
     // XXX should retrieve current document location, not url bar value
     if(!url) url = gURLBar.value;
     if(url.length == 0) return;
 
-    // chop off a query string
-    matches = url.match(/^([^\?]*?)\?.*/);
-    if(matches) {
-      url = matches[1]; //its never ==origUrl
-      this.addItem(menu, matches[1]);
+    // chop off a query string and deal woth urls like
+    // http://www.example.com/redirect.php?http://www.foo.com/&foo=blah
+    matches = url.split("?");
+    if(matches[1]) {
+      str = matches[1];
+      if(/^(ht|f)tp:\/\//.test(str)) {
+        str = str.split("&")[0];
+        this.addItem(menu, str);
+      }
+    }
+    if(matches[0]) {
+      url = matches[0];
+      this.addItem(menu, url);
     }
 
     // trim filename (this makes subdriectory digging easier)
