@@ -7,11 +7,11 @@
     <RDF:li resource="urn:mozilla:package:linktoolbar"/>
   </RDF:Seq>
 
-  <!-- package information $Id: contents.rdf,v 1.1 2003/02/05 21:20:20 cdn Exp $ -->
+  <!-- package information $Id: contents.rdf,v 1.2 2003/02/05 23:26:16 cdn Exp $ -->
   <RDF:Description about="urn:mozilla:package:linktoolbar"
         chrome:author="Chris Neale"
         chrome:authorURL="http://cdn.mozdev.org/linkToolbar/"
-        chrome:description="[2003-02-04] Adds Mozilla's link toolbar to Px."
+        chrome:description="[2003-02-05] Adds Mozilla's link toolbar to Px."
         chrome:displayName="Link Toolbar"
         chrome:extension="true"
         chrome:name="linktoolbar">
