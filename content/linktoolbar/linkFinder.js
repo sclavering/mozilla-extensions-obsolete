@@ -61,7 +61,7 @@ var linkFinder = {
     // xxx think more about what cap to use (500 is probably excessively high)
     var max = Math.min(doc.links.length, 500);
 
-    for(i = 0; i != max; i++) {
+    for(var i = 0; i != max; i++) {
       var link = doc.links[i];
       var href = link.href;
 
@@ -122,14 +122,12 @@ var linkFinder = {
   // get the text contained in a link, and any guesses for rel based on img url
   getTextAndImgRels: function(el, rels) {
     var s = "";
-    // use alt text for images
-    if(el instanceof HTMLImageElement) {
+    // use alt text for images and image map areas
+    if((el instanceof HTMLImageElement) || (el instanceof HTMLAreaElement)) {
       // should this have spaces wrapped round it?
       s = el.alt;
-      if(s) return s;
 
-      // guess some rel values from the url.
-      // (examining alt text is usually better, but this image has no alt text)
+      // guess rel values from the URL. .src always gives an absolute URL, so we use getAttribute
       var src = el.getAttribute("src");
       if(this.img_re_next.test(src)) rels["next"] = true;
       else if(this.img_re_prev.test(src)) rels["prev"] = true;
