@@ -20,7 +20,7 @@ var GoTo = {
     _content.focus();
     if(e.button==1) {
       menu.hidePopup();
-      menu.parentNode.parentNode.hidPopup();
+      menu.parentNode.parentNode.hidePopup();
     }
   },
 
@@ -30,7 +30,7 @@ var GoTo = {
 
   buildMenu: function(menu) {
     var cm = gContextMenu;
-    var url = cm.onLink ? cm.linkURL() : document.location.href;
+    var url = cm.onLink ? cm.linkURL() : _content.document.location.href;
     if(!url) return;
 
     var matches, str, regexp, groupEnd, originalUrl = url;
