@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.4 2003/05/27 19:18:31 cdn Exp $ -->
+<!-- $Id: linkit.xul,v 1.5 2003/05/28 11:46:21 cdn Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -23,8 +23,21 @@ function NB_innerText(el){
 }
 
 function linkit() {
+
   var page = document.getElementById("content").contentDocument;
   var hydra = page.getElementsByTagName("head").item(0);
+
+ // prevent multiplication
+  try {
+    hydra.removeChild(page.getElementById("linkit-top"));
+    hydra.removeChild(page.getElementById("linkit-up"));
+  }catch(e) {}
+  try {
+    hydra.removeChild(page.getElementById("linkit-prev"));
+  }catch(e) {}
+  try {
+    hydra.removeChild(page.getElementById("linkit-next"));
+  }catch(e) {}
 
   var linkN = page.createElement("link");
   var linkP = page.createElement("link");
@@ -39,10 +52,28 @@ function linkit() {
 
   hydra.appendChild(linkX);
 
-   linkY.setAttribute("href", "..");
-   linkY.setAttribute("id", "linkit-up");
-   linkY.setAttribute("rel", "up");
-   linkY.setAttribute("title", "LinkIt [..]");
+// javascript:if (location.pathname == "/"); else
+// if (location.pathname.charAt(location.pathname.length-1) == "/") location = ".."; else location = "."; void 0
+
+   var lYlink = "..";
+   var location = gURLBar.value;
+/*
+   if (location.pathname == "/") alert('/ 1');
+   else
+   { alert('! /');
+     if (location.pathname.charAt(location.pathname.length-1) == "/")
+     { alert('..');//lYlink = "..";
+     }
+     else { alert('.');//lYlink = ".";
+     }
+   }
+*/
+//   if ( lYlink != "" ) {
+     linkY.setAttribute("href", lYlink);
+     linkY.setAttribute("id", "linkit-up");
+     linkY.setAttribute("rel", "up");
+     linkY.setAttribute("title", "LinkIt [" + lYlink + "]");
+//   }
 
   hydra.appendChild(linkY);
 
@@ -55,21 +86,24 @@ function linkit() {
 //      if (instag.getAttribute("href") == '' || instag.getAttribute("name") != '') break;
 
 //    if ( instag.hasAttribute("href") == false )
-//alert(NB_innerText(instag));
 
+//    alert(NB_innerText(instag));
+
+// \u00ab
       if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|«/i.test(NB_innerText(instag))) {
         linkP.setAttribute("href", instag.getAttribute("href"));
         linkP.setAttribute("id", "linkit-prev");
         linkP.setAttribute("rel", "prev");
-        linkP.setAttribute("title", "Linkit [<]");
+        linkP.setAttribute("title", "LinkIt [<]");
         hydra.appendChild(linkP);
       }
 
-      if (/^next\s*\S*\s*\S*$|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|»/i.test(NB_innerText(instag))) {
+// \u00bb
+      if (/next|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|»/i.test(NB_innerText(instag))) {
         linkN.setAttribute("href", instag.getAttribute("href"));
         linkN.setAttribute("id", "linkit-next");
         linkN.setAttribute("rel", "next");
-        linkN.setAttribute("title", "Linkit [>]");
+        linkN.setAttribute("title", "LinkIt [>]");
         hydra.appendChild(linkN);
       }
 
@@ -77,20 +111,21 @@ function linkit() {
         linkA.setAttribute("href", instag.getAttribute("href"));
         linkA.setAttribute("class", "linkit-link");
         linkA.setAttribute("rel", "linkit");
-        linkA.setAttribute("title", "Linkit [" + NB_innerText(instag)  + "]");
+        linkA.setAttribute("title", "LinkIt [" + NB_innerText(instag)  + "]");
         cerb.appendChild(linkA);
 */
 
      }
     }
 
-
 }
+
 
 window.addEventListener("load", function() {
 
 dump('load listener');
 
+document.getElementById("appcontent").addEventListener("focus", linkit, true);
 document.getElementById("appcontent").addEventListener("load", linkit, true);
 
 }, false);
