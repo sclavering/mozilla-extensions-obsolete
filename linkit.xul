@@ -1,18 +1,32 @@
 <?xml version="1.0"?>
 
+<!DOCTYPE overlay [
+<!ENTITY % brandDTD SYSTEM "chrome://global/locale/brand.dtd" >
+%brandDTD;
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
+%browserDTD;
+]>
+
 <overlay id="linkitOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <script type="application/x-javascript"><![CDATA[
 
-const linkitRE_next  = /^next|continue\b|next$|>$|\u00bb/i;
-const linkitRE_prev  = /^prev(ious)?\b|prev$|previous$|^back|\bback$|^<|\u00ab/i;
+const linkitRE_next  = /^next|continue\b|next$|^>$|\u00bb/i;
+const linkitRE_prev  = /^prev(ious)?\b|prev$|previous$|^back|\bback$|^<$|\u00ab/i;
 const linkitRE_first = /^first|first$|^begin|\|</i; // ? >\u007c| ?
 const linkitRE_last  = /^last|last$|^end\b|>\|/i; // ? >\u007c| ?
 const linkitRE_next2 = /next|fwd/i;
 const linkitRE_prev2 = /p?rev/i;
 const linkitREfirst2 = /first/i;
 const linkitRE_last2 = /last/i;
+const is_head = /head/i;
+const img = /(gif|jp[e]?g|png)$/i;
+
+// <
+// need > and not >>
+//      < and not <<
+// >
 
 // recursively ding the internal text of an element
 function linkit_getInnerText(el) {
@@ -41,26 +55,49 @@ function linkit_getInnerText(el) {
 
 
 function linkit(event) {
+
   var page = event.originalTarget;
-  var hydra = page.getElementsByTagName("head");
-  if(!hydra) return;
-  hydra = hydra[0];
   var location = page.location.href;
 
+  var corps = page.lastChild; // better than first
+
+  dump('Linkit :: corps:' + corps.localName + '\n');
+
+  var hydra = corps.firstChild;
+
+  while(!is_head.test(hydra.localName)) hydra = hydra.nextSibling;
+
+  dump('Linkit :: hydra:' + hydra.nodeName + '\n');
+
+  if(img.test(location) && !is_head.test(hydra.nodeName)) { // for images that result in 404 html
+    var tete = page.createElement('head');
+    corps.appendChild(tete);
+    dump('Linkit :: add Head\n');
+    var hydra2 = hydra.nextSibling;
+    hydra = hydra2;
+  }
+  else if(!is_head.test(hydra.nodeName)) {
+    dump('Linkit :: ' + location + ' has got no head ...\n');
+    return;
+  }
+
   // prevent duplication, probably unnecessary
-  if(page.xxLinkItDone) return;
+  if(page.xxLinkItDone) { dump('deja vu\n'); return };
   page.xxLinkItDone = true;
 
   // add a top link iff relevant
   if(/^[^\/]*?:\/\/.*\/.+/.test(location)) {
-    linkit_addLink(page,hydra,"top","/");
+    linkit_addLink(page,hydra,'top','/');
     // add a . or .. link
     var matches = location.match(/(^.*\/)(.*)/);
     if(!matches) return;  // we're on an about:blank or something weird
-    if(matches[2]!="" && !/(index|main)\.(html?|php3?)/i.test(matches[2]))
-      linkit_addLink(page,hydra,"up",".")
-    else if(matches[2]=="")
-      linkit_addLink(page,hydra,"up","..")
+    if(matches[2]!='' && !/(index|main)\.(html?|php3?)/i.test(matches[2]))
+      linkit_addLink(page,hydra,'up','.');
+    else if(matches[2]=='')
+      linkit_addLink(page,hydra,'up','..');
+  }
+  else {
+    dump('Linkit :: already /\n');
   }
 
   // add prev/next links
@@ -130,17 +167,84 @@ function linkit(event) {
     }
 */
 
+ /* if (document.getElementById("linkit-"+rel) && document.getElementById("linkit-"+rel).href != url) {
+    link.setAttribute("id", "linkit-"+rel+'2');
+    head.appendChild(link);
+    dump('Linkit :: add ' + rel + '2\n');
+  }
+  else */
+
+ /*
+  while(linktags[i].getAttribute('class') != "linkit-"+rel) {
+    i++; dump('linktags[' + i + ']\n');
+  }
+
+
+  if(linktags[i].getAttribute('href') != url || i == linktags.length || )
+    nodupes = true;
+ */
+
+// var linkitLinks = [];
+
+ // if (!linktags || nodupes) {
+//    if(linkitLinks[rel]) { dump('Linkit :: ' + rel + ' : deja vu\n'); return };
+//     linkitLinks[rel] = true;
+ // }
+
+ /* var nodupes = false; */
+
+
 function linkit_addLink(page,head,rel,url,title) {
+
   var link = page.createElement("link");
+  if(!head) return;
+  link.setAttribute("class", "linkit-"+rel);
   link.setAttribute("href", url);
-  link.setAttribute("id", "linkit-"+rel);
   link.setAttribute("rel", rel);
   if(title) link.setAttribute("title", title);
   else link.setAttribute("title", "LinkIt ["+url+"]");
 
 // if no link currently in head matches href and rel then add
-//  if (head.)
+
+  var linktags = page.getElementsByTagName("link");
+
+  for(var i = 0; i < linktags.length; i++) {
+    var linktag = linktags[i];
+    var klass = linktag.getAttribute("class");
+    var href = linktag.getAttribute("href");
+    var rell = linktag.getAttribute("rel");
+
+    if(rell == rel && href == url && klass == "linkit-"+rel)
+      return;
+
+  }
+
     head.appendChild(link);
+    dump('Linkit :: add ' + rel + '\n');
+
+}
+
+
+function fiddle() {
+
+ // var fred = document.getElementById('ctx-openlink');
+ // if(!fred) {
+
+  dump('Link Context Menu :: fiddling\n');
+
+  var contextM = document.getElementById("contentAreaContextMenu");
+
+  var ctxOlt = document.getElementById('context-openlinkintab').cloneNode(false);
+      ctxOlt.id = 'cdn-contextOpenLinkInTab';
+
+  var ctxOl = document.getElementById('context-openlink');
+
+  contextM.insertBefore(ctxOlt, ctxOl);
+
+  document.getElementById('context-openlinkintab').setAttribute('hidden', true);
+
+ // }
+
 }
 
 
@@ -149,7 +253,10 @@ window.addEventListener("load",linkit_init,false);
 function linkit_init() {
   // this will hear "load" events even for background tabs, and the document
   // that has loaded can be retrieved via event.originalTarget
+ // window.removeEventListener("load", linkit_init, false);
   document.getElementById("appcontent").addEventListener("load", linkit, true);
+  dump("LinkIt :: I'm Listening\n");
+ // document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", fiddle, true);
 }
 
 ]]></script>
