@@ -258,7 +258,7 @@
       <toolbarseparator/>
 
       <toolbarbutton id="document-menu" class="bookmark-item" type="menu" container="true"
-          label="&documentButton.label;" disabled="true" tooltiptext="&documentButton.tooltip;"
+          label="&documentButton.label;" disabled="true" tooltiptext0="&documentButton.tooltip;"
           >
         <menupopup id="document-menu-popup">
           <menuitem id="link-toc" label="&tocButton.label;" hidden="true"
@@ -287,7 +287,7 @@
       </toolbarbutton>
 
       <toolbarbutton id="more-menu" class="bookmark-item" type="menu" container="true"
-          label="&moreButton.label;" disabled="true" tooltiptext="&moreButton.tooltip;"
+          label="&moreButton.label;" disabled="true" tooltiptext0="&moreButton.tooltip;"
           >
         <menupopup id="more-menu-popup">
           <menuitem id="link-help" label="&helpButton.label;" hidden="true"
