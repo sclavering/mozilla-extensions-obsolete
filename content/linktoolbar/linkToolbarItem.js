@@ -56,6 +56,20 @@ All of this really need redoing so that menu items are only created when the men
 is opened, rather than when a link is found.
 */
 
+
+// helper for toolbar buttons and transient items
+function makeLinkToolbarMenuItem(href, label, tooltip) {
+  var mi = document.createElement("menuitem");
+  mi.className = "menuitem-iconic bookmark-item";
+  mi.setAttribute("href", href);
+  mi.setAttribute("label", label);
+  mi.setAttribute("tooltiptext1", tooltip);
+  mi.setAttribute("tooltiptext2", href);
+  return mi;
+}
+
+
+
 function LinkToolbarItem (linkType, element) {
   this.linkType = linkType;
   this.xulElement = element;
@@ -73,13 +87,13 @@ LinkToolbarItem.prototype = {
   },
 
   displayLink: function(linkElement) {
-    if (this.xulElement.hasAttribute("href")) return false;
+    if(this.xulElement.hasAttribute("href")) return;
     this.parentMenuButton.disabled = false;
     this.xulElement.disabled = false;
     this.xulElement.hidden = false;
-    this.xulElement.setAttribute("href", linkElement.href);
+    this.xulElement.setAttribute("href", linkElement.url);
     this.xulElement.setAttribute("tooltiptext1", linkElement.longTitle);
-    this.xulElement.setAttribute("tooltiptext2", linkElement.href);
+    this.xulElement.setAttribute("tooltiptext2", linkElement.url);
   }
 };
 
@@ -89,9 +103,10 @@ LinkToolbarItem.prototype = {
 // Hackery employed to disable the dropmarker if there is just one link.
 function initLinkToolbarButton(linkType, elt) {
   elt.linkType = linkType;
+  elt.links = []; // must do this so each button has its own array rather than a reference to a shared one
   var popup = elt.popup = document.createElement("menupopup");
   elt.appendChild(popup);
-  //elt.popup = document.getElementById("link-"+linkType+"-popup");
+  popup.setAttribute("onpopupshowing", "return this.parentNode.buildMenu();");
   // hackish
   var anonKids = document.getAnonymousNodes(elt);
   elt.dropMarker = anonKids[anonKids.length-1];
@@ -103,25 +118,28 @@ function initLinkToolbarButton(linkType, elt) {
 const linkToolbarButton = {
   haveLink: false, // indicates the button is showing 1 or more links
   haveLinks: false, // indicates the button has >= 2 links
+  // links: [], // an array of links for this button (set in above function)
+  linksHaveChanged: true, // has our set of links changed since the menu was last shown
 
   clear: function() {
     this.haveLink = this.haveLinks = false;
+    this.linksHaveChanged = true;
+    this.links = [];
     this.disabled = true;
     this.removeAttribute("href");
     this.removeAttribute("tooltiptext1");
     this.removeAttribute("tooltiptext2");
-    const p = this.popup
-    while(p.hasChildNodes()) p.removeChild(p.lastChild);
   },
 
   displayLink: function(linkElement) {
+    this.linksHaveChanged = true;
+    this.links.push(linkElement);
     if(!this.haveLink) {
       this.haveLink = true;
-      this.setAttribute("href", linkElement.href);
       this.disabled = false;
-      // lines will be hidden if blank
+      this.setAttribute("href", linkElement.url);
       this.setAttribute("tooltiptext1", linkElement.longTitle);
-      this.setAttribute("tooltiptext2", linkElement.href);
+      this.setAttribute("tooltiptext2", linkElement.url);
       // just setting .disabled will not do anything, presumably because the
       // dropmarker xbl:inherits the toolbarbutton's disabled attribute.
       this.dropMarker.setAttribute("disabled","true");
@@ -129,15 +147,22 @@ const linkToolbarButton = {
       this.haveLinks = true;
       this.dropMarker.removeAttribute("disabled");
     }
-    // add menu item
-    var menuitem = document.createElement("menuitem");
-    // XXX: use longTitle for tooltip too ?
-    menuitem.setAttribute("tooltiptext1", linkElement.title);
-    menuitem.setAttribute("tooltiptext2", linkElement.href);
-    menuitem.setAttribute("label", linkElement.longTitle);
-    menuitem.setAttribute("href", linkElement.href);
-    menuitem.className = "menuitem-iconic bookmark-item";
-    this.popup.appendChild(menuitem);
+  },
+
+  buildMenu: function() {
+    if(!this.haveLinks) return false;
+    if(!this.linksHaveChanged) return true;
+
+    const p = this.popup;
+    while(p.hasChildNodes()) p.removeChild(p.lastChild);
+
+    const ls = this.links, num = ls.length;
+    for(var i = 0; i != num; i++) {
+      var l = ls[i];
+      p.appendChild(makeLinkToolbarMenuItem(l.url, l.longTitle, l.title));
+    }
+    this.linksHaveChanged = false;
+    return true;
   }
 };
 
@@ -160,18 +185,12 @@ LinkToolbarMenu.prototype = {
     while(p.hasChildNodes()) p.removeChild(p.lastChild);
   },
 
-  displayLink: function(linkElement) {
+  displayLink: function(link) {
     this.xulElement.disabled = false;
     this.xulElement.hidden = false;
     this.parentMenuButton.disabled = false;
-    // add menuitem
-    var menuitem = document.createElement("menuitem");
-    menuitem.setAttribute("tooltiptext1", linkElement.title);
-    menuitem.setAttribute("tooltiptext2", linkElement.href);
-    menuitem.setAttribute("label", linkElement.longTitle);
-    menuitem.setAttribute("href", linkElement.href);
-    menuitem.className = "menuitem-iconic bookmark-item";
-    this.xulPopup.appendChild(menuitem);
+    var mi = makeLinkToolbarMenuItem(link.url, link.longTitle, link.title);
+    this.xulPopup.appendChild(mi);
   }
 };
 
@@ -216,10 +235,10 @@ LinkToolbarTransientItem.prototype = {
     // handle the first link
     if(!this.haveLink) {
       this.haveLink = true;
-      this.item.setAttribute("href", linkInfo.href);
+      this.item.setAttribute("href", linkInfo.url);
       this.item.hidden = false;
       this.item.setAttribute("tooltiptext1", linkInfo.longTitle);
-      this.item.setAttribute("tooltiptext2", linkInfo.href);
+      this.item.setAttribute("tooltiptext2", linkInfo.url);
       this.parentMenuButton.disabled = false;
     } else if(!this.haveLinks) {
       // handling a second link, so hide item and show menu
@@ -227,14 +246,9 @@ LinkToolbarTransientItem.prototype = {
       this.item.hidden = true;
       this.menu.hidden = false;
     }
-    // add the link to the xul popup
-    var menuitem = document.createElement("menuitem");
-    // XXX: use longTitle for tooltip too ?
-    menuitem.setAttribute("tooltiptext1", linkInfo.title);
-    menuitem.setAttribute("tooltiptext2", linkInfo.href);
-    menuitem.setAttribute("label", linkInfo.longTitle || linkInfo.href);
-    menuitem.setAttribute("href", linkInfo.href);
-    menuitem.className = "menuitem-iconic bookmark-item";
-    this.popup.appendChild(menuitem);
+    // add menu item
+    const link = linkInfo;
+    var mi = makeLinkToolbarMenuItem(link.url, link.longTitle || link.url, link.title);
+    this.popup.appendChild(mi);
   }
 };
