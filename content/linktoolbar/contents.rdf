@@ -7,14 +7,13 @@
     <RDF:li resource="urn:mozilla:package:linktoolbar"/>
   </RDF:Seq>
 
-  <!-- package information $Id: contents.rdf,v 1.9 2003/06/22 13:13:30 clav Exp $ -->
+  <!-- package information $Id: contents.rdf,v 1.10 2003/09/05 15:07:35 clav Exp $ -->
   <RDF:Description about="urn:mozilla:package:linktoolbar"
     chrome:author="Stephen Clavering, Chris Neale"
     chrome:authorURL="http://cdn.mozdev.org/linkToolbar/"
-    chrome:description="Adds Mozilla's link toolbar to Firebird and Netscape 7.
- Includes a style selector for Firebird
- Adjust View > Site Navigation Bar to suit your browsing needs."
-    chrome:displayName="Link Toolbar [2003-05-04]"
+    chrome:description="Adds a derivative of Mozilla's link toolbar to Firebird.
+Adjust View > Link Toolbar to suit your browsing needs."
+    chrome:displayName="Link Toolbar 0.6 (2003-09-05)"
     chrome:extension="true"
     chrome:name="linktoolbar"
     />
