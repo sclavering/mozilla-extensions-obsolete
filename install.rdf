@@ -7,7 +7,7 @@
     <id>fusion</id>
 
     <name>Fusion</name>
-    <version>0.5</version>
+    <version>0.6</version>
     <description>Amalgamates the location bar and the progress bar.</description>
 
     <creator>Stephen Clavering</creator>
