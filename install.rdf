@@ -10,7 +10,7 @@
     <version>0.8</version>
     <description>A site navigation toolbar</description>
 
-    <creator>Chris Neale, Stephen Clavering</creator>
+    <creator>Stephen Clavering</creator>
     <homepageURL>http://cdn.mozdev.org/linkToolbar/</homepageURL>
 
     <optionsURL>chrome://linktoolbar/content/options.xul</optionsURL>
