@@ -130,10 +130,13 @@ LinkToolbarButton.prototype = new LinkToolbarItem;
 function LinkToolbarMenu (linkType) {
   this.constructor(linkType);
 
+  this.knownLinks = null;
+
   this.clear = function() {
     this.disableParentMenuButton();
     this.getXULElement().setAttribute("disabled", "true");
     clearPopup(this.getPopup());
+    this.knownLinks = null;
   }
 
   function clearPopup(popup) {
@@ -146,10 +149,23 @@ function LinkToolbarMenu (linkType) {
   }
 
   this.displayLink = function(linkElement) {
+    if (this.isAlreadyAdded(linkElement)) return false;
+
+    this.getKnownLinks()[linkElement.href] = true;
     this.addMenuItem(linkElement);
     this.getXULElement().removeAttribute("disabled");
     this.enableParentMenuButton();
     return true;
+  }
+
+  this.isAlreadyAdded = function(linkElement) {
+    return this.getKnownLinks()[linkElement.href];
+  }
+
+  this.getKnownLinks = function() {
+    if (!this.knownLinks)
+      this.knownLinks = new Array();
+    return this.knownLinks;
   }
 
   function match(first, second) {
@@ -167,7 +183,7 @@ function LinkToolbarMenu (linkType) {
     // XXX: clone a prototypical XUL element instead of hardcoding these
     //   attributes
     var menuitem = document.createElement("menuitem");
-    
+
     if (linkElement.title != '')
       menuitem.setAttribute("tooltiptext", linkElement.title);
     else

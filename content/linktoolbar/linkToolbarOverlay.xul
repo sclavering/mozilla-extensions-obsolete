@@ -89,6 +89,8 @@
                   name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_true" />
       </menupopup>
     </menu>
+    <menuitem position="4" oncommand="openTopWin(this.getAttribute('href'))" label="Test Cases" id="lt-tests"
+              href="chrome://linktoolbar/content/index.html" class="menuitem-iconic bookmark-item"/>
   </menupopup>
 
   <!-- <toolbox id="navigator-toolbox"> -->
@@ -222,23 +224,15 @@
           label="&styleButton.label;"
           tooltiptext="&styleButton.tooltip;">
         <menupopup id="styleswitcher-popup" onpopupshowing="styleswitcherBuildMenu(this);"
-          oncommand="styleswitcherMenuClickHandler(event, this, window._content);">
+                   oncommand="styleswitcherMenuClickHandler(event, this, window._content);">
           <menuitem label="&styleswitcherNoPageStylesheets;" type="radio"/>
           <menuitem label="&styleswitcherPersistentPageStylesheets;" type="radio"/>
-     <!--     <menu label="Standard" oncommand="stylesheetSwitchToStandard(window._content, event.target.data, event.target.label);"> -->
-   <!--         <menuitem label="Ultramarine" oncommand="stylesheetSwitchAllToStandard(window._content, this); event.stopPropagation();"/>
-            <menuitem label="Forest"      oncommand="stylesheetSwitchAllToStandard(window._content, this); event.stopPropagation();"/>
-            <menuitem label="Midnight"    oncommand="stylesheetSwitchAllToStandard(window._content, this); event.stopPropagation();"/>
-            <menuitem label="OldStyle"    oncommand="stylesheetSwitchAllToStandard(window._content, this); event.stopPropagation();"/>
-< ! - -          </menu> - - >
-          <menuseparator/> - - >
-          <menuitem label="&styleswitcherBasicPageStyle;" type="radio"/> -->
         </menupopup>
       </toolbarbutton>
 <!--
       <toolbarseparator />
 
-      <toolbarbutton id="sharc-button" oncommand="window.openDialog('chrome://browser/content', 'Phoenix', 'chrome,all,dialog=no', 'http://cdn.mozdev.org/linkToolbar/');"/>
+      <toolbarbutton id="sharc-button" oncommand="openTopWin('http://cdn.mozdev.org/linkToolbar/');"/>
 -->
     </statusbarpanel>
     <!-- </toolbar> -->

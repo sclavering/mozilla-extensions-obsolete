@@ -19,13 +19,12 @@
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
- *      Christopher Hoess <choess@force.stwing.upenn.edu>
- *      Tim Taylor <tim@tool-man.org>
- *      Henri Sivonen <henris@clinet.fi>
- *      Stuart Ballard <sballard@netreach.net>
- *
- * Port to Px:
- *      Chris Neale <cdn@mozdev.org>
+ *   Christopher Hoess <choess@force.stwing.upenn.edu>
+ *   Tim Taylor <tim@tool-man.org>
+ *   Henri Sivonen <henris@clinet.fi>
+ *   Stuart Ballard <sballard@netreach.net>
+ *   Chris Neale <cdn@mozdev.org> [Port to Px]
+ *   Stephen Clavering <mozilla@clav.co.uk> (2003-04-17, middle click handling for all links)
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -101,12 +100,12 @@ function()
   if (!(currentNode instanceof Components.interfaces.nsIDOMHTMLHtmlElement))
     return;
   currentNode = currentNode.firstChild;
-  
+
   while(currentNode)
   {
     if (currentNode instanceof Components.interfaces.nsIDOMHTMLHeadElement) {
       currentNode = currentNode.firstChild;
-      
+
       while(currentNode)
       {
         if (currentNode instanceof Components.interfaces.nsIDOMHTMLLinkElement)
@@ -125,7 +124,7 @@ function()
       // Got a comment node or something like that. Moving on.
       currentNode = currentNode.nextSibling;
     }
-  }  
+  }
 }
 
 LinkToolbarUI.prototype.toolbarActive = false;
@@ -170,35 +169,44 @@ function(event)
 {
   // Return if this is one of the menubuttons.
   if (event.target.getAttribute("type") == "menu") return;
-  
   if (!event.target.getAttribute("href")) return;
 
+  // hide the menupopups (middle clicks don't do this by themselves)
+  if(event.button==1) {
+    var p = event.target.parentNode;
+    var linkbar = document.getElementById("linktoolbar");
+    while(p!=linkbar) {
+      if(p.localName=="menupopup") p.hidePopup();
+      p = p.parentNode;
+    }
+  }
+
+
   var destURL = event.target.getAttribute("href");
-  
+
   // We have to do a security check here, because we are loading URIs given
   // to us by a web page from chrome, which is privileged.
   try {
-    var ssm = Components.classes["@mozilla.org/scriptsecuritymanager;1"].getService().
-	  	          QueryInterface(Components.interfaces.nsIScriptSecurityManager);
+    var ssm = Components.classes["@mozilla.org/scriptsecuritymanager;1"].getService()
+	  	                  .QueryInterface(Components.interfaces.nsIScriptSecurityManager);
   	ssm.checkLoadURIStr(window.content.location.href, destURL, 0);
-	var referrer =
-	    Components.classes["@mozilla.org/network/standard-url;1"].
-	      createInstance(Components.interfaces.nsIURI);
-	referrer.spec = window.content.location.href;
-	loadURI(destURL, referrer); // if(event.button==1) // [middle]
-  } catch (e) {
+
+  	// middle clicking should open the link in a new tab
+  	if(event.button==1) {
+  	  BrowserOpenTab();
+      gURLBar.value = destURL;
+      BrowserLoadURL(event);
+      _content.focus();
+  	} else {
+    	var referrer = Components.classes["@mozilla.org/network/standard-url;1"]
+    	                         .createInstance(Components.interfaces.nsIURI);
+    	referrer.spec = window.content.location.href;
+    	loadURI(destURL, referrer);
+    }
+  } catch(e) {
     dump("Error: it is not permitted to load this URI from a <link> element: " + e);
   }
 }
-
-/*
-function diggerLoadURLInNewTab(e) {
-  var url = gURLBar.value;
-  BrowserOpenTab();
-  gURLBar.value = url;
-  BrowserLoadURL(e);
-}
-*/
 
 // functions for twiddling XUL elements in the toolbar
 
@@ -213,7 +221,7 @@ function(checkedItem)
     linkToolbarHandler.clearAllItems();
 }
 
-LinkToolbarUI.prototype.initLinkbarVisibilityMenu = 
+LinkToolbarUI.prototype.initLinkbarVisibilityMenu =
 function()
 {
   var state = document.getElementById("linktoolbar").getAttribute("hidden");
