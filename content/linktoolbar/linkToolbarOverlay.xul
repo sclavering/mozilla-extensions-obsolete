@@ -23,7 +23,7 @@
    -      Christopher Hoess <choess@force.stwing.upenn.edu>
    -      Tim Taylor <tim@tool-man.org>
    -      Stuart Ballard <sballard@netreach.net>
-   -      Chris Neale <cdn@mozdev.org>  (Port to Px)
+   -      Chris Neale <cdn@mozdev.org>  (Port to Px/Fb)
    -      Stephen Clavering <mozilla@clav.co.uk>
    -
    - Alternatively, the contents of this file may be used under the terms of
@@ -85,15 +85,12 @@
                   name="cmd_viewlinktoolbar" id="cmd_viewlinktoolbar_true" />
       </menupopup>
     </menu>
-    <menuitem position="4" persist="hidden" oncommand="openTopWin(this.getAttribute('href'))"
-              label="Test Cases" id="lt-tests" href="chrome://linktoolbar/content/tests/index.html"
-              class="menuitem-iconic bookmark-item"/>
     <menuitem position="5" persist="hidden" oncommand="BrowserOpenTab(); openTopWin(this.getAttribute('href'))"
               label="Test Cases [Tab]" id="lt-tabtests" href="chrome://linktoolbar/content/tests/index.html"
               class="menuitem-iconic bookmark-item"/>
   </menupopup>
 
-  <window id="main-window"> <!-- onfocus="linkAdd();"> -->
+  <window id="main-window">
     <popupset id="linkToolbarPopupset">
       <!-- a menu of urls derived by repeatedly chopping off the last leaf
            This is only a context menu because making Up a menu-button failed -->
@@ -124,13 +121,8 @@
         <menupopup onpopupshowing="return linkToolbarUrlDigger.buildMenu(this);"
           onpopuphiding="linkToolbarUrlDigger.clearMenu(this);" />
       </toolbarbutton> -->
-<!--      <toolbarseparator/>
-      <toolbarbutton id="linktoolbar-diggler"
-                     tooltiptext="&upButton.tooltip;" type="menu">
-        <menupopup onpopupshowing="return linkToolbarUrlDigger.buildMenu(this);"
-          onpopuphiding="linkToolbarUrlDigger.clearMenu(this);"/>
-      </toolbarbutton>
-      <toolbarseparator/> -->
+
+      <toolbarseparator/>
       <toolbarbutton disabled="true" id="link-first"
           label="&firstButton.label;" tooltiptext="&firstButton.tooltip;"/>
       <toolbarbutton disabled="true" id="link-prev"
@@ -200,64 +192,8 @@
       </toolbarbutton>
     </statusbarpanel>
 
-  <script type="application/x-javascript">
-  <![CDATA[
-/**/
- //   dump('rimmer\n');
-
- //   dump('flibble\n');
-
-	var page = document.getElementById("content").contentDocument;
-	var flashes = page.getElementsByTagName("embed");
-
-//   function flib() {
-    var topLink = page.createElement('link');
-    var upLink = page.createElement('link');
-    var heed = document.getElementById('content').contentDocument.getElementsByTagName('head').item(0);
-
-     alert(heed.tagName);
-
-    topLink.setAttribute('href', '/');
-    upLink.setAttribute('href', '..');
-
-    topLink.setAttribute('rel', 'top');
-    upLink.setAttribute('rel', 'up');
-
-    topLink.setAttribute('title', 'Digger [/]');
-    upLink.setAttribute('title', 'Digger [..]');
-
-//       alert(upLink.tagName);
-
-    document.getElementById('content').contentDocument.getElementsByTagName('head').item(0).appendChild(topLink);
-    document.getElementById('content').contentDocument.getElementsByTagName('head').item(0).appendChild(upLink);
-//   }
-/**/
-/*
-var topLink = document.createElement('link');
-    var upLink = document.createElement('link');
-    var heed = document.getElementById('content').contentDocument;
-    heed = heed.getElementsByTagName('head').item(0);
-
-    alert(heed.tagName);
-
-    topLink.setAttribute('href', '/');
-    upLink.setAttribute('href', '..');
-
-    topLink.setAttribute('rel', 'top');
-    upLink.setAttribute('rel', 'up');
-
-    topLink.setAttribute('title', 'Digger [/]');
-    upLink.setAttribute('title', 'Digger [..]');
-    heed.appendChild(topLink);
-    heed.appendChild(upLink);
-*/
-  ]]>
-  </script>
-
-
     <statusbarpanel id="styleselector-panel" insertafter="linktoolbar" insertbefore="statusbar-progresspanel">
       <toolbarbutton id="linktoolbar-toggle" oncommand="toggleLinkToolbar();" persist="left" />
-     <!-- <toolbarbutton oncommand="flib();" label="links" /> -->
       <toolbarbutton id="linktoolbar-digger" label="&upButton.label;"
                      tooltiptext="&upButton.tooltip;" type="menu">
         <menupopup onpopupshowing="return linkToolbarUrlDigger.buildMenu(this);"
