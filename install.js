@@ -8,7 +8,7 @@ const APP_CONTENT_FOLDER = "/";
 
 const APP_SUCCESS_MESSAGE = "Pressing Alt + Up should move you up a level on website from when you next start Firebird.";
 
-const INST_TO_PROFILE = "Do you wish to install "+APP_DISPLAY_NAME+" to you profile?\nThis will mean it does not need reinstalling when you update Firebird.\n(Click Cancel if you want "+APP_DISPLAY_NAME+" installing to the Firebird directory.)";
+const INST_TO_PROFILE = "Do you wish to install "+APP_DISPLAY_NAME+" to your profile?\nThis will mean it does not need reinstalling when you update Firebird.\n(Click Cancel if you want "+APP_DISPLAY_NAME+" installing to the Firebird directory.)";
 
 initInstall(APP_NAME, APP_PACKAGE, APP_VERSION);
 
