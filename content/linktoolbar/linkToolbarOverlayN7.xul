@@ -86,26 +86,19 @@
         onclick="event.preventBubble(); return linkToolbarUI.commanded(event);"
         tbautostretch="always" hidden="true" hasitems="false" title="Link Toolbar" grippytooltiptext="&linkToolbar.label;">
 
-      <toolbarbutton id="link-top" class="bookmark-item"
-          label="&topButton.label;" disabled="true"
-          tooltiptext="&topButton.tooltip;"/>
-      <toolbarbutton id="link-up" class="bookmark-item"
-          label="&upButton.label;" disabled="true"
-          tooltiptext="&upButton.tooltip;"/>
+      <toolbarbutton id="link-top" disabled="true"
+          label="&topButton.label;" tooltiptext="&topButton.tooltip;"/>
+      <toolbarbutton id="link-up" disabled="true"
+          label="&upButton.label;" tooltiptext="&upButton.tooltip;"/>
       <toolbarseparator/>
-      <toolbarbutton id="link-first" class="bookmark-item"
-          label="&firstButton.label;" disabled="true"
-          tooltiptext="&firstButton.tooltip;"/>
-      <toolbarbutton id="link-prev" class="bookmark-item"
-          label="&prevButton.label;" disabled="true"
-          tooltiptext="&prevButton.tooltip;"/>
-      <toolbarbutton id="link-next" class="bookmark-item"
-          label="&nextButton.label;" disabled="true"
-          tooltiptext="&nextButton.tooltip;"/>
-      <toolbarbutton id="link-last" class="bookmark-item"
-          label="&lastButton.label;" disabled="true"
-          tooltiptext="&lastButton.tooltip;"/>
-
+      <toolbarbutton id="link-first" disabled="true"
+          label="&firstButton.label;" tooltiptext="&firstButton.tooltip;"/>
+      <toolbarbutton id="link-prev" disabled="true"
+          label="&prevButton.label;" tooltiptext="&prevButton.tooltip;"/>
+      <toolbarbutton id="link-next" disabled="true"
+          label="&nextButton.label;" tooltiptext="&nextButton.tooltip;"/>
+      <toolbarbutton id="link-last" disabled="true"
+          label="&lastButton.label;" tooltiptext="&lastButton.tooltip;"/>
       <toolbarseparator/>
 
       <toolbarbutton id="document-menu" class="bookmark-item" type="menu" container="true"
