@@ -15,13 +15,11 @@
     </c:packages>
   </Description>
 
-<!--
   <Seq about="urn:mozilla:stylesheets">
     <li resource="chrome://global/content/customizeToolbar.xul"/>
   </Seq>
   <Seq about="chrome://global/content/customizeToolbar.xul">
-    <li>chrome://linktoolbar/skin/lt-palette.css</li>
+    <li>chrome://linktoolbar/skin/linkToolbar.css</li>
   </Seq>
--->
 
 </RDF>
