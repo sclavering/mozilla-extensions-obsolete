@@ -4,13 +4,13 @@
 <?xml-stylesheet href="chrome://toolbarext/skin/" type="text/css"?>
 
 <!DOCTYPE overlay [
-<!ENTITY % tbext SYSTEM "chrome://toolbarext/locale/">
-%tbext;
+<!ENTITY % tbx SYSTEM "chrome://toolbarext/locale/">
+%tbx;
 <!ENTITY % pagecookies SYSTEM "chrome://toolbarext/locale/pagecookies.dtd">
 %pagecookies;
 ]>
 
-<overlay id="toolbarextBrowserOverlay"
+<overlay id="tbxBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <script src="toolbarext.js" type="application/x-javascript"/>
@@ -24,101 +24,95 @@
   <!-- allow all sidebars to be opened in a new tab when the toolbarbutton is middle clicked
        note: might replace dl and hsitory panel with something based on the old seamonkey
        Download Manager and History window later -->
-  <toolbarbutton id="downloads-button" onclick="ToolbarExt.downloadPanel(event);"/>
-  <toolbarbutton id="history-button" onclick="ToolbarExt.historyPanel(event);"/>
-  <toolbarbutton id="bookmarks-button" onclick="ToolbarExt.bookmarksPanel(event);"/>
+  <toolbarbutton id="downloads-button" onclick="tbxCommands.downloadPanel(event);"/>
+  <toolbarbutton id="history-button" onclick="tbxCommands.historyPanel(event);"/>
+  <toolbarbutton id="bookmarks-button" onclick="tbxCommands.bookmarksPanel(event);"/>
 
 
   <!-- add new buttons -->
   <toolbarpalette id="BrowserToolbarPalette">
     <!-- Options -->
     <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-options" oncommand="openPreferences()"
-        label="&toolbarext-options.label;" tooltiptext="&toolbarext-options.tooltip;"
+        id="tbx-options-button" oncommand="openPreferences()"
+        label="&tbx-options-button.label;" tooltiptext="&tbx-options-button.tooltip;"
         />
 
     <!-- Add Bookmark, Manage Bookmarks -->
     <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-add-bookmark" command="Browser:AddBookmarkAs"
-        label="&toolbarext-addBookmark.label;" tooltiptext="&toolbarext-addBookmark.tooltip;"
+        id="tbx-addbookmark-button" command="Browser:AddBookmarkAs"
+        label="&tbx-addbookmark-button.label;" tooltiptext="&tbx-addbookmark-button.tooltip;"
         />
     <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-manage-bookmarks" oncommand="ToolbarExt.bookmarkManager(event);"
-        onclick="ToolbarExt.bookmarkManager2(event);"
-        label="&toolbarext-manageBookmarks.label;" tooltiptext="&toolbarext-manageBookmarks.tooltip;"
+        id="tbx-managebookmarks-button" oncommand="tbxCommands.bookmarkManager(event);"
+        onclick="tbxCommands.bookmarkManager2(event);"
+        label="&tbx-managebookmarks-button.label;" tooltiptext="&tbx-managebookmarks-button.tooltip;"
         />
 
     <!-- Save -->
     <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-save" command="Browser:SavePage"
-        label="&toolbarext-save.label;" tooltiptext="&toolbarext-save.tooltip;"
+        id="tbx-save-button" command="Browser:SavePage"
+        label="&tbx-save-button.label;" tooltiptext="&tbx-save-button.tooltip;"
         />
 
     <!-- View Source -->
     <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-viewsource" oncommand="BrowserViewSourceOfDocument(window._content.document);"
-        onclick="ToolbarExt.viewSource(event,window._content.document);"
-        label="&toolbarext-viewsource.label;" tooltiptext="&toolbarext-viewsource.tooltip;"
+        id="tbx-viewsource-button" oncommand="BrowserViewSourceOfDocument(window._content.document);"
+        onclick="tbxCommands.viewSource(event,window._content.document);"
+        label="&tbx-viewsource-button.label;" tooltiptext="&tbx-viewsource-button.tooltip;"
         />
 
     <!-- Javascript Console -->
     <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-jsconsole" oncommand="toJavaScriptConsole();"
-        onclick="ToolbarExt.jsConsole(event);"
-        label="&toolbarext-jsconsole.label;" tooltiptext="&toolbarext-jsconsole.tooltip;"
+        id="tbx-jsconsole-button" oncommand="toJavaScriptConsole();"
+        onclick="tbxCommands.jsConsole(event);"
+        label="&tbx-jsconsole-button.label;" tooltiptext="&tbx-jsconsole-button.tooltip;"
         />
 
     <!-- Toggle Fullscreen Mode -->
     <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-fullscreen" oncommand="BrowserFullScreen();"
-        label="&toolbarext-fullscreen.label;" tooltiptext="&toolbarext-fullscreen.tooltip;"
+        id="tbx-fullscreen-button" oncommand="BrowserFullScreen();"
+        label="&tbx-fullscreen-button.label;" tooltiptext="&tbx-fullscreen-button.tooltip;"
         />
 
     <!-- Zoom In/Out -->
     <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-zoomin" command="cmd_textZoomEnlarge"
-        label="&toolbarext-zoomin.label;" tooltiptext="&toolbarext-zoomin.tooltip;"
+        id="tbx-zoomout-button" command="cmd_textZoomReduce"
+        label="&tbx-zoomout-button.label;" tooltiptext="&tbx-zoomout-button.tooltip;"
         />
     <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-zoomout" command="cmd_textZoomReduce"
-        label="&toolbarext-zoomout.label;" tooltiptext="&toolbarext-zoomout.tooltip;"
+        id="tbx-zoomin-button" command="cmd_textZoomEnlarge"
+        label="&tbx-zoomin-button.label;" tooltiptext="&tbx-zoomin-button.tooltip;"
         />
 
     <!-- View Page Info -->
     <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-pageinfo" command="View:PageInfo"
-        label="&toolbarext-pageinfo.label;" tooltiptext="&toolbarext-pageinfo.tooltip;"
+        id="tbx-pageinfo-button" command="View:PageInfo"
+        label="&tbx-pageinfo-button.label;" tooltiptext="&tbx-pageinfo-button.tooltip;"
         />
 
     <!-- Clear Cache -->
     <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-clearcache" oncommand="ToolbarExt.clearCache();"
-        label="&toolbarext-clearcache.label;" tooltiptext="&toolbarext-clearcache.tooltip;"
+        id="tbx-clearcache-button" oncommand="tbxCommands.clearCache();"
+        label="&tbx-clearcache-button.label;" tooltiptext="&tbx-clearcache-button.tooltip;"
         />
 
     <!-- Close Tab
     <toolbarbutton class="tabs-closebutton"
-        id="toolbarext-closetab"
-        label="&toolbarext-closetab.label;"
+        id="tbx-closetab-button"
+        label="&tbx-closetab.label;"
         oncommand="BrowserCloseTabOrWindow();"
-        tooltiptext="&toolbarext-closetab.tooltip;"
+        tooltiptext="&tbx-closetab-button.tooltip;"
         />
         -->
-        
+
     <!-- Stop/Reload combi-button -->
     <toolbarbutton class="toolbarbutton-1"
-        id="toolbarext-stopreload" oncommand="ToolbarExt.stopOrReload(event, this);"
-        label="&tbext-stopreload-default.label;"
-        reloadlabel="&tbext-stopreload-reload.label;"
-        stoplabel="&tbext-stopreload-stop.label;"
-        tooltiptext="&tbext-stopreload-reload.tooltip;"
-        reloadtooltip="&tbext-stopreload-reload.tooltip;"
-        stoptooltip="&tbext-stopreload-stop.tooltip;"
+        id="tbx-stopreload-button" oncommand="tbxCommands.stopOrReload(event, this);"
+        label="&tbx-stopreload.default.label;" tooltiptext="&tbx-stopreload.reload.tooltip;"
+        reloadlabel="&tbx-stopreload.reload.label;" reloadtooltip="&tbx-stopreload.reload.tooltip;"
+        stoplabel="&tbx-stopreload.stop.label;" stoptooltip="&tbx-stopreload.stop.tooltip;"
         />
-
   </toolbarpalette>
-
-
 
 
 
@@ -127,43 +121,63 @@
 
   <!-- Toolboxes need a name for the Add Toolbar feature (We use "Top", "Right", etc.), a |palette|
        attribute so they use the new xbl widget, and a different context menu while customising -->
-  <toolbox id="navigator-toolbox" toolboxname="&toolbarext-top-toolbox-name;"
+  <toolbox id="navigator-toolbox" toolboxname="&tbx-top-toolbox-name;"
       customiseContext="toolbar-customise-context-menu"
       palette="BrowserToolbarPalette"
       />
 
   <!-- another toolbox at the bottom of the window -->
   <window id="main-window">
-    <toolbox id="toolbarext-bottom-toolbox" insertbefore="status-bar"
-        toolboxname="&toolbarext-bottom-toolbox-name;"
+    <toolbox id="tbx-bottom-toolbox" insertbefore="status-bar"
+        toolboxname="&tbx-bottom-toolbox-name;"
         palette="BrowserToolbarPalette" context="toolbar-context-menu"
         customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
         >
-      <toolbarset id="toolbarext-bottom-toolbars" context="toolbar-context-menu"/>
+      <toolbarset id="tbx-bottom-toolbars" context="toolbar-context-menu"/>
     </toolbox>
   </window>
 
   <!-- toolboxes at left and right -->
   <hbox id="browser">
-    <toolbox id="toolbarext-left-toolbox" insertbefore="sidebar-box"
-        vertical="true" toolboxname="&toolbarext-left-toolbox-name;"
+    <toolbox id="tbx-left-toolbox" insertbefore="sidebar-box"
+        vertical="true" toolboxname="&tbx-left-toolbox-name;"
         palette="BrowserToolbarPalette" context="toolbar-context-menu"
         customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
         >
-      <toolbarset id="toolbarext-left-toolbars" context="toolbar-context-menu"/>
+      <toolbarset id="tbx-left-toolbars" context="toolbar-context-menu"/>
     </toolbox>
-    <toolbox id="toolbarext-right-toolbox" insertafter="appcontent"
-        vertical="true" toolboxname="&toolbarext-right-toolbox-name;"
+    <toolbox id="tbx-right-toolbox" insertafter="appcontent"
+        vertical="true" toolboxname="&tbx-right-toolbox-name;"
         palette="BrowserToolbarPalette" context="toolbar-context-menu"
         customiseContext="toolbar-customise-context-menu"
         mode="icons" iconsize="small"
         >
-      <toolbarset id="toolbarext-right-toolbars" context="toolbar-context-menu"/>
+      <toolbarset id="tbx-right-toolbars" context="toolbar-context-menu"/>
     </toolbox>
   </hbox>
 
+
+  <!-- toolbars at each end of the status bar.
+       position attr used to try and ensure they always end up at the ends,
+       regardless of what other extensions the user has installed. -->
+  <statusbar id="status-bar">
+    <toolbox id="tbx-toolbox-statusbar-left" class="tbx-toolbox-plain tbx-statusbar-toolbox"
+        palette="BrowserToolbarPalette" context="toolbar-context-menu"
+        customiseContext="toolbar-customise-context-menu"
+        position="1">
+      <toolbar id="tbx-toolbar-statusbar-left" class="tbx-toolbar-plain"
+          customizable="true" mode="icons" iconsize="small"/>
+    </toolbox>
+    <toolbox id="tbx-toolbox-statusbar-right" class="tbx-toolbox-plain tbx-statusbar-toolbox"
+        palette="BrowserToolbarPalette" context="toolbar-context-menu"
+        customiseContext="toolbar-customise-context-menu"
+        position="100">
+      <toolbar id="tbx-toolbar-statusbar-right" class="tbx-toolbar-plain"
+          customizable="true" mode="icons" iconsize="small"/>
+    </toolbox>
+  </statusbar>
 
 
 
@@ -171,16 +185,16 @@
   <!-- a new context menu to use for toolbars while customising them -->
   <popupset id="mainPopupSet">
     <popup id="toolbar-customise-context-menu"
-        onpopupshowing="toolbarextInitCustomiseContext(event, this);"
-        oncommand="toolbarextSetToolbarMode(event);"
+        onpopupshowing="tbxInitCustomiseContext(event, this);"
+        oncommand="tbxSetToolbarMode(event);"
         >
-      <menuitem type="radio" name="mode" value="icons" label="&toolbarext-mode-icons-only;"/>
-      <menuitem type="radio" name="mode" value="full"  label="&toolbarext-mode-icons-text;"/>
-      <menuitem type="radio" name="mode" value="text"  label="&toolbarext-mode-text-only;"/>
+      <menuitem type="radio" name="mode" value="icons" label="&tbx-mode-icons-only;"/>
+      <menuitem type="radio" name="mode" value="full"  label="&tbx-mode-icons-text;"/>
+      <menuitem type="radio" name="mode" value="text"  label="&tbx-mode-text-only;"/>
       <menuseparator/>
-      <menuitem type="checkbox" value="smallicons" label="&toolbarext-mode-small-icons;"/>
+      <menuitem type="checkbox" value="smallicons" label="&tbx-mode-small-icons;"/>
       <menuseparator/>
-      <menuitem type="checkbox" value="fullscreen" label="&toolbarext-show-in-fullscreen;"/>
+      <menuitem type="checkbox" value="fullscreen" label="&tbx-mode-show-in-fullscreen;"/>
     </popup>
   </popupset>
 
@@ -191,23 +205,23 @@
        full details.  Also includes menu items for removing all cookies from a given domain,
        and blocking the domain.  An extra submenu gives access to the global cookie prefs. -->
   <toolbarpalette id="BrowserToolbarPalette">
-    <toolbarbutton class="toolbarbutton-1" type="menu" id="tbext-pagecookies-button"
-        label="&tbext.pagecookies-button.label;">
-      <menupopup id="tbext-pagecookies-menu"
-          onpopupshowing="tbextPageCookiesMenu.showMenu(this, event);"
-          onpopuphidden="tbextPageCookiesMenu.emptyMenu(this, event);"
-          oncommand="tbextPageCookiesMenu.commanded(event);">
-        <menuseparator id="tbext-cookieoptions-sep"/>
-        <menu id="tbext-cookieprefs" label="&tbext.cookiePrefs.label;">
-          <menupopup id="tbext-cookieprefs-popup" onpopupshowing="tbextCookiePrefMenu.update(this,event);"
-              oncommand="tbextCookiePrefMenu.setPref(event); event.stopPropagation();">
-            <menuitem type="checkbox" id="tbext-enablecookies" label="&tbext.enableCookies.label;"
+    <toolbarbutton class="toolbarbutton-1" type="menu" id="tbx-pagecookies-button"
+        label="&tbx.pagecookies-button.label;">
+      <menupopup id="tbx-pagecookies-menu"
+          onpopupshowing="tbxPageCookiesMenu.showMenu(this, event);"
+          onpopuphidden="tbxPageCookiesMenu.emptyMenu(this, event);"
+          oncommand="tbxPageCookiesMenu.commanded(event);">
+        <menuseparator id="tbx-cookieoptions-sep"/>
+        <menu id="tbx-cookieprefs" label="&tbx.cookiePrefs.label;">
+          <menupopup id="tbx-cookieprefs-popup" onpopupshowing="tbxCookiePrefMenu.update(this,event);"
+              oncommand="tbxCookiePrefMenu.setPref(event); event.stopPropagation();">
+            <menuitem type="checkbox" id="tbx-enablecookies" label="&tbx.enableCookies.label;"
                       prefstring="network.cookie.enable"/>
-            <menuitem type="checkbox" id="tbext-originatingSiteOnly" label="&tbext.forOriginatingSiteOnly.label;"
+            <menuitem type="checkbox" id="tbx-originatingSiteOnly" label="&tbx.forOriginatingSiteOnly.label;"
                       prefstring="network.cookie.enableForOriginatingWebsiteOnly"/>
-            <menuitem type="checkbox" id="tbext-currentSessionOnly" label="&tbext.forCurrentSessionOnly.label;"
+            <menuitem type="checkbox" id="tbx-currentSessionOnly" label="&tbx.forCurrentSessionOnly.label;"
                       prefstring="network.cookie.enableForCurrentSessionOnly"/>
-            <menuitem type="checkbox" id="tbext-askFirst" label="&tbext.butAskFirst.label;"
+            <menuitem type="checkbox" id="tbx-askFirst" label="&tbx.butAskFirst.label;"
                       prefstring="network.cookie.warnAboutCookies"/>
           </menupopup>
         </menu>
@@ -215,9 +229,9 @@
     </toolbarbutton>
   </toolbarpalette>
 
-  <!-- tooltip for displaying info about a cookie. used by tbext-pagecookies-button. -->
+  <!-- tooltip for displaying info about a cookie. used by tbx-pagecookies-button. -->
   <popupset id="mainPopupSet">
-    <tooltip id="tbext-pagecookies-tooltip" onpopupshowing="tbextCookieInfo.show(event);">
+    <tooltip id="tbx-pagecookies-tooltip" onpopupshowing="tbxCookieInfo.show(event);">
       <grid flex="1">
         <columns>
           <column/>
@@ -225,41 +239,41 @@
         </columns>
         <rows>
           <row align="center">
-            <hbox align="center" pack="end"><label value="&tbext.cookieinfo.name.label;"/></hbox>
-            <textbox id="tbext-cookieinfo-name" readonly="true" class="plain"/>
+            <hbox align="center" pack="end"><label value="&tbx.cookieinfo.name.label;"/></hbox>
+            <textbox id="tbx-cookieinfo-name" readonly="true" class="plain"/>
           </row>
           <row align="center">
-            <hbox align="center" pack="end"><label value="&tbext.cookieinfo.value.label;"/></hbox>
-            <textbox id="tbext-cookieinfo-value" readonly="true" class="plain"/>
+            <hbox align="center" pack="end"><label value="&tbx.cookieinfo.value.label;"/></hbox>
+            <textbox id="tbx-cookieinfo-value" readonly="true" class="plain"/>
           </row>
           <row align="center">
-            <hbox align="center" pack="end"><label id="tbext-cookieinfo-isDomain" value="&tbext.cookieinfo.domain.label;"/></hbox>
-            <textbox id="tbext-cookieinfo-host" readonly="true" class="plain"/>
+            <hbox align="center" pack="end"><label id="tbx-cookieinfo-isDomain" value="&tbx.cookieinfo.domain.label;"/></hbox>
+            <textbox id="tbx-cookieinfo-host" readonly="true" class="plain"/>
           </row>
           <row align="center">
-            <hbox align="center" pack="end"><label value="&tbext.cookieinfo.path.label;"/></hbox>
-            <textbox id="tbext-cookieinfo-path" readonly="true" class="plain"/>
+            <hbox align="center" pack="end"><label value="&tbx.cookieinfo.path.label;"/></hbox>
+            <textbox id="tbx-cookieinfo-path" readonly="true" class="plain"/>
           </row>
           <row align="center">
-            <hbox align="center" pack="end"><label value="&tbext.cookieinfo.secure.label;"/></hbox>
-            <textbox id="tbext-cookieinfo-isSecure" readonly="true" class="plain"/>
+            <hbox align="center" pack="end"><label value="&tbx.cookieinfo.secure.label;"/></hbox>
+            <textbox id="tbx-cookieinfo-isSecure" readonly="true" class="plain"/>
           </row>
           <row align="center">
-            <hbox align="center" pack="end"><label value="&tbext.cookieinfo.expires.label;"/></hbox>
-            <textbox id="tbext-cookieinfo-expires" readonly="true" class="plain"/>
+            <hbox align="center" pack="end"><label value="&tbx.cookieinfo.expires.label;"/></hbox>
+            <textbox id="tbx-cookieinfo-expires" readonly="true" class="plain"/>
           </row>
           <row align="center">
-            <hbox align="center" pack="end"><label value="&tbext.cookieinfo.policy.label;"/></hbox>
-            <textbox id="tbext-cookieinfo-policy" readonly="true" class="plain"/>
+            <hbox align="center" pack="end"><label value="&tbx.cookieinfo.policy.label;"/></hbox>
+            <textbox id="tbx-cookieinfo-policy" readonly="true" class="plain"/>
           </row>
         </rows>
-      </grid>  
+      </grid>
     </tooltip>
   </popupset>
 
   <!-- stringbundle for pretty-printing info about cookies -->
   <stringbundleset id="stringbundleset">
-    <stringbundle id="tbext-cookieinfo-bundle" src="chrome://toolbarext/locale/pagecookies.properties"/>
+    <stringbundle id="tbx-cookieinfo-bundle" src="chrome://toolbarext/locale/pagecookies.properties"/>
   </stringbundleset>
 
 </overlay>

@@ -1,7 +1,7 @@
 // javascript for making the extra toolbar buttons work.
 
 
-var ToolbarExt = {
+var tbxCommands = {
   viewSource: function(e,doc) {
     if(e.button!=1) return;
     openNewTabWith("view-source:"+doc.location.href);
@@ -35,19 +35,19 @@ var ToolbarExt = {
     if(e.button!=1) return;
     openNewTabWith("chrome://browser/content/bookmarks/bookmarksPanel.xul");
   },
-  
+
   clearCache: function() {
   	var classID = Components.classes["@mozilla.org/network/cache-service;1"];
   	var cacheService = classID.getService(Components.interfaces.nsICacheService);
   	cacheService.evictEntries(Components.interfaces.nsICache.STORE_IN_MEMORY);
   	cacheService.evictEntries(Components.interfaces.nsICache.STORE_ON_DISK);
   },
-  
+
   // unused
   closeTab: function() {
     gBrowser.removeCurrentTab();
   },
-  
+
   stopOrReload: function(evt, button) {
     if(button.getAttribute('state')=='stop') BrowserStop();
     else if(evt.shiftKey) BrowserReloadSkipCache();
@@ -59,18 +59,20 @@ var ToolbarExt = {
 
 
 // combined Stop and Reload button.  (like Opera's one)
-var tbextStopReloadButton = {
-  button: null,
+var tbxWebProgressListener = {
+  stopReloadButton: null,
+
   listenerAdded: false,
-  
+
   init: function() {
-    this.button = document.getElementById('toolbarext-stopreload');
-    if(this.button) {
+    this.stopReloadButton = document.getElementById('tbx-stopreload-button');
+    if(this.stopReloadButton) {
       if(this.listenerAdded) return;
       gBrowser.addProgressListener(this, Components.interfaces.nsIWebProgress.NOTIFY_STATE_ALL);
+//      gBrowser.addProgressListener(this, Components.interfaces.nsIWebProgress.NOTIFY_ALL);
       this.listenerAdded = true;
       // default label is 'Stop/Reload', for when it's on the palette
-      this.button.setAttribute('label',this.button.getAttribute('reloadlabel'));
+      this.stopReloadButton.setAttribute('label',this.stopReloadButton.getAttribute('reloadlabel'));
     } else {
       if(!this.listenerAdded) return;
       gBrowser.removeProgressListener(this);
@@ -78,16 +80,16 @@ var tbextStopReloadButton = {
     }
   },
 
-  QueryInterface : function(aIID) {
+  QueryInterface: function(aIID) {
     if(aIID.equals(Components.interfaces.nsIWebProgressListener)
         || aIID.equals(Components.interfaces.nsISupports))
       return this;
     throw Components.results.NS_NOINTERFACE;
   },
 
-  onStateChange : function(aWebProgress, aRequest, aStateFlags, aStatus) {  
+  onStateChange: function(aWebProgress, aRequest, aStateFlags, aStatus) {
     const nsIWebProgressListener = Components.interfaces.nsIWebProgressListener;
-    var btn = this.button;
+    var btn = this.stopReloadButton;
     if(aStateFlags & nsIWebProgressListener.STATE_START) {
       btn.setAttribute('state','stop');
       btn.setAttribute('label',btn.getAttribute('stoplabel'));
@@ -99,14 +101,14 @@ var tbextStopReloadButton = {
     }
   },
 
-  onProgressChange: function (aWebProgress, aRequest, aCurSelfProgress, aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {},
+  onProgressChange: function(aWebProgress, aRequest, aCurSelfProgress, aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {},
 
   onLocationChange: function(aWebProgress, aRequest, aLocation) {},
 
   onStatusChange: function(aWebProgress, aRequest, aStatus, aMessage) {},
 
   onSecurityChange: function(aWebProgress, aRequest, aState) {},
-  
+
   // tabbrowser.xml#551 bogusly calls this for all registered progress listeners,
   // even though it is *not* part of the nsIWebProgressListener interface
   onLinkIconAvailable: function(href) {}

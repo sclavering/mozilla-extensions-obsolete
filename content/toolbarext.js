@@ -1,27 +1,39 @@
 // javascript for enhancing toolbar customisation.
 
-var gTbextToolboxes = null;
+var gTbxToolboxes = null;
+var gTbxNavToolbox = null;
 
-// xxx: this code is duplicated in ToolbarExt_BrowserCustomizeToolbar
-// because we have to pass each toolbox as a seperate argument for the moment
-function tbextGetToolboxes() {
-  gTbextToolboxes = [];
-  gTbextToolboxes.push(document.getElementById("navigator-toolbox"));
-  gTbextToolboxes.push(document.getElementById("toolbarext-bottom-toolbox"));
-  gTbextToolboxes.push(document.getElementById("toolbarext-left-toolbox"));
-  gTbextToolboxes.push(document.getElementById("toolbarext-right-toolbox"));
+function tbxGetToolboxes() {
+  gTbxToolboxes = [];
+
+  // normal toolbox
+  gTbxNavToolbox = document.getElementById("navigator-toolbox");
+  gTbxToolboxes.push(gTbxNavToolbox);
+
+  // toolboxes on each other side of browser
+  gTbxToolboxes.push(document.getElementById("tbx-bottom-toolbox"));
+  gTbxToolboxes.push(document.getElementById("tbx-left-toolbox"));
+  gTbxToolboxes.push(document.getElementById("tbx-right-toolbox"));
+
+  // toolboxes containing the singleton toolbars at each end of the status bar
+  gTbxToolboxes.push(document.getElementById("tbx-toolbox-statusbar-left"));
+  gTbxToolboxes.push(document.getElementById("tbx-toolbox-statusbar-right"));
 
   // get the toolboxes at the left and right of the tab strip. this really
   // does have to be this complex, because they're two xbl bindings down!
   var tabbrowser = document.getElementById("content");
   // there's nothing better to hook onto than the class attr :(
   var tabstrip = document.getAnonymousElementByAttribute(tabbrowser, 'class', 'tabbrowser-strip chromeclass-toolbar');
-  gTbextToolboxes.push(document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'toolbarext-toolbox-tableft'));
-  gTbextToolboxes.push(document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'toolbarext-toolbox-tabright'));
-  
+  gTbxToolboxes.push(document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'tbx-toolbox-tableft'));
+  gTbxToolboxes.push(document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'tbx-toolbox-tabright'));
+
   // get the toolbox below the tab bar
   var tabbox = document.getAnonymousNodes(tabbrowser)[1];
-  gTbextToolboxes.push(document.getAnonymousElementByAttribute(tabbox, 'anonid', 'toolbarext-toolbox-belowtabs'));
+  gTbxToolboxes.push(document.getAnonymousElementByAttribute(tabbox, 'anonid', 'tbx-toolbox-belowtabs'));
+
+
+  // might as well hook this up here
+  document.getElementById("tbx-bottom-toolbox").customizeDone = tbxCustomiseDone;
 }
 
 
@@ -33,52 +45,36 @@ function ToolbarExt_BrowserCustomizeToolbar() {
   var menubar = document.getElementById("main-menubar");
   for (var i = 0; i < menubar.childNodes.length; ++i)
     menubar.childNodes[i].setAttribute("disabled", true);
-    
+
+  // in practice this is irrelevant, because we replace the context menus anyway.
   var cmd = document.getElementById("cmd_CustomizeToolbars");
   cmd.setAttribute("disabled", "true");
 
-  var navbox = document.getElementById("navigator-toolbox");
-  var bottomBox = document.getElementById("toolbarext-bottom-toolbox");
-  var leftBox = document.getElementById("toolbarext-left-toolbox");
-  var rightBox = document.getElementById("toolbarext-right-toolbox");
-  
-  // doesn't matter which toolbox we put the callback on
-  bottomBox.customizeDone = tbextCustomiseDone;
-  
-  // get the toolboxes at the left and right of the tab strip. this really
-  // does have to be this complex, because they're two xbl bindings down!
-  var tabbrowser = document.getElementById("content");
-  // there's nothing better to hook onto than the class attr :(
-  var tabstrip = document.getAnonymousElementByAttribute(tabbrowser, 'class', 'tabbrowser-strip chromeclass-toolbar');
-  var tableftBox = document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'toolbarext-toolbox-tableft');
-  var tabrightBox = document.getAnonymousElementByAttribute(tabstrip, 'anonid', 'toolbarext-toolbox-tabright');
-  
-  var tabbox = document.getAnonymousNodes(tabbrowser)[1];
-  var belowTabsBox = document.getAnonymousElementByAttribute(tabbox, 'anonid', 'toolbarext-toolbox-belowtabs');
-  
+  if(!gTbxToolboxes) tbxGetToolboxes();
+
   window.openDialog("chrome://global/content/customizeToolbar.xul", "CustomizeToolbar",
-                    "chrome,all,dependent", navbox, bottomBox, leftBox, rightBox, tableftBox, tabrightBox, belowTabsBox);
+                    "chrome,all,dependent", gTbxNavToolbox, gTbxToolboxes);
 }
 
 
-function tbextCustomiseDone(anyToolboxChanged) {
-  if(anyToolboxChanged) tbextInit();
+function tbxCustomiseDone(anyToolboxChanged) {
+  if(anyToolboxChanged) tbxInit();
 }
 
-function tbextInit() {
+function tbxInit() {
   // update the Stop/Reload combi-button
-  tbextStopReloadButton.init();
-  
+  tbxWebProgressListener.init();
+
   // if our fullscreen toggle is present, and on a fullscreen toolbar, then remove the built-in
   // window controls. (using a custom attr, to avoid breaking the normal hiding-when-not-fullscreen)
-  var fullscreen = document.getElementById('toolbarext-fullscreen');
+  var fullscreen = document.getElementById('tbx-fullscreen');
   var controls = document.getElementById('window-controls');
   var hideControls = fullscreen && fullscreen.parentNode.getAttribute('fullscreentoolbar')=='true';
   if(hideControls) controls.setAttribute('hidecontrols','true');
   else controls.removeAttribute('hidecontrols');
 }
 
-window.addEventListener("load", tbextInit, false);
+window.addEventListener("load", tbxInit, false);
 
 
 
@@ -94,10 +90,10 @@ function onViewToolbarsPopupShowing(aEvent) {
     if(deadItem.hasAttribute("toolbarid"))
       popup.removeChild(deadItem);
   }
-  
+
   var firstMenuItem = popup.firstChild;
 
-  var toolboxIds = ["navigator-toolbox","toolbarext-left-toolbox","toolbarext-bottom-toolbox","toolbarext-right-toolbox"];
+  var toolboxIds = ["navigator-toolbox","tbx-left-toolbox","tbx-bottom-toolbox","tbx-right-toolbox"];
 
   for(var j = 0; j < toolboxIds.length; j++) {
     var toolbox = document.getElementById(toolboxIds[j]);
@@ -114,8 +110,8 @@ function onViewToolbarsPopupShowing(aEvent) {
         menuItem.setAttribute("label", toolbarName);
         menuItem.setAttribute("accesskey", toolbar.getAttribute("accesskey"));
         menuItem.setAttribute("checked", toolbar.getAttribute("collapsed") != "true");
-        popup.insertBefore(menuItem, firstMenuItem);        
-        
+        popup.insertBefore(menuItem, firstMenuItem);
+
         menuItem.addEventListener("command", onViewToolbarCommand, false);
       }
       toolbar = toolbar.nextSibling;
@@ -147,7 +143,7 @@ function updateToolbarStates(toolbarMenuElt) {
       for (i = 0; i < toolbarMenuElt.childNodes.length; ++i)
         document.getElementById(toolbarMenuElt.childNodes[i].getAttribute("observes")).removeAttribute("checked");
       var toolbars = document.getElementsByTagName("toolbar");
-      
+
       // Start i at 1, since we skip the menubar.
       for (i = 1; i < toolbars.length; ++i) {
         if (toolbars[i].getAttribute("class").indexOf("chromeclass") != -1)
@@ -167,7 +163,7 @@ function updateToolbarStates(toolbarMenuElt) {
 
 // onshowing + oncommand handlers for the context menu for toolbars while customising
 
-function toolbarextInitCustomiseContext(evt, popup) {
+function tbxInitCustomiseContext(evt, popup) {
   var toolbar = document.popupNode;
   while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
 
@@ -190,7 +186,7 @@ function toolbarextInitCustomiseContext(evt, popup) {
   popup.lastChild.setAttribute("checked", showInFullScreen);
 }
 
-function toolbarextSetToolbarMode(evt) {
+function tbxSetToolbarMode(evt) {
   var toolbar = document.popupNode;
   while(toolbar.localName!="toolbar") toolbar = toolbar.parentNode;
 
@@ -199,7 +195,7 @@ function toolbarextSetToolbarMode(evt) {
     var small = evt.originalTarget.getAttribute("checked")=="true";
     var size = small ? "small" : "large";
     toolbar.parentNode.setToolbarIconSize(toolbar, size);
-  } else if(value=="fullscreen") {  
+  } else if(value=="fullscreen") {
     var showInFullScreen = evt.originalTarget.getAttribute("checked")=="true";
     toolbar.parentNode.showToolbarInFullscreen(toolbar,showInFullScreen);
   } else {

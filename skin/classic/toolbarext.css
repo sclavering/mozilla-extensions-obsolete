@@ -2,140 +2,140 @@
 
 /* extra toolbar buttons */
 
-#toolbarext-options {
+#tbx-options-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 32px 32px 0);
 }
-toolbar[iconsize="small"] #toolbarext-options {
+toolbar[iconsize="small"] #tbx-options-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 20px 20px 0);
 }
 
-#toolbarext-add-bookmark {
+#tbx-addbookmark-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 64px 32px 32px);
 }
-toolbar[iconsize="small"] #toolbarext-add-bookmark {
+toolbar[iconsize="small"] #tbx-addbookmark-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 40px 20px 20px);
 }
 
-#toolbarext-manage-bookmarks {
+#tbx-managebookmarks-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 96px 32px 64px);
 }
-toolbar[iconsize="small"] #toolbarext-manage-bookmarks {
+toolbar[iconsize="small"] #tbx-managebookmarks-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 60px 20px 40px);
 }
 
-#toolbarext-save {
+#tbx-save-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 128px 32px 96px);
 }
-toolbar[iconsize="small"] #toolbarext-save {
+toolbar[iconsize="small"] #tbx-save-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 80px 20px 60px);
 }
 
-#toolbarext-viewsource {
+#tbx-viewsource-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 160px 32px 128px);
 }
-toolbar[iconsize="small"] #toolbarext-viewsource {
+toolbar[iconsize="small"] #tbx-viewsource-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 100px 20px 80px);
 }
 
-#toolbarext-jsconsole {
+#tbx-jsconsole-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 192px 32px 160px);
 }
-toolbar[iconsize="small"] #toolbarext-jsconsole {
+toolbar[iconsize="small"] #tbx-jsconsole-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 120px 20px 100px);
 }
 
-#toolbarext-fullscreen {
+#tbx-fullscreen-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 224px 32px 192px);
 }
-toolbar[iconsize="small"] #toolbarext-fullscreen {
+toolbar[iconsize="small"] #tbx-fullscreen-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 140px 20px 120px);
 }
 
-#toolbarext-zoomin {
+#tbx-zoomout-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 256px 32px 224px);
 }
-toolbar[iconsize="small"] #toolbarext-zoomin {
+toolbar[iconsize="small"] #tbx-zoomout-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 160px 20px 140px);
 }
 
-#toolbarext-zoomout {
+#tbx-zoomin-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 288px 32px 256px);
 }
-toolbar[iconsize="small"] #toolbarext-zoomout {
+toolbar[iconsize="small"] #tbx-zoomin-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 180px 20px 160px);
 }
 
-#toolbarext-pageinfo {
+#tbx-pageinfo-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 320px 32px 288px);
 }
-toolbar[iconsize="small"] #toolbarext-pageinfo {
+toolbar[iconsize="small"] #tbx-pageinfo-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 200px 20px 180px);
 }
 
-#toolbarext-clearcache {
+#tbx-clearcache-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 352px 32px 320px);
 }
-toolbar[iconsize="small"] #toolbarext-clearcache {
+toolbar[iconsize="small"] #tbx-clearcache-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 220px 20px 200px);
 }
 
-#toolbarext-cookiemanager {
+#tbx-cookiemanager-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 384px 32px 352px);
 }
-toolbar[iconsize="small"] #toolbarext-cookiemanager {
+toolbar[iconsize="small"] #tbx-cookiemanager-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 240px 20px 220px);
 }
 
-#tbext-pagecookies-button {
+#tbx-pagecookies-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 416px 32px 384px);
 }
-toolbar[iconsize="small"] #tbext-pagecookies-button {
+toolbar[iconsize="small"] #tbx-pagecookies-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 260px 20px 240px);
 }
-#tbext-pagecookies-button .toolbarbutton-menu-dropmarker { display: none; }
-#tbext-pagecookies-tooltip { max-width: 65em; }
-#tbext-pagecookies-tooltip textbox { background-color: transparent !important; }
+#tbx-pagecookies-button .toolbarbutton-menu-dropmarker { display: none; }
+#tbx-pagecookies-tooltip { max-width: 65em; }
+#tbx-pagecookies-tooltip textbox { background-color: transparent !important; }
 
-#toolbarext-stopreload[state="stop"] {
+#tbx-stopreload-button[state="stop"] {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 448px 32px 416px);
 }
-toolbar[iconsize="small"] #toolbarext-stopreload[state="stop"] {
+toolbar[iconsize="small"] #tbx-stopreload-button[state="stop"] {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 280px 20px 260px);
 }
 
-#toolbarext-stopreload {
+#tbx-stopreload-button {
   list-style-image: url(chrome://toolbarext/skin/large.png);
   -moz-image-region: rect(0 480px 32px 448px);
 }
-toolbar[iconsize="small"] #toolbarext-stopreload {
+toolbar[iconsize="small"] #tbx-stopreload-button {
   list-style-image: url(chrome://toolbarext/skin/small.png);
   -moz-image-region: rect(0 300px 20px 280px);
 }
@@ -174,25 +174,27 @@ toolbox[vertical="true"] > toolbar > toolbarpaletteitem[place="toolbar"] {
   border-top: 2px solid transparent;
   border-bottom: 2px solid transparent;
 }
-toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="left"] { border-top-color: #000000; }
-toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="right"] { border-bottom-color: #000000; }
+toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="left"] { border-top-color: black; }
+toolbox[vertical="true"] > toolbar > toolbarpaletteitem[dragover="right"] { border-bottom-color: black; }
 
 
 
 
-/* the toolars/boxes on the tab strip should have a very plain appearance */
-.toolbarext-tabbar-toolbox {
+/* toolboxes on tab strip and statusbar be completely plain */
+.tbx-toolbox-plain {
   padding: 0;
   -moz-box-orient: horizontal;
 }
-.toolbarext-tabbar-toolbox,
-.toolbarext-tabbar-toolbar {
+.tbx-toolbox-plain, .tbx-toolbar-plain {
   margin: 0;
   -moz-appearance: none;
   border: none !important;
+  background: transparent !important;
 }
 
-.toolbarext-tabbar-toolbox[incustomisemode="true"] > toolbar {
+
+/* need to have a min size so that items can be dragged into the tabbar/statusbar toolbars */
+.tbx-toolbox-plain[incustomisemode="true"] > .tbx-toolbar-plain {
   min-width: 10px;
   min-height: 20px;
 }

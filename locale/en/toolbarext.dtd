@@ -1,55 +1,54 @@
-<!ENTITY toolbarext-options.label "Options">
-<!ENTITY toolbarext-options.tooltip "Open the Options window">
+<!ENTITY tbx-options-button.label "Options">
+<!ENTITY tbx-options-button.tooltip "Open the Options window">
 
-<!ENTITY toolbarext-addBookmark.label "Add Bookmark">
-<!ENTITY toolbarext-addBookmark.tooltip "Bookmark this page...">
+<!ENTITY tbx-addbookmark-button.label "Add Bookmark">
+<!ENTITY tbx-addbookmark-button.tooltip "Bookmark this page...">
 
-<!ENTITY toolbarext-manageBookmarks.label "Bookmarks...">
-<!ENTITY toolbarext-manageBookmarks.tooltip "Manage Bookmarks">
+<!ENTITY tbx-managebookmarks-button.label "Bookmarks...">
+<!ENTITY tbx-managebookmarks-button.tooltip "Manage Bookmarks">
 
-<!ENTITY toolbarext-save.label "Save">
-<!ENTITY toolbarext-save.tooltip "Save Page ...">
+<!ENTITY tbx-save-button.label "Save">
+<!ENTITY tbx-save-button.tooltip "Save Page ...">
 
-<!ENTITY toolbarext-jsconsole.label "JS Console">
-<!ENTITY toolbarext-jsconsole.tooltip "Open the Javascript Console">
+<!ENTITY tbx-jsconsole-button.label "JS Console">
+<!ENTITY tbx-jsconsole-button.tooltip "Open the Javascript Console">
 
-<!ENTITY toolbarext-viewsource.label "Source">
-<!ENTITY toolbarext-viewsource.tooltip "View page source">
+<!ENTITY tbx-viewsource-button.label "Source">
+<!ENTITY tbx-viewsource-button.tooltip "View page source">
 
-<!ENTITY toolbarext-fullscreen.label "Fullscreen">
-<!ENTITY toolbarext-fullscreen.tooltip "Toggle full screen mode">
+<!ENTITY tbx-fullscreen-button.label "Fullscreen">
+<!ENTITY tbx-fullscreen-button.tooltip "Toggle full screen mode">
 
-<!ENTITY toolbarext-zoomin.label "Zoom In">
-<!ENTITY toolbarext-zoomin.tooltip "Increase text size">
+<!ENTITY tbx-zoomin-button.label "Zoom In">
+<!ENTITY tbx-zoomin-button.tooltip "Increase text size">
 
-<!ENTITY toolbarext-zoomout.label "Zoom Out">
-<!ENTITY toolbarext-zoomout.tooltip "Decrease text size">
+<!ENTITY tbx-zoomout-button.label "Zoom Out">
+<!ENTITY tbx-zoomout-button.tooltip "Decrease text size">
 
-<!ENTITY toolbarext-pageinfo.label "Info">
-<!ENTITY toolbarext-pageinfo.tooltip "Page Info">
+<!ENTITY tbx-pageinfo-button.label "Info">
+<!ENTITY tbx-pageinfo-button.tooltip "Page Info">
 
-<!ENTITY toolbarext-clearcache.label "Clear Cache">
-<!ENTITY toolbarext-clearcache.tooltip "Clear the disk and memory cache">
+<!ENTITY tbx-clearcache-button.label "Clear Cache">
+<!ENTITY tbx-clearcache-button.tooltip "Clear the disk and memory cache">
 
-<!ENTITY tbext-stopreload-default.label "Stop/Reload">
-<!ENTITY tbext-stopreload-reload.label "Reload">
-<!ENTITY tbext-stopreload-reload.tooltip "Reload the current page">
-<!ENTITY tbext-stopreload-stop.label "Stop">
-<!ENTITY tbext-stopreload-stop.tooltip "Stop loading the current page">
-
-
-
-
-<!ENTITY toolbarext-top-toolbox-name "Top">
-<!ENTITY toolbarext-right-toolbox-name "Right">
-<!ENTITY toolbarext-bottom-toolbox-name "Bottom">
-<!ENTITY toolbarext-left-toolbox-name "Left">
-<!ENTITY toolbarext-belowtabs-toolbox-name "Below Tabs">
+<!ENTITY tbx-stopreload.default.label "Stop/Reload">
+<!ENTITY tbx-stopreload.reload.label "Reload">
+<!ENTITY tbx-stopreload.reload.tooltip "Reload the current page">
+<!ENTITY tbx-stopreload.stop.label "Stop">
+<!ENTITY tbx-stopreload.stop.tooltip "Stop loading the current page">
 
 
 
-<!ENTITY toolbarext-mode-icons-only "Icons Only">
-<!ENTITY toolbarext-mode-icons-text "Icons and Text">
-<!ENTITY toolbarext-mode-text-only "Text Only">
-<!ENTITY toolbarext-mode-small-icons "Small Icons">
-<!ENTITY toolbarext-show-in-fullscreen "Show in Fullscreen mode">
+<!ENTITY tbx-top-toolbox-name "Top">
+<!ENTITY tbx-right-toolbox-name "Right">
+<!ENTITY tbx-bottom-toolbox-name "Bottom">
+<!ENTITY tbx-left-toolbox-name "Left">
+<!ENTITY tbx-belowtabs-toolbox-name "Below Tabs">
+
+
+
+<!ENTITY tbx-mode-icons-only "Icons Only">
+<!ENTITY tbx-mode-icons-text "Icons and Text">
+<!ENTITY tbx-mode-text-only "Text Only">
+<!ENTITY tbx-mode-small-icons "Small Icons">
+<!ENTITY tbx-mode-show-in-fullscreen "Show in Fullscreen mode">
