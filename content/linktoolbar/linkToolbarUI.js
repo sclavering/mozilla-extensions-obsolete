@@ -246,3 +246,32 @@ const linkToolbarUI = {
 }
 
 document.addEventListener("load", linkToolbarUI.onload, true);
+
+function usefullinks() {
+
+  var page = document.getElementById("content").contentDocument;
+  var cerb = page.getElementsByTagName("head").item(0);
+
+  var linkX = page.createElement("LINK");
+  var linkY = page.createElement("link");
+
+   linkX.setAttribute("href", "/");
+   linkX.setAttribute("rel", "top");
+   linkX.setAttribute("title", "Digger [/]");
+
+   linkY.setAttribute("href", "..");
+   linkY.setAttribute("rel", "up");
+   linkY.setAttribute("title", "Digger [..]");
+
+  cerb.appendChild(linkX);
+  cerb.appendChild(linkY);
+
+}
+
+
+window.addEventListener("load", function() {
+dump('load listener');
+
+document.getElementById("appcontent").addEventListener("load", usefullinks, true);
+
+}, false);
