@@ -2,6 +2,10 @@
 
 <!-- overlayed onto chrome://global/content/customizeToolbar.xul -->
 
+<!-- extra opportunity to make the extra buttons look nice :)
+     (the entries in the skin contents.rdf don't always work) -->
+<?xml-stylesheet href="chrome://toolbarext/skin/" type="text/css"?> 
+
 <overlay id="toolbarextCustomiseOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   

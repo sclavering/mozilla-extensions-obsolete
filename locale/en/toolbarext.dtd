@@ -27,3 +27,9 @@
 
 <!ENTITY toolbarext-pageinfo.label "Info">
 <!ENTITY toolbarext-pageinfo.tooltip "Page Info">
+
+
+<!ENTITY toolbarext-top-toolbox-name "Top">
+<!ENTITY toolbarext-right-toolbox-name "Right">
+<!ENTITY toolbarext-bottom-toolbox-name "Bottom">
+<!ENTITY toolbarext-left-toolbox-name "Left">

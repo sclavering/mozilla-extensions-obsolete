@@ -65,7 +65,7 @@ function onViewToolbarsPopupShowing(aEvent) {
   // Empty the menu
   for(i = popup.childNodes.length-1; i >= 0; --i) {
     var deadItem = popup.childNodes[i];
-    if(deadItem.hasAttribute("toolbarindex"))
+    if(deadItem.hasAttribute("toolbarid"))
       popup.removeChild(deadItem);
   }
   
@@ -79,10 +79,11 @@ function onViewToolbarsPopupShowing(aEvent) {
     for (i = 0; i < toolbox.childNodes.length; ++i) {
       var toolbar = toolbox.childNodes[i];
       var toolbarName = toolbar.getAttribute("toolbarname");
+
       var type = toolbar.getAttribute("type");
       if (toolbarName && type != "menubar") {
         var menuItem = document.createElement("menuitem");
-        menuItem.setAttribute("toolbarindex", i);
+        menuItem.setAttribute("toolbarid", toolbar.id);
         menuItem.setAttribute("type", "checkbox");
         menuItem.setAttribute("label", toolbarName);
         menuItem.setAttribute("accesskey", toolbar.getAttribute("accesskey"));
@@ -96,18 +97,20 @@ function onViewToolbarsPopupShowing(aEvent) {
   }
 }
 
-// need to rewrite this
-function onViewToolbarCommand(aEvent)
-{
-  var toolbox = document.getElementById("navigator-toolbox");
-  var index = aEvent.originalTarget.getAttribute("toolbarindex");
-  var toolbar = toolbox.childNodes[index];
+// rewritten to be based on toolbar ids rather than the toolbarindex
+// (which was a stupid thing to use anyway :p )
+function onViewToolbarCommand(aEvent) {
+  var id = aEvent.originalTarget.getAttribute("toolbarid");
+  var toolbar = document.getElementById(id);
 
   toolbar.collapsed = aEvent.originalTarget.getAttribute("checked") != "true";
   document.persist(toolbar.id, "collapsed");
 }
 
 
+// I don't fully understand what this function (from browser.js) was meant to do but
+// it makes the extra toolboxes remain active rather than entering customisation mode.
+// Replacing with this do-nothing version for the moment, and will fix it properly later.
 function updateToolbarStates(toolbarMenuElt) {
   /*
   if (!gHaveUpdatedToolbarState) {

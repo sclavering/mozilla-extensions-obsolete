@@ -12,7 +12,7 @@
 <dialog id="toolbarextNewCustomToolbarDialogue"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         buttons="accept,cancel"
-        title="Add Toolbar"
+        title="&new-toolbar-title;"
         onload="init();"
         ondialogaccept="return accept();"
         ondialogcancel=""
@@ -72,6 +72,7 @@ function errorDuplicateName(name) {
 
 ]]></script>
 
+<!-- for the duplicate-name-error message -->
 <stringbundle id="stringBundle" src="chrome://global/locale/customizeToolbar.properties"/>
 
 <label value="&toolbar-name-label;"/>
