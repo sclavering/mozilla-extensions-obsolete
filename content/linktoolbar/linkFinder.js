@@ -42,13 +42,10 @@ const linkFinder = {
     if(!(noPrev || noNext)) return;
 
 
-    // xxx use NS version of function?
-    var links = doc.getElementsByTagName('a');
-
     var addedLinks = [];
 
-    for(i = 0; i < links.length; i++) {
-      link = links[i];
+    for(i = 0; i < doc.links.length; i++) {
+      link = doc.links[i];
       var href = link.getAttribute("href");
       var rel = link.getAttribute("rel");
       var base = link.baseURI; // DOM3, needed because we have to resolve relative urls
