@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE window SYSTEM "chrome://browser/locale/">
+<!DOCTYPE overlay SYSTEM "chrome://browser/locale/">
 
 <overlay id="GoHomeOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 

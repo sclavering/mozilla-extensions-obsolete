@@ -4,15 +4,16 @@
      xmlns:c="http://www.mozilla.org/rdf/chrome#">
 
   <Seq about="urn:mozilla:package:root">
-    <li resource="urn:mozilla:package:gohome"/>
+    <li>
+      <Description about="urn:mozilla:package:gohome" c:name="gohome"/>
+    </li>
   </Seq>
-
-  <Description about="urn:mozilla:package:gohome" c:name="gohome"/>
 
   <Seq about="urn:mozilla:overlays">
-    <li resource="chrome://browser/content/browser.xul"/>
-  </Seq>
-  <Seq about="chrome://browser/content/browser.xul">
-    <li>chrome://gohome/content/gohome.xul</li>
+    <li>
+      <Seq about="chrome://browser/content/browser.xul">
+        <li>chrome://gohome/content/gohome.xul</li>
+      </Seq>
+    </li>
   </Seq>
 </RDF>
