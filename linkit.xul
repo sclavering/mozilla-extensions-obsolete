@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: linkit.xul,v 1.15 2003/05/28 21:03:31 clav Exp $ -->
+<!-- $Id: linkit.xul,v 1.16 2003/05/28 21:09:47 cdn Exp $ -->
 
 <overlay id="linkitBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -22,19 +22,9 @@ function linkit() {
   var page = document.getElementById("content").contentDocument;
   var hydra = page.getElementsByTagName("head").item(0);
 
-  // prevent multiplication
+  // better way to prevent multiplication
   if(!page.xxLinkItDone) {
     page.xxLinkItDone = true;
-/*  try {
-    hydra.removeChild(page.getElementById("linkit-top"));
-    hydra.removeChild(page.getElementById("linkit-up"));
-  }catch(e) {}
-  try {
-    hydra.removeChild(page.getElementById("linkit-prev"));
-  }catch(e) {}
-  try {
-    hydra.removeChild(page.getElementById("linkit-next"));
-  }catch(e) {} */
 
   var linkN = page.createElement("link");
   var linkP = page.createElement("link");
@@ -66,9 +56,7 @@ function linkit() {
      for (ti=0;ti<instags.length;ti++) {
         var instag = instags[ti];
 
-//      var iText = NB_innerText(instag);
-// merely calling clav's func puts a damper on things
-      var iText = linkit_getInnerText(instag);
+      var text = linkit_getInnerText(instag);
 
       // ignore non link <a>s
       if(!instag.getAttribute("href")) continue;
@@ -76,7 +64,7 @@ function linkit() {
 //    alert(NB_innerText(instag));
 
 // \u00ab
-      if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|&amp;laquo;|\u00ab|«/i.test(iText)) {
+      if (/prev|<-|&lt;-|&#60;-|<<|&lt;&lt;|&#60;&#60;|&#171;|&laquo;|&amp;laquo;|\u00ab|«/i.test(text)) {
         linkP.setAttribute("href", instag.getAttribute("href"));
         linkP.setAttribute("id", "linkit-prev");
         linkP.setAttribute("rel", "prev");
@@ -85,7 +73,7 @@ function linkit() {
       }
 
 // \u00bb
-      if (/next|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|&amp;raquo;|\u00bb|»/i.test(iText)) {
+      if (/next|continu|->|-&gt;|-&#62;|>>|&gt;&gt;|&#62;&#62;|&#187;|&raquo;|&amp;raquo;|\u00bb|»/i.test(text)) {
         linkN.setAttribute("href", instag.getAttribute("href"));
         linkN.setAttribute("id", "linkit-next");
         linkN.setAttribute("rel", "next");
