@@ -57,9 +57,10 @@ LTLinkInfo.prototype = {
       // XXX: lookup more meaningful and localized version of media,
       //   i.e. media="print" becomes "Printable" or some such
       // XXX: use localized version of ":" separator
-      if(this.media && !/\b(all|screen)\b/i.test(this.media))
-        longTitle += this.media + ": ";
-      if(this.hreflang) longTitle += ltLanguageDictionary.lookup(this.hreflang) + ": ";
+      if(this.media && !/\b(all|screen)\b/i.test(this.media)) longTitle += this.media + ": ";
+      // XXX this produces stupid results if there is an hreflang present but no title
+      // (gives "French: ", should be something like "French [language] version")
+      if(this.lang) longTitle += ltLanguageDictionary.lookup(this.lang) + ": ";
       if(this.title) longTitle += this.title;
       // the 'if' here is to ensure the long title isn't just the url
       else if(longTitle) longTitle += this.url;
