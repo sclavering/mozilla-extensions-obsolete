@@ -32,10 +32,12 @@
 <!ENTITY toolbarext-clearcache.tooltip "Clear the disk and memory cache">
 
 
+
 <!ENTITY toolbarext-top-toolbox-name "Top">
 <!ENTITY toolbarext-right-toolbox-name "Right">
 <!ENTITY toolbarext-bottom-toolbox-name "Bottom">
 <!ENTITY toolbarext-left-toolbox-name "Left">
+
 
 
 <!ENTITY toolbarext-mode-icons-only "Icons Only">

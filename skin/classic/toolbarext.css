@@ -101,6 +101,26 @@ toolbar[iconsize="small"] #toolbarext-clearcache {
   -moz-image-region: rect(0 220px 20px 200px);
 }
 
+#toolbarext-cookiemanager {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 384px 32px 352px);
+}
+toolbar[iconsize="small"] #toolbarext-cookiemanager {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 240px 20px 220px);
+}
+
+#tbext-pagecookies-button {
+  list-style-image: url(chrome://toolbarext/skin/large.png);
+  -moz-image-region: rect(0 416px 32px 384px);
+}
+toolbar[iconsize="small"] #tbext-pagecookies-button {
+  list-style-image: url(chrome://toolbarext/skin/small.png);
+  -moz-image-region: rect(0 260px 20px 240px);
+}
+#tbext-pagecookies-button .toolbarbutton-menu-dropmarker { display: none; }
+#tbext-pagecookies-tooltip { max-width: 65em; }
+#tbext-pagecookies-tooltip textbox { background-color: transparent !important; }
 
 
 

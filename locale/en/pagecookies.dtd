@@ -1,0 +1,16 @@
+<!ENTITY tbext.pagecookies-button.label "Cookies">
+<!ENTITY tbext.pagecookies-button.tooltip "View Cookies for current page">
+
+<!ENTITY tbext.cookieinfo.name.label "Name:">
+<!ENTITY tbext.cookieinfo.value.label "Value:">
+<!ENTITY tbext.cookieinfo.domain.label "Domain:">
+<!ENTITY tbext.cookieinfo.path.label "Path:">
+<!ENTITY tbext.cookieinfo.secure.label "Secure:">
+<!ENTITY tbext.cookieinfo.expires.label "Expires:">
+<!ENTITY tbext.cookieinfo.policy.label "Policy:">
+
+<!ENTITY tbext.cookiePrefs.label              "Cookie Options">
+<!ENTITY tbext.enableCookies.label            "Enable cookies">
+<!ENTITY tbext.forOriginatingSiteOnly.label   "for the originating Web site only">
+<!ENTITY tbext.forCurrentSessionOnly.label    "for the current session only">
+<!ENTITY tbext.butAskFirst.label              "but ask before accepting">

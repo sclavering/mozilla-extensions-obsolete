@@ -4,17 +4,21 @@
 <?xml-stylesheet href="chrome://toolbarext/skin/" type="text/css"?>
 
 <!DOCTYPE overlay [
-<!ENTITY % identityDTD SYSTEM "chrome://toolbarext/locale/">
-%identityDTD;
+<!ENTITY % tbext SYSTEM "chrome://toolbarext/locale/">
+%tbext;
+<!ENTITY % pagecookies SYSTEM "chrome://toolbarext/locale/pagecookies.dtd">
+%pagecookies;
 ]>
 
 <overlay id="toolbarextBrowserOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <script src="toolbarext.js" type="application/x-javascript"/>
+  <script src="pagecookies.js" type="application/x-javascript"/>
 
   <!-- override the Print button to do Print Preview instead :) -->
   <toolbarbutton id="print-button" oncommand="BrowserPrintPreview();"/>
+
 
   <!-- allow all sidebars to be opened in a new tab when the toolbarbutton is middle clicked
        note: might replace dl and hsitory panel with something based on the old seamonkey
@@ -23,10 +27,6 @@
   <toolbarbutton id="history-button" onclick="ToolbarExt.historyPanel(event);"/>
   <toolbarbutton id="bookmarks-button" onclick="ToolbarExt.bookmarksPanel(event);"/>
 
-  <!-- override the bookmarks toolbar folder and make it rooted on the bookmarks root
-       broken.  (causes js errors)
-  <hbox id="bookmarks-ptf" ref="NC:BookmarksRoot"/>
-  -->
 
   <!-- add new buttons -->
   <toolbarpalette id="BrowserToolbarPalette">
@@ -97,12 +97,14 @@
   </toolbarpalette>
 
 
+
+
+
   <!-- override customise toolbars, so we can pass all our toolboxes as extra args to the palette window -->
   <command id="cmd_CustomizeToolbars" oncommand="ToolbarExt_BrowserCustomizeToolbar();"/>
 
-  <!-- Toolboxes need a name for the Add Toolbar feature. (for browser we just use the location).
-       We also want a different context menu while customising
-       -->
+  <!-- Toolboxes need a name for the Add Toolbar feature (We use "Top", "Right", etc.), a |palette|
+       attribute so they use the new xbl widget, and a different context menu while customising -->
   <toolbox id="navigator-toolbox" toolboxname="&toolbarext-top-toolbox-name;"
       customiseContext="toolbar-customise-context-menu"
       palette="BrowserToolbarPalette"
@@ -140,6 +142,10 @@
     </toolbox>
   </hbox>
 
+
+
+
+
   <!-- a new context menu to use for toolbars while customising them -->
   <popupset id="mainPopupSet">
     <popup id="toolbar-customise-context-menu"
@@ -155,5 +161,83 @@
       <menuitem type="checkbox" value="fullscreen" label="&toolbarext-show-in-fullscreen;"/>
     </popup>
   </popupset>
+
+
+
+  <!-- Page Cookies button + tooltip + stringbundle
+       Lists all cookies for the current page, sorted by domain, with a tooltip to show the
+       full details.  Also includes menu items for removing all cookies from a given domain,
+       and blocking the domain.  An extra submenu gives access to the global cookie prefs. -->
+  <toolbarpalette id="BrowserToolbarPalette">
+    <toolbarbutton class="toolbarbutton-1" type="menu" id="tbext-pagecookies-button"
+        label="&tbext.pagecookies-button.label;">
+      <menupopup id="tbext-pagecookies-menu"
+          onpopupshowing="tbextPageCookiesMenu.showMenu(this, event);"
+          onpopuphidden="tbextPageCookiesMenu.emptyMenu(this, event);"
+          oncommand="tbextPageCookiesMenu.commanded(event);">
+        <menuseparator id="tbext-cookieoptions-sep"/>
+        <menu id="tbext-cookieprefs" label="&tbext.cookiePrefs.label;">
+          <menupopup id="tbext-cookieprefs-popup" onpopupshowing="tbextCookiePrefMenu.update(this,event);"
+              oncommand="tbextCookiePrefMenu.setPref(event); event.stopPropagation();">
+            <menuitem type="checkbox" id="tbext-enablecookies" label="&tbext.enableCookies.label;"
+                      prefstring="network.cookie.enable"/>
+            <menuitem type="checkbox" id="tbext-originatingSiteOnly" label="&tbext.forOriginatingSiteOnly.label;"
+                      prefstring="network.cookie.enableForOriginatingWebsiteOnly"/>
+            <menuitem type="checkbox" id="tbext-currentSessionOnly" label="&tbext.forCurrentSessionOnly.label;"
+                      prefstring="network.cookie.enableForCurrentSessionOnly"/>
+            <menuitem type="checkbox" id="tbext-askFirst" label="&tbext.butAskFirst.label;"
+                      prefstring="network.cookie.warnAboutCookies"/>
+          </menupopup>
+        </menu>
+      </menupopup>
+    </toolbarbutton>
+  </toolbarpalette>
+
+  <!-- tooltip for displaying info about a cookie. used by tbext-pagecookies-button. -->
+  <popupset id="mainPopupSet">
+    <tooltip id="tbext-pagecookies-tooltip" onpopupshowing="tbextCookieInfo.show(event);">
+      <grid flex="1">
+        <columns>
+          <column/>
+          <column flex="1"/>
+        </columns>
+        <rows>
+          <row align="center">
+            <hbox align="center" pack="end"><label value="&tbext.cookieinfo.name.label;"/></hbox>
+            <textbox id="tbext-cookieinfo-name" readonly="true" class="plain"/>
+          </row>
+          <row align="center">
+            <hbox align="center" pack="end"><label value="&tbext.cookieinfo.value.label;"/></hbox>
+            <textbox id="tbext-cookieinfo-value" readonly="true" class="plain"/>
+          </row>
+          <row align="center">
+            <hbox align="center" pack="end"><label id="tbext-cookieinfo-isDomain" value="&tbext.cookieinfo.domain.label;"/></hbox>
+            <textbox id="tbext-cookieinfo-host" readonly="true" class="plain"/>
+          </row>
+          <row align="center">
+            <hbox align="center" pack="end"><label value="&tbext.cookieinfo.path.label;"/></hbox>
+            <textbox id="tbext-cookieinfo-path" readonly="true" class="plain"/>
+          </row>
+          <row align="center">
+            <hbox align="center" pack="end"><label value="&tbext.cookieinfo.secure.label;"/></hbox>
+            <textbox id="tbext-cookieinfo-isSecure" readonly="true" class="plain"/>
+          </row>
+          <row align="center">
+            <hbox align="center" pack="end"><label value="&tbext.cookieinfo.expires.label;"/></hbox>
+            <textbox id="tbext-cookieinfo-expires" readonly="true" class="plain"/>
+          </row>
+          <row align="center">
+            <hbox align="center" pack="end"><label value="&tbext.cookieinfo.policy.label;"/></hbox>
+            <textbox id="tbext-cookieinfo-policy" readonly="true" class="plain"/>
+          </row>
+        </rows>
+      </grid>  
+    </tooltip>
+  </popupset>
+
+  <!-- stringbundle for pretty-printing info about cookies -->
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="tbext-cookieinfo-bundle" src="chrome://toolbarext/locale/pagecookies.properties"/>
+  </stringbundleset>
 
 </overlay>
