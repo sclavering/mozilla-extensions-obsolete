@@ -62,12 +62,7 @@ function LinkToolbarItem (linkType) {
   this.clear = function() {
     this.disableParentMenuButton();
     this.getXULElement().setAttribute("disabled", "true");
-
-    if ( this.linkType != 'top' && this.linkType != 'up' &&
-         this.linkType != 'first' && this.linkType != 'prev' &&
-         this.linkType != 'next' && this.linkType != 'last' )
-      this.getXULElement().setAttribute("hidden", "true");
-
+    this.getXULElement().setAttribute("hidden", "true");
     this.getXULElement().removeAttribute("href");
     this.getXULElement().removeAttribute("tooltiptext1");
     this.getXULElement().removeAttribute("tooltiptext2");
@@ -85,7 +80,7 @@ function LinkToolbarItem (linkType) {
     this.getXULElement().removeAttribute("disabled");
     this.getXULElement().removeAttribute("hidden");
     // lines will be hidden if blank
-    this.getXULElement().setAttribute("tooltiptext1", linkElement.title);
+    this.getXULElement().setAttribute("tooltiptext1", linkElement.getLongTitle());
     this.getXULElement().setAttribute("tooltiptext2", linkElement.href);
   }
 
@@ -119,20 +114,17 @@ function LinkToolbarItem (linkType) {
 function LinkToolbarButton (linkType) {
   this.constructor(linkType);
 
+  // override because we want buttons disabled, not hidden
   this.clear = function() {
-    this.__proto__.clear.apply(this);
-//    this.getXULElement().removeAttribute("tooltiptext1");
+    this.getXULElement().setAttribute("disabled", "true");
+    this.getXULElement().removeAttribute("href");
+    this.getXULElement().removeAttribute("tooltiptext1");
     this.getXULElement().removeAttribute("tooltiptext2");
   }
 
-  this.setItem = function(linkElement) {
-    this.__proto__.setItem.apply(this, [linkElement]);
-    this.getXULElement().setAttribute("tooltiptext1", linkElement.getLongTitle());
-    this.getXULElement().setAttribute("tooltiptext2", linkElement.href);
-  }
-
-  this.enableParentMenuButton = function() { /* do nothing */ }
-  this.disableParentMenuButton = function() { /* do nothing */ }
+  // do nothing.  unneeded?
+  this.enableParentMenuButton = function() {};
+  this.disableParentMenuButton = function() {};
 }
 LinkToolbarButton.prototype = new LinkToolbarItem;
 
@@ -243,5 +235,4 @@ function LinkToolbarTransientMenu (linkType) {
     return true;
   }
 }
-
 LinkToolbarTransientMenu.prototype = new LinkToolbarMenu;
