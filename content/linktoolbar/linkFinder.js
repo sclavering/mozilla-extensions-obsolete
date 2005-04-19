@@ -16,7 +16,10 @@ var linkToolbarLinkFinder = {
   guessUpAndTopFromURL: function(doc, doclinks, url) {
     if(!("top" in doclinks)) {
       var topurl = url.match(/^[^\/]*?:\/\/[^\/]*\//);
-      if(topurl) this.addLink(doc, {top:true}, topurl[0], null, null);
+      if(topurl) {
+        topurl = topurl[0];
+        if(topurl!=url) this.addLink(doc, {top:true}, topurl, null, null);
+      }
     }
     if(!("up" in doclinks)) {
       var upurl = this.getUp(url);
