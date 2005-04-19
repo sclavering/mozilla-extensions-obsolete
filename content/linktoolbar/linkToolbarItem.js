@@ -110,7 +110,6 @@ function makeLinkToolbarMenuItem(href, label, tooltip) {
   mi.setAttribute("href", href);
   mi.setAttribute("label", label);
   mi.setAttribute("tooltiptext1", tooltip);
-  mi.setAttribute("tooltiptext2", href);
   return mi;
 }
 
@@ -139,7 +138,6 @@ const linkToolbarItem = {
     this.hidden = false;
     this.setAttribute("href", link.url);
     this.setAttribute("tooltiptext1", link.longTitle);
-    this.setAttribute("tooltiptext2", link.url);
   }
 };
 
@@ -148,6 +146,12 @@ const linkToolbarItem = {
 // Top, Up, First, Prev, Next, and Last menu-buttons
 // Hackery employed to disable the dropmarker if there is just one link.
 function initLinkToolbarButton(elt) {
+  // to avoid repetetive XUL
+  elt.onmouseover = linkToolbarMouseEnter;
+  elt.onmouseout = linkToolbarMouseExit;
+  elt.onclick = linkToolbarItemClicked;
+  elt.setAttribute("oncommand", "linkToolbarLoadPage(event);"); // .oncommand does not exist
+
   elt.inited = true;
   for(var i in linkToolbarButton) elt[i] = linkToolbarButton[i];
   elt.links = []; // must do this so each button has its own array rather than a reference to a shared one
@@ -173,7 +177,6 @@ const linkToolbarButton = {
     this.disabled = true;
     this.removeAttribute("href");
     this.removeAttribute("tooltiptext1");
-    this.removeAttribute("tooltiptext2");
     this.removeAttribute("multi");
   },
 
@@ -185,7 +188,6 @@ const linkToolbarButton = {
       this.disabled = false;
       this.setAttribute("href", linkElement.url);
       this.setAttribute("tooltiptext1", linkElement.longTitle);
-      this.setAttribute("tooltiptext2", linkElement.url);
       // just setting .disabled will not do anything, presumably because the
       // dropmarker xbl:inherits the toolbarbutton's disabled attribute.
       this.dropMarker.setAttribute("disabled","true");
@@ -310,7 +312,6 @@ LinkToolbarTransientItem.prototype = {
       this.item.setAttribute("href", link.url);
       this.item.hidden = false;
       this.item.setAttribute("tooltiptext1", link.longTitle);
-      this.item.setAttribute("tooltiptext2", link.url);
       this.parentMenuButton.disabled = false;
     } else if(!this.haveLinks) {
       this.haveLinks = true;

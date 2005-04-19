@@ -47,10 +47,14 @@ var gLinkToolbarPrefGuessUpAndTopFromURL = false;
 var gLinkToolbarPrefGuessPrevAndNextFromURL = false;
 var gLinkToolbarPrefScanHyperlinks = false;
 
+var gLinkToolbarStatusbar = null; // Firefox's usual statusbar
+
 
 
 
 function linkToolbarStartup() {
+  gLinkToolbarStatusbar = document.getElementById("statusbar-display");
+
   setTimeout(linkToolbarDelayedStartup, 1); // needs to happen after Fx's delayedStartup()
 
   // pref listener (sort of)
@@ -209,12 +213,32 @@ function linkToolbarAddLinkForPage(linkInfo, doc, rels) {
 
 
 
+// Code to show urls in the status bar (setting statustext attribute does zilch).
+// Rather complex because it worries about restoring the old text, and only doing so if something else hasn't modified the text in the meantime.
+
+var gLinkToolbarOldStatusbarText = null;
+
+function linkToolbarMouseEnter(e) {
+  const t = e.target;
+  const href = t.getAttribute("href");
+  if(!href) return;
+  gLinkToolbarOldStatusbarText = gLinkToolbarStatusbar.getAttribute("label");
+  gLinkToolbarStatusbar.setAttribute("label", href);
+}
+
+function linkToolbarMouseExit(e) {
+  const t = e.target;
+  const href = t.getAttribute("href");
+  const txt = gLinkToolbarStatusbar.getAttribute("label");
+  if(txt==href) gLinkToolbarStatusbar.setAttribute("label", gLinkToolbarOldStatusbarText);
+  gLinkToolbarOldStatusbarText = null;
+}
 
 
 function linkToolbarFillTooltip(tooltip, event) {
-  var elt = document.tooltipNode, line1 = tooltip.firstChild, line2 = tooltip.lastChild;
-  var text1 = elt.getAttribute("tooltiptext1") || elt.getAttribute("tooltiptext0");
-  var text2 = elt.getAttribute("tooltiptext2");
+  const elt = document.tooltipNode, line1 = tooltip.firstChild, line2 = tooltip.lastChild;
+  const text1 = elt.getAttribute("tooltiptext1") || elt.getAttribute("tooltiptext0");
+  const text2 = elt.getAttribute("href");
   line1.hidden = !(line1.value = text1);
   line2.hidden = !(line2.value = text2);
   // don't show the tooltip if it's over a submenu of the More menu
