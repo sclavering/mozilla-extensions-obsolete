@@ -72,13 +72,19 @@ LTLinkInfo.prototype = {
 
 
 
+// Ignore whole links if their rel attribute matches this regexp.
+// "meta" is for FOAF - see mozdev bug 10027 and/or http://rdfweb.org/topic/Autodiscovery
+// "schema.foo" is used by Dublin Core and FOAF.
+// "icon" turns up as "shortcut icon" too, I think.
+// "stylesheet" is here because of "alternate stylesheet", which also needs ignoring
+// pingback, fontdef and p3pv are inherited from Mozilla. XXX could they be moved to standardiseRelType?
+const linkToolbarIgnoreRels =
+  /\b(?:stylesheet\b|icon\b|pingback\b|fontdef\b|p3pv|schema\.|meta\b)/i;
+
 var linkToolbarUtils = {
   getLinkRels: function(relStr, revStr, mimetype, title) {
-    // Ignore certain rel values for links
-    // XXX: should some of these possibilites just be handled by returning null in standardiseRelType
-    // as we do for prefetch?  that would mean the link would still be handled if it had other rel
-    // values that were interesting.  (icon and stylesheet we want to keep doing this way)
-    if(/\b(stylesheet\b|icon\b|pingback\b|fontdef\b|p3pv|schema\.)/i.test(relStr)) return null;
+    // Ignore certain links
+    if(linkToolbarIgnoreRels.test(relStr)) return null;
 
     var relValues = [], rel, i, haveRels = false;
     // get relValues from rel
