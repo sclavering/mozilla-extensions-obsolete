@@ -1,0 +1,19 @@
+<!--
+Licence: MPL 1.1/GPL 2.0/LGPL 2.1
+
+Original Author:
+  Rotem Liss <mail % rotemliss.com>
+-->
+
+<!ENTITY title "אפשרויות Link Toolbar">
+
+<!ENTITY general "תצוגת Link Toolbar">
+<!ENTITY showOnlyWhenNeeded "העלם כאשר אין קישורים בדף הנוכחי">
+<!ENTITY iconsOnly "הצג רק סמלים, לא טקסט">
+
+<!ENTITY linkGuessing "ניחוש קישורים">
+<!ENTITY linkGuessingDescription "Link Toolbar יכול לנחש קישורים בדפים שונים שלא מציינים אותם מפורשות.">
+
+<!ENTITY scanHyperlinks "סרוק הקישורים בדף למציאת הקישורים לדפים הראשון, הקודם, הבא והאחרון בסדרה">
+<!ENTITY guessUpAndTopFromURL "נחש את הקישורים ״רמה האחת למעלה״ ו״ראש האתר״">
+<!ENTITY guessPrevAndNextFromURL "נחש את הקישורים לדפים הקודם והבא בסדרה בהתבסס על החלקים המספריים ב־URL של הדף">
