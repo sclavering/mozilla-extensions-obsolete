@@ -72,13 +72,13 @@
 <!ENTITY keycode.up "VK_UP">
 <!ENTITY modifiers.up "alt">
 
-<!ENTITY key.first "[">
+<!ENTITY key.first ",">
 <!ENTITY modifiers.first "accel shift">
-<!ENTITY key.prev "[">
+<!ENTITY key.prev ",">
 <!ENTITY modifiers.prev "accel">
-<!ENTITY key.next "]">
+<!ENTITY key.next ".">
 <!ENTITY modifiers.next "accel">
-<!ENTITY key.last "]">
+<!ENTITY key.last ".">
 <!ENTITY modifiers.last "accel shift">
 
 <!ENTITY keycode2.first "VK_PAGE_UP">
