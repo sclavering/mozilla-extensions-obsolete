@@ -9,7 +9,7 @@ var linkToolbarLinkFinder = {
   // regular expressions used for identifying links based on the src url of contained images
   img_re_first: /first/i,
   img_re_prev:  /rev(?!iew)/i, // match [p]revious, but not [p]review
-  img_re_next:  /ne?xt|more|fwd/i,
+  img_re_next:  /ne?xt|more|fwd|forward/i,
   img_re_last:  /last/i,
 
 
