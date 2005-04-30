@@ -42,6 +42,7 @@
         <locale>locale/fr-FR/</locale>
         <locale>locale/he-IL/</locale>
         <locale>locale/it-IT/</locale>
+        <locale>locale/ja-JP/</locale>
         <locale>locale/nl-NL/</locale>
         <locale>locale/sk-SK/</locale>
         <!--
