@@ -7,7 +7,7 @@
     <id>linktoolbar</id>
 
     <name>Link Toolbar</name>
-    <version>0.9.1</version>
+    <version>1.0</version>
     <description>A site-navigation toolbar</description>
 
     <creator>Stephen Clavering</creator>
@@ -20,6 +20,7 @@
     <contributor>Rob de Vries (nl-NL translation)</contributor>
     <contributor>Peter Ondraska (Slovensky preklad)</contributor>
     <contributor>Tomáš Kopečný (cs-CZ translation)</contributor>
+    <contributor>Rotem Liss (תרגום לעברית)</contributor>
 
     <optionsURL>chrome://linktoolbar/content/options.xul</optionsURL>
     <!-- <iconURL></iconURL> -->
@@ -39,6 +40,7 @@
         <locale>locale/en-US/linktoolbar/</locale>
         <locale>locale/cs-CZ/</locale>
         <locale>locale/fr-FR/</locale>
+        <locale>locale/he-IL/</locale>
         <locale>locale/it-IT/</locale>
         <locale>locale/nl-NL/</locale>
         <locale>locale/sk-SK/</locale>
