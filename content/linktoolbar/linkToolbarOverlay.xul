@@ -105,7 +105,7 @@
   <toolbarbutton id="linktoolbar-more-menu" label="&more.label;" tooltiptext0="&more.tooltip;"
       type="menu" orient="" tooltip="linktoolbar-tooltip" context="" disabled="true" class="linktoolbar-button toolbarbutton-1"
       oncommand="return linkToolbarLoadPage(event);" onclick="linkToolbarItemClicked(event);"
-      onmouseover="linkToolbarMouseEnter(event.target);" onmouseout="linkToolbarMouseExit(event.target);"
+      onmouseover="linkToolbarMouseEnter(event);" onmouseout="linkToolbarMouseExit(event);"
       >
         <menupopup id="linktoolbar-more-popup">
           <menuitem id="linktoolbar-toc" label="&toc;" hidden="true" class="menuitem-iconic"/>
