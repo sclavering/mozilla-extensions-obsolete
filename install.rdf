@@ -21,6 +21,8 @@
     <contributor>Peter Ondraska (Slovensky preklad)</contributor>
     <contributor>Tomáš Kopečný (cs-CZ translation)</contributor>
     <contributor>Rotem Liss (תרגום לעברית)</contributor>
+    <contributor>Japanese Firefox Community</contributor>
+    <contributor>Alexander Gieg (pt-BR translation)</contributor>
 
     <optionsURL>chrome://linktoolbar/content/options.xul</optionsURL>
     <!-- <iconURL></iconURL> -->
@@ -45,6 +47,7 @@
         <locale>locale/ja-JP/</locale>
         <locale>locale/nl-NL/</locale>
         <locale>locale/sk-SK/</locale>
+        <locale>locale/pt-BR/</locale>
         <!--
         <locale>locale/de-AT/linktoolbar/</locale>
         <locale>locale/sv-SE/linktoolbar/</locale>
