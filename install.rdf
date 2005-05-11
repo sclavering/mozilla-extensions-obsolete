@@ -4,7 +4,7 @@
          xmlns="http://www.mozilla.org/2004/em-rdf#">
 
   <rdf:Description about="urn:mozilla:install-manifest">
-    <id>linktoolbar</id>
+    <id>{b09532de-8fa4-4ea5-a9cb-4764e5bdb700}</id>
 
     <name>Link Toolbar</name>
     <version>1.0</version>
