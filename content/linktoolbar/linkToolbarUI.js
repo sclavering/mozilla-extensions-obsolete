@@ -124,7 +124,7 @@ function linkToolbarAddHandlers() {
   browser.addEventListener("select", linkToolbarTabSelectedHandler, false);
   browser.addEventListener("DOMLinkAdded", linkToolbarLinkAddedHandler, true);
   browser.addEventListener("unload", linkToolbarPageClosedHandler, true);
-  browser.addEventListener("load", linkToolbarPageLoadedHandler, true);
+  browser.addEventListener("DOMContentLoaded", linkToolbarPageLoadedHandler, true);
 }
 
 
@@ -133,7 +133,13 @@ function linkToolbarRemoveHandlers() {
   browser.removeEventListener("select", linkToolbarTabSelectedHandler, false);
   browser.removeEventListener("DOMLinkAdded", linkToolbarLinkAddedHandler, true);
   browser.removeEventListener("unload", linkToolbarPageClosedHandler, true);
-  browser.removeEventListener("load", linkToolbarPageLoadedHandler, true);
+  browser.removeEventListener("DOMContentLoaded", linkToolbarPageLoadedHandler, true);
+}
+
+
+// Used to make the page scroll when the mouse-wheel is used on one of our buttons
+function linkToolbarMouseScrollHandler(event) {
+  content.scrollBy(0, event.detail);
 }
 
 
@@ -166,9 +172,19 @@ function linkToolbarPageClosedHandler(event) {
 
 function linkToolbarPageLoadedHandler(evt) {
   var doc = evt.originalTarget;
-  var links = doc.__lt__links || (doc.__lt__links = []);
+  if(!gLinkToolbarPrefUseLinkGuessing);
+  if(!(doc instanceof HTMLDocument)) return;
+  const win = doc.defaultView;
+  if(win != win.top) return;
+  
+  // don't block page rendering
+  setTimeout(linkToolbarGuessLinks, 50, doc);
+}
 
-  if(!gLinkToolbarPrefUseLinkGuessing || !(doc instanceof HTMLDocument)) return;
+
+function linkToolbarGuessLinks(doc) {
+  const links = doc.__lt__links || (doc.__lt__links = []);
+
   if(gLinkToolbarPrefScanHyperlinks)
     linkToolbarLinkFinder.scanPageLinks(doc, links);
   // doc.location[.href] seems not to be maskable by JS, so this should be OK

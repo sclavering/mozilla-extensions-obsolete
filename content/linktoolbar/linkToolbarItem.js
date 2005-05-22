@@ -151,10 +151,12 @@ function initLinkToolbarButton(elt) {
   elt.onmouseout = linkToolbarMouseExit;
   elt.onclick = linkToolbarItemClicked;
   elt.setAttribute("oncommand", "linkToolbarLoadPage(event);"); // .oncommand does not exist
+  
+  elt.addEventListener("DOMMouseScroll", linkToolbarMouseScrollHandler, false);
 
   elt.inited = true;
   for(var i in linkToolbarButton) elt[i] = linkToolbarButton[i];
-  elt.links = []; // must do this so each button has its own array rather than a reference to a shared one
+  elt.links = []; // each button needs its own array, not a reference to a shared one
   var popup = elt.popup = document.createElement("menupopup");
   elt.appendChild(popup);
   popup.setAttribute("onpopupshowing", "return this.parentNode.buildMenu();");
