@@ -150,7 +150,10 @@ var linkToolbarUtils = {
         return "chapter";
       case "prefetch":
       case "sidebar":
+      // used on blogs
       case "nofollow":
+      // seen on blogs.  links didn't seem to have any real relation to the page
+      case "external":
         return null;
       default:
         // might as well preserve case
