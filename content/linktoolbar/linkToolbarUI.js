@@ -177,12 +177,6 @@ function linkToolbarPageLoadedHandler(evt) {
   const win = doc.defaultView;
   if(win != win.top) return;
   
-  // don't block page rendering
-  setTimeout(linkToolbarGuessLinks, 50, doc);
-}
-
-
-function linkToolbarGuessLinks(doc) {
   const links = doc.__lt__links || (doc.__lt__links = []);
 
   if(gLinkToolbarPrefScanHyperlinks)
@@ -204,9 +198,10 @@ function linkToolbarTabSelectedHandler(event) {
 function linkToolbarRefreshLinks() {
   linkToolbarItems.clearAll();
   var doc = content.document;
-  if(!("__lt__links" in doc)) return;
+  if(!doc.__lt__links) return;
   linkToolbarItems.handleLinksForRels(doc.__lt__links);
 }
+
 
 
 function linkToolbarAddLinkForPage(linkInfo, doc, rels) {
