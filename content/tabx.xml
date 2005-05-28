@@ -42,8 +42,8 @@
         
         tab.addEventListener("click", handler, true);
       ]]>
-      </constructor >
-    </implementation >
+      </constructor>
+    </implementation>
 
   </binding>
 </bindings>
