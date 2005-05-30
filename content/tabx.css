@@ -5,10 +5,13 @@ tabbrowser .tab-text {
   margin: 0;
 }
 
-toolbarbutton.tabs-closebutton {
+tabbrowser .tabs-closebutton {
   display: none;
 }
 
 .tabx-tab-close-button {
   padding: 0;
+  width: auto;
+  height: auto;
+  display: -moz-box !important; /* override rule above */
 }
