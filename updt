@@ -1,0 +1,3 @@
+#!/bin/sh
+zip -ur chrome/linkToolbar.jar content locale skin -x '*CVS*'
+zip -ur linkToolbar.xpi chrome defaults install.rdf -x '*CVS*'
