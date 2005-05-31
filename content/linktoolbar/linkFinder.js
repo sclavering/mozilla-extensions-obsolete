@@ -9,7 +9,7 @@ var linkToolbarLinkFinder = {
   // regular expressions used for identifying links based on the src url of contained images
   img_re_first: /first/i,
   img_re_prev:  /rev(?!iew)/i, // match [p]revious, but not [p]review
-  img_re_next:  /ne?xt|more|fwd|forward/i,
+  img_re_next:  /ne?xt|fwd|forward/i,
   img_re_last:  /last/i,
 
 
@@ -36,8 +36,12 @@ var linkToolbarLinkFinder = {
     function isDigit(c) { return ("0" <= c && c <= "9") }
 
     var url = location.href;
+
     // the char index in the url at which the path+search+hash section begins (2 is for the //)
-    var min = location.host.length + location.protocol.length + 2;
+    var min = 0;
+    // about:blank has no host
+    if(location.host)
+      min = location.host.length + location.protocol.length + 2;
 
     var e, s;
     for(e = url.length; e > min && !isDigit(url[e-1]); --e);
