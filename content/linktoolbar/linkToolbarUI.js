@@ -50,8 +50,6 @@ var gLinkToolbarPrefScanHyperlinks = false;
 var gLinkToolbarStatusbar = null; // Firefox's usual statusbar
 
 
-
-
 function linkToolbarStartup() {
   gLinkToolbarStatusbar = document.getElementById("statusbar-display");
 
@@ -83,8 +81,6 @@ window.addEventListener("load", linkToolbarStartup, false);
 window.addEventListener("unload", linkToolbarShutdown, false);
 
 
-
-
 function linkToolbarToolboxCustomizeDone(somethingChanged) {
   if(somethingChanged) {
     linkToolbarItems.updateForToolbarCustomisation();
@@ -92,9 +88,6 @@ function linkToolbarToolboxCustomizeDone(somethingChanged) {
   }
   this._preLinkToolbar_customizeDone(somethingChanged);
 }
-
-
-
 
 
 function linkToolbarLoadPrefs() {
@@ -116,15 +109,14 @@ var linkToolbarPrefObserver = {
 };
 
 
-
-
-
 function linkToolbarAddHandlers() {
   var browser = gBrowser;
   browser.addEventListener("select", linkToolbarTabSelectedHandler, false);
   browser.addEventListener("DOMLinkAdded", linkToolbarLinkAddedHandler, true);
   browser.addEventListener("unload", linkToolbarPageClosedHandler, true);
+  browser.addEventListener("PageHide", linkToolbarPageClosedHandler, false);
   browser.addEventListener("DOMContentLoaded", linkToolbarPageLoadedHandler, true);
+  browser.addEventListener("PageShow", linkToolbarPageShowHandler, false);
 }
 
 
@@ -133,7 +125,9 @@ function linkToolbarRemoveHandlers() {
   browser.removeEventListener("select", linkToolbarTabSelectedHandler, false);
   browser.removeEventListener("DOMLinkAdded", linkToolbarLinkAddedHandler, true);
   browser.removeEventListener("unload", linkToolbarPageClosedHandler, true);
+  browser.removeEventListener("PageHide", linkToolbarPageClosedHandler, true);  
   browser.removeEventListener("DOMContentLoaded", linkToolbarPageLoadedHandler, true);
+  browser.removeEventListener("PageShow", linkToolbarPageShowHandler, false);
 }
 
 
@@ -155,28 +149,26 @@ function linkToolbarLinkAddedHandler(event) {
 }
 
 
+// Really ought to delete/nullify doc.__lt__links on "close" (but not on "PageHide")
 function linkToolbarPageClosedHandler(event) {
-  // When following a link of the form:
-  //   <a href="..." onclick="this.style.display='none'">.....</a>
-  //   (the onclick handler could be on an ancestor node of the link instead)
-  // the originalTarget of the unload event for leaving the current page becomes the Text node
-  // for the link, rather than the Document node.  So we use ownerDocument, but can't always do
-  // so, because the DOM2 spec defines that as being null for Document nodes.
+  // Links like: <a href="..." onclick="this.style.display='none'">.....</a>
+  // (the onclick handler could instead be on an ancestor of the link) lead to unload/PageHide
+  // events with originalTarget==a text node.  So use ownerDocument (which is null for Documents)
   var doc = event.originalTarget;
   if(!(doc instanceof Document)) doc = doc.ownerDocument;
-  // we only want to clear the toolbar if it's the currently visible document that is unloading
+  // don't clear the links for unload/PageHide from a background tab, or from a subframe
   if(doc != gBrowser.contentDocument) return;
   linkToolbarItems.clearAll();
 }
 
 
-function linkToolbarPageLoadedHandler(evt) {
-  var doc = evt.originalTarget;
+function linkToolbarPageLoadedHandler(event) {
+  var doc = event.originalTarget;
   if(!gLinkToolbarPrefUseLinkGuessing);
   if(!(doc instanceof HTMLDocument)) return;
   const win = doc.defaultView;
   if(win != win.top) return;
-  
+
   const links = doc.__lt__links || (doc.__lt__links = []);
 
   if(gLinkToolbarPrefScanHyperlinks)
@@ -195,6 +187,13 @@ function linkToolbarTabSelectedHandler(event) {
 }
 
 
+function linkToolbarPageShowHandler(event) {
+  const doc = event.originalTarget;
+//  dump("pageshow doc="+doc+"\n");
+  if(doc == gBrowser.contentDocument) linkToolbarRefreshLinks();
+}
+
+
 function linkToolbarRefreshLinks() {
   linkToolbarItems.clearAll();
   var doc = content.document;
@@ -203,12 +202,12 @@ function linkToolbarRefreshLinks() {
 }
 
 
-
 function linkToolbarAddLinkForPage(linkInfo, doc, rels) {
   // remember the link in an array on the document
   // xxx we'd prefer not to pollute the document's DOM of course, but javascript
   // doesn't have real hashtables (only string->anything maps), so there isn't
   // all that much choice.
+  // xxx this doesn't work (at all) with XPCNativeWrappers as of 20050712
   var doclinks = doc.__lt__links || (doc.__lt__links = []);
   for(var r in rels) {
     if(!(r in doclinks)) doclinks[r] = [];
