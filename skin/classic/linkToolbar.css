@@ -17,6 +17,9 @@ Contributor(s):
 
 .linktoolbar-button > .toolbarbutton-menubutton-button { -moz-box-orient: horizontal; }
 
+/* Charamel sets -moz-image-region on the <hbox> wrapping the <image> within <menuitem>s */
+.linktoolbar-button .menu-iconic-left { -moz-image-region: inherit !important; }
+
 #linktoolbar-top { -moz-image-region: rect(0 16px 16px 0); }
 #linktoolbar-top:hover { -moz-image-region: rect(16px 16px 32px 0); }
 #linktoolbar-top[multi] { -moz-image-region: rect(0 112px 16px 96px); }
