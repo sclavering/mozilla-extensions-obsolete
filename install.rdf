@@ -7,7 +7,7 @@
     <id>linktoolbar@cdn.mozdev.org</id>
 
     <name>Link Toolbar</name>
-    <version>1.0</version>
+    <version>1.0+</version>
     <description>A site-navigation toolbar</description>
 
     <creator>Stephen Clavering</creator>
