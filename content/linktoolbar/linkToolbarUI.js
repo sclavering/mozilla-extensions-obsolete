@@ -141,8 +141,6 @@ function linkToolbarLinkAddedHandler(event) {
   var elt = event.originalTarget;
   var doc = elt.ownerDocument;
   if(!(elt instanceof HTMLLinkElement) || !elt.href || !(elt.rel || elt.rev)) return;
-  dump("lt interesting link added, rel='"+elt.rel+"'\n");
-
   var rels = linkToolbarUtils.getLinkRels(elt.rel, elt.rev, elt.type, elt.title);
   if(!rels) return;
   var linkInfo = new LTLinkInfo(elt.href, elt.title, elt.hreflang, elt.media);
@@ -164,7 +162,6 @@ function linkToolbarPageClosedHandler(event) {
 
 
 function linkToolbarPageLoadedHandler(event) {
-  dump("lt loaded\n");
   var doc = event.originalTarget;
   if(!gLinkToolbarPrefUseLinkGuessing) return;
   if(!(doc instanceof HTMLDocument)) return;
@@ -184,7 +181,6 @@ function linkToolbarPageLoadedHandler(event) {
       var upUrl = linkToolbarUtils.guessUpUrl(doc.location);
       if(upUrl) linkToolbarAddLinkForPage(new LTLinkInfo(upUrl), doc, {up: true});
     }
-    dump("top is "+links.top+"\n");
     if(!links.top) {
       var topUrl = linkToolbarUtils.guessTopUrl(doc.location);
       if(topUrl) linkToolbarAddLinkForPage(new LTLinkInfo(topUrl), doc, {top: true});
@@ -203,7 +199,6 @@ function linkToolbarTabSelectedHandler(event) {
 
 function linkToolbarPageShowHandler(event) {
   const doc = event.originalTarget;
-//  dump("pageshow doc="+doc+"\n");
   if(doc == gBrowser.contentDocument) linkToolbarRefreshLinks();
 }
 
