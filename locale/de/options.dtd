@@ -1,0 +1,19 @@
+<!--
+Licence: MPL 1.1/GPL 2.0/LGPL 2.1
+
+Original Author:
+  Sönke Tesch <soenketesch gmx.de>
+-->
+
+<!ENTITY title "Link Toolbar-Optionen">
+
+<!ENTITY general "Darstellung">
+<!ENTITY showOnlyWhenNeeded "Verstecken, falls keine passenden Verweise in der angezeigten Seite existieren">
+<!ENTITY iconsOnly "Nur Grafiken anzeigen, keinen Text">
+
+<!ENTITY linkGuessing "Zusammenhänge erraten">
+<!ENTITY linkGuessingDescription "Viele Webseiten enthalten keine HTML-&lt;link&gt;-Elemente, die auf mit ihnen zusammenhängende Seiten zeigen. Link Toolbar kann stattdessen versuchen, an Hand des Inhalts der angezeigten Seite diese Zusammenhänge zu erraten.">
+
+<!ENTITY scanHyperlinks "Nach Hinweisen auf nächste, vorangehende, erste und letzte Seite suchen">
+<!ENTITY guessUpAndTopFromURL "Adresse der übergeordneten und der Startseite aus der aktuellen Adresse konstruieren">
+<!ENTITY guessPrevAndNextFromURL "Vorangehende und nächste Seite aus Zahlmustern in der aktuellen Adresse erraten">

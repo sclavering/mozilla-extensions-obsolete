@@ -1,14 +1,12 @@
 <?xml version="1.0"?>
 
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-         xmlns="http://www.mozilla.org/2004/em-rdf#">
-
-  <rdf:Description about="urn:mozilla:install-manifest">
+<r:RDF xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.mozilla.org/2004/em-rdf#">
+  <r:Description about="urn:mozilla:install-manifest">
     <id>linktoolbar@cdn.mozdev.org</id>
 
     <name>Link Toolbar</name>
     <version>1.0+</version>
-    <description>A site-navigation toolbar</description>
+    <description>A site-navigation tool</description>
 
     <creator>Stephen Clavering</creator>
     <homepageURL>http://cdn.mozdev.org/linkToolbar/</homepageURL>
@@ -23,20 +21,21 @@
     <contributor>Rotem Liss (תרגום לעברית)</contributor>
     <contributor>Japanese Firefox Community</contributor>
     <contributor>Alexander Gieg (tradução para Português Brasileiro)</contributor>
+    <contributor>Sönke Tesch (German translation)</contributor>
 
     <optionsURL>chrome://linktoolbar/content/options.xul</optionsURL>
     <!-- <iconURL></iconURL> -->
 
     <targetApplication>
-      <rdf:Description>
+      <r:Description>
         <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
         <minVersion>1.0</minVersion>
         <maxVersion>1.0+</maxVersion>
-      </rdf:Description>
+      </r:Description>
     </targetApplication>
 
     <file>
-      <rdf:Description about="urn:mozilla:extension:file:linkToolbar.jar">
+      <r:Description about="urn:mozilla:extension:file:linkToolbar.jar">
         <package>content/linktoolbar/</package>
         <skin>skin/classic/</skin>
         <locale>locale/en-US/linktoolbar/</locale>
@@ -48,11 +47,8 @@
         <locale>locale/nl-NL/</locale>
         <locale>locale/sk-SK/</locale>
         <locale>locale/pt-BR/</locale>
-        <!--
-        <locale>locale/de-AT/linktoolbar/</locale>
-        <locale>locale/sv-SE/linktoolbar/</locale>
-        -->
-      </rdf:Description>
+        <locale>locale/de/</locale>
+      </r:Description>
     </file>
-  </rdf:Description>
-</rdf:RDF>
+  </r:Description>
+</r:RDF>
