@@ -12,22 +12,6 @@ var linkToolbarLinkFinder = {
   img_re_next:  /ne?xt|fwd|forward/i,
   img_re_last:  /last/i,
 
-
-  guessUpAndTopFromURL: function(doc, doclinks, url) {
-    if(!("top" in doclinks)) {
-      var topurl = url.match(/^[^\/]*?:\/\/[^\/]*\//);
-      if(topurl) {
-        topurl = topurl[0];
-        if(topurl!=url) this.addLink(doc, {top:true}, topurl, null, null);
-      }
-    }
-    if(!("up" in doclinks)) {
-      var upurl = this.getUp(url);
-      if(upurl) this.addLink(doc, {up:true}, upurl, null, null);
-    }
-  },
-
-
   guessPrevAndNextFromURL: function(doc, doclinks, location) {
     var addPrev = !("prev" in doclinks);
     var addNext = !("next" in doclinks);
@@ -103,28 +87,6 @@ var linkToolbarLinkFinder = {
   addLink: function(doc, rels, url, title, longTitle) {
     var info = {href: url, url: url, title: title, longTitle: longTitle};
     linkToolbarAddLinkForPage(info, doc, rels);
-  },
-
-
-  getUp: function(url) {
-    var matches, origUrl = url;
-    // trim filename (this makes subdriectory digging easier)
-    matches = url.match(/(^.*\/)(.*)/);
-    if(!matches) return null; //only fails if "url" has no /'s
-    url = matches[1];
-    if(url!=origUrl && !/(index|main)\.(php3?|html?)/i.test(url))
-      return url;
-    // dig through subdirs
-    matches = url.match(/^([^\/]*?:\/\/.*\/)[^\/]+?\//);
-    if(matches) return matches[1];
-    // we've reach (ht|f)tp://foo.com/, climb up through subdomains
-    // split into protocol and domain
-    matches = url.match(/([^:]*:\/\/)?(.*)/);
-    var protocol = matches[1], domain = matches[2];
-    matches = domain.match(/^[^\.]*\.(.*)/);
-    if(matches) return (protocol+matches[1]);
-    // nothing found
-    return null;
   },
 
 

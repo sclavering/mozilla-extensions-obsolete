@@ -141,6 +141,7 @@ function linkToolbarLinkAddedHandler(event) {
   var elt = event.originalTarget;
   var doc = elt.ownerDocument;
   if(!(elt instanceof HTMLLinkElement) || !elt.href || !(elt.rel || elt.rev)) return;
+  dump("lt interesting link added, rel='"+elt.rel+"'\n");
 
   var rels = linkToolbarUtils.getLinkRels(elt.rel, elt.rev, elt.type, elt.title);
   if(!rels) return;
@@ -163,19 +164,32 @@ function linkToolbarPageClosedHandler(event) {
 
 
 function linkToolbarPageLoadedHandler(event) {
+  dump("lt loaded\n");
   var doc = event.originalTarget;
-  if(!gLinkToolbarPrefUseLinkGuessing);
+  if(!gLinkToolbarPrefUseLinkGuessing) return;
   if(!(doc instanceof HTMLDocument)) return;
   const win = doc.defaultView;
   if(win != win.top) return;
+
+  if(doc._linkToolbar_haveGuessedLinks) return;
+  doc._linkToolbar_haveGuessedLinks = true;
 
   const links = doc.__lt__links || (doc.__lt__links = []);
 
   if(gLinkToolbarPrefScanHyperlinks)
     linkToolbarLinkFinder.scanPageLinks(doc, links);
   // doc.location[.href] seems not to be maskable by JS, so this should be OK
-  if(gLinkToolbarPrefGuessUpAndTopFromURL)
-    linkToolbarLinkFinder.guessUpAndTopFromURL(doc, links, doc.location.href);
+  if(gLinkToolbarPrefGuessUpAndTopFromURL) {
+    if(!links.up) {
+      var upUrl = linkToolbarUtils.guessUpUrl(doc.location);
+      if(upUrl) linkToolbarAddLinkForPage(new LTLinkInfo(upUrl), doc, {up: true});
+    }
+    dump("top is "+links.top+"\n");
+    if(!links.top) {
+      var topUrl = linkToolbarUtils.guessTopUrl(doc.location);
+      if(topUrl) linkToolbarAddLinkForPage(new LTLinkInfo(topUrl), doc, {top: true});
+    }
+  }
   if(gLinkToolbarPrefGuessPrevAndNextFromURL)
     linkToolbarLinkFinder.guessPrevAndNextFromURL(doc, links, doc.location);
 }
@@ -213,7 +227,7 @@ function linkToolbarAddLinkForPage(linkInfo, doc, rels) {
     if(!(r in doclinks)) doclinks[r] = [];
     // we leave any existing link with the same URL alone so that linkToolbarLinkFinder-generated
     // links don't replace page-provided ones (which are likely to have better descriptions)
-    var url = linkInfo.href;
+    var url = linkInfo.url;
     if(url in doclinks[r]) delete rels[r];
     else doclinks[r][url] = linkInfo;
   }

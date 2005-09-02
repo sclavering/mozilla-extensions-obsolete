@@ -41,10 +41,10 @@
 
 
 function LTLinkInfo(url, title, lang, media) {
-  this.href = this.url = url;
-  this.title = title;
-  this.lang = lang;
-  this.media = media;
+  this.url = url;
+  this.title = title || null;
+  this.lang = lang || null;
+  this.media = media || null;
 }
 LTLinkInfo.prototype = {
   _longTitle: null,
@@ -60,7 +60,7 @@ LTLinkInfo.prototype = {
       if(this.media && !/\b(all|screen)\b/i.test(this.media)) longTitle += this.media + ": ";
       // XXX this produces stupid results if there is an hreflang present but no title
       // (gives "French: ", should be something like "French [language] version")
-      if(this.lang) longTitle += ltLanguageDictionary.lookup(this.lang) + ": ";
+      if(this.lang) longTitle += linkToolbarUtils.getLanguageName(this.lang) + ": ";
       if(this.title) longTitle += this.title;
       // the 'if' here is to ensure the long title isn't just the url
       else if(longTitle) longTitle += this.url;
@@ -81,7 +81,7 @@ LTLinkInfo.prototype = {
 const linkToolbarIgnoreRels =
   /\b(?:stylesheet\b|icon\b|pingback\b|fontdef\b|p3pv|schema\.|meta\b)/i;
 
-var linkToolbarUtils = {
+const linkToolbarUtils = {
   getLinkRels: function(relStr, revStr, mimetype, title) {
     // Ignore certain links
     if(linkToolbarIgnoreRels.test(relStr)) return null;
@@ -172,32 +172,26 @@ var linkToolbarUtils = {
         return "next";
     }
     return null;
-  }
-};
+  },
 
-
-
-// a lazily-initialised dictionary for looking up readable names for 2/3-letter lang codes
-// e.g. "en" -> "English", "de" -> "German" (or en->Englisch, de->Deutsch)
-var ltLanguageDictionary = {
   // code is a language code, e.g. en, en-GB, es, fr-FR
-  lookup: function(code) {
-    var dict = this.dictionary;
+  getLanguageName: function(code) {
+    const dict = this._languageDictionary;
     if(code in dict) return dict[code];
-
-    // see if we have something like "en-GB", and if so change to "English (GB)"
+    // if we have something like "en-GB", change to "English (GB)"
     var parts = code.match(/^(.{2,3})-(.*)$/);
     // xxx make the parentheses localizable
     if(parts && parts[1] in dict) return dict[parts[1]]+" ("+parts[2]+")";
-
     return code;
   },
 
-  get dictionary() {
-    delete this.dictionary; // remove this getter function, so that we can replace with an array
+  // a lazily-initialised dictionary for looking up readable names for 2/3-letter lang codes
+  // e.g. "en" -> "English", "de" -> "German" (or en->Englisch, de->Deutsch)
+  get _languageDictionary() {
+    delete this._languageDictionary; // remove this getter function, so that we can replace with an array
 
     // convert the stringbundle into a js hashtable
-    var dict = this.dictionary = [];
+    const dict = this._languageDictionary = [];
     try {
       var bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
                    .getService(Components.interfaces.nsIStringBundleService)
@@ -213,5 +207,33 @@ var ltLanguageDictionary = {
     }
 
     return dict;
+  },
+
+  // arg is an nsIDOMLocation
+  guessTopUrl: function(location) {
+    const pro = location.protocol;
+    return /^(?:ht|f)tp/.test(pro) ? pro + "//" + location.host + "/" : null;
+  },
+
+  guessUpUrl: function(location) {
+    // location.host produces *error messages* in Fx 1.0 for "about:blank", so avoid those
+    if(!/^(?:ht|f)tp/.test(location.protocol)) return null;
+    const prefix = location.protocol + "//";
+    var host = location.host, path = location.pathname, matches, tail;
+    // dig through path
+    if(path != "/") {
+      while(true) {
+        matches = path.match(/^(.*\/)([^\/]*)$/);
+        if(!matches) break;
+        path = matches[1];
+        tail = matches[2];
+        if(path == "/") break;
+        if(/(?:index|main)\.[\w.]+\/?$/i.test(tail)) continue;
+        return prefix + location.host + path;
+      }
+    }
+    // dig through subdomains
+    matches = host.match(/[^.]*\.(.*)/);
+    return matches && /\./.test(matches[1]) ? prefix + matches[1] + "/" : null;
   }
 };
