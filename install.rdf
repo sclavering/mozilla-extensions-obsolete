@@ -13,9 +13,9 @@
     <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
 
     <contributor>Chris Neale</contributor>
-    <contributor>Xavier Robin</contributor>
+    <contributor>Xavier Robin (French translation)</contributor>
     <contributor>Giancarlo Dessì (Localizzazione italiana)</contributor>
-    <contributor>Rob de Vries (nl-NL translation)</contributor>
+    <contributor>Rob de Vries (Dutch translation)</contributor>
     <contributor>Peter Ondraska (Slovensky preklad)</contributor>
     <contributor>Tomáš Kopečný (cs-CZ translation)</contributor>
     <contributor>Rotem Liss (תרגום לעברית)</contributor>
@@ -24,7 +24,6 @@
     <contributor>Sönke Tesch (German translation)</contributor>
 
     <optionsURL>chrome://linktoolbar/content/options.xul</optionsURL>
-    <!-- <iconURL></iconURL> -->
 
     <targetApplication>
       <r:Description>
