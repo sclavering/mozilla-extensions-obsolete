@@ -150,6 +150,7 @@ function initLinkToolbarButton(elt) {
   elt.onmouseover = linkToolbarMouseEnter;
   elt.onmouseout = linkToolbarMouseExit;
   elt.onclick = linkToolbarItemClicked;
+  elt.oncontextmenu = linkToolbarButtonRightClicked;
   elt.setAttribute("oncommand", "linkToolbarLoadPage(event);"); // .oncommand does not exist
   
   elt.addEventListener("DOMMouseScroll", linkToolbarMouseScrollHandler, false);

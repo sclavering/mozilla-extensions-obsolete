@@ -49,7 +49,6 @@ var gLinkToolbarPrefScanHyperlinks = false;
 
 var gLinkToolbarStatusbar = null; // Firefox's usual statusbar
 
-
 function linkToolbarStartup() {
   gLinkToolbarStatusbar = document.getElementById("statusbar-display");
 
@@ -69,13 +68,11 @@ function linkToolbarDelayedStartup() {
   box.customizeDone = linkToolbarToolboxCustomizeDone;
 }
 
-
 function linkToolbarShutdown() {
   // unhook pref listener (to prevent memory leaks)
   var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
   os.removeObserver(linkToolbarPrefObserver, "linktoolbar:prefs-updated", false);
 }
-
 
 window.addEventListener("load", linkToolbarStartup, false);
 window.addEventListener("unload", linkToolbarShutdown, false);
@@ -264,22 +261,10 @@ function linkToolbarFillTooltip(tooltip, event) {
   return !(!text1 && !text2); // return a bool, not a string
 }
 
-
-// handles middle-clicks and right-clicks
 function linkToolbarItemClicked(e) {
-  var b = e.button, t = e.target, ot = e.originalTarget;
-
-  // open the <menupopup> for a toolbarbutton with more than one link on right click
-  if(b==2 && ot.localName=="toolbarbutton" && t.haveLinks) {
-    t.firstChild.showPopup();
-    return;
-  }
-
-  if(b!=1) return;
+  if(e.button != 1) return;
   linkToolbarLoadPage(e);
-
-  // close any menus if it was a middle-click
-  // closeMenus() in utilityOverlay.js is poorly written (uses tagName, amongst other things), and appears incapable of handling nested menus
+  // close any menus
   var p = e.target.parentNode;
   while(p.localName!="toolbarbutton") {
     if(p.localName=="menupopup") p.hidePopup();
@@ -287,23 +272,45 @@ function linkToolbarItemClicked(e) {
   }
 }
 
-
-function linkToolbarLoadPage(e) {
-  var url = e.target.getAttribute("href");
-  // in contentAreaUtils.js, throws an exception if check fails.
-  // really does expect the XUL document, not the HTML one trying to laod the url
-  urlSecurityCheck(url, document);
-  // in utilityOverlay.js
-  openUILink(url, e, false, true);
+function linkToolbarButtonRightClicked(e) {
+  const t = e.target, ot = e.originalTarget;
+  if(ot.localName=="toolbarbutton" && t.haveLinks) t.firstChild.showPopup();
 }
 
+function linkToolbarLoadPage(e) {
+  const url = e.target.getAttribute("href");
+  const sourceURL = content.document.documentURI; //e.target.ltSourceURL;
+  const button = e.type=="command" ? 0 : e.button;
+  // Construct a fake event to pass to handleLinkClick(event, href, linkNode)
+  // to make it extract the correct source URL. 
+  const fakeEvent = {
+    metaKey: e.metaKey, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey,
+    altKey: e.altKey, button: button, preventBubble: function() {},
+    target: { ownerDocument: { location : { href: sourceURL }}}
+  };
+  // handleLinkClick deals with modified left-clicks, and middle-clicks
+  const didHandleClick = handleLinkClick(fakeEvent, url, null);
+  if(didHandleClick || button != 0) return;
+  linkToolbarLoadPageInCurrentBrowser(url, sourceURL);
+}
 
 // only works for linkType=top/up/first/prev/next/last (i.e. only for buttons)
 // used for keyboard shortcut handling
 function linkToolbarGo(linkType) {
-  var item = linkToolbarItems.getItem(linkType);
-  var url = item.haveLink && item.getAttribute("href");
-  if(!url) return;
-  urlSecurityCheck(url, document);
-  openUILinkIn(url, "current"); // open link in current tab
+  const item = linkToolbarItems.getItem(linkType);
+  if(!item.haveLink) return;
+  const url = item.getAttribute("href");
+  const sourceURL = content.document.documentURI; // item.ltSourceURL;
+  linkToolbarLoadPageInCurrentBrowser(url, sourceURL);
+}
+
+function linkToolbarLoadPageInCurrentBrowser(url, sourceURL) {
+  // urlSecurityCheck changed signature in rev 1.77 of contentAreaUtils.js
+  // (i.e. btwn Fx 1.0.x and 1.5 beta). isn't this fun?
+  if("getContentFrameURI" in window) // happens to coincide with the change
+    urlSecurityCheck(url, document); // yes, it wants the XUL doc.
+  else
+    urlSecurityCheck(url, sourceURL);
+  gBrowser.loadURI(url);
+  content.focus();
 }
