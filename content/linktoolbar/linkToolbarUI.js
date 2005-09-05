@@ -51,6 +51,7 @@ var gLinkToolbarStatusbar = null; // Firefox's usual statusbar
 
 function linkToolbarStartup() {
   gLinkToolbarStatusbar = document.getElementById("statusbar-display");
+  linkToolbarItems.init();
 
   setTimeout(linkToolbarDelayedStartup, 1); // needs to happen after Fx's delayedStartup()
 
@@ -172,7 +173,10 @@ function linkToolbarPageLoadedHandler(event) {
 
   if(gLinkToolbarPrefScanHyperlinks)
     linkToolbarLinkFinder.scanPageLinks(doc, links);
-  // doc.location[.href] seems not to be maskable by JS, so this should be OK
+
+  const protocol = doc.location.protocol;
+  if(!/^(?:https|http|ftp)\:$/.test(protocol)) return;
+
   if(gLinkToolbarPrefGuessUpAndTopFromURL) {
     if(!links.up) {
       var upUrl = linkToolbarUtils.guessUpUrl(doc.location);
@@ -184,7 +188,7 @@ function linkToolbarPageLoadedHandler(event) {
     }
   }
   if(gLinkToolbarPrefGuessPrevAndNextFromURL)
-    linkToolbarLinkFinder.guessPrevAndNextFromURL(doc, links, doc.location);
+    linkToolbarLinkFinder.guessPrevAndNextFromURL(doc, !links.prev, !links.next);
 }
 
 

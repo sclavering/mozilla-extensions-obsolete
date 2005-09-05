@@ -12,20 +12,14 @@ var linkToolbarLinkFinder = {
   img_re_next:  /ne?xt|fwd|forward/i,
   img_re_last:  /last/i,
 
-  guessPrevAndNextFromURL: function(doc, doclinks, location) {
-    var addPrev = !("prev" in doclinks);
-    var addNext = !("next" in doclinks);
-    if(!addPrev && !addNext) return;
+  guessPrevAndNextFromURL: function(doc, guessPrev, guessNext) {
+    if(!guessPrev && !guessNext) return;
 
     function isDigit(c) { return ("0" <= c && c <= "9") }
 
+    const location = doc.location;
     var url = location.href;
-
-    // the char index in the url at which the path+search+hash section begins (2 is for the //)
-    var min = 0;
-    // about:blank has no host
-    if(location.host)
-      min = location.host.length + location.protocol.length + 2;
+    var min = location.host.length + location.protocol.length + 2; // 2 for "//"
 
     var e, s;
     for(e = url.length; e > min && !isDigit(url[e-1]); --e);
@@ -36,18 +30,17 @@ var linkToolbarLinkFinder = {
     var num = parseInt(old, 10); // force base 10 because number could start with zeros
 
     var pre = url.substring(0,s), post = url.substring(e);
-    if(addPrev) {
+    if(guessPrev) {
       var prv = ""+(num-1);
       while(prv.length < old.length) prv = "0" + prv;
-      this.addLink(doc, {prev:true}, pre+prv+post, null, null);
+      linkToolbarAddLinkForPage(new LTLinkInfo(pre + prv + post), doc, { prev: true });
     }
-    if(addNext) {
+    if(guessNext) {
       var nxt = ""+(num+1);
       while(nxt.length < old.length) nxt = "0" + nxt;
-      this.addLink(doc, {next:true}, pre+nxt+post, null, null);
+      linkToolbarAddLinkForPage(new LTLinkInfo(pre + nxt + post), doc, { next: true });
     }
   },
-
 
   scanPageLinks: function(doc, links) {
     // The user has to wait for linkToolbarLinkFinder to finish before they can interact with the page
@@ -79,16 +72,9 @@ var linkToolbarLinkFinder = {
       else if(this.re_first.test(title)) rels.first = true;
       else if(this.re_last.test(title)) rels.last = true;
 
-      this.addLink(doc, rels, href, title, title);
+      linkToolbarAddLinkForPage(new LTLinkInfo(href, title), doc, rels);
     }
   },
-
-
-  addLink: function(doc, rels, url, title, longTitle) {
-    var info = {href: url, url: url, title: title, longTitle: longTitle};
-    linkToolbarAddLinkForPage(info, doc, rels);
-  },
-
 
   // get the text contained in a link, and any guesses for rel based on img url
   getTextAndImgRels: function(el, rels) {

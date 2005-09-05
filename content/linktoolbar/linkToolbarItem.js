@@ -47,13 +47,17 @@ const linkToolbarItems = {
 
   items: [], // rel->item map
 
+  init: function() {
+    this.moreMenu = document.getElementById("linktoolbar-more-menu");
+    this.morePopup = document.getElementById("linktoolbar-more-popup");
+  },
+
   // called after toolbar customisation is finished.  must stop using any items that are no longer present,
   // and destroy any menus/menuitems for which a button is now present
   updateForToolbarCustomisation: function() {
-    const items = this.items;
+    this.init();
+    const items = this.items, moreMenu = this.moreMenu;
     const btns = {top:true, up:true, first:true, prev:true, next:true, last:true};
-    const moreMenu = this.moreMenu = document.getElementById("linktoolbar-more-menu");
-    this.morePopup = document.getElementById("linktoolbar-more-popup");
 
     for(var rel in items) {
       var item = items[rel];
