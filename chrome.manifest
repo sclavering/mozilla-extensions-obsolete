@@ -1,5 +1,5 @@
-content	linktoolbar	jar:chrome/linkToolbar.jar!/content/linktoolbar/ xpcnativewrappers=no
-overlay	chrome://browser/content/browser.xul	chrome://linktoolbar/content/linkToolbarOverlay.xul
+content linktoolbar jar:chrome/linkToolbar.jar!/content/linktoolbar/ xpcnativewrappers=yes
+overlay chrome://browser/content/browser.xul chrome://linktoolbar/content/linkToolbarOverlay.xul
 
 skin	linktoolbar	classic/1.0	jar:chrome/linkToolbar.jar!/skin/classic/
 style	chrome://global/content/customizeToolbar.xul	chrome://linktoolbar/skin/linkToolbar.css
