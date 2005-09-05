@@ -63,3 +63,7 @@ Contributor(s):
 #linktoolbar-more-menu[open=true] { -moz-image-region: rect(32px 176px 48px 160px); }
 #linktoolbar-more-menu[disabled=true] { -moz-image-region: rect(32px 192px 48px 176px); }
 .linktoolbar-button menuitem[href^="mailto:"] { -moz-image-region: rect(32px 112px 48px 96px); }
+
+#status-bar toolbar .linktoolbar-button {
+	max-height: none;
+}
