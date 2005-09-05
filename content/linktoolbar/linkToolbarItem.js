@@ -41,45 +41,53 @@
 
 
 // controller for all UI bits displaying <link>s
-var linkToolbarItems = {
+const linkToolbarItems = {
+  moreMenu: null,
+  morePopup: null,
+
   items: [], // rel->item map
 
   // called after toolbar customisation is finished.  must stop using any items that are no longer present,
-  // and destroy an y menus/menuitems for which a button is now present
+  // and destroy any menus/menuitems for which a button is now present
   updateForToolbarCustomisation: function() {
-    const is = this.items;
+    const items = this.items;
     const btns = {top:true, up:true, first:true, prev:true, next:true, last:true};
+    const moreMenu = this.moreMenu = document.getElementById("linktoolbar-more-menu");
+    this.morePopup = document.getElementById("linktoolbar-more-popup");
 
-    var moreMenu = document.getElementById("linktoolbar-more-menu");
-
-    for(var rel in is) {
-      var item = is[rel];
-      // if buttons have been added some menus+menuitems may need destroying
-      // if buttons have been removed they should be removed from .items[]
+    for(var rel in items) {
+      var item = items[rel];
+      // keep an item that *can* correspond to a button iff:
+      //   it was an item on the More menu, and that's still on a toolbar
+      //   or it was a button before, and still is one
       if(rel in btns) {
         var btn = document.getElementById("linktoolbar-"+rel);
-        if(!btn && (item instanceof Element)) { // button has been removed
-          delete is[rel];
-        } else if(btn && btn!=item) { // button has been added
-          item.destroy();
-          delete is[rel];
-        } // otherwise button either still present, or still not present
+        if(btn ? item == btn : item instanceof LinkToolbarTransientItem && moreMenu) continue;
       }
+      // keep menuitems/submenus only of the More menu is still present
+      else if(moreMenu) continue;
 
-      // if the More menu is gone then all non-toolbar-button items should be thrown away
-      if(!moreMenu && !((item instanceof Element) && item.localName=="toolbarbutton"))
-        delete is[rel];
+      item.destroy();
+      delete items[rel];
     }
+    
+    // Can end up incorrectly enabled if e.g. only the Top menuitem was active,
+    // and that gets replaced by a button.
+    if(moreMenu) moreMenu.disabled = true;
   },
 
   handleLinkForRels: function(linkInfo, rels) {
-    for(var rel in rels) this.getItem(rel).displayLink(linkInfo);
+    for(var rel in rels) {
+      var item = this.getItem(rel);
+      if(item) item.displayLink(linkInfo);
+    }
   },
 
   // rels is a rel->{url->linkInfo} map
   handleLinksForRels: function(rels) {
     for(var rel in rels) {
       var item = this.getItem(rel);
+      if(!item) continue;
       var links = rels[rel];
       for(var link in links) item.displayLink(links[link]);
     }
@@ -87,13 +95,13 @@ var linkToolbarItems = {
 
   getItem: function(linkType) {
     const items = this.items;
-    if(!(linkType in items)) {
-      var elt = document.getElementById("linktoolbar-" + linkType);
-      // initialisation functions for different elements used to display links
-      const inits = {toolbarbutton: initLinkToolbarButton, menuitem: initLinkToolbarItem, menu: initLinkToolbarMenu};
-      items[linkType] = elt ? inits[elt.localName](elt) : new LinkToolbarTransientItem(linkType);
-    }
-    return items[linkType];
+    if(items[linkType]) return items[linkType];
+    const elt = document.getElementById("linktoolbar-" + linkType);
+    // initialisation functions for different elements used to display links
+    const inits = {toolbarbutton: initLinkToolbarButton, menuitem: initLinkToolbarItem, menu: initLinkToolbarMenu};
+    if(elt) return items[linkType] = inits[elt.localName](elt);
+    if(!this.moreMenu) return null;
+    return items[linkType] = new LinkToolbarTransientItem(linkType);
   },
 
   clearAll: function() {
@@ -117,16 +125,16 @@ function makeLinkToolbarMenuItem(href, label, tooltip) {
 
 function initLinkToolbarItem(elt) {
   for(var i in linkToolbarItem) elt[i] = linkToolbarItem[i];
-  // this will need fixing if we ever have more than one top-level menu
-  elt.parentMenuButton = document.getElementById("linktoolbar-more-menu");
   return elt;
 }
 
 const linkToolbarItem = {
   haveLink: false,
 
+  destroy: function() {},
+
   clear: function() {
-    this.parentMenuButton.disabled = true;
+    linkToolbarItems.moreMenu.disabled = true;
     this.hidden = true;
     this.haveLink = false;
   },
@@ -134,7 +142,7 @@ const linkToolbarItem = {
   displayLink: function(link) {
     if(this.haveLink) return;
     this.haveLink = true;
-    this.parentMenuButton.disabled = false;
+    linkToolbarItems.moreMenu.disabled = false;
     this.hidden = false;
     this.setAttribute("href", link.url);
     this.setAttribute("tooltiptext1", link.longTitle);
@@ -172,6 +180,8 @@ const linkToolbarButton = {
   haveLinks: false, // indicates the button has >= 2 links
   // links: [], // an array of links for this button (set in above function)
   linksHaveChanged: true, // has our set of links changed since the menu was last shown
+  
+  destroy: function() {},
 
   clear: function() {
     this.haveLink = this.haveLinks = false;
@@ -226,17 +236,17 @@ function initLinkToolbarMenu(elt) {
   var popup = elt.popup = document.createElement("menupopup");
   popup.setAttribute("onpopupshowing", "this.parentNode.buildMenu();");
   elt.appendChild(popup);
-  // this will need fixing if we ever have more than one top-level menu
-  elt.parentMenuButton = document.getElementById("linktoolbar-more-menu");
   return elt;
 }
 
 const linkToolbarMenu = {
   links: [],
   linksHaveChanged: true, // has the set of links changed since the menu was last shown?
+  
+  destroy: function() {},
 
   clear: function() {
-    this.parentMenuButton.disabled = true;
+    linkToolbarItems.moreMenu.disabled = true;
     this.hidden = true;
     this.links = [];
     this.linksHaveChanged = true;
@@ -245,7 +255,7 @@ const linkToolbarMenu = {
   displayLink: function(link) {
     this.linksHaveChanged = true;
     this.hidden = false;
-    this.parentMenuButton.disabled = false;
+    linkToolbarItems.moreMenu.disabled = false;
     this.links.push(link);
   },
 
@@ -283,10 +293,9 @@ function LinkToolbarTransientItem(linkType) {
   popup.linkToolbarItem = this;
   popup.setAttribute("onpopupshowing", "this.linkToolbarItem.buildMenu();");
   // add items and create object to control them
-  this.parentMenuButton = document.getElementById("linktoolbar-more-menu");
-  var moreMenu = document.getElementById("linktoolbar-more-popup");
-  moreMenu.appendChild(item);
-  moreMenu.appendChild(menu);
+  const morePopup = linkToolbarItems.morePopup;
+  morePopup.appendChild(item);
+  morePopup.appendChild(menu);
 }
 
 LinkToolbarTransientItem.prototype = {
@@ -306,7 +315,7 @@ LinkToolbarTransientItem.prototype = {
     this.links = [];
     this.linksHaveChanged = true;
     this.item.hidden = this.menu.hidden = true;
-    this.parentMenuButton.disabled = true;
+    linkToolbarItems.moreMenu.disabled = true;
   },
 
   displayLink: function(link) {
@@ -315,7 +324,7 @@ LinkToolbarTransientItem.prototype = {
       this.item.setAttribute("href", link.url);
       this.item.hidden = false;
       this.item.setAttribute("tooltiptext1", link.longTitle);
-      this.parentMenuButton.disabled = false;
+      linkToolbarItems.moreMenu.disabled = false;
     } else if(!this.haveLinks) {
       this.haveLinks = true;
       this.item.hidden = true;

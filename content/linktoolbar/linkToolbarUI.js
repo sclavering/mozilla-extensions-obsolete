@@ -298,7 +298,7 @@ function linkToolbarLoadPage(e) {
 // used for keyboard shortcut handling
 function linkToolbarGo(linkType) {
   const item = linkToolbarItems.getItem(linkType);
-  if(!item.haveLink) return;
+  if(!item || !item.haveLink) return;
   const url = item.getAttribute("href");
   const sourceURL = content.document.documentURI; // item.ltSourceURL;
   linkToolbarLoadPageInCurrentBrowser(url, sourceURL);
