@@ -12,7 +12,7 @@ Original Author:
 <!ENTITY iconsOnly "Nur Grafiken anzeigen, keinen Text">
 
 <!ENTITY linkGuessing "Zusammenhänge erraten">
-<!ENTITY linkGuessingDescription "Viele Webseiten enthalten keine HTML-&lt;link&gt;-Elemente, die auf mit ihnen zusammenhängende Seiten zeigen. Link Toolbar kann stattdessen versuchen, an Hand des Inhalts der angezeigten Seite diese Zusammenhänge zu erraten.">
+<!ENTITY linkGuessingDescription "Link Toolbar kann versuchen, aus dem Inhalt einer Seite auf Folgeseiten zu schließen.">
 
 <!ENTITY scanHyperlinks "Nach Hinweisen auf nächste, vorangehende, erste und letzte Seite suchen">
 <!ENTITY guessUpAndTopFromURL "Adresse der übergeordneten und der Startseite aus der aktuellen Adresse konstruieren">
