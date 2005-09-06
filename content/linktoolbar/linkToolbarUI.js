@@ -112,9 +112,9 @@ function linkToolbarAddHandlers() {
   browser.addEventListener("select", linkToolbarTabSelectedHandler, false);
   browser.addEventListener("DOMLinkAdded", linkToolbarLinkAddedHandler, true);
   browser.addEventListener("unload", linkToolbarPageClosedHandler, true);
-  browser.addEventListener("PageHide", linkToolbarPageClosedHandler, false);
+  browser.addEventListener("pagehide", linkToolbarPageClosedHandler, false);
   browser.addEventListener("DOMContentLoaded", linkToolbarPageLoadedHandler, true);
-  browser.addEventListener("PageShow", linkToolbarPageShowHandler, false);
+  browser.addEventListener("pageshow", linkToolbarPageShowHandler, false);
 }
 
 
@@ -123,9 +123,9 @@ function linkToolbarRemoveHandlers() {
   browser.removeEventListener("select", linkToolbarTabSelectedHandler, false);
   browser.removeEventListener("DOMLinkAdded", linkToolbarLinkAddedHandler, true);
   browser.removeEventListener("unload", linkToolbarPageClosedHandler, true);
-  browser.removeEventListener("PageHide", linkToolbarPageClosedHandler, true);  
+  browser.removeEventListener("pagehide", linkToolbarPageClosedHandler, true);  
   browser.removeEventListener("DOMContentLoaded", linkToolbarPageLoadedHandler, true);
-  browser.removeEventListener("PageShow", linkToolbarPageShowHandler, false);
+  browser.removeEventListener("pageshow", linkToolbarPageShowHandler, false);
 }
 
 
@@ -146,14 +146,14 @@ function linkToolbarLinkAddedHandler(event) {
 }
 
 
-// Really ought to delete/nullify doc.__lt__links on "close" (but not on "PageHide")
+// Really ought to delete/nullify doc.__lt__links on "close" (but not on "pagehide")
 function linkToolbarPageClosedHandler(event) {
   // Links like: <a href="..." onclick="this.style.display='none'">.....</a>
-  // (the onclick handler could instead be on an ancestor of the link) lead to unload/PageHide
+  // (the onclick handler could instead be on an ancestor of the link) lead to unload/pagehide
   // events with originalTarget==a text node.  So use ownerDocument (which is null for Documents)
   var doc = event.originalTarget;
   if(!(doc instanceof Document)) doc = doc.ownerDocument;
-  // don't clear the links for unload/PageHide from a background tab, or from a subframe
+  // don't clear the links for unload/pagehide from a background tab, or from a subframe
   if(doc != gBrowser.contentDocument) return;
   linkToolbarItems.clearAll();
 }
