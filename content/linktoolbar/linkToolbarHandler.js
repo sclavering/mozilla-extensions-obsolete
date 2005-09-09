@@ -209,29 +209,27 @@ const linkToolbarUtils = {
     return dict;
   },
 
-  // arg is an nsIDOMLocation
+  // arg is an nsIDOMLocation, with protocol of http(s) or ftp
   guessTopUrl: function(location) {
-    const pro = location.protocol;
-    return /^(?:ht|f)tp/.test(pro) ? pro + "//" + location.host + "/" : null;
+    return location.protocol + "//" + location.host + "/";
   },
 
   guessUpUrl: function(location) {
-    // location.host produces *error messages* in Fx 1.0 for "about:blank", so avoid those
-    if(!/^(?:ht|f)tp/.test(location.protocol)) return null;
+    const ignoreRE = /(?:index|main)\.[\w.]+\/?$/i;
     const prefix = location.protocol + "//";
-    var host = location.host, path = location.pathname, matches, tail;
+    var host = location.host, path = location.pathname, path0 = path, matches, tail;
     // dig through path
-    if(path != "/") {
-      while(true) {
-        matches = path.match(/^(.*\/)([^\/]*)$/);
-        if(!matches) break;
-        path = matches[1];
-        tail = matches[2];
-        if(path == "/") break;
-        if(/(?:index|main)\.[\w.]+\/?$/i.test(tail)) continue;
-        return prefix + location.host + path;
-      }
+    while(true) {
+      matches = path.match(/^(.*\/)([^\/]*)$/);
+      if(!matches) break;
+      path = matches[1];
+      tail = matches[2];
+      if(path == "/") break;
+      if(ignoreRE.test(tail)) continue;
+      return prefix + location.host + path;
     }
+    if(path == "/" && path0 != "/" && !ignoreRE.test(path0))
+      return prefix + location.host + path;
     // dig through subdomains
     matches = host.match(/[^.]*\.(.*)/);
     return matches && /\./.test(matches[1]) ? prefix + matches[1] + "/" : null;
