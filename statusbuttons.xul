@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://statusbuttons/content/statusbuttons.css" type="text/css"?>
+
+<overlay id="statusbuttonsOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<statusbar id="status-bar">
+  <toolbar
+    id="statusbuttons-toolbar-left"
+    toolbox="navigator-toolbox"
+    class="statusbuttons-toolbar"
+    context="toolbar-context-menu"
+    customizable="true"
+    mode="icons"
+    iconsize="small"
+    position="1"
+    />
+  <toolbar
+    id="statusbuttons-toolbar-right"
+    toolbox="navigator-toolbox"
+    class="statusbuttons-toolbar"
+    context="toolbar-context-menu"
+    customizable="true"
+    mode="icons"
+    iconsize="small"
+    position="1000"
+    />
+</statusbar>
+
+<script type="application/x-javascript"><![CDATA[
+var statusbuttonsUselessVariable = null; // see bindings.xml (declaring it here avoids a warning)
+var statusbuttonsToolbarsAreBeingCustomised = false;
+
+const statusbuttonsOldBrowserCustomizeToolbar = BrowserCustomizeToolbar;
+
+BrowserCustomizeToolbar = function statusbuttons_BrowserCustomizeToolbar() {
+  statusbuttonsToolbarsAreBeingCustomised = true;
+  document.getElementById("statusbuttons-toolbar-left").setAttribute("incustomisemode", "true");
+  document.getElementById("statusbuttons-toolbar-right").setAttribute("incustomisemode", "true");
+  statusbuttonsOldBrowserCustomizeToolbar();
+}
+
+const statusbuttonsOldBrowserToolboxCustomizeDone = BrowserToolboxCustomizeDone;
+
+BrowserToolboxCustomizeDone = function statusbuttons_BrowserToolboxCustomizeDone(aToolboxChanged) {
+  statusbuttonsToolbarsAreBeingCustomised = false;
+  document.getElementById("statusbuttons-toolbar-left").removeAttribute("incustomisemode");
+  document.getElementById("statusbuttons-toolbar-right").removeAttribute("incustomisemode");
+  statusbuttonsOldBrowserToolboxCustomizeDone(aToolboxChanged);
+}
+
+]]></script>
+
+</overlay>

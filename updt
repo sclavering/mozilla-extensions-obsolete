@@ -1,0 +1,2 @@
+zip -ur0 chrome/statusbuttons.jar statusbuttons.xul statusbuttons.css bindings.xml
+zip -ur9 statusbuttons.xpi chrome install.rdf chrome.manifest -x '*CVS*'

@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+
+<bindings id="statusbuttons-bindings" xmlns="http://www.mozilla.org/xbl">
+
+<binding id="toolbar" extends="chrome://global/content/bindings/toolbar.xml#toolbar">
+  <implementation>
+    <field name="_toolboxProperties">
+    statusbuttonsUselessVariable = { // get parsing errors without the assignment
+      // tricks various things into believing our toolbars are children of the toolbox
+      childNodesGetter: function() {
+        const extras = this._statusbuttons_toolbars, elen = extras.length;
+        const kids = this.__proto__.__lookupGetter__("childNodes").call(this), klen = kids.length;
+        const result = new Array(klen + elen);
+        for(var i = 0; i != klen; ++i) result[i] = kids[i];
+        for(i = 0; i != elen; ++i) result[klen + i] = extras[i];
+        return result;
+      },
+
+      // copies the drag* event listeners used by the customisation window onto our toolbars
+      addEventListener: function(name, func, capture) {
+        const extras = this._statusbuttons_toolbars, elen = extras.length;
+        if(statusbuttonsToolbarsAreBeingCustomised) // paranoia
+          for(var i = 0; i != elen; ++i) extras[i].addEventListener(name, func, capture);
+        this._pre_statusbuttons_addEventListener(name, func, capture);
+      },
+
+      removeEventListener: function(name, func, capture) {
+        const extras = this._statusbuttons_toolbars, elen = extras.length;
+        if(statusbuttonsToolbarsAreBeingCustomised)
+          for(var i = 0; i != elen; ++i) extras[i].removeEventListener(name, func, capture);
+        this._pre_statusbuttons_removeEventListener(name, func, capture);
+      },
+
+      // needed to make unwrapping items at the end of customisation work properly
+      getElementsByTagName: function(tag) {
+        return tag=="toolbarpaletteitem" ? document.getElementsByTagName(tag)
+          : this._pre_statusbuttons_getElementsByTagName(tag);
+      }
+    }
+    </field>
+
+    <constructor><![CDATA[
+      const toolbox = document.getElementById(this.getAttribute("toolbox"));
+      const toolboxprops = this._toolboxProperties;
+      if(!toolbox._statusbuttons_toolbars) {
+        toolbox.__defineGetter__("childNodes", toolboxprops.childNodesGetter);
+        toolbox._pre_statusbuttons_addEventListener = toolbox.addEventListener;
+        toolbox.addEventListener = toolboxprops.addEventListener;
+        toolbox._pre_statusbuttons_removeEventListener = toolbox.removeEventListener;
+        toolbox.removeEventListener = toolboxprops.removeEventListener;
+        toolbox._pre_statusbuttons_getElementsByTagName = toolbox.getElementsByTagName;
+        toolbox.getElementsByTagName = toolboxprops.getElementsByTagName;
+        toolbox._statusbuttons_toolbars = [];
+        toolbox._statusbuttons_isBeingCustomised = false;
+      }
+      toolbox._statusbuttons_toolbars.push(this);
+
+      const palette = toolbox.palette || toolbox.getElementsByTagName("toolbarpalette")[0];
+      // the binding we're inheriting from expects this
+      this.parentNode.palette = palette;
+
+      const set = this.getAttribute("currentset") || this.getAttribute("defaultset");
+      if(set) this.currentSet = set;
+    ]]></constructor>
+  </implementation>
+</binding>
+</bindings>

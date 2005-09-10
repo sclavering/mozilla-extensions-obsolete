@@ -1,0 +1,15 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+.statusbuttons-toolbar {
+  -moz-binding: url(chrome://statusbuttons/content/bindings.xml#toolbar);
+  -moz-appearance: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.statusbuttons-toolbar[incustomisemode=true] {
+  min-width: 20px;
+  border: 1px solid;
+}
