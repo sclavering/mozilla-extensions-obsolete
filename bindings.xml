@@ -39,6 +39,15 @@
     }
     </field>
 
+    <field name="_pre_statusbuttons_setAttribute">this.setAttribute</field>
+
+    <field name="setAttribute">
+      function(name, val) {
+        if(name == "iconsize" || name == "mode") return;
+        this._pre_statusbuttons_setAttribute(name, val);
+      }
+    </field>
+
     <constructor><![CDATA[
       // For Thunderbird, this runs before the code in the .xul file
       if(!statusbuttonsToolbox) {
