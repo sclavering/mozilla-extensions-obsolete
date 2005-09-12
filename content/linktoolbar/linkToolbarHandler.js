@@ -215,21 +215,19 @@ const linkToolbarUtils = {
   },
 
   guessUpUrl: function(location) {
-    const ignoreRE = /(?:index|main)\.[\w.]+\/?$/i;
+    const ignoreRE = /(?:index|main)\.[\w.]+?$/i;
     const prefix = location.protocol + "//";
     var host = location.host, path = location.pathname, path0 = path, matches, tail;
+    if(path[path.length - 1] == "/") path = path.slice(0, path.length - 1);
     // dig through path
-    while(true) {
-      matches = path.match(/^(.*\/)([^\/]*)$/);
+    while(path) {
+      matches = path.match(/^(.*)\/([^\/]*)$/);
       if(!matches) break;
       path = matches[1];
       tail = matches[2];
-      if(path == "/") break;
-      if(ignoreRE.test(tail)) continue;
-      return prefix + location.host + path;
+      if(path ? !ignoreRE.test(tail) : path0 != "/" && !ignoreRE.test(path0))
+        return prefix + location.host + path + "/";
     }
-    if(path == "/" && path0 != "/" && !ignoreRE.test(path0))
-      return prefix + location.host + path;
     // dig through subdomains
     matches = host.match(/[^.]*\.(.*)/);
     return matches && /\./.test(matches[1]) ? prefix + matches[1] + "/" : null;
