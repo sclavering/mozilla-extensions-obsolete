@@ -43,14 +43,12 @@
       // For Thunderbird, this runs before the code in the .xul file
       if(!statusbuttonsToolbox) {
         if("BrowserCustomizeToolbar" in window) { // it's Firefox
-//          dump("is Fx.  BrowserCustomizeToolbar="+ BrowserCustomizeToolbar.__proto__+"\n");
           statusbuttonsOldCustomizeToolbar = BrowserCustomizeToolbar;
           BrowserCustomizeToolbar = statusbuttonsCustomizeToolbar;
           statusbuttonsOldToolboxCustomizeDone = BrowserToolboxCustomizeDone;
           BrowserToolboxCustomizeDone = statusbuttonsToolboxCustomizeDone;
           var toolboxId = "navigator-toolbox";
         } else { // it's Thunderbird
-//          dump("sb Thunderbird!\n");
           statusbuttonsOldCustomizeToolbar = CustomizeMailToolbar;
           CustomizeMailToolbar = statusbuttonsCustomizeToolbar;
           statusbuttonsOldToolboxCustomizeDone = MailToolboxCustomizeDone;
@@ -58,7 +56,6 @@
           toolboxId = "mail-toolbox";
         }
         const toolbox = statusbuttonsToolbox = document.getElementById(toolboxId);
-//        dump("toolbox = "+toolbox+"\n");
         const toolboxprops = this._toolboxProperties;
         toolbox.__defineGetter__("childNodes", toolboxprops.childNodesGetter);
         toolbox._pre_statusbuttons_addEventListener = toolbox.addEventListener;
