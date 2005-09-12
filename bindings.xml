@@ -40,9 +40,26 @@
     </field>
 
     <constructor><![CDATA[
-      const toolbox = document.getElementById(this.getAttribute("toolbox"));
-      const toolboxprops = this._toolboxProperties;
-      if(!toolbox._statusbuttons_toolbars) {
+      // For Thunderbird, this runs before the code in the .xul file
+      if(!statusbuttonsToolbox) {
+        if("BrowserCustomizeToolbar" in window) { // it's Firefox
+//          dump("is Fx.  BrowserCustomizeToolbar="+ BrowserCustomizeToolbar.__proto__+"\n");
+          statusbuttonsOldCustomizeToolbar = BrowserCustomizeToolbar;
+          BrowserCustomizeToolbar = statusbuttonsCustomizeToolbar;
+          statusbuttonsOldToolboxCustomizeDone = BrowserToolboxCustomizeDone;
+          BrowserToolboxCustomizeDone = statusbuttonsToolboxCustomizeDone;
+          var toolboxId = "navigator-toolbox";
+        } else { // it's Thunderbird
+//          dump("sb Thunderbird!\n");
+          statusbuttonsOldCustomizeToolbar = CustomizeMailToolbar;
+          CustomizeMailToolbar = statusbuttonsCustomizeToolbar;
+          statusbuttonsOldToolboxCustomizeDone = MailToolboxCustomizeDone;
+          MailToolboxCustomizeDone = statusbuttonsToolboxCustomizeDone;
+          toolboxId = "mail-toolbox";
+        }
+        const toolbox = statusbuttonsToolbox = document.getElementById(toolboxId);
+//        dump("toolbox = "+toolbox+"\n");
+        const toolboxprops = this._toolboxProperties;
         toolbox.__defineGetter__("childNodes", toolboxprops.childNodesGetter);
         toolbox._pre_statusbuttons_addEventListener = toolbox.addEventListener;
         toolbox.addEventListener = toolboxprops.addEventListener;
@@ -52,13 +69,14 @@
         toolbox.getElementsByTagName = toolboxprops.getElementsByTagName;
         toolbox._statusbuttons_toolbars = [];
         toolbox._statusbuttons_isBeingCustomised = false;
+        if(!toolbox.palette)
+          toolbox.palette = toolbox.removeChild(toolbox.getElementsByTagName("toolbarpalette")[0]);
       }
-      toolbox._statusbuttons_toolbars.push(this);
 
-      const palette = toolbox.palette || toolbox.getElementsByTagName("toolbarpalette")[0];
+      statusbuttonsToolbox._statusbuttons_toolbars.push(this);
       // the binding we're inheriting from expects this
-      this.parentNode.palette = palette;
-
+      this.parentNode.palette = statusbuttonsToolbox.palette;
+      // the overridden constructor did this
       const set = this.getAttribute("currentset") || this.getAttribute("defaultset");
       if(set) this.currentSet = set;
     ]]></constructor>

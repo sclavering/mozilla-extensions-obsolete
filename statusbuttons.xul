@@ -7,7 +7,6 @@
 <statusbar id="status-bar">
   <toolbar
     id="statusbuttons-toolbar-left"
-    toolbox="navigator-toolbox"
     class="statusbuttons-toolbar"
     context="toolbar-context-menu"
     customizable="true"
@@ -17,7 +16,6 @@
     />
   <toolbar
     id="statusbuttons-toolbar-right"
-    toolbox="navigator-toolbox"
     class="statusbuttons-toolbar"
     context="toolbar-context-menu"
     customizable="true"
@@ -31,22 +29,23 @@
 var statusbuttonsUselessVariable = null; // see bindings.xml (declaring it here avoids a warning)
 var statusbuttonsToolbarsAreBeingCustomised = false;
 
-const statusbuttonsOldBrowserCustomizeToolbar = BrowserCustomizeToolbar;
+var statusbuttonsOldCustomizeToolbar = null;
+var statusbuttonsOldToolboxCustomizeDone = null;
 
-BrowserCustomizeToolbar = function statusbuttons_BrowserCustomizeToolbar() {
+var statusbuttonsToolbox = null;
+
+function statusbuttonsCustomizeToolbar(id) { // id arg is Tb only
   statusbuttonsToolbarsAreBeingCustomised = true;
   document.getElementById("statusbuttons-toolbar-left").setAttribute("incustomisemode", "true");
   document.getElementById("statusbuttons-toolbar-right").setAttribute("incustomisemode", "true");
-  statusbuttonsOldBrowserCustomizeToolbar();
+  statusbuttonsOldCustomizeToolbar(id);
 }
 
-const statusbuttonsOldBrowserToolboxCustomizeDone = BrowserToolboxCustomizeDone;
-
-BrowserToolboxCustomizeDone = function statusbuttons_BrowserToolboxCustomizeDone(aToolboxChanged) {
+function statusbuttonsToolboxCustomizeDone(aToolboxChanged) {
   statusbuttonsToolbarsAreBeingCustomised = false;
   document.getElementById("statusbuttons-toolbar-left").removeAttribute("incustomisemode");
   document.getElementById("statusbuttons-toolbar-right").removeAttribute("incustomisemode");
-  statusbuttonsOldBrowserToolboxCustomizeDone(aToolboxChanged);
+  statusbuttonsOldToolboxCustomizeDone(aToolboxChanged);
 }
 
 ]]></script>
