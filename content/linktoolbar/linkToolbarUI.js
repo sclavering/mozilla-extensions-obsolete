@@ -280,7 +280,7 @@ function linkToolbarItemClicked(e) {
 
 function linkToolbarButtonRightClicked(e) {
   const t = e.target, ot = e.originalTarget;
-  if(ot.localName=="toolbarbutton" && t.haveLinks) t.firstChild.showPopup();
+  if(ot.localName=="toolbarbutton" && t.links.length>1) t.firstChild.showPopup();
 }
 
 function linkToolbarLoadPage(e) {
@@ -304,7 +304,7 @@ function linkToolbarLoadPage(e) {
 // used for keyboard shortcut handling
 function linkToolbarGo(linkType) {
   const item = linkToolbarItems.getItem(linkType);
-  if(!item || !item.haveLink) return;
+  if(!item || !item.links.length) return;
   const url = item.getAttribute("href");
   const sourceURL = content.document.documentURI; // item.ltSourceURL;
   linkToolbarLoadPageInCurrentBrowser(url, sourceURL);
