@@ -73,7 +73,7 @@ const linkToolbarItems = {
     this.moreMenu = document.getElementById("linktoolbar-more-menu");
     this.morePopup = document.getElementById("linktoolbar-more-popup");
   },
-  
+
   _initButtons: function() {
     const btns = {top:true, up:true, first:true, prev:true, next:true, last:true};
     const buttons = this.buttons = {};
@@ -81,12 +81,12 @@ const linkToolbarItems = {
       var elt = document.getElementById("linktoolbar-"+rel);
       if(elt) buttons[rel] = initLinkToolbarButton(elt, rel);
     }
-  },  
+  },
 
   // called after toolbar customisation is finished.  must stop using any items that are no longer present,
   // and destroy any menus/menuitems for which a button is now present
   updateForToolbarCustomisation: function() {
-    this._init();    
+    this._init();
     for each(var btn in this.buttons) btn.clear();
     this._initButtons();
     const buttons = this.buttons, items = this.items, moreMenu = this.moreMenu;
@@ -204,7 +204,7 @@ const linkToolbarItemBase = {
 
   buildMenu: function() {
     if(!this._menuNeedsRefresh) return true;
-    this._menuNeedsRefresh = false;    
+    this._menuNeedsRefresh = false;
     const p = this.popup;
     while(p.hasChildNodes()) p.removeChild(p.lastChild);
     const ls = this.links, num = ls.length;
@@ -256,23 +256,22 @@ const linkToolbarButton = {
 
   show: function() {
     this._linksHaveChanged = false;
-    const links = this.links;
-    this.disabled = !links.length;
-    switch(links.length) {
-    case 0:
+    const links = this.links, numLinks = links.length;
+    this.disabled = !numLinks;
+    if(!numLinks) {
       this.removeAttribute("href");
       this.removeAttribute("tooltiptext1");
       this.removeAttribute("multi");
-      break;
-    case 1:
-      const link = links[0];
-      this.setAttribute("href", link.url);
-      this.setAttribute("tooltiptext1", link.longTitle);
+      return;
+    }
+    const link = links[0];
+    this.setAttribute("href", link.url);
+    this.setAttribute("tooltiptext1", link.longTitle);
+    if(numLinks == 1) {
       // just setting .disabled will not do anything, presumably because the
       // dropmarker xbl:inherits the toolbarbutton's disabled attribute.
       this.dropMarker.setAttribute("disabled","true");
-      break;
-    default:
+    } else {
       this.dropMarker.removeAttribute("disabled");
       this.setAttribute("multi", "true");
     }
@@ -303,9 +302,9 @@ LinkToolbarItem.prototype = {
   },
 
   show: function() {
-    this._isShowing = true;  
+    this._isShowing = true;
     if(!this._linksHaveChanged) return;
-    this._linksHaveChanged = false;    
+    this._linksHaveChanged = false;
     const links = this.links, numLinks = links.length;
     if(!this.menuitem) {
       if(!numLinks) return;
@@ -331,7 +330,7 @@ LinkToolbarItem.prototype = {
   },
 
   createElements: function() {
-    const rel = this.rel;  
+    const rel = this.rel;
     const mi = this.menuitem = document.createElement("menuitem");
     const relStr = linkToolbarStrings[rel] || rel;
     mi.className = "menuitem-iconic";
@@ -371,7 +370,7 @@ LinkToolbarMenu.prototype = {
   __proto__: LinkToolbarItem.prototype,
 
   show: function() {
-    this._isShowing = true;  
+    this._isShowing = true;
     if(!this._linksHaveChanged) return;
     this._linksHaveChanged = false;
     const links = this.links, numLinks = links.length;
