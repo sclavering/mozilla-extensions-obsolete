@@ -46,11 +46,13 @@ var gLinkToolbarPrefUseLinkGuessing = false;
 var gLinkToolbarPrefGuessUpAndTopFromURL = false;
 var gLinkToolbarPrefGuessPrevAndNextFromURL = false;
 var gLinkToolbarPrefScanHyperlinks = false;
+var linkToolbarStrings = "chrome://linktoolbar/locale/main.strings";
 
 var gLinkToolbarStatusbar = null; // Firefox's usual statusbar
 
 function linkToolbarStartup() {
   gLinkToolbarStatusbar = document.getElementById("statusbar-display");
+  linkToolbarStrings = linkToolbarLoadStringBundle(linkToolbarStrings);
   linkToolbarItems.init();
 
   setTimeout(linkToolbarDelayedStartup, 1); // needs to happen after Fx's delayedStartup()
@@ -269,7 +271,7 @@ function linkToolbarItemClicked(e) {
   if(e.button != 1) return;
   linkToolbarLoadPage(e);
   // close any menus
-  var p = e.target.parentNode;
+  var p = e.target;
   while(p.localName!="toolbarbutton") {
     if(p.localName=="menupopup") p.hidePopup();
     p = p.parentNode;

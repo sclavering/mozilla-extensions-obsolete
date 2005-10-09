@@ -189,24 +189,8 @@ const linkToolbarUtils = {
   // e.g. "en" -> "English", "de" -> "German" (or en->Englisch, de->Deutsch)
   get _languageDictionary() {
     delete this._languageDictionary; // remove this getter function, so that we can replace with an array
-
-    // convert the stringbundle into a js hashtable
-    const dict = this._languageDictionary = [];
-    try {
-      var bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
-                   .getService(Components.interfaces.nsIStringBundleService)
-                   .createBundle("chrome://global/locale/languageNames.properties")
-                   .getSimpleEnumeration();
-    } catch(ex) {
-      return []; // we'll just live without pretty-printing
-    }
-
-    while(bundle.hasMoreElements()) {
-      var item = bundle.getNext().QueryInterface(Components.interfaces.nsIPropertyElement);
-      dict[item.key] = item.value;
-    }
-
-    return dict;
+    return this._languageDictionary =
+      linkToolbarLoadStringBundle("chrome://global/locale/languageNames.properties");
   },
 
   // arg is an nsIDOMLocation, with protocol of http(s) or ftp
@@ -218,6 +202,7 @@ const linkToolbarUtils = {
     const ignoreRE = /(?:index|main)\.[\w.]+?$/i;
     const prefix = location.protocol + "//";
     var host = location.host, path = location.pathname, path0 = path, matches, tail;
+    if(location.search && location.search!="?") return prefix + host + path;
     if(path[path.length - 1] == "/") path = path.slice(0, path.length - 1);
     // dig through path
     while(path) {
@@ -233,3 +218,23 @@ const linkToolbarUtils = {
     return matches && /\./.test(matches[1]) ? prefix + matches[1] + "/" : null;
   }
 };
+
+
+function linkToolbarLoadStringBundle(bundlePath) {
+  const strings = {};
+  try {
+    var bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
+                 .getService(Components.interfaces.nsIStringBundleService)
+                 .createBundle(bundlePath)
+                 .getSimpleEnumeration();
+  } catch(ex) {
+    return {};  // callers can all survive without
+  }
+
+  while(bundle.hasMoreElements()) {
+    var item = bundle.getNext().QueryInterface(Components.interfaces.nsIPropertyElement);
+    strings[item.key] = item.value;
+  }
+
+  return strings;
+}

@@ -51,21 +51,6 @@
 <!ENTITY more.label "More">
 <!ENTITY more.tooltip "Other related pages">
 
-<!ENTITY toc "Table of Contents">
-<!ENTITY chapters "Chapters">
-<!ENTITY sections "Sections">
-<!ENTITY subsections "Subsections">
-<!ENTITY appendices "Appendices">
-<!ENTITY glossary "Glossary">
-<!ENTITY index "Index">
-
-<!ENTITY help "Help">
-<!ENTITY search "Search">
-<!ENTITY author "Authors">
-<!ENTITY copyright "Copyright">
-<!ENTITY bookmark "Bookmarks">
-<!ENTITY alternate "Other Versions">
-
 <!-- keyboard shortcuts -->
 <!ENTITY keycode.top "VK_UP">
 <!ENTITY modifiers.top "alt shift">
