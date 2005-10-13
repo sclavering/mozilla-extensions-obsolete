@@ -19,21 +19,6 @@ Author: Rob de Vries
 <!ENTITY more.label "Meer">
 <!ENTITY more.tooltip "Andere gerelateerde pagina's">
 
-<!ENTITY toc "Inhoudsopgave">
-<!ENTITY chapters "Hoofdstukken">
-<!ENTITY sections "Secties">
-<!ENTITY subsections "Subsecties">
-<!ENTITY appendices "Bijlagen">
-<!ENTITY glossary "Verklarende woordenlijst">
-<!ENTITY index "Index">
-
-<!ENTITY help "Help">
-<!ENTITY search "Zoek">
-<!ENTITY author "Auteurs">
-<!ENTITY copyright "Auteursrecht">
-<!ENTITY bookmark "Bladwijzers">
-<!ENTITY alternate "Andere Versies">
-
 <!-- keyboard shortcuts -->
 <!ENTITY keycode.top "VK_UP">
 <!ENTITY modifiers.top "alt shift">
