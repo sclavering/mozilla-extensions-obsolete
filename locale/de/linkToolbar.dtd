@@ -5,35 +5,20 @@ Original Author:
   Sönke Tesch <soenketesch gmx.de>
 -->
 
-<!ENTITY top.label "Start">
-<!ENTITY top.tooltip "Zur Startseite springen.">
-<!ENTITY up.label "Rauf">
-<!ENTITY up.tooltip "Eine Ebene höher springen.">
+<!ENTITY top.label "Startseite">
+<!ENTITY top.tooltip "Zur Startseite springen">
+<!ENTITY up.label "Aufwärts">
+<!ENTITY up.tooltip "Eine Ebene höher springen">
 <!ENTITY first.label "Erste">
-<!ENTITY first.tooltip "Zur ersten Seite dieses Bereichs springen.">
+<!ENTITY first.tooltip "Zur ersten Seite dieses Bereichs springen">
 <!ENTITY prev.label "Vorangehende">
-<!ENTITY prev.tooltip "Zur vorangehenden Seite blättern.">
+<!ENTITY prev.tooltip "Zur vorangehenden Seite blättern">
 <!ENTITY next.label "Nächste">
-<!ENTITY next.tooltip "Zur nächsten Seite blättern.">
+<!ENTITY next.tooltip "Zur nächsten Seite blättern">
 <!ENTITY last.label "Letzte">
-<!ENTITY last.tooltip "Zur letzten Seite dieses Bereichs springen.">
+<!ENTITY last.tooltip "Zur letzten Seite dieses Bereichs springen">
 <!ENTITY more.label "Siehe auch">
-<!ENTITY more.tooltip "Weitere Seiten in diesem Zusammenhang.">
-
-<!ENTITY toc "Inhalt">
-<!ENTITY chapters "Kapitel">
-<!ENTITY sections "Abschnitte">
-<!ENTITY subsections "Unterabschnitte">
-<!ENTITY appendices "Anhänge">
-<!ENTITY glossary "Glossar">
-<!ENTITY index "Index">
-
-<!ENTITY help "Hilfe">
-<!ENTITY search "Suche">
-<!ENTITY author "Autoren">
-<!ENTITY copyright "Recht">
-<!ENTITY bookmark "Lesezeichen">
-<!ENTITY alternate "Andere Versionen">
+<!ENTITY more.tooltip "Weitere Seiten in diesem Zusammenhang">
 
 <!-- keyboard shortcuts -->
 <!ENTITY keycode.top "VK_UP">
@@ -58,3 +43,4 @@ Original Author:
 <!ENTITY modifiers2.next "alt">
 <!ENTITY keycode2.last "VK_PAGE_DOWN">
 <!ENTITY modifiers2.last "alt shift">
+

@@ -5,15 +5,16 @@ Original Author:
   Sönke Tesch <soenketesch gmx.de>
 -->
 
-<!ENTITY title "Link Toolbar-Optionen">
+<!ENTITY title "Einstellungen für die Link Toolbar">
 
 <!ENTITY general "Darstellung">
 <!ENTITY showOnlyWhenNeeded "Verstecken, falls keine passenden Verweise in der angezeigten Seite existieren">
 <!ENTITY iconsOnly "Nur Grafiken anzeigen, keinen Text">
 
 <!ENTITY linkGuessing "Zusammenhänge erraten">
-<!ENTITY linkGuessingDescription "Link Toolbar kann versuchen, aus dem Inhalt einer Seite auf Folgeseiten zu schließen.">
+<!ENTITY linkGuessingDescription "Link Toolbar kann versuchen, aus dem Inhalt einer Seite auf verwandte Seiten zu schließen.">
 
 <!ENTITY scanHyperlinks "Nach Hinweisen auf nächste, vorangehende, erste und letzte Seite suchen">
 <!ENTITY guessUpAndTopFromURL "Adresse der übergeordneten und der Startseite aus der aktuellen Adresse konstruieren">
-<!ENTITY guessPrevAndNextFromURL "Vorangehende und nächste Seite aus Zahlmustern in der aktuellen Adresse erraten">
+<!ENTITY guessPrevAndNextFromURL "Nächste und vorangehende Seite aus Zahlmustern in der aktuellen Adresse erraten">
+
