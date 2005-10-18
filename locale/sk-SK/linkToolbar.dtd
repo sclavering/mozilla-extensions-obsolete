@@ -56,21 +56,6 @@ Preklad:
 <!ENTITY more.label "Viac">
 <!ENTITY more.tooltip "Ďalšie súvisiace stránky">
 
-<!ENTITY toc "Obsah">
-<!ENTITY chapters "Kapitoly">
-<!ENTITY sections "Sekcie">
-<!ENTITY subsections "Podsekcie">
-<!ENTITY appendices "Dodatky">
-<!ENTITY glossary "Glosár">
-<!ENTITY index "Register">
-
-<!ENTITY help "Pomoc">
-<!ENTITY search "Hľadanie">
-<!ENTITY author "Autor">
-<!ENTITY copyright "Copyright">
-<!ENTITY bookmark "Záložky">
-<!ENTITY alternate "Iné verzie">
-
 <!-- keyboard shortcuts -->
 <!ENTITY keycode.top "VK_UP">
 <!ENTITY modifiers.top "alt shift">
