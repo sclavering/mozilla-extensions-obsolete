@@ -13,21 +13,6 @@
 <!ENTITY more.label "Plus">
 <!ENTITY more.tooltip "Autres pages en rapport">
 
-<!ENTITY toc "Table des matières">
-<!ENTITY chapters "Chapitres">
-<!ENTITY sections "Sections">
-<!ENTITY subsections "Sous-sections">
-<!ENTITY appendices "Appendices">
-<!ENTITY glossary "Glossaire">
-<!ENTITY index "Index">
-
-<!ENTITY help "Aide">
-<!ENTITY search "Recherche">
-<!ENTITY author "Auteur(s)">
-<!ENTITY copyright "Copyright">
-<!ENTITY bookmark "Marque-pages">
-<!ENTITY alternate "Autres versions">
-
 <!-- keyboard shortcuts -->
 <!ENTITY keycode.top "VK_UP">
 <!ENTITY modifiers.top "alt shift">

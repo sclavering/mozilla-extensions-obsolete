@@ -20,21 +20,6 @@ Original Author:
 <!ENTITY more.label "Mais">
 <!ENTITY more.tooltip "Outras páginas relacionadas">
 
-<!ENTITY toc "Sumário">
-<!ENTITY chapters "Capítulos">
-<!ENTITY sections "Seções">
-<!ENTITY subsections "Subseções">
-<!ENTITY appendices "Apêndices">
-<!ENTITY glossary "Glossário">
-<!ENTITY index "Índice">
-
-<!ENTITY help "Ajuda">
-<!ENTITY search "Busca">
-<!ENTITY author "Autores">
-<!ENTITY copyright "Direitos Autorais">
-<!ENTITY bookmark "Favoritos">
-<!ENTITY alternate "Outras Versões">
-
 <!-- keyboard shortcuts -->
 <!ENTITY keycode.top "VK_UP">
 <!ENTITY modifiers.top "alt shift">
