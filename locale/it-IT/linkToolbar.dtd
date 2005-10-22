@@ -25,21 +25,6 @@ Translated from en-US version, which was by:
 <!ENTITY more.label "Altro">
 <!ENTITY more.tooltip "Altre pagine correlate">
 
-<!ENTITY toc "Indice degli Argomenti">
-<!ENTITY chapters "Capitoli">
-<!ENTITY sections "Sezioni">
-<!ENTITY subsections "Sottosezioni">
-<!ENTITY appendices "Appendici">
-<!ENTITY glossary "Glossario">
-<!ENTITY index "Indice">
-
-<!ENTITY help "Guida">
-<!ENTITY search "Ricerca">
-<!ENTITY author "Autori">
-<!ENTITY copyright "Copyright">
-<!ENTITY bookmark "Segnalibri">
-<!ENTITY alternate "Altre Versioni">
-
 <!-- keyboard shortcuts -->
 <!ENTITY keycode.top "VK_UP">
 <!ENTITY modifiers.top "alt shift">
