@@ -55,21 +55,6 @@ Translation:
 <!ENTITY more.label "Další">
 <!ENTITY more.tooltip "Ostatní související stránky">
 
-<!ENTITY toc "Tabulka Obsahu">
-<!ENTITY chapters "Kapitoly">
-<!ENTITY sections "Části">
-<!ENTITY subsections "Podčásti">
-<!ENTITY appendices "Dodatky">
-<!ENTITY glossary "Rejstřík">
-<!ENTITY index "Seznam">
-
-<!ENTITY help "Nápověda">
-<!ENTITY search "Hledání">
-<!ENTITY author "Autoři">
-<!ENTITY copyright "Copyright">
-<!ENTITY bookmark "Záložky">
-<!ENTITY alternate "Ostatní verze">
-
 <!-- keyboard shortcuts -->
 <!ENTITY keycode.top "VK_UP">
 <!ENTITY modifiers.top "alt shift">

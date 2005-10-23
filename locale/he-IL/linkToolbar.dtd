@@ -20,21 +20,6 @@ Original Author:
 <!ENTITY more.label "עוד">
 <!ENTITY more.tooltip "דפים קשורים אחרים">
 
-<!ENTITY toc "תוכן העניינים">
-<!ENTITY chapters "פרקים">
-<!ENTITY sections "חלקים">
-<!ENTITY subsections "תת־חלקים">
-<!ENTITY appendices "נספחים">
-<!ENTITY glossary "מילון">
-<!ENTITY index "אינדקס">
-
-<!ENTITY help "עזרה">
-<!ENTITY search "חיפוש">
-<!ENTITY author "יוצרים">
-<!ENTITY copyright "זכויות יוצרים">
-<!ENTITY bookmark "סימניות">
-<!ENTITY alternate "גרסאות אחרות">
-
 <!-- keyboard shortcuts -->
 <!ENTITY keycode.top "VK_UP">
 <!ENTITY modifiers.top "alt shift">
