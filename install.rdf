@@ -28,26 +28,9 @@
     <targetApplication>
       <r:Description>
         <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
-        <minVersion>1.0</minVersion>
-        <maxVersion>1.4.1</maxVersion>
+        <minVersion>1.4</minVersion>
+        <maxVersion>1.5</maxVersion>
       </r:Description>
     </targetApplication>
-
-    <file>
-      <r:Description about="urn:mozilla:extension:file:linkToolbar.jar">
-        <package>content/linktoolbar/</package>
-        <skin>skin/classic/</skin>
-        <locale>locale/en-US/linktoolbar/</locale>
-        <locale>locale/cs-CZ/</locale>
-        <locale>locale/fr-FR/</locale>
-        <locale>locale/he-IL/</locale>
-        <locale>locale/it-IT/</locale>
-        <locale>locale/ja-JP/</locale>
-        <locale>locale/nl-NL/</locale>
-        <locale>locale/sk-SK/</locale>
-        <locale>locale/pt-BR/</locale>
-        <locale>locale/de/</locale>
-      </r:Description>
-    </file>
   </r:Description>
 </r:RDF>

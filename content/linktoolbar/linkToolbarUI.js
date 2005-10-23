@@ -51,6 +51,7 @@ var linkToolbarStrings = "chrome://linktoolbar/locale/main.strings";
 var gLinkToolbarStatusbar = null; // Firefox's usual statusbar
 
 function linkToolbarStartup() {
+  window.removeEventListener("load", linkToolbarStartup, false);
   gLinkToolbarStatusbar = document.getElementById("statusbar-display");
   linkToolbarStrings = linkToolbarLoadStringBundle(linkToolbarStrings);
   linkToolbarItems.init();
@@ -72,6 +73,7 @@ function linkToolbarDelayedStartup() {
 }
 
 function linkToolbarShutdown() {
+  window.removeEventListener("unload", linkToolbarShutdown, false);
   // unhook pref listener (to prevent memory leaks)
   var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
   os.removeObserver(linkToolbarPrefObserver, "linktoolbar:prefs-updated", false);
@@ -311,12 +313,7 @@ function linkToolbarGo(linkType) {
 }
 
 function linkToolbarLoadPageInCurrentBrowser(url, sourceURL) {
-  // urlSecurityCheck changed signature in rev 1.77 of contentAreaUtils.js
-  // (i.e. btwn Fx 1.0.x and 1.5 beta). isn't this fun?
-  if("getContentFrameURI" in window) // happens to coincide with the change
-    urlSecurityCheck(url, document); // yes, it wants the XUL doc.
-  else
-    urlSecurityCheck(url, sourceURL);
+  urlSecurityCheck(url, sourceURL);
   gBrowser.loadURI(url);
   content.focus();
 }
