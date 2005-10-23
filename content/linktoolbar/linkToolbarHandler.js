@@ -82,6 +82,7 @@ const linkToolbarIgnoreRels =
   /\b(?:stylesheet\b|icon\b|pingback\b|fontdef\b|p3pv|schema\.|meta\b)/i;
 
 const linkToolbarRelConversions = {
+  home: "top",
   origin: "top",
   start: "top",
   parent: "up",
