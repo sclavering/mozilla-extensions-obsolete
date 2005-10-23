@@ -81,6 +81,28 @@ LTLinkInfo.prototype = {
 const linkToolbarIgnoreRels =
   /\b(?:stylesheet\b|icon\b|pingback\b|fontdef\b|p3pv|schema\.|meta\b)/i;
 
+const linkToolbarRelConversions = {
+  origin: "top",
+  start: "top",
+  parent: "up",
+  begin: "first",
+  child: "next",
+  previous: "prev",
+  end: "last",
+  contents: "toc",
+  nofollow: null, // blog thing
+  external: null, // used to mean "off-site link", mostly used for styling
+  prefetch: null,
+  sidebar: null
+};
+
+const linkToolbarRevToRel = {
+  made: "author",
+  next: "prev",
+  prev: "next",
+  previous: "next"
+};
+
 const linkToolbarUtils = {
   getLinkRels: function(relStr, revStr, mimetype, title) {
     // Ignore certain links
@@ -100,7 +122,7 @@ const linkToolbarUtils = {
     if(revStr) {
       var revValues = revStr.split(/[ \t\f\r\n\u200B]+/);
       for(i = 0; i < revValues.length; i++) {
-        rel = this.convertRevToRel(revValues[i]);
+        rel = linkToolbarRevToRel[revValues[i].toLowerCase()] || null;
         if(rel) relValues[rel] = true, haveRels = true;
       }
     }
@@ -110,68 +132,17 @@ const linkToolbarUtils = {
 
   // mimetype and title are optional
   standardiseRelType: function(relValue, mimetype, title) {
-    switch (relValue.toLowerCase()) {
-      case "top":
-      case "origin":
-      case "start":
-        return "top";
-      case "up":
-      case "parent":
-        return "up";
-      case "begin":
-      case "first":
-        return "first";
-      case "next":
-      case "child":
-        return "next";
-      case "prev":
-      case "previous":
-        return "prev";
-      case "end":
-      case "last":
-        return "last";
-      case "alternate":
+    const rel = relValue.toLowerCase();
+    if(rel == "alternate") {
+        // xxx this is out of sync with Fx
         // Ignore "Livemark" links (see browser.js#~580 livemarkOnLinkAdded(...))
         if((mimetype && (mimetype=="application/rss+xml" || mimetype=="application/atom+xml"
             || mimetype=="application/x.atom+xml")) || (title && (title.indexOf("RSS")!=-1
             || title.indexOf("Atom")!=-1 || title.indexOf("rss")!=-1)))
           return null;
         return "alternate";
-      case "author":
-        return "author";
-      case "contents":
-      case "toc":
-        return "toc";
-      case "section":
-        return "section";
-      case "subsection":
-        return "subsection";
-      case "chapter":
-        return "chapter";
-      case "prefetch":
-      case "sidebar":
-      // used on blogs
-      case "nofollow":
-      // seen on blogs.  links didn't seem to have any real relation to the page
-      case "external":
-        return null;
-      default:
-        // might as well preserve case
-        return relValue;
     }
-  },
-
-  convertRevToRel: function(revValue) {
-    switch(revValue.toLowerCase()) {
-      case "made":
-        return "author";
-      case "next":
-        return "prev";
-      case "prev":
-      case "previous":
-        return "next";
-    }
-    return null;
+    return rel in linkToolbarRelConversions ? linkToolbarRelConversions[rel] : rel;
   },
 
   // code is a language code, e.g. en, en-GB, es, fr-FR
