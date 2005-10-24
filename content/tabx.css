@@ -5,7 +5,7 @@ tabbrowser .tab-text {
   margin: 0;
 }
 
-tabbrowser .tabs-closebutton {
+tabbrowser tabs .tabs-closebutton {
   display: none;
 }
 
