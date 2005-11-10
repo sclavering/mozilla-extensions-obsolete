@@ -24,7 +24,7 @@ function diggerLoadURL(e, popup, isMiddleClick) {
 }
 
 function diggerBuildMenu(menu) {
-  var url = gURLBar.value || _content.location.href;
+  var url = gURLBar.value || content.location.href;
   if(!url || url=="about:blank") return false;
 
   // clear menu

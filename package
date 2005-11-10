@@ -1,0 +1,3 @@
+# yes, the .xul file really belongs at the root of the .xpi
+# the chrome.manifest makes this work
+zip -ur digger.xpi digger.xul install.rdf chrome.manifest
