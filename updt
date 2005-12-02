@@ -1,3 +1,2 @@
-#!/bin/sh
-zip -ur chrome/zoomy.jar content locale skin -x '*CVS*'
-zip -ur zoomy.xpi chrome install.rdf -x '*CVS*'
+zip -ur0 zoomy.jar content locale skin -x '*CVS*'
+zip -ur9 zoomy.xpi zoomy.jar install.rdf chrome.manifest

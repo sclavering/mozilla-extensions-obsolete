@@ -2,48 +2,35 @@
 
 <r:RDF xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
        xmlns="http://www.mozilla.org/2004/em-rdf#">
+<r:Description about="urn:mozilla:install-manifest">
 
-  <r:Description about="urn:mozilla:install-manifest">
-    <id>zoomy</id>
+<id>zoomy@clav.mozdev.org</id>
+<name>Zoomy</name>
+<version>2.1</version>
+<description>Toolbar buttons to change text size</description>
+<homepageURL>http://clav.mozdev.org/</homepageURL>
 
-    <name>Zoomy</name>
-    <version>1.3</version>
-    <description>Toolbar buttons to change text size</description>
-    <homepageURL>http://clav.mozdev.org/</homepageURL>
-    <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
+<creator>Stephen Clavering</creator>
+<contributor>Andrea of extenzilla.it (Italian translator)</contributor>
+<contributor>Rob de Vries (Dutch translator)</contributor>
+<contributor>Tobias Caspers (Deutsche Übersetzung)</contributor>
 
-    <creator>Stephen Clavering</creator>
-    <contributor>Andrea of extenzilla.it (Italian translator)</contributor>
-    <contributor>Rob de Vries (Dutch translator)</contributor>
-    <contributor>Tobias Caspers (Deutsche Übersetzung)</contributor>
-    
-    <!-- Firefox -->
-    <targetApplication>
-      <r:Description>
-        <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
-        <minVersion>1.0</minVersion>
-        <maxVersion>1.0</maxVersion>
-      </r:Description>
-    </targetApplication>
-
-    <!-- Thunderbird -->
-    <targetApplication>
-      <r:Description>
-        <id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</id>
-        <minVersion>1.0</minVersion>
-        <maxVersion>1.0</maxVersion>
-      </r:Description>
-    </targetApplication>
-
-    <file>
-      <r:Description about="urn:mozilla:extension:file:zoomy.jar">
-        <package>content/</package>
-        <skin>skin/</skin>
-        <locale>locale/en/</locale>
-        <locale>locale/it-IT/</locale>
-        <locale>locale/nl-NL/</locale>
-        <locale>locale/de-DE/</locale>
-      </r:Description>
-    </file>
+<!-- Firefox -->
+<targetApplication>
+  <r:Description>
+    <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
+    <minVersion>1.4.1</minVersion>
+    <maxVersion>1.5.0.*</maxVersion>
   </r:Description>
+</targetApplication>
+
+<!-- Thunderbird -->
+<targetApplication>
+  <r:Description>
+    <id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</id>
+    <minVersion>1.4</minVersion>
+    <maxVersion>1.5.0.*</maxVersion>
+  </r:Description>
+</targetApplication>
+</r:Description>
 </r:RDF>
