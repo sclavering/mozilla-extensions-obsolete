@@ -109,7 +109,8 @@ const linkToolbarUtils = {
     // Ignore certain links
     if(linkToolbarIgnoreRels.test(relStr)) return null;
 
-    var relValues = [], rel, i, haveRels = false;
+    const relValues = {};
+    var rel, i, haveRels = false;
     // get relValues from rel
     if(relStr) {
       var rawRelValues = relStr.split(/[ \t\f\r\n\u200B]+/);

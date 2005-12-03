@@ -1,16 +1,17 @@
-content linktoolbar jar:chrome/linkToolbar.jar!/content/linktoolbar/ xpcnativewrappers=yes
+content linktoolbar jar:linkToolbar.jar!/content/linktoolbar/ xpcnativewrappers=yes
 overlay chrome://browser/content/browser.xul chrome://linktoolbar/content/linkToolbarOverlay.xul
 
-skin	linktoolbar	classic/1.0	jar:chrome/linkToolbar.jar!/skin/classic/
+skin	linktoolbar	classic/1.0	jar:linkToolbar.jar!/skin/classic/
 style	chrome://global/content/customizeToolbar.xul	chrome://linktoolbar/skin/linkToolbar.css
 
-locale	linktoolbar	en-US	jar:chrome/linkToolbar.jar!/locale/en-US/linktoolbar/
-locale	linktoolbar	cs-CZ	jar:chrome/linkToolbar.jar!/locale/cs-CZ/
-locale	linktoolbar	de	    jar:chrome/linkToolbar.jar!/locale/de/
-locale	linktoolbar	fr-FR	jar:chrome/linkToolbar.jar!/locale/fr-FR/
-locale	linktoolbar	he-IL	jar:chrome/linkToolbar.jar!/locale/he-IL/
-locale	linktoolbar	it-IT	jar:chrome/linkToolbar.jar!/locale/it-IT/
-locale	linktoolbar	ja-JP	jar:chrome/linkToolbar.jar!/locale/ja-JP/
-locale	linktoolbar	nl-NL	jar:chrome/linkToolbar.jar!/locale/nl-NL/
-locale	linktoolbar	sk-SK	jar:chrome/linkToolbar.jar!/locale/sk-SK/
-locale	linktoolbar	pt-BR	jar:chrome/linkToolbar.jar!/locale/pt-BR/
+locale	linktoolbar	en-US	jar:linkToolbar.jar!/locale/en-US/linktoolbar/
+locale	linktoolbar	cs-CZ	jar:linkToolbar.jar!/locale/cs-CZ/
+locale	linktoolbar	de	    jar:linkToolbar.jar!/locale/de/
+locale	linktoolbar	es	    jar:linkToolbar.jar!/locale/es/
+locale	linktoolbar	fr-FR	jar:linkToolbar.jar!/locale/fr-FR/
+locale	linktoolbar	he-IL	jar:linkToolbar.jar!/locale/he-IL/
+locale	linktoolbar	it-IT	jar:linkToolbar.jar!/locale/it-IT/
+locale	linktoolbar	ja-JP	jar:linkToolbar.jar!/locale/ja-JP/
+locale	linktoolbar	nl-NL	jar:linkToolbar.jar!/locale/nl-NL/
+locale	linktoolbar	sk-SK	jar:linkToolbar.jar!/locale/sk-SK/
+locale	linktoolbar	pt-BR	jar:linkToolbar.jar!/locale/pt-BR/

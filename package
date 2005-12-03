@@ -1,0 +1,2 @@
+zip -ur0 linkToolbar.jar content locale skin -x '*CVS*'
+zip -ur9 linkToolbar.xpi linkToolbar.jar defaults install.rdf chrome.manifest
