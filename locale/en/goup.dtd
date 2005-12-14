@@ -1,2 +1,7 @@
 <!ENTITY label "Up">
 <!ENTITY tooltip "Go up a level in this Web site">
+
+<!ENTITY keycode.top "VK_UP">
+<!ENTITY modifiers.top "alt shift">
+<!ENTITY keycode.up "VK_UP">
+<!ENTITY modifiers.up "alt">

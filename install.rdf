@@ -2,35 +2,25 @@
 
 <r:RDF xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
        xmlns="http://www.mozilla.org/2004/em-rdf#">
+<r:Description about="urn:mozilla:install-manifest">
 
-  <r:Description about="urn:mozilla:install-manifest">
-    <id>goup</id>
+<id>goup@clav.mozdev.org</id>
+<name>Go Up</name>
+<version>1.0</version>
+<description>Easily navigate 'up' a level in a web site</description>
+<homepageURL>http://clav.mozdev.org/</homepageURL>
+<iconURL>chrome://goup/content/icon.png</iconURL>
 
-    <name>Go Up</name>
-    <version>0.9.1</version>
-    <description>Easily navigate 'up' a level in a Web site</description>
+<creator>Stephen Clavering</creator>
+<contributor>Andrea (Italian translator)</contributor>
 
-    <creator>Stephen Clavering</creator>
-    <contributor>Andrea (Italian translator)</contributor>
-    <homepageURL>http://clav.mozdev.org/</homepageURL>
-    <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
-    <iconURL>chrome://goup/content/icon.png</iconURL>
-
-    <targetApplication>
-      <r:Description>
-        <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
-        <minVersion>1.0</minVersion>
-        <maxVersion>1.0</maxVersion>
-      </r:Description>
-    </targetApplication>
-
-    <file>
-      <r:Description about="urn:mozilla:extension:file:goup.jar">
-        <package>content/</package>
-        <locale>locale/en/</locale>
-        <locale>locale/it/</locale>
-        <skin>skin/</skin>
-      </r:Description>
-    </file>
+<targetApplication>
+  <r:Description>
+    <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
+    <minVersion>1.4.1</minVersion>
+    <maxVersion>1.5.0.*</maxVersion>
   </r:Description>
+</targetApplication>
+
+</r:Description>
 </r:RDF>

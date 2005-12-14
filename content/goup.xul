@@ -8,47 +8,33 @@
 
 <toolbarpalette id="BrowserToolbarPalette">
   <toolbarbutton id="goup-button" class="toolbarbutton-1"
-      oncommand="GoUp.buttonClicked(event);"
-      onclick="GoUp.buttonClicked2(event);"
+      oncommand="goup_up(event);"
+      onclick="if(event.button==1) goup_up(event);"
       label="&label;" tooltiptext="&tooltip;"/>
 </toolbarpalette>
 
+<keyset id="mainKeyset">
+  <key id="goup-key-top" keycode="&keycode.top;" modifiers="&modifiers.top;"
+      oncommand="goup_top();"/>
+  <key id="goup-key-up" keycode="&keycode.up;" modifiers="&modifiers.up;"
+      oncommand="goup_up(null);"/>
+</keyset>
+
 <script type="application/x-javascript"><![CDATA[
 
-const GoUp = {
-  init: function() {
-    // get dom nodes ourselves incase gURLBar not initialised yet
-    var urlbar = document.getElementById("urlbar");
-    urlbar.addEventListener("keypress", GoUp.keyComboInUrlBar, true);
-    var content = document.getElementById("appcontent");
-    content.addEventListener("keypress", GoUp.keyComboInPage, true);
-  },
+function goup_top() {
+  const loc = content.document.location, pro = loc.protocol;
+  if(/^ftp|http|https$/.test(pro)) openUILink(pro + "//" + loc.host, null);
+} 
 
-  buttonClicked2: function(e) {
-    if(e.button==1) this.buttonClicked(e);
-  },
+function goup_up(e) {
+  const loc = content.document.location, pro = loc.protocol;
+  if(!/^ftp|http|https$/.test(pro)) return;
+  const up = goup_getUpUrl(loc.href);
+  if(up) openUILink(up, e);
+}
 
-  buttonClicked: function(e) {
-    var up = this.getUp(_content.document.location.href);
-    openUILink(up, e);
-  },
-
-  keyComboInUrlBar: function(e) {
-    if(!e.altKey || e.keyCode!=e.DOM_VK_UP) return;
-    var up = GoUp.getUp(gURLBar.value);
-    if(up) gURLBar.value = up;
-    e.preventDefault()
-    e.stopPropagation();
-  },
-
-  keyComboInPage: function(e) {
-    if(!e.altKey || e.keyCode!=e.DOM_VK_UP) return;
-    var doc = e.originalTarget.ownerDocument
-    var up = GoUp.getUp(doc.location.href);
-    if(up) doc.location.href = up;
-  },
-
-  getUp: function(url) {
+function goup_getUpUrl(url) {
     var matches, origUrl = url;
     // trim filename (this makes subdriectory digging easier)
     matches = url.match(/(^.*\/)(.*)/);
@@ -65,12 +51,9 @@ const GoUp = {
     var protocol = matches[1], domain = matches[2];
     matches = domain.match(/^[^\.]*\.(.*)/);
     if(matches) return (protocol+matches[1]);
-    // nothing found
     return null;
-  }
-};
+}
 
-window.addEventListener("load", GoUp.init, false);
 
 ]]></script>
 
