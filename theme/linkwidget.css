@@ -9,7 +9,7 @@ Contributor(s):
 */
 
 .linktoolbar-button, .linktoolbar-button menu, .linktoolbar-button menuitem {
-  list-style-image: url(chrome://linktoolbar/skin/buttons.png) !important;
+  list-style-image: url(chrome://linkwidget/skin/buttons.png) !important;
 }
 
 /* for the default theme we use icons with built-in dropmarkers, but other themes might want to keep them separate */
