@@ -929,7 +929,7 @@ LinkToolbarItem.prototype = {
 };
 
 
-// an item that's always a submenbu (e.g. Chapters)
+// an item that's always a submenu (e.g. Chapters)
 function LinkToolbarMenu(rel, relNum) {
   this.links = [];
   this.rel = rel;

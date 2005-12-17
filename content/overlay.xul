@@ -40,15 +40,12 @@
    -
    - ***** END LICENSE BLOCK ***** -->
 
-<?xml-stylesheet href="chrome://linktoolbar/skin/linkToolbar.css" type="text/css"?>
+<?xml-stylesheet href="chrome://linkwidget/skin/linkwidget.css" type="text/css"?>
 
-<!DOCTYPE overlay SYSTEM "chrome://linktoolbar/locale/linkToolbar.dtd">
+<!DOCTYPE overlay SYSTEM "chrome://linkwidget/locale/linkwidget.dtd">
 
 <overlay id="linkToolbarOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script type="application/x-javascript" src="linkFinder.js"/>
-  <script type="application/x-javascript" src="linkToolbarHandler.js"/>
-  <script type="application/x-javascript" src="linkToolbarItem.js"/>
-  <script type="application/x-javascript" src="linkToolbarUI.js"/>
+  <script type="application/x-javascript" src="code.js"/>
 
   <popupset id="mainPopupSet">
     <tooltip id="linktoolbar-tooltip" orient="vertical"
