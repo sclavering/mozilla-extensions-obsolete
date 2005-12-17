@@ -1,4 +1,4 @@
-﻿<!--
+<!--
 Licence: MPL 1.1/GPL 2.0/LGPL 2.1
 
 Original Author:
@@ -19,21 +19,6 @@ Original Author:
 <!ENTITY last.tooltip "Zur letzten Seite dieses Bereichs springen">
 <!ENTITY more.label "Siehe auch">
 <!ENTITY more.tooltip "Weitere Seiten in diesem Zusammenhang">
-
-<!ENTITY toc "Inhalt">
-<!ENTITY chapters "Kapitel">
-<!ENTITY sections "Abschnitte">
-<!ENTITY subsections "Unterabschnitte">
-<!ENTITY appendices "Anhänge">
-<!ENTITY glossary "Glossar">
-<!ENTITY index "Index">
-
-<!ENTITY help "Hilfe">
-<!ENTITY search "Suche">
-<!ENTITY author "Autoren">
-<!ENTITY copyright "Recht">
-<!ENTITY bookmark "Lesezeichen">
-<!ENTITY alternate "Andere Versionen">
 
 <!-- keyboard shortcuts -->
 <!ENTITY keycode.top "VK_UP">
@@ -58,3 +43,4 @@ Original Author:
 <!ENTITY modifiers2.next "alt">
 <!ENTITY keycode2.last "VK_PAGE_DOWN">
 <!ENTITY modifiers2.last "alt shift">
+
