@@ -1,0 +1,19 @@
+<!--
+Licence: MPL 1.1/GPL 2.0/LGPL 2.1
+
+Original Author:
+  Stephen Clavering <mozilla@clav.me.uk>
+-->
+
+<!ENTITY title "Link Toolbar Options">
+
+<!ENTITY general "Link Toolbar Appearance">
+<!ENTITY showOnlyWhenNeeded "Hide when there are no links for the current page">
+<!ENTITY iconsOnly "Only show icons, not text">
+
+<!ENTITY linkGuessing "Link Guessing">
+<!ENTITY linkGuessingDescription "The Link Toolbar can guess links for the many pages which do not provide them.">
+
+<!ENTITY scanHyperlinks "Scan the hyperlinks on the page for First, Previous, Next and Last Page links">
+<!ENTITY guessUpAndTopFromURL "Guess Up and Top links based on the URL of the page">
+<!ENTITY guessPrevAndNextFromURL "Guess Previous and Next Page links based on numeric parts of the URL of the page">

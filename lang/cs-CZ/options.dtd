@@ -1,0 +1,22 @@
+<!--
+Licence: MPL 1.1/GPL 2.0/LGPL 2.1
+
+Original Author:
+  Stephen Clavering <mozilla@clav.me.uk>
+
+Translation:
+  Tomáš Kopečný <georgo10 seznam.cz>
+-->
+
+<!ENTITY title "Nastavebá Link Toolbar">
+
+<!ENTITY general "Vzhled Link Toolbar">
+<!ENTITY showOnlyWhenNeeded "Skrýt když na aktuální stránce nejsou žádné odkazy">
+<!ENTITY iconsOnly "Zobrazit jen ikony bez textu">
+
+<!ENTITY linkGuessing "Hádání odkazů">
+<!ENTITY linkGuessingDescription "Spousta webů nepodporuje HTML &lt;odkazové&gt; elementy, které by Link Toolbar rozpoznal.">
+
+<!ENTITY scanHyperlinks "Zkoumat odkazy na stránce pro První, Předchozí, Další a Poslední">
+<!ENTITY guessUpAndTopFromURL "Odhadovat Nahoru a  Úvod podle URL stránky">
+<!ENTITY guessPrevAndNextFromURL "Odhadovat Předchozí a Další na stránkách postavených z číselných částí v URL">
