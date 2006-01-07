@@ -15,7 +15,7 @@ Localizzazione in italiano:
 <!ENTITY iconsOnly "Mostra solo le icone, senza il testo">
 
 <!ENTITY linkGuessing "Ipotizza i collegamenti del sito">
-<!ENTITY linkGuessingDescription "Molte pagine Web non forniscono gli elementi HTML &lt;link&gt; da cui dipende Link Toolbar. L'attivazione di queste impostazioni fa in modo che linkToolbar cerchi i probabili collegamenti correlati in base all'URL">
+<!ENTITY linkGuessingDescription "Molte pagine Web non forniscono gli elementi HTML &lt;link&gt; da cui dipende Link Widget. L'attivazione di queste impostazioni fa in modo che linkWidget cerchi i probabili collegamenti correlati in base all'URL">
 
 <!ENTITY scanHyperlinks "Cerca i collegamenti ipertestuali alla Prima pagina, alla Precedente, alla Successiva e all'Ultima">
 <!ENTITY guessUpAndTopFromURL "Ipotizza i collegamenti Inizio e Sali in base all'URL della pagina">

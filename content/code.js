@@ -41,117 +41,117 @@ the terms of any one of the MPL, the GPL or the LGPL.
 ***** END LICENSE BLOCK ***** */
 
 
-var gLinkToolbar = null;
-var gLinkToolbarPrefUseLinkGuessing = false;
-var gLinkToolbarPrefGuessUpAndTopFromURL = false;
-var gLinkToolbarPrefGuessPrevAndNextFromURL = false;
-var gLinkToolbarPrefScanHyperlinks = false;
-var linkToolbarStrings = "chrome://linktoolbar/locale/main.strings";
+var gLinkWidget = null;
+var gLinkWidgetPrefUseLinkGuessing = false;
+var gLinkWidgetPrefGuessUpAndTopFromURL = false;
+var gLinkWidgetPrefGuessPrevAndNextFromURL = false;
+var gLinkWidgetPrefScanHyperlinks = false;
+var linkWidgetStrings = "chrome://linkwidget/locale/main.strings";
 
-var gLinkToolbarStatusbar = null; // Firefox's usual statusbar
+var gLinkWidgetStatusbar = null; // Firefox's usual statusbar
 
-function linkToolbarStartup() {
-  window.removeEventListener("load", linkToolbarStartup, false);
-  gLinkToolbarStatusbar = document.getElementById("statusbar-display");
-  linkToolbarStrings = linkToolbarLoadStringBundle(linkToolbarStrings);
-  linkToolbarItems.init();
+function linkWidgetStartup() {
+  window.removeEventListener("load", linkWidgetStartup, false);
+  gLinkWidgetStatusbar = document.getElementById("statusbar-display");
+  linkWidgetStrings = linkWidgetLoadStringBundle(linkWidgetStrings);
+  linkWidgetItems.init();
 
-  setTimeout(linkToolbarDelayedStartup, 1); // needs to happen after Fx's delayedStartup()
+  setTimeout(linkWidgetDelayedStartup, 1); // needs to happen after Fx's delayedStartup()
 
   // pref listener (sort of)
   var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
-  os.addObserver(linkToolbarPrefObserver, "linktoolbar:prefs-updated", false);
+  os.addObserver(linkWidgetPrefObserver, "linkwidget:prefs-updated", false);
 }
 
-function linkToolbarDelayedStartup() {
-  linkToolbarLoadPrefs();
-  linkToolbarAddHandlers();
+function linkWidgetDelayedStartup() {
+  linkWidgetLoadPrefs();
+  linkWidgetAddHandlers();
   // replace the toolbar customisation callback
   var box = document.getElementById("navigator-toolbox");
-  box._preLinkToolbar_customizeDone = box.customizeDone;
-  box.customizeDone = linkToolbarToolboxCustomizeDone;
+  box._preLinkWidget_customizeDone = box.customizeDone;
+  box.customizeDone = linkWidgetToolboxCustomizeDone;
 }
 
-function linkToolbarShutdown() {
-  window.removeEventListener("unload", linkToolbarShutdown, false);
+function linkWidgetShutdown() {
+  window.removeEventListener("unload", linkWidgetShutdown, false);
   // unhook pref listener (to prevent memory leaks)
   var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
-  os.removeObserver(linkToolbarPrefObserver, "linktoolbar:prefs-updated", false);
+  os.removeObserver(linkWidgetPrefObserver, "linkwidget:prefs-updated", false);
 }
 
-window.addEventListener("load", linkToolbarStartup, false);
-window.addEventListener("unload", linkToolbarShutdown, false);
+window.addEventListener("load", linkWidgetStartup, false);
+window.addEventListener("unload", linkWidgetShutdown, false);
 
 
-function linkToolbarToolboxCustomizeDone(somethingChanged) {
+function linkWidgetToolboxCustomizeDone(somethingChanged) {
   if(somethingChanged) {
-    linkToolbarItems.updateForToolbarCustomisation();
-    linkToolbarRefreshLinks();
+    linkWidgetItems.updateForToolbarCustomisation();
+    linkWidgetRefreshLinks();
   }
-  this._preLinkToolbar_customizeDone(somethingChanged);
+  this._preLinkWidget_customizeDone(somethingChanged);
 }
 
 
-function linkToolbarLoadPrefs() {
-  var branch = gPrefService.getBranch("extensions.linktoolbar.");
+function linkWidgetLoadPrefs() {
+  var branch = gPrefService.getBranch("extensions.linkwidget.");
 
-  gLinkToolbarPrefScanHyperlinks = branch.getBoolPref("scanHyperlinks");
-  gLinkToolbarPrefGuessUpAndTopFromURL = branch.getBoolPref("guessUpAndTopFromURL");
-  gLinkToolbarPrefGuessPrevAndNextFromURL = branch.getBoolPref("guessPrevAndNextFromURL");
+  gLinkWidgetPrefScanHyperlinks = branch.getBoolPref("scanHyperlinks");
+  gLinkWidgetPrefGuessUpAndTopFromURL = branch.getBoolPref("guessUpAndTopFromURL");
+  gLinkWidgetPrefGuessPrevAndNextFromURL = branch.getBoolPref("guessPrevAndNextFromURL");
 
-  gLinkToolbarPrefUseLinkGuessing = gLinkToolbarPrefScanHyperlinks
-      || gLinkToolbarPrefGuessUpAndTopFromURL || gLinkToolbarPrefGuessPrevAndNextFromURL;
+  gLinkWidgetPrefUseLinkGuessing = gLinkWidgetPrefScanHyperlinks
+      || gLinkWidgetPrefGuessUpAndTopFromURL || gLinkWidgetPrefGuessPrevAndNextFromURL;
 }
 
 
-var linkToolbarPrefObserver = {
+var linkWidgetPrefObserver = {
   observe: function(subject, topic, data) {
-    linkToolbarLoadPrefs();
+    linkWidgetLoadPrefs();
   }
 };
 
 
-function linkToolbarAddHandlers() {
+function linkWidgetAddHandlers() {
   var browser = gBrowser;
-  browser.addEventListener("select", linkToolbarTabSelectedHandler, false);
-  browser.addEventListener("DOMLinkAdded", linkToolbarLinkAddedHandler, true);
-  browser.addEventListener("unload", linkToolbarPageClosedHandler, true);
-  browser.addEventListener("pagehide", linkToolbarPageClosedHandler, false);
-  browser.addEventListener("DOMContentLoaded", linkToolbarPageLoadedHandler, true);
-  browser.addEventListener("pageshow", linkToolbarPageShowHandler, false);
+  browser.addEventListener("select", linkWidgetTabSelectedHandler, false);
+  browser.addEventListener("DOMLinkAdded", linkWidgetLinkAddedHandler, true);
+  browser.addEventListener("unload", linkWidgetPageClosedHandler, true);
+  browser.addEventListener("pagehide", linkWidgetPageClosedHandler, false);
+  browser.addEventListener("DOMContentLoaded", linkWidgetPageLoadedHandler, true);
+  browser.addEventListener("pageshow", linkWidgetPageShowHandler, false);
 }
 
 
-function linkToolbarRemoveHandlers() {
+function linkWidgetRemoveHandlers() {
   var browser = gBrowser;
-  browser.removeEventListener("select", linkToolbarTabSelectedHandler, false);
-  browser.removeEventListener("DOMLinkAdded", linkToolbarLinkAddedHandler, true);
-  browser.removeEventListener("unload", linkToolbarPageClosedHandler, true);
-  browser.removeEventListener("pagehide", linkToolbarPageClosedHandler, true);
-  browser.removeEventListener("DOMContentLoaded", linkToolbarPageLoadedHandler, true);
-  browser.removeEventListener("pageshow", linkToolbarPageShowHandler, false);
+  browser.removeEventListener("select", linkWidgetTabSelectedHandler, false);
+  browser.removeEventListener("DOMLinkAdded", linkWidgetLinkAddedHandler, true);
+  browser.removeEventListener("unload", linkWidgetPageClosedHandler, true);
+  browser.removeEventListener("pagehide", linkWidgetPageClosedHandler, true);
+  browser.removeEventListener("DOMContentLoaded", linkWidgetPageLoadedHandler, true);
+  browser.removeEventListener("pageshow", linkWidgetPageShowHandler, false);
 }
 
 
 // Used to make the page scroll when the mouse-wheel is used on one of our buttons
-function linkToolbarMouseScrollHandler(event) {
+function linkWidgetMouseScrollHandler(event) {
   content.scrollBy(0, event.detail);
 }
 
 
-function linkToolbarLinkAddedHandler(event) {
+function linkWidgetLinkAddedHandler(event) {
   var elt = event.originalTarget;
   var doc = elt.ownerDocument;
   if(!(elt instanceof HTMLLinkElement) || !elt.href || !(elt.rel || elt.rev)) return;
-  var rels = linkToolbarUtils.getLinkRels(elt.rel, elt.rev, elt.type, elt.title);
+  var rels = linkWidgetUtils.getLinkRels(elt.rel, elt.rev, elt.type, elt.title);
   if(!rels) return;
   var linkInfo = new LTLinkInfo(elt.href, elt.title, elt.hreflang, elt.media);
-  linkToolbarAddLinkForPage(linkInfo, doc, rels);
+  linkWidgetAddLinkForPage(linkInfo, doc, rels);
 }
 
 
 // Really ought to delete/nullify doc.__lt__links on "close" (but not on "pagehide")
-function linkToolbarPageClosedHandler(event) {
+function linkWidgetPageClosedHandler(event) {
   // Links like: <a href="..." onclick="this.style.display='none'">.....</a>
   // (the onclick handler could instead be on an ancestor of the link) lead to unload/pagehide
   // events with originalTarget==a text node.  So use ownerDocument (which is null for Documents)
@@ -159,64 +159,64 @@ function linkToolbarPageClosedHandler(event) {
   if(!(doc instanceof Document)) doc = doc.ownerDocument;
   // don't clear the links for unload/pagehide from a background tab, or from a subframe
   if(doc != gBrowser.contentDocument) return;
-  linkToolbarItems.clearAll();
+  linkWidgetItems.clearAll();
 }
 
 
-function linkToolbarPageLoadedHandler(event) {
+function linkWidgetPageLoadedHandler(event) {
   var doc = event.originalTarget;
-  if(!gLinkToolbarPrefUseLinkGuessing) return;
+  if(!gLinkWidgetPrefUseLinkGuessing) return;
   if(!(doc instanceof HTMLDocument)) return;
   const win = doc.defaultView;
   if(win != win.top) return;
 
-  if(doc._linkToolbar_haveGuessedLinks) return;
-  doc._linkToolbar_haveGuessedLinks = true;
+  if(doc._linkWidget_haveGuessedLinks) return;
+  doc._linkWidget_haveGuessedLinks = true;
 
   const links = doc.__lt__links || (doc.__lt__links = []);
 
-  if(gLinkToolbarPrefScanHyperlinks)
-    linkToolbarLinkFinder.scanPageLinks(doc, links);
+  if(gLinkWidgetPrefScanHyperlinks)
+    linkWidgetLinkFinder.scanPageLinks(doc, links);
 
   const protocol = doc.location.protocol;
   if(!/^(?:https|http|ftp)\:$/.test(protocol)) return;
 
-  if(gLinkToolbarPrefGuessUpAndTopFromURL) {
+  if(gLinkWidgetPrefGuessUpAndTopFromURL) {
     if(!links.up) {
-      var upUrl = linkToolbarUtils.guessUpUrl(doc.location);
-      if(upUrl) linkToolbarAddLinkForPage(new LTLinkInfo(upUrl), doc, {up: true});
+      var upUrl = linkWidgetUtils.guessUpUrl(doc.location);
+      if(upUrl) linkWidgetAddLinkForPage(new LTLinkInfo(upUrl), doc, {up: true});
     }
     if(!links.top) {
-      var topUrl = linkToolbarUtils.guessTopUrl(doc.location);
-      if(topUrl) linkToolbarAddLinkForPage(new LTLinkInfo(topUrl), doc, {top: true});
+      var topUrl = linkWidgetUtils.guessTopUrl(doc.location);
+      if(topUrl) linkWidgetAddLinkForPage(new LTLinkInfo(topUrl), doc, {top: true});
     }
   }
-  if(gLinkToolbarPrefGuessPrevAndNextFromURL)
-    linkToolbarLinkFinder.guessPrevAndNextFromURL(doc, !links.prev, !links.next);
+  if(gLinkWidgetPrefGuessPrevAndNextFromURL)
+    linkWidgetLinkFinder.guessPrevAndNextFromURL(doc, !links.prev, !links.next);
 }
 
 
-function linkToolbarTabSelectedHandler(event) {
+function linkWidgetTabSelectedHandler(event) {
   if(event.originalTarget.localName != "tabs") return;
-  linkToolbarRefreshLinks();
+  linkWidgetRefreshLinks();
 }
 
 
-function linkToolbarPageShowHandler(event) {
+function linkWidgetPageShowHandler(event) {
   const doc = event.originalTarget;
-  if(doc == gBrowser.contentDocument) linkToolbarRefreshLinks();
+  if(doc == gBrowser.contentDocument) linkWidgetRefreshLinks();
 }
 
 
-function linkToolbarRefreshLinks() {
-  linkToolbarItems.clearAll();
+function linkWidgetRefreshLinks() {
+  linkWidgetItems.clearAll();
   var doc = content.document;
   if(!doc.__lt__links) return;
-  linkToolbarItems.handleLinksForRels(doc.__lt__links);
+  linkWidgetItems.handleLinksForRels(doc.__lt__links);
 }
 
 
-function linkToolbarAddLinkForPage(linkInfo, doc, rels) {
+function linkWidgetAddLinkForPage(linkInfo, doc, rels) {
   // remember the link in an array on the document
   // xxx we'd prefer not to pollute the document's DOM of course, but javascript
   // doesn't have real hashtables (only string->anything maps), so there isn't
@@ -225,14 +225,14 @@ function linkToolbarAddLinkForPage(linkInfo, doc, rels) {
   var doclinks = doc.__lt__links || (doc.__lt__links = []);
   for(var r in rels) {
     if(!(r in doclinks)) doclinks[r] = [];
-    // we leave any existing link with the same URL alone so that linkToolbarLinkFinder-generated
+    // we leave any existing link with the same URL alone so that linkWidgetLinkFinder-generated
     // links don't replace page-provided ones (which are likely to have better descriptions)
     var url = linkInfo.url;
     if(url in doclinks[r]) delete rels[r];
     else doclinks[r][url] = linkInfo;
   }
 
-  if(doc == content.document) linkToolbarItems.handleLinkForRels(linkInfo, rels);
+  if(doc == content.document) linkWidgetItems.handleLinkForRels(linkInfo, rels);
 }
 
 
@@ -240,26 +240,26 @@ function linkToolbarAddLinkForPage(linkInfo, doc, rels) {
 // Code to show urls in the status bar (setting statustext attribute does zilch).
 // Rather complex because it worries about restoring the old text, and only doing so if something else hasn't modified the text in the meantime.
 
-var gLinkToolbarOldStatusbarText = null;
+var gLinkWidgetOldStatusbarText = null;
 
-function linkToolbarMouseEnter(e) {
+function linkWidgetMouseEnter(e) {
   const t = e.target;
   const href = t.getAttribute("href");
   if(!href) return;
-  gLinkToolbarOldStatusbarText = gLinkToolbarStatusbar.getAttribute("label");
-  gLinkToolbarStatusbar.setAttribute("label", href);
+  gLinkWidgetOldStatusbarText = gLinkWidgetStatusbar.getAttribute("label");
+  gLinkWidgetStatusbar.setAttribute("label", href);
 }
 
-function linkToolbarMouseExit(e) {
+function linkWidgetMouseExit(e) {
   const t = e.target;
   const href = t.getAttribute("href");
-  const txt = gLinkToolbarStatusbar.getAttribute("label");
-  if(txt==href) gLinkToolbarStatusbar.setAttribute("label", gLinkToolbarOldStatusbarText);
-  gLinkToolbarOldStatusbarText = null;
+  const txt = gLinkWidgetStatusbar.getAttribute("label");
+  if(txt==href) gLinkWidgetStatusbar.setAttribute("label", gLinkWidgetOldStatusbarText);
+  gLinkWidgetOldStatusbarText = null;
 }
 
 
-function linkToolbarFillTooltip(tooltip, event) {
+function linkWidgetFillTooltip(tooltip, event) {
   const elt = document.tooltipNode, line1 = tooltip.firstChild, line2 = tooltip.lastChild;
   const text1 = elt.getAttribute("tooltiptext1") || elt.getAttribute("tooltiptext0");
   const text2 = elt.getAttribute("href");
@@ -269,9 +269,9 @@ function linkToolbarFillTooltip(tooltip, event) {
   return !(!text1 && !text2); // return a bool, not a string
 }
 
-function linkToolbarItemClicked(e) {
+function linkWidgetItemClicked(e) {
   if(e.button != 1) return;
-  linkToolbarLoadPage(e);
+  linkWidgetLoadPage(e);
   // close any menus
   var p = e.target;
   while(p.localName!="toolbarbutton") {
@@ -280,12 +280,12 @@ function linkToolbarItemClicked(e) {
   }
 }
 
-function linkToolbarButtonRightClicked(e) {
+function linkWidgetButtonRightClicked(e) {
   const t = e.target, ot = e.originalTarget;
   if(ot.localName=="toolbarbutton" && t.links.length>1) t.firstChild.showPopup();
 }
 
-function linkToolbarLoadPage(e) {
+function linkWidgetLoadPage(e) {
   const url = e.target.getAttribute("href");
   const sourceURL = content.document.documentURI; //e.target.ltSourceURL;
   const button = e.type=="command" ? 0 : e.button;
@@ -299,20 +299,20 @@ function linkToolbarLoadPage(e) {
   // handleLinkClick deals with modified left-clicks, and middle-clicks
   const didHandleClick = handleLinkClick(fakeEvent, url, null);
   if(didHandleClick || button != 0) return;
-  linkToolbarLoadPageInCurrentBrowser(url, sourceURL);
+  linkWidgetLoadPageInCurrentBrowser(url, sourceURL);
 }
 
 // only works for linkType=top/up/first/prev/next/last (i.e. only for buttons)
 // used for keyboard shortcut handling
-function linkToolbarGo(linkType) {
-  const item = linkToolbarItems.getItem(linkType);
+function linkWidgetGo(linkType) {
+  const item = linkWidgetItems.getItem(linkType);
   if(!item || !item.links.length) return;
   const url = item.getAttribute("href");
   const sourceURL = content.document.documentURI; // item.ltSourceURL;
-  linkToolbarLoadPageInCurrentBrowser(url, sourceURL);
+  linkWidgetLoadPageInCurrentBrowser(url, sourceURL);
 }
 
-function linkToolbarLoadPageInCurrentBrowser(url, sourceURL) {
+function linkWidgetLoadPageInCurrentBrowser(url, sourceURL) {
   urlSecurityCheck(url, sourceURL);
   gBrowser.loadURI(url);
   content.focus();
@@ -342,7 +342,7 @@ LTLinkInfo.prototype = {
       if(this.media && !/\b(all|screen)\b/i.test(this.media)) longTitle += this.media + ": ";
       // XXX this produces stupid results if there is an hreflang present but no title
       // (gives "French: ", should be something like "French [language] version")
-      if(this.lang) longTitle += linkToolbarUtils.getLanguageName(this.lang) + ": ";
+      if(this.lang) longTitle += linkWidgetUtils.getLanguageName(this.lang) + ": ";
       if(this.title) longTitle += this.title;
       // the 'if' here is to ensure the long title isn't just the url
       else if(longTitle) longTitle += this.url;
@@ -360,10 +360,10 @@ LTLinkInfo.prototype = {
 // "icon" turns up as "shortcut icon" too, I think.
 // "stylesheet" is here because of "alternate stylesheet", which also needs ignoring
 // pingback, fontdef and p3pv are inherited from Mozilla. XXX could they be moved to standardiseRelType?
-const linkToolbarIgnoreRels =
+const linkWidgetIgnoreRels =
   /\b(?:stylesheet\b|icon\b|pingback\b|fontdef\b|p3pv|schema\.|meta\b)/i;
 
-const linkToolbarRelConversions = {
+const linkWidgetRelConversions = {
   home: "top",
   origin: "top",
   start: "top",
@@ -379,17 +379,17 @@ const linkToolbarRelConversions = {
   sidebar: null
 };
 
-const linkToolbarRevToRel = {
+const linkWidgetRevToRel = {
   made: "author",
   next: "prev",
   prev: "next",
   previous: "next"
 };
 
-const linkToolbarUtils = {
+const linkWidgetUtils = {
   getLinkRels: function(relStr, revStr, mimetype, title) {
     // Ignore certain links
-    if(linkToolbarIgnoreRels.test(relStr)) return null;
+    if(linkWidgetIgnoreRels.test(relStr)) return null;
 
     const relValues = {};
     var rel, i, haveRels = false;
@@ -406,7 +406,7 @@ const linkToolbarUtils = {
     if(revStr) {
       var revValues = revStr.split(/[ \t\f\r\n\u200B]+/);
       for(i = 0; i < revValues.length; i++) {
-        rel = linkToolbarRevToRel[revValues[i].toLowerCase()] || null;
+        rel = linkWidgetRevToRel[revValues[i].toLowerCase()] || null;
         if(rel) relValues[rel] = true, haveRels = true;
       }
     }
@@ -426,7 +426,7 @@ const linkToolbarUtils = {
           return null;
         return "alternate";
     }
-    return rel in linkToolbarRelConversions ? linkToolbarRelConversions[rel] : rel;
+    return rel in linkWidgetRelConversions ? linkWidgetRelConversions[rel] : rel;
   },
 
   // code is a language code, e.g. en, en-GB, es, fr-FR
@@ -445,7 +445,7 @@ const linkToolbarUtils = {
   get _languageDictionary() {
     delete this._languageDictionary; // remove this getter function, so that we can replace with an array
     return this._languageDictionary =
-      linkToolbarLoadStringBundle("chrome://global/locale/languageNames.properties");
+      linkWidgetLoadStringBundle("chrome://global/locale/languageNames.properties");
   },
 
   // arg is an nsIDOMLocation, with protocol of http(s) or ftp
@@ -475,7 +475,7 @@ const linkToolbarUtils = {
 };
 
 
-function linkToolbarLoadStringBundle(bundlePath) {
+function linkWidgetLoadStringBundle(bundlePath) {
   const strings = {};
   try {
     var bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
@@ -497,7 +497,7 @@ function linkToolbarLoadStringBundle(bundlePath) {
 
 
 
-var linkToolbarLinkFinder = {
+var linkWidgetLinkFinder = {
   // regular expressions for identifying link types
   // XXX some pages use << for first and < for prev, so we should handle things like that differently
   re_first: /^first\b|\bfirst$|^begin|\|<|\u00ab/i, // ? >\u007c| ?
@@ -532,18 +532,18 @@ var linkToolbarLinkFinder = {
     if(guessPrev) {
       var prv = ""+(num-1);
       while(prv.length < old.length) prv = "0" + prv;
-      linkToolbarAddLinkForPage(new LTLinkInfo(pre + prv + post), doc, { prev: true });
+      linkWidgetAddLinkForPage(new LTLinkInfo(pre + prv + post), doc, { prev: true });
     }
     if(guessNext) {
       var nxt = ""+(num+1);
       while(nxt.length < old.length) nxt = "0" + nxt;
-      linkToolbarAddLinkForPage(new LTLinkInfo(pre + nxt + post), doc, { next: true });
+      linkWidgetAddLinkForPage(new LTLinkInfo(pre + nxt + post), doc, { next: true });
     }
   },
 
   scanPageLinks: function(doc, links) {
-    // The user has to wait for linkToolbarLinkFinder to finish before they can interact with the page
-    // that has just loaded.  On pages with lots of links linkToolbarLinkFinder could make Firefox
+    // The user has to wait for linkWidgetLinkFinder to finish before they can interact with the page
+    // that has just loaded.  On pages with lots of links linkWidgetLinkFinder could make Firefox
     // unresponsive for several seconds if we didn't cap the number of links we inspect.
     // xxx think more about what cap to use (500 is probably excessively high)
     var max = Math.min(doc.links.length, 500);
@@ -560,9 +560,9 @@ var linkToolbarLinkFinder = {
       title = title.replace(/\s+/g," ");
 
       if(link.rel || link.rev) {
-        rels = linkToolbarUtils.getLinkRels(link.rel, link.rev);
+        rels = linkWidgetUtils.getLinkRels(link.rel, link.rev);
         var info = new LTLinkInfo(link.href, title, link.hreflang, null);
-        linkToolbarAddLinkForPage(info, doc, rels);
+        linkWidgetAddLinkForPage(info, doc, rels);
         continue; // no point using the regexps
       }
 
@@ -571,7 +571,7 @@ var linkToolbarLinkFinder = {
       else if(this.re_first.test(title)) rels.first = true;
       else if(this.re_last.test(title)) rels.last = true;
 
-      linkToolbarAddLinkForPage(new LTLinkInfo(href, title), doc, rels);
+      linkWidgetAddLinkForPage(new LTLinkInfo(href, title), doc, rels);
     }
   },
 
@@ -610,7 +610,7 @@ var linkToolbarLinkFinder = {
 
 
 // controller for all UI bits displaying <link>s
-const linkToolbarItems = {
+const linkWidgetItems = {
   moreMenu: null,
   morePopup: null,
 
@@ -639,16 +639,16 @@ const linkToolbarItems = {
   },
 
   _init: function() {
-    this.moreMenu = document.getElementById("linktoolbar-more-menu");
-    this.morePopup = document.getElementById("linktoolbar-more-popup");
+    this.moreMenu = document.getElementById("linkwidget-more-menu");
+    this.morePopup = document.getElementById("linkwidget-more-popup");
   },
 
   _initButtons: function() {
     const btns = {top:true, up:true, first:true, prev:true, next:true, last:true};
     const buttons = this.buttons = {};
     for(var rel in btns) {
-      var elt = document.getElementById("linktoolbar-"+rel);
-      if(elt) buttons[rel] = initLinkToolbarButton(elt, rel);
+      var elt = document.getElementById("linkwidget-"+rel);
+      if(elt) buttons[rel] = initLinkWidgetButton(elt, rel);
     }
   },
 
@@ -676,7 +676,7 @@ const linkToolbarItems = {
       var item = this.getItem(rel);
       if(!item) continue;
       item.addLink(linkInfo);
-      if(item instanceof LinkToolbarItem) enableMoreMenu = true;
+      if(item instanceof LinkWidgetItem) enableMoreMenu = true;
     }
     if(enableMoreMenu) this.moreMenu.disabled = false;
   },
@@ -688,7 +688,7 @@ const linkToolbarItems = {
     for(var rel in rels) {
       var item = this.getItem(rel);
       if(!item) continue;
-      if(item instanceof LinkToolbarItem) enableMoreMenu = true;
+      if(item instanceof LinkWidgetItem) enableMoreMenu = true;
       item.replaceLinks(rels[rel]);
     }
     if(enableMoreMenu) this.moreMenu.disabled = false;
@@ -707,7 +707,7 @@ const linkToolbarItems = {
   onMoreMenuHidden: function() {
     for each(var item in this.items) item._isShowing = false;
     const kids = this.morePopup.childNodes, num = kids.length;
-    for(var i = 0; i != num; ++i) kids[i].linkToolbarItem._isShowing = false;
+    for(var i = 0; i != num; ++i) kids[i].linkWidgetItem._isShowing = false;
   },
 
   getItem: function(rel) {
@@ -717,7 +717,7 @@ const linkToolbarItems = {
     const relNum = this._itemPlacement[rel] || Infinity;
     const isMenu = rel in this._itemsWhichShouldAlwaysBeMenus;
     return this.items[rel] =
-      isMenu ? new LinkToolbarMenu(rel, relNum) : new LinkToolbarItem(rel, relNum);
+      isMenu ? new LinkWidgetMenu(rel, relNum) : new LinkWidgetItem(rel, relNum);
   },
 
   // returns a XULElement to insertBefore(...)
@@ -737,7 +737,7 @@ const linkToolbarItems = {
 };
 
 
-const linkToolbarItemBase = {
+const linkWidgetItemBase = {
   _linksHaveChanged: true, // has our set of links changed since the menu was last shown
   _menuNeedsRefresh: true,
   _isShowing: false,
@@ -766,7 +766,7 @@ const linkToolbarItemBase = {
   },
 
   show: function() {
-    throw "show() not implemented for some link toolbar item";
+    throw "show() not implemented for some Link Widget item";
   },
 
   destroy: function() {},
@@ -795,20 +795,20 @@ const linkToolbarItemBase = {
 
 // Top, Up, First, Prev, Next, and Last menu-buttons
 // Hackery employed to disable the dropmarker if there is just one link.
-function initLinkToolbarButton(elt, rel) {
+function initLinkWidgetButton(elt, rel) {
   if(elt.alreadyInitialised) return elt;
   elt.alreadyInitialised = true;
   elt.rel = rel;
   // to avoid repetetive XUL
-  elt.onmouseover = linkToolbarMouseEnter;
-  elt.onmouseout = linkToolbarMouseExit;
-  elt.onclick = linkToolbarItemClicked;
-  elt.oncontextmenu = linkToolbarButtonRightClicked;
-  elt.setAttribute("oncommand", "linkToolbarLoadPage(event);"); // .oncommand does not exist
+  elt.onmouseover = linkWidgetMouseEnter;
+  elt.onmouseout = linkWidgetMouseExit;
+  elt.onclick = linkWidgetItemClicked;
+  elt.oncontextmenu = linkWidgetButtonRightClicked;
+  elt.setAttribute("oncommand", "linkWidgetLoadPage(event);"); // .oncommand does not exist
   elt.setAttribute("context", "");
-  elt.setAttribute("tooltip", "linktoolbar-tooltip");
-  elt.addEventListener("DOMMouseScroll", linkToolbarMouseScrollHandler, false);
-  for(var i in linkToolbarButton) elt[i] = linkToolbarButton[i];
+  elt.setAttribute("tooltip", "linkwidget-tooltip");
+  elt.addEventListener("DOMMouseScroll", linkWidgetMouseScrollHandler, false);
+  for(var i in linkWidgetButton) elt[i] = linkWidgetButton[i];
   elt.links = []; // each button needs its own array, not a reference to a shared one
   var popup = elt.popup = document.createElement("menupopup");
   elt.appendChild(popup);
@@ -819,8 +819,8 @@ function initLinkToolbarButton(elt, rel) {
   return elt;
 };
 
-const linkToolbarButton = {
-  __proto__: linkToolbarItemBase,
+const linkWidgetButton = {
+  __proto__: linkWidgetItemBase,
   _isShowing: true,
 
   show: function() {
@@ -849,13 +849,13 @@ const linkToolbarButton = {
 
 
 // switches automatically between being a single menu item and a whole sub menu
-function LinkToolbarItem(rel, relNum) {
+function LinkWidgetItem(rel, relNum) {
   this.links = [];
   this.rel = rel;
   this.relNum = relNum
 }
-LinkToolbarItem.prototype = {
-  __proto__: linkToolbarItemBase,
+LinkWidgetItem.prototype = {
+  __proto__: linkWidgetItemBase,
 
   menuitem: null,
   menu: null,
@@ -864,9 +864,9 @@ LinkToolbarItem.prototype = {
   destroy: function() {
     const i = this.menuitem, m = this.menu, p = this.popup;
     if(!i) return;
-    delete i.linkToolbarItem; i.parentNode.removeChild(i);
-    delete m.linkToolbarItem; m.parentNode.removeChild(m);
-    delete p.linkToolbarItem;
+    delete i.linkWidgetItem; i.parentNode.removeChild(i);
+    delete m.linkWidgetItem; m.parentNode.removeChild(m);
+    delete p.linkWidgetItem;
     this.menuitem = this.menu = this.popup = null;
   },
 
@@ -901,23 +901,23 @@ LinkToolbarItem.prototype = {
   createElements: function() {
     const rel = this.rel;
     const mi = this.menuitem = document.createElement("menuitem");
-    const relStr = linkToolbarStrings[rel] || rel;
+    const relStr = linkWidgetStrings[rel] || rel;
     mi.className = "menuitem-iconic";
     mi.setAttribute("label", relStr);
     const m = this.menu = document.createElement("menu");
-    m.setAttribute("label", linkToolbarStrings["2"+rel] || relStr);
+    m.setAttribute("label", linkWidgetStrings["2"+rel] || relStr);
     m.hidden = true;
     m.className = "menu-iconic";
     m.setAttribute("container", "true");
     const p = this.popup = document.createElement("menupopup");
-    p.setAttribute("onpopupshowing", "this.linkToolbarItem.buildMenu();");
+    p.setAttribute("onpopupshowing", "this.linkWidgetItem.buildMenu();");
 
-    mi.linkToolbarItem = m.linkToolbarItem = p.linkToolbarItem = this;
+    mi.linkWidgetItem = m.linkWidgetItem = p.linkWidgetItem = this;
     mi.relNum = m.relNum = this.relNum;
 
     m.appendChild(p);
-    const where = linkToolbarItems.getInsertionPointFor(this.relNum);
-    const morePopup = linkToolbarItems.morePopup;
+    const where = linkWidgetItems.getInsertionPointFor(this.relNum);
+    const morePopup = linkWidgetItems.morePopup;
     if(where) {
       morePopup.insertBefore(m, where);
       morePopup.insertBefore(mi, where);
@@ -930,13 +930,13 @@ LinkToolbarItem.prototype = {
 
 
 // an item that's always a submenu (e.g. Chapters)
-function LinkToolbarMenu(rel, relNum) {
+function LinkWidgetMenu(rel, relNum) {
   this.links = [];
   this.rel = rel;
   this.relNum = relNum;
 }
-LinkToolbarMenu.prototype = {
-  __proto__: LinkToolbarItem.prototype,
+LinkWidgetMenu.prototype = {
+  __proto__: LinkWidgetItem.prototype,
 
   show: function() {
     this._isShowing = true;

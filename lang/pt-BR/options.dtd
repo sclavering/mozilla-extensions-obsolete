@@ -5,10 +5,10 @@ Original Author:
   Alexander Gieg <alexgieg % gmail.com>
 -->
 
-<!ENTITY title "Opções do Link Toolbar">
+<!ENTITY title "Opções do Link Widget">
 
 <!ENTITY linkGuessing "Adivinhar Ligações">
-<!ENTITY linkGuessingDescription "O Link Toolbar pode tentar adivinhar ligações em sites que não as informam.">
+<!ENTITY linkGuessingDescription "O Link Widget pode tentar adivinhar ligações em sites que não as informam.">
 
 <!ENTITY scanHyperlinks "Buscar na página por links 'Primeiro', 'Anterior', 'Próximo' e 'Última Página'">
 <!ENTITY guessUpAndTopFromURL "Adivinhar ligações 'Acima' e 'Início' com base na URL da página">

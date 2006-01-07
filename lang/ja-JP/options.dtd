@@ -1,7 +1,7 @@
 
-<!ENTITY title "Link Toolbarの設定">
+<!ENTITY title "Link Widgetの設定">
 
-<!ENTITY general "Link Toolbarの外観">
+<!ENTITY general "Link Widgetの外観">
 <!ENTITY showOnlyWhenNeeded "ナビゲーションリンクがないページで表示しない">
 <!ENTITY iconsOnly "アイコンのみ表示する">
 

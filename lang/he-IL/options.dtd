@@ -5,14 +5,14 @@ Original Author:
   Rotem Liss <mail % rotemliss.com>
 -->
 
-<!ENTITY title "אפשרויות Link Toolbar">
+<!ENTITY title "אפשרויות Link Widget">
 
-<!ENTITY general "תצוגת Link Toolbar">
+<!ENTITY general "תצוגת Link Widget">
 <!ENTITY showOnlyWhenNeeded "העלם כאשר אין קישורים בדף הנוכחי">
 <!ENTITY iconsOnly "הצג רק סמלים, לא טקסט">
 
 <!ENTITY linkGuessing "ניחוש קישורים">
-<!ENTITY linkGuessingDescription "Link Toolbar יכול לנחש קישורים בדפים שונים שלא מציינים אותם מפורשות.">
+<!ENTITY linkGuessingDescription "Link Widget יכול לנחש קישורים בדפים שונים שלא מציינים אותם מפורשות.">
 
 <!ENTITY scanHyperlinks "סרוק הקישורים בדף למציאת הקישורים לדפים הראשון, הקודם, הבא והאחרון בסדרה">
 <!ENTITY guessUpAndTopFromURL "נחש את הקישורים ״רמה האחת למעלה״ ו״ראש האתר״">

@@ -12,7 +12,7 @@ Original Author:
 <!DOCTYPE overlay SYSTEM "chrome://linkwidget/locale/options.dtd">
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-    id="linkToolbarOptions"
+    id="linkWidgetOptions"
     title="&title;"
     buttons="accept,cancel"
     onload="loadPrefs();"
@@ -28,7 +28,7 @@ var gPrefs = null;
 function loadPrefs() {
   gPrefs = Components.classes["@mozilla.org/preferences-service;1"]
                      .getService(Components.interfaces.nsIPrefService);
-  gPrefs = gPrefs.getBranch("extensions.linktoolbar.");
+  gPrefs = gPrefs.getBranch("extensions.linkwidget.");
 
   for(var i in ids) {
     var elt = document.getElementById(ids[i]);
@@ -43,7 +43,7 @@ function savePrefs() {
   }
 
   var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
-  os.notifyObservers(null, "linktoolbar:prefs-updated", null);
+  os.notifyObservers(null, "linkwidget:prefs-updated", null);
 }
 ]]>
 </script>

@@ -14,7 +14,7 @@
 <p>In various Firefox builds from February 2004 it was observed that the unload event for the page
 when following a link that hides itself when clicked (or a link contained in another element that
 hides itself when clicked) would have a Text node (presumably the text content of the link) as its
-orignalTarget, rather than having the document being unloaded.  This would result in the link toolbar
+orignalTarget, rather than having the document being unloaded.  This would result in the link widget
 not clearing itself properly on moving to the next page, because the check whether the unload event's
 target was the docuement currently being viewed would fail.  (The code now uses ownerDocument to work
 around this).</p>
