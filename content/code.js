@@ -173,7 +173,7 @@ function linkWidgetPageLoadedHandler(event) {
   if(doc._linkWidget_haveGuessedLinks) return;
   doc._linkWidget_haveGuessedLinks = true;
 
-  const links = doc.linkWidgetLinks || (doc.linkWidgetLinks = []);
+  const links = doc.linkWidgetLinks || (doc.linkWidgetLinks = {});
 
   if(linkWidgetPrefScanHyperlinks)
     linkWidgetLinkFinder.scanPageLinks(doc, links);
@@ -181,18 +181,18 @@ function linkWidgetPageLoadedHandler(event) {
   const protocol = doc.location.protocol;
   if(!/^(?:https|http|ftp)\:$/.test(protocol)) return;
 
-  if(linkWidgetPrefGuessUpAndTopFromURL) {
-    if(!links.up) {
-      var upUrl = linkWidgetUtils.guessUpUrl(doc.location);
-      if(upUrl) linkWidgetAddLinkForPage(new LinkWidgetLink(upUrl), doc, {up: true});
-    }
-    if(!links.top) {
-      var topUrl = linkWidgetUtils.guessTopUrl(doc.location);
-      if(topUrl) linkWidgetAddLinkForPage(new LinkWidgetLink(topUrl), doc, {top: true});
-    }
-  }
   if(linkWidgetPrefGuessPrevAndNextFromURL)
     linkWidgetLinkFinder.guessPrevAndNextFromURL(doc, !links.prev, !links.next);
+
+  if(!linkWidgetPrefGuessUpAndTopFromURL) return;
+  if(!links.up) {
+    var upUrl = linkWidgetUtils.guessUpUrl(doc.location);
+    if(upUrl) linkWidgetAddLinkForPage(new LinkWidgetLink(upUrl), doc, {up: true});
+  }
+  if(!links.top) {
+    var topUrl = linkWidgetUtils.guessTopUrl(doc.location);
+    if(topUrl) linkWidgetAddLinkForPage(new LinkWidgetLink(topUrl), doc, {top: true});
+  }
 }
 
 
@@ -217,14 +217,10 @@ function linkWidgetRefreshLinks() {
 
 
 function linkWidgetAddLinkForPage(linkInfo, doc, rels) {
-  // remember the link in an array on the document
-  // xxx we'd prefer not to pollute the document's DOM of course, but javascript
-  // doesn't have real hashtables (only string->anything maps), so there isn't
-  // all that much choice.
-  // xxx this doesn't work (at all) with XPCNativeWrappers as of 20050712
-  var doclinks = doc.linkWidgetLinks || (doc.linkWidgetLinks = []);
+  // put the link in a rel->url->link map on the document's XPCNativeWrapper
+  var doclinks = doc.linkWidgetLinks || (doc.linkWidgetLinks = {});
   for(var r in rels) {
-    if(!(r in doclinks)) doclinks[r] = [];
+    if(!(r in doclinks)) doclinks[r] = {};
     // we leave any existing link with the same URL alone so that linkWidgetLinkFinder-generated
     // links don't replace page-provided ones (which are likely to have better descriptions)
     var url = linkInfo.url;
