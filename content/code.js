@@ -41,18 +41,18 @@ the terms of any one of the MPL, the GPL or the LGPL.
 ***** END LICENSE BLOCK ***** */
 
 
-var gLinkWidget = null;
-var gLinkWidgetPrefUseLinkGuessing = false;
-var gLinkWidgetPrefGuessUpAndTopFromURL = false;
-var gLinkWidgetPrefGuessPrevAndNextFromURL = false;
-var gLinkWidgetPrefScanHyperlinks = false;
+var linkWidget = null;
+var linkWidgetPrefUseLinkGuessing = false;
+var linkWidgetPrefGuessUpAndTopFromURL = false;
+var linkWidgetPrefGuessPrevAndNextFromURL = false;
+var linkWidgetPrefScanHyperlinks = false;
 var linkWidgetStrings = "chrome://linkwidget/locale/main.strings";
 
-var gLinkWidgetStatusbar = null; // Firefox's usual statusbar
+var linkWidgetStatusbar = null; // Firefox's usual statusbar
 
 function linkWidgetStartup() {
   window.removeEventListener("load", linkWidgetStartup, false);
-  gLinkWidgetStatusbar = document.getElementById("statusbar-display");
+  linkWidgetStatusbar = document.getElementById("statusbar-display");
   linkWidgetStrings = linkWidgetLoadStringBundle(linkWidgetStrings);
   linkWidgetItems.init();
 
@@ -95,12 +95,12 @@ function linkWidgetToolboxCustomizeDone(somethingChanged) {
 function linkWidgetLoadPrefs() {
   var branch = gPrefService.getBranch("extensions.linkwidget.");
 
-  gLinkWidgetPrefScanHyperlinks = branch.getBoolPref("scanHyperlinks");
-  gLinkWidgetPrefGuessUpAndTopFromURL = branch.getBoolPref("guessUpAndTopFromURL");
-  gLinkWidgetPrefGuessPrevAndNextFromURL = branch.getBoolPref("guessPrevAndNextFromURL");
+  linkWidgetPrefScanHyperlinks = branch.getBoolPref("scanHyperlinks");
+  linkWidgetPrefGuessUpAndTopFromURL = branch.getBoolPref("guessUpAndTopFromURL");
+  linkWidgetPrefGuessPrevAndNextFromURL = branch.getBoolPref("guessPrevAndNextFromURL");
 
-  gLinkWidgetPrefUseLinkGuessing = gLinkWidgetPrefScanHyperlinks
-      || gLinkWidgetPrefGuessUpAndTopFromURL || gLinkWidgetPrefGuessPrevAndNextFromURL;
+  linkWidgetPrefUseLinkGuessing = linkWidgetPrefScanHyperlinks
+      || linkWidgetPrefGuessUpAndTopFromURL || linkWidgetPrefGuessPrevAndNextFromURL;
 }
 
 
@@ -145,12 +145,12 @@ function linkWidgetLinkAddedHandler(event) {
   if(!(elt instanceof HTMLLinkElement) || !elt.href || !(elt.rel || elt.rev)) return;
   var rels = linkWidgetUtils.getLinkRels(elt.rel, elt.rev, elt.type, elt.title);
   if(!rels) return;
-  var linkInfo = new LTLinkInfo(elt.href, elt.title, elt.hreflang, elt.media);
+  var linkInfo = new LinkWidgetLink(elt.href, elt.title, elt.hreflang, elt.media);
   linkWidgetAddLinkForPage(linkInfo, doc, rels);
 }
 
 
-// Really ought to delete/nullify doc.__lt__links on "close" (but not on "pagehide")
+// Really ought to delete/nullify doc.linkWidgetLinks on "close" (but not on "pagehide")
 function linkWidgetPageClosedHandler(event) {
   // Links like: <a href="..." onclick="this.style.display='none'">.....</a>
   // (the onclick handler could instead be on an ancestor of the link) lead to unload/pagehide
@@ -165,7 +165,7 @@ function linkWidgetPageClosedHandler(event) {
 
 function linkWidgetPageLoadedHandler(event) {
   var doc = event.originalTarget;
-  if(!gLinkWidgetPrefUseLinkGuessing) return;
+  if(!linkWidgetPrefUseLinkGuessing) return;
   if(!(doc instanceof HTMLDocument)) return;
   const win = doc.defaultView;
   if(win != win.top) return;
@@ -173,25 +173,25 @@ function linkWidgetPageLoadedHandler(event) {
   if(doc._linkWidget_haveGuessedLinks) return;
   doc._linkWidget_haveGuessedLinks = true;
 
-  const links = doc.__lt__links || (doc.__lt__links = []);
+  const links = doc.linkWidgetLinks || (doc.linkWidgetLinks = []);
 
-  if(gLinkWidgetPrefScanHyperlinks)
+  if(linkWidgetPrefScanHyperlinks)
     linkWidgetLinkFinder.scanPageLinks(doc, links);
 
   const protocol = doc.location.protocol;
   if(!/^(?:https|http|ftp)\:$/.test(protocol)) return;
 
-  if(gLinkWidgetPrefGuessUpAndTopFromURL) {
+  if(linkWidgetPrefGuessUpAndTopFromURL) {
     if(!links.up) {
       var upUrl = linkWidgetUtils.guessUpUrl(doc.location);
-      if(upUrl) linkWidgetAddLinkForPage(new LTLinkInfo(upUrl), doc, {up: true});
+      if(upUrl) linkWidgetAddLinkForPage(new LinkWidgetLink(upUrl), doc, {up: true});
     }
     if(!links.top) {
       var topUrl = linkWidgetUtils.guessTopUrl(doc.location);
-      if(topUrl) linkWidgetAddLinkForPage(new LTLinkInfo(topUrl), doc, {top: true});
+      if(topUrl) linkWidgetAddLinkForPage(new LinkWidgetLink(topUrl), doc, {top: true});
     }
   }
-  if(gLinkWidgetPrefGuessPrevAndNextFromURL)
+  if(linkWidgetPrefGuessPrevAndNextFromURL)
     linkWidgetLinkFinder.guessPrevAndNextFromURL(doc, !links.prev, !links.next);
 }
 
@@ -211,8 +211,8 @@ function linkWidgetPageShowHandler(event) {
 function linkWidgetRefreshLinks() {
   linkWidgetItems.clearAll();
   var doc = content.document;
-  if(!doc.__lt__links) return;
-  linkWidgetItems.handleLinksForRels(doc.__lt__links);
+  if(!doc.linkWidgetLinks) return;
+  linkWidgetItems.handleLinksForRels(doc.linkWidgetLinks);
 }
 
 
@@ -222,7 +222,7 @@ function linkWidgetAddLinkForPage(linkInfo, doc, rels) {
   // doesn't have real hashtables (only string->anything maps), so there isn't
   // all that much choice.
   // xxx this doesn't work (at all) with XPCNativeWrappers as of 20050712
-  var doclinks = doc.__lt__links || (doc.__lt__links = []);
+  var doclinks = doc.linkWidgetLinks || (doc.linkWidgetLinks = []);
   for(var r in rels) {
     if(!(r in doclinks)) doclinks[r] = [];
     // we leave any existing link with the same URL alone so that linkWidgetLinkFinder-generated
@@ -240,22 +240,22 @@ function linkWidgetAddLinkForPage(linkInfo, doc, rels) {
 // Code to show urls in the status bar (setting statustext attribute does zilch).
 // Rather complex because it worries about restoring the old text, and only doing so if something else hasn't modified the text in the meantime.
 
-var gLinkWidgetOldStatusbarText = null;
+var linkWidgetOldStatusbarText = null;
 
 function linkWidgetMouseEnter(e) {
   const t = e.target;
   const href = t.getAttribute("href");
   if(!href) return;
-  gLinkWidgetOldStatusbarText = gLinkWidgetStatusbar.getAttribute("label");
-  gLinkWidgetStatusbar.setAttribute("label", href);
+  linkWidgetOldStatusbarText = linkWidgetStatusbar.getAttribute("label");
+  linkWidgetStatusbar.setAttribute("label", href);
 }
 
 function linkWidgetMouseExit(e) {
   const t = e.target;
   const href = t.getAttribute("href");
-  const txt = gLinkWidgetStatusbar.getAttribute("label");
-  if(txt==href) gLinkWidgetStatusbar.setAttribute("label", gLinkWidgetOldStatusbarText);
-  gLinkWidgetOldStatusbarText = null;
+  const txt = linkWidgetStatusbar.getAttribute("label");
+  if(txt==href) linkWidgetStatusbar.setAttribute("label", linkWidgetOldStatusbarText);
+  linkWidgetOldStatusbarText = null;
 }
 
 
@@ -291,6 +291,7 @@ function linkWidgetLoadPage(e) {
   const button = e.type=="command" ? 0 : e.button;
   // Construct a fake event to pass to handleLinkClick(event, href, linkNode)
   // to make it extract the correct source URL.
+  // xxx { __proto__: event, target: { ... }} ?
   const fakeEvent = {
     metaKey: e.metaKey, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey,
     altKey: e.altKey, button: button, preventBubble: function() {},
@@ -322,13 +323,13 @@ function linkWidgetLoadPageInCurrentBrowser(url, sourceURL) {
 
 
 
-function LTLinkInfo(url, title, lang, media) {
+function LinkWidgetLink(url, title, lang, media) {
   this.url = url;
   this.title = title || null;
   this.lang = lang || null;
   this.media = media || null;
 }
-LTLinkInfo.prototype = {
+LinkWidgetLink.prototype = {
   _longTitle: null,
 
   // this is only needed when showing a tooltip, or for items on the More menu, so we
@@ -532,12 +533,12 @@ var linkWidgetLinkFinder = {
     if(guessPrev) {
       var prv = ""+(num-1);
       while(prv.length < old.length) prv = "0" + prv;
-      linkWidgetAddLinkForPage(new LTLinkInfo(pre + prv + post), doc, { prev: true });
+      linkWidgetAddLinkForPage(new LinkWidgetLink(pre + prv + post), doc, { prev: true });
     }
     if(guessNext) {
       var nxt = ""+(num+1);
       while(nxt.length < old.length) nxt = "0" + nxt;
-      linkWidgetAddLinkForPage(new LTLinkInfo(pre + nxt + post), doc, { next: true });
+      linkWidgetAddLinkForPage(new LinkWidgetLink(pre + nxt + post), doc, { next: true });
     }
   },
 
@@ -561,7 +562,7 @@ var linkWidgetLinkFinder = {
 
       if(link.rel || link.rev) {
         rels = linkWidgetUtils.getLinkRels(link.rel, link.rev);
-        var info = new LTLinkInfo(link.href, title, link.hreflang, null);
+        var info = new LinkWidgetLink(link.href, title, link.hreflang, null);
         linkWidgetAddLinkForPage(info, doc, rels);
         continue; // no point using the regexps
       }
@@ -571,7 +572,7 @@ var linkWidgetLinkFinder = {
       else if(this.re_first.test(title)) rels.first = true;
       else if(this.re_last.test(title)) rels.last = true;
 
-      linkWidgetAddLinkForPage(new LTLinkInfo(href, title), doc, rels);
+      linkWidgetAddLinkForPage(new LinkWidgetLink(href, title), doc, rels);
     }
   },
 
@@ -742,7 +743,7 @@ const linkWidgetItemBase = {
   _menuNeedsRefresh: true,
   _isShowing: false,
 
-  links: [], // an array of LTLinkInfo's
+  links: [], // an array of LinkWidgetLink's
   popup: null,
 
   addLink: function(link) {
