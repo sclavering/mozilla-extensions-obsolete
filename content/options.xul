@@ -11,50 +11,19 @@ Original Author:
 
 <!DOCTYPE overlay SYSTEM "chrome://linkwidget/locale/options.dtd">
 
-<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-    id="linkWidgetOptions"
-    title="&title;"
-    buttons="accept,cancel"
-    onload="loadPrefs();"
-    ondialogaccept="savePrefs();"
-    >
-
-<script type="application/x-javascript">
-<![CDATA[
-const ids = ["guessUpAndTopFromURL","guessPrevAndNextFromURL","scanHyperlinks"];
-
-var gPrefs = null;
-
-function loadPrefs() {
-  gPrefs = Components.classes["@mozilla.org/preferences-service;1"]
-                     .getService(Components.interfaces.nsIPrefService);
-  gPrefs = gPrefs.getBranch("extensions.linkwidget.");
-
-  for(var i in ids) {
-    var elt = document.getElementById(ids[i]);
-    elt.checked = gPrefs.getBoolPref(ids[i]);
-  }
-}
-
-function savePrefs() {
-  for(var i in ids) {
-    var elt = document.getElementById(ids[i]);
-    gPrefs.setBoolPref(ids[i], elt.checked);
-  }
-
-  var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
-  os.notifyObservers(null, "linkwidget:prefs-updated", null);
-}
-]]>
-</script>
-
-  <groupbox id="linkGuessing">
-    <caption label="&linkGuessing;"/>
+<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    id="linkWidgetOptions" title="&title;">
+  <prefpane id="main">
+    <preferences>
+      <preference id="scan" name="extensions.linkwidget.scanHyperlinks" type="bool"/>
+      <preference id="uptop" name="extensions.linkwidget.guessUpAndTopFromURL" type="bool"/>
+      <preference id="prvnxt" name="extensions.linkwidget.guessPrevAndNextFromURL" type="bool"/>
+    </preferences>
 
     <description>&linkGuessingDescription;</description>
 
-    <checkbox id="scanHyperlinks" label="&scanHyperlinks;"/>
-    <checkbox id="guessUpAndTopFromURL" label="&guessUpAndTopFromURL;"/>
-    <checkbox id="guessPrevAndNextFromURL" label="&guessPrevAndNextFromURL;"/>
-  </groupbox>
-</dialog>
+    <checkbox preference="scan" label="&scanHyperlinks;"/>
+    <checkbox preference="uptop" label="&guessUpAndTopFromURL;"/>
+    <checkbox preference="prvnxt" label="&guessPrevAndNextFromURL;"/>
+  </prefpane>
+</prefwindow>

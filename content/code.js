@@ -40,6 +40,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 ***** END LICENSE BLOCK ***** */
 
+const linkWidgetPrefPrefix = "extensions.linkwidget.";
 
 var linkWidget = null;
 var linkWidgetPrefUseLinkGuessing = false;
@@ -57,14 +58,11 @@ function linkWidgetStartup() {
   linkWidgetItems.init();
 
   setTimeout(linkWidgetDelayedStartup, 1); // needs to happen after Fx's delayedStartup()
-
-  // pref listener (sort of)
-  var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
-  os.addObserver(linkWidgetPrefObserver, "linkwidget:prefs-updated", false);
 }
 
 function linkWidgetDelayedStartup() {
   linkWidgetLoadPrefs();
+  gPrefService.addObserver(linkWidgetPrefPrefix, linkWidgetPrefObserver, false);
   linkWidgetAddHandlers();
   // replace the toolbar customisation callback
   var box = document.getElementById("navigator-toolbox");
@@ -74,9 +72,7 @@ function linkWidgetDelayedStartup() {
 
 function linkWidgetShutdown() {
   window.removeEventListener("unload", linkWidgetShutdown, false);
-  // unhook pref listener (to prevent memory leaks)
-  var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
-  os.removeObserver(linkWidgetPrefObserver, "linkwidget:prefs-updated", false);
+  gPrefService.removeObserver(linkWidgetPrefPrefix, linkWidgetPrefObserver);
 }
 
 window.addEventListener("load", linkWidgetStartup, false);
@@ -93,12 +89,10 @@ function linkWidgetToolboxCustomizeDone(somethingChanged) {
 
 
 function linkWidgetLoadPrefs() {
-  var branch = gPrefService.getBranch("extensions.linkwidget.");
-
+  const branch = gPrefService.getBranch(linkWidgetPrefPrefix);
   linkWidgetPrefScanHyperlinks = branch.getBoolPref("scanHyperlinks");
   linkWidgetPrefGuessUpAndTopFromURL = branch.getBoolPref("guessUpAndTopFromURL");
   linkWidgetPrefGuessPrevAndNextFromURL = branch.getBoolPref("guessPrevAndNextFromURL");
-
   linkWidgetPrefUseLinkGuessing = linkWidgetPrefScanHyperlinks
       || linkWidgetPrefGuessUpAndTopFromURL || linkWidgetPrefGuessPrevAndNextFromURL;
 }
@@ -106,6 +100,8 @@ function linkWidgetLoadPrefs() {
 
 var linkWidgetPrefObserver = {
   observe: function(subject, topic, data) {
+//    dump("lwpref: subject="+subject.root+" topic="+topic+" data="+data+"\n");
+    // there're only three of them
     linkWidgetLoadPrefs();
   }
 };
