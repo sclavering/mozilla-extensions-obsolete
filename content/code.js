@@ -128,7 +128,7 @@ function linkWidgetLinkAddedHandler(event) {
   var elt = event.originalTarget;
   var doc = elt.ownerDocument;
   if(!(elt instanceof HTMLLinkElement) || !elt.href || !(elt.rel || elt.rev)) return;
-  var rels = linkWidgetUtils.getLinkRels(elt.rel, elt.rev, elt.type, elt.title);
+  var rels = linkWidgetGetLinkRels(elt.rel, elt.rev, elt.type, elt.title);
   if(!rels) return;
   var linkInfo = new LinkWidgetLink(elt.href, elt.title, elt.hreflang, elt.media);
   linkWidgetAddLinkForPage(linkInfo, doc, rels);
@@ -363,49 +363,39 @@ const linkWidgetRevToRel = {
   previous: "next"
 };
 
+function linkWidgetGetLinkRels(relStr, revStr, mimetype, title) {
+  // Ignore certain links
+  if(linkWidgetIgnoreRels.test(relStr)) return null;
+  // Ignore anything Firefox regards as an RSS/Atom-feed link
+  if(relStr && /alternate/i.test(relStr)) {
+    const type = mimetype.replace(/\s|;.*/g, "").toLowerCase();
+    const feedtype = /^application\/(?:rss|atom)\+xml$/;
+    const xmltype = /^(?:application|text)\/(?:rdf\+)?xml$/;
+    if(feedtype.test(type) || (xmltype.test(type) && /\brss\b/i.test(title))) return null;
+  }
+
+  const whitespace = /[ \t\f\r\n\u200B]+/; // per HTML4.01 spec
+  const rels = {};
+  var haveRels = false;
+  if(relStr) {
+    var relValues = relStr.split(whitespace);
+    for(var i = 0; i != relValues.length; i++) {
+      var rel = relValues[i].toLowerCase();
+      rel = linkWidgetRelConversions[rel] || rel;
+      if(rel) rels[rel] = true, haveRels = true;
+    }
+  }
+  if(revStr) {
+    var revValues = revStr.split(whitespace);
+    for(i = 0; i < revValues.length; i++) {
+      rel = linkWidgetRevToRel[revValues[i].toLowerCase()] || null;
+      if(rel) rels[rel] = true, haveRels = true;
+    }
+  }
+  return haveRels ? rels : null;
+}
+
 const linkWidgetUtils = {
-  getLinkRels: function(relStr, revStr, mimetype, title) {
-    // Ignore certain links
-    if(linkWidgetIgnoreRels.test(relStr)) return null;
-
-    const relValues = {};
-    var rel, i, haveRels = false;
-    // get relValues from rel
-    if(relStr) {
-      var rawRelValues = relStr.split(/[ \t\f\r\n\u200B]+/);
-      for(i = 0; i < rawRelValues.length; i++) {
-        rel = this.standardiseRelType(rawRelValues[i], mimetype, title);
-        // avoid duplicate rel values
-        if(rel) relValues[rel] = true, haveRels = true;
-      }
-    }
-    // get relValues from rev
-    if(revStr) {
-      var revValues = revStr.split(/[ \t\f\r\n\u200B]+/);
-      for(i = 0; i < revValues.length; i++) {
-        rel = linkWidgetRevToRel[revValues[i].toLowerCase()] || null;
-        if(rel) relValues[rel] = true, haveRels = true;
-      }
-    }
-
-    return haveRels ? relValues : null;
-  },
-
-  // mimetype and title are optional
-  standardiseRelType: function(relValue, mimetype, title) {
-    const rel = relValue.toLowerCase();
-    if(rel == "alternate") {
-        // xxx this is out of sync with Fx
-        // Ignore "Livemark" links (see browser.js#~580 livemarkOnLinkAdded(...))
-        if((mimetype && (mimetype=="application/rss+xml" || mimetype=="application/atom+xml"
-            || mimetype=="application/x.atom+xml")) || (title && (title.indexOf("RSS")!=-1
-            || title.indexOf("Atom")!=-1 || title.indexOf("rss")!=-1)))
-          return null;
-        return "alternate";
-    }
-    return rel in linkWidgetRelConversions ? linkWidgetRelConversions[rel] : rel;
-  },
-
   // code is a language code, e.g. en, en-GB, es, fr-FR
   getLanguageName: function(code) {
     const dict = this._languageDictionary;
@@ -537,7 +527,7 @@ var linkWidgetLinkFinder = {
       title = title.replace(/\s+/g," ");
 
       if(link.rel || link.rev) {
-        rels = linkWidgetUtils.getLinkRels(link.rel, link.rev);
+        rels = linkWidgetGetLinkRels(link.rel, link.rev);
         var info = new LinkWidgetLink(link.href, title, link.hreflang, null);
         linkWidgetAddLinkForPage(info, doc, rels);
         continue; // no point using the regexps
