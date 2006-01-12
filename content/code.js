@@ -42,6 +42,14 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 const linkWidgetPrefPrefix = "extensions.linkwidget.";
 
+const linkWidgetEventHandlers = {
+  "select": "linkWidgetTabSelectedHandler",
+  "DOMLinkAdded": "linkWidgetLinkAddedHandler",
+  "pagehide": "linkWidgetPageHideHandler",
+  "DOMContentLoaded": "linkWidgetPageLoadedHandler",
+  "pageshow": "linkWidgetPageShowHandler"
+};
+
 var linkWidget = null;
 var linkWidgetPrefUseLinkGuessing = false;
 var linkWidgetPrefGuessUpAndTopFromURL = false;
@@ -63,7 +71,8 @@ function linkWidgetStartup() {
 function linkWidgetDelayedStartup() {
   linkWidgetLoadPrefs();
   gPrefService.addObserver(linkWidgetPrefPrefix, linkWidgetPrefObserver, false);
-  linkWidgetAddHandlers();
+  for(var h in linkWidgetEventHandlers)
+    gBrowser.addEventListener(h, window[linkWidgetEventHandlers[h]], false);
   // replace the toolbar customisation callback
   var box = document.getElementById("navigator-toolbox");
   box._preLinkWidget_customizeDone = box.customizeDone;
@@ -72,6 +81,8 @@ function linkWidgetDelayedStartup() {
 
 function linkWidgetShutdown() {
   window.removeEventListener("unload", linkWidgetShutdown, false);
+  for(var h in linkWidgetEventHandlers)
+    gBrowser.addEventListener(h, window[linkWidgetEventHandlers[h]], false);  
   gPrefService.removeObserver(linkWidgetPrefPrefix, linkWidgetPrefObserver);
 }
 
@@ -107,28 +118,6 @@ var linkWidgetPrefObserver = {
 };
 
 
-function linkWidgetAddHandlers() {
-  var browser = gBrowser;
-  browser.addEventListener("select", linkWidgetTabSelectedHandler, false);
-  browser.addEventListener("DOMLinkAdded", linkWidgetLinkAddedHandler, true);
-  browser.addEventListener("unload", linkWidgetPageClosedHandler, true);
-  browser.addEventListener("pagehide", linkWidgetPageClosedHandler, false);
-  browser.addEventListener("DOMContentLoaded", linkWidgetPageLoadedHandler, true);
-  browser.addEventListener("pageshow", linkWidgetPageShowHandler, false);
-}
-
-
-function linkWidgetRemoveHandlers() {
-  var browser = gBrowser;
-  browser.removeEventListener("select", linkWidgetTabSelectedHandler, false);
-  browser.removeEventListener("DOMLinkAdded", linkWidgetLinkAddedHandler, true);
-  browser.removeEventListener("unload", linkWidgetPageClosedHandler, true);
-  browser.removeEventListener("pagehide", linkWidgetPageClosedHandler, true);
-  browser.removeEventListener("DOMContentLoaded", linkWidgetPageLoadedHandler, true);
-  browser.removeEventListener("pageshow", linkWidgetPageShowHandler, false);
-}
-
-
 // Used to make the page scroll when the mouse-wheel is used on one of our buttons
 function linkWidgetMouseScrollHandler(event) {
   content.scrollBy(0, event.detail);
@@ -147,7 +136,7 @@ function linkWidgetLinkAddedHandler(event) {
 
 
 // Really ought to delete/nullify doc.linkWidgetLinks on "close" (but not on "pagehide")
-function linkWidgetPageClosedHandler(event) {
+function linkWidgetPageHideHandler(event) {
   // Links like: <a href="..." onclick="this.style.display='none'">.....</a>
   // (the onclick handler could instead be on an ancestor of the link) lead to unload/pagehide
   // events with originalTarget==a text node.  So use ownerDocument (which is null for Documents)
@@ -279,16 +268,11 @@ function linkWidgetButtonRightClicked(e) {
 
 function linkWidgetLoadPage(e) {
   const url = e.target.getAttribute("href");
-  const sourceURL = content.document.documentURI; //e.target.ltSourceURL;
+  const sourceURL = content.document.documentURI;
   const button = e.type=="command" ? 0 : e.button;
-  // Construct a fake event to pass to handleLinkClick(event, href, linkNode)
-  // to make it extract the correct source URL.
-  // xxx { __proto__: event, target: { ... }} ?
-  const fakeEvent = {
-    metaKey: e.metaKey, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey,
-    altKey: e.altKey, button: button, preventBubble: function() {},
-    target: { ownerDocument: { location : { href: sourceURL }}}
-  };
+  // Make handleLinkClick find the right origin URL
+  const fakeEvent = { target: { ownerDocument: { location : { href: sourceURL }}},
+      button: button, __proto__: e }; // proto must be set last
   // handleLinkClick deals with modified left-clicks, and middle-clicks
   const didHandleClick = handleLinkClick(fakeEvent, url, null);
   if(didHandleClick || button != 0) return;
