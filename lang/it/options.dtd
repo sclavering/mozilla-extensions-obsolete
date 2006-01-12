@@ -1,18 +1,11 @@
 <!--
 Licence: MPL 1.1/GPL 2.0/LGPL 2.1
 
-Original Author:
-  Stephen Clavering <mozilla@clav.me.uk>
-
-Localizzazione in italiano:
+Author:
   Giancarlo Dessì <gian@cettolini.it>
 -->
 
 <!ENTITY title "Opzioni della barra dei collegamenti correlati del sito">
-
-<!ENTITY general "Aspetto della barra dei collegamenti">
-<!ENTITY showOnlyWhenNeeded "Nascondi quando non ci sono collegamenti nella pagina corrente">
-<!ENTITY iconsOnly "Mostra solo le icone, senza il testo">
 
 <!ENTITY linkGuessing "Ipotizza i collegamenti del sito">
 <!ENTITY linkGuessingDescription "Molte pagine Web non forniscono gli elementi HTML &lt;link&gt; da cui dipende Link Widget. L'attivazione di queste impostazioni fa in modo che linkWidget cerchi i probabili collegamenti correlati in base all'URL">

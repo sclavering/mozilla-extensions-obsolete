@@ -7,10 +7,6 @@ Original Author:
 
 <!ENTITY title "Einstellungen für die Link Widget">
 
-<!ENTITY general "Darstellung">
-<!ENTITY showOnlyWhenNeeded "Verstecken, falls keine passenden Verweise in der angezeigten Seite existieren">
-<!ENTITY iconsOnly "Nur Grafiken anzeigen, keinen Text">
-
 <!ENTITY linkGuessing "Zusammenhänge erraten">
 <!ENTITY linkGuessingDescription "Link Widget kann versuchen, aus dem Inhalt einer Seite auf verwandte Seiten zu schließen.">
 

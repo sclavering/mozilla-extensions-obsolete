@@ -1,5 +1,3 @@
-# Menus use the 2rel string (e.g. 2index) if available
-
 top   = Inicio
 up    = Subir
 first = Primera página

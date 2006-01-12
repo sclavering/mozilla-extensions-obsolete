@@ -7,10 +7,6 @@ Original Author:
 
 <!ENTITY title "אפשרויות Link Widget">
 
-<!ENTITY general "תצוגת Link Widget">
-<!ENTITY showOnlyWhenNeeded "העלם כאשר אין קישורים בדף הנוכחי">
-<!ENTITY iconsOnly "הצג רק סמלים, לא טקסט">
-
 <!ENTITY linkGuessing "ניחוש קישורים">
 <!ENTITY linkGuessingDescription "Link Widget יכול לנחש קישורים בדפים שונים שלא מציינים אותם מפורשות.">
 

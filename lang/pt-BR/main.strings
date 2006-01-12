@@ -1,6 +1,3 @@
-# Menus use the 2rel string (e.g. 2index) if available
-
-
 top   = Início
 up    = Acima
 first = Primeira

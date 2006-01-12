@@ -6,10 +6,6 @@ Author: Rob de Vries
 
 <!ENTITY title "Link Widget Opties">
 
-<!ENTITY general "Link Widget Verschijning">
-<!ENTITY showOnlyWhenNeeded "Niet laten zien als er geen links zijn voor de huidige pagina">
-<!ENTITY iconsOnly "Alleen iconen, geen tekst">
-
 <!ENTITY linkGuessing "Link 'Raden'">
 <!ENTITY linkGuessingDescription "Veel webpagina's voorzien niet in de HTML &lt;link&gt; elementen waarop de Link Widget vertrouwt.">
 

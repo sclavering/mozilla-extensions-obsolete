@@ -1,9 +1,4 @@
-
 <!ENTITY title "Link Widgetの設定">
-
-<!ENTITY general "Link Widgetの外観">
-<!ENTITY showOnlyWhenNeeded "ナビゲーションリンクがないページで表示しない">
-<!ENTITY iconsOnly "アイコンのみ表示する">
 
 <!ENTITY linkGuessing "ナビゲーションリンクの推測">
 

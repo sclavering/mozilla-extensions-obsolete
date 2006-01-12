@@ -10,10 +10,6 @@ Preklad:
 
 <!ENTITY title "Panel odkazov - Možnosti">
 
-<!ENTITY general "Vzhľad Panela odkazov">
-<!ENTITY showOnlyWhenNeeded "Skryť ak na stránke nie sú žiadne vhodné odkazy">
-<!ENTITY iconsOnly "Zobraziť iba ikony bez popisu">
-
 <!ENTITY linkGuessing "Odhadovanie odkazov">
 <!ENTITY linkGuessingDescription "Mnohé stránky neposkytujú HTML element &lt;link&gt;, na ktorom Panel odkazov závisí:">
 

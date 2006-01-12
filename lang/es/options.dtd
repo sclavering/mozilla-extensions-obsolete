@@ -1,9 +1,5 @@
 <!ENTITY title "Opciones de LinkWidget">
 
-<!ENTITY general "Presentación de LinkWidget">
-<!ENTITY showOnlyWhenNeeded "Ocultar cuando no haya enlaces en la página actual">
-<!ENTITY iconsOnly "Mostrar solamente iconos, sin texto">
-
 <!ENTITY linkGuessing "Adivinar enlaces">
 <!ENTITY linkGuessingDescription "LinkWidget puede intentar adivinar los enlaces de las muchas páginas que no los proporcionan.">
 

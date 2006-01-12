@@ -7,10 +7,6 @@ Original Author:
 
 <!ENTITY title "Options de la barre de navigation">
 
-<!ENTITY general "Apparence de la barre de navigation">
-<!ENTITY showOnlyWhenNeeded "Cacher quand il n'y a pas de lien dans la page courante">
-<!ENTITY iconsOnly "Montrer seulement les icônes, pas le texte">
-
 <!ENTITY linkGuessing "Deviner les liens">
 <!ENTITY linkGuessingDescription "La barre de navigation peut essayer de deviner les liens pour les pages web ne fournissent pas l'élément HTML &lt;link&gt; dont elle dépend en utilisant les stratégies suivantes :">
 
