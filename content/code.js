@@ -160,14 +160,13 @@ function linkWidgetPageLoadedHandler(event) {
 
   const links = doc.linkWidgetLinks || (doc.linkWidgetLinks = {});
 
-  if(linkWidgetPrefScanHyperlinks)
-    linkWidgetLinkFinder.scanPageLinks(doc, links);
+  if(linkWidgetPrefScanHyperlinks) linkWidgetScanPageForLinks(doc);
 
   const protocol = doc.location.protocol;
   if(!/^(?:https|http|ftp)\:$/.test(protocol)) return;
 
   if(linkWidgetPrefGuessPrevAndNextFromURL)
-    linkWidgetLinkFinder.guessPrevAndNextFromURL(doc, !links.prev, !links.next);
+    linkWidgetGuessPrevNextLinksFromURL(doc, !links.prev, !links.next);
 
   if(!linkWidgetPrefGuessUpAndTopFromURL) return;
   if(!links.up) {
@@ -206,7 +205,7 @@ function linkWidgetAddLinkForPage(linkInfo, doc, rels) {
   var doclinks = doc.linkWidgetLinks || (doc.linkWidgetLinks = {});
   for(var r in rels) {
     if(!(r in doclinks)) doclinks[r] = {};
-    // we leave any existing link with the same URL alone so that linkWidgetLinkFinder-generated
+    // we leave any existing link with the same URL alone so that guessed
     // links don't replace page-provided ones (which are likely to have better descriptions)
     var url = linkInfo.url;
     if(url in doclinks[r]) delete rels[r];
@@ -463,22 +462,7 @@ function linkWidgetLoadStringBundle(bundlePath) {
 
 
 
-
-var linkWidgetLinkFinder = {
-  // regular expressions for identifying link types
-  // XXX some pages use << for first and < for prev, so we should handle things like that differently
-  re_first: /^first\b|\bfirst$|^begin|\|<|\u00ab/i, // ? >\u007c| ?
-  re_prev:  /^prev(?:ious)?\b|prev$|previous$|^back\b|\bback$|^<<?-?\s?$|\u00ab/i, // \u003c / = | <=
-  re_next:  /^next\b|\bcontinue\b|next$|^\s?-?>?>$/i, // |\u00bb$/i,
-  re_last:  /^last\b|\blast$|^end\b|>\|/i, // ? >\u007c| ?
-
-  // regular expressions used for identifying links based on the src url of contained images
-  img_re_first: /first/i,
-  img_re_prev:  /rev(?!iew)/i, // match [p]revious, but not [p]review
-  img_re_next:  /ne?xt|fwd|forward/i,
-  img_re_last:  /last/i,
-
-  guessPrevAndNextFromURL: function(doc, guessPrev, guessNext) {
+function linkWidgetGuessPrevNextLinksFromURL(doc, guessPrev, guessNext) {
     if(!guessPrev && !guessNext) return;
 
     function isDigit(c) { return ("0" <= c && c <= "9") }
@@ -506,71 +490,70 @@ var linkWidgetLinkFinder = {
       while(nxt.length < old.length) nxt = "0" + nxt;
       linkWidgetAddLinkForPage(new LinkWidgetLink(pre + nxt + post), doc, { next: true });
     }
-  },
+}
 
-  scanPageLinks: function(doc, links) {
-    // The user has to wait for linkWidgetLinkFinder to finish before they can interact with the page
-    // that has just loaded.  On pages with lots of links linkWidgetLinkFinder could make Firefox
-    // unresponsive for several seconds if we didn't cap the number of links we inspect.
-    // xxx think more about what cap to use (500 is probably excessively high)
-    var max = Math.min(doc.links.length, 500);
+function linkWidgetScanPageForLinks(doc) {
+  const links = doc.links;
+  // The scanning blocks the UI, so we don't want to spend too long on it. Previously we'd block the
+  // UI for several seconds on http://antwrp.gsfc.nasa.gov/apod/archivepix.html (>3000 links)
+  const max = Math.min(links.length, 500);
 
-    for(var i = 0; i != max; i++) {
-      var link = doc.links[i];
-      var href = link.href;
+  for(var i = 0; i != max; ++i) {
+    var link = links[i], href = link.href;
+    if(!href || href.charAt(0)=='#') continue; // ignore internal links
 
-      // ignore internal links
-      if(!href || href.charAt(0)=='#') continue;
-
-      var rels = [];
-      var title = this.getTextAndImgRels(link, rels);
-      title = title.replace(/\s+/g," ");
-
-      if(link.rel || link.rev) {
-        rels = linkWidgetGetLinkRels(link.rel, link.rev);
-        var info = new LinkWidgetLink(link.href, title, link.hreflang, null);
-        linkWidgetAddLinkForPage(info, doc, rels);
-        continue; // no point using the regexps
-      }
-
-      if(this.re_next.test(title)) rels.next = true;
-      else if(this.re_prev.test(title)) rels.prev = true;
-      else if(this.re_first.test(title)) rels.first = true;
-      else if(this.re_last.test(title)) rels.last = true;
-
-      linkWidgetAddLinkForPage(new LinkWidgetLink(href, title), doc, rels);
+    var txt = link.innerHTML
+        .replace(/<[^>]+alt="([^"]*)"[^>]*>/ig, " $1 ") // keep alt attrs
+        .replace(/<[^>]+alt='([^']*)'[^>]*>/ig, " $1 ")
+        .replace(/<[^>]*>/g, "") // drop tags + comments
+        .replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace(/\s+/g, " ")
+        .replace(/^\s+|\s+$/g, "");
+    var rels = (link.rel || link.rev) && linkWidgetGetLinkRels(link.rel, link.rev);
+    if(!rels) {
+      var rel = linkWidgetGuessLinkRel(link, txt);
+      if(rel) rels = {}, rels[rel] = true;
     }
-  },
-
-  // get the text contained in a link, and any guesses for rel based on img url
-  getTextAndImgRels: function(el, rels) {
-    var s = "";
-    var node = el, lastNode = el.nextSibling;
-    while(node && node!=lastNode) {
-      var t = null;
-      if(node.nodeType==3 || node.nodeType==2) {
-        t = node.nodeValue; // CDATA and Text nodes
-      } else if(node instanceof HTMLImageElement) {
-        t = node.alt;
-        // guess rel values from the URL. .src always gives an absolute URL, so we use getAttribute
-        var src = node.getAttribute("src");
-        if(this.img_re_next.test(src)) rels.next = true;
-        else if(this.img_re_prev.test(src)) rels.prev = true;
-        else if(this.img_re_first.test(src)) rels.first = true;
-        else if(this.img_re_last.test(src)) rels.last = true;
-      } else if(node instanceof HTMLAreaElement) {
-        t = node.alt;
-      }
-
-      if(t) s = s ? s+" "+t : t; // the space *is* important.  some sites (ebay) don't put a space btwn. text and images
-
-      var next = node.firstChild || node.nextSibling;
-      while(!next && node!=el) node = node.parentNode, next = node.nextSibling;
-      node = next;
-    }
-
-    return s;
+    if(!rels) continue;
+    var info = new LinkWidgetLink(href, txt, link.hreflang, null);
+    linkWidgetAddLinkForPage(info, doc, rels);
   }
+}
+
+const linkWidgetLinkTextPatterns = {
+  // XXX some pages use << for first and < for prev, so we should handle things like that differently
+  first: /^first\b|\bfirst$|^begin|\|<|\u00ab/i, // ? >\u007c| ?
+  prev: /^prev(?:ious)?\b|prev$|previous$|^back\b|\bback$|^<<?-?\s?$|\u00ab/i, // \u003c / = | <=
+  next: /^next\b|\bcontinue\b|next$|^\s?-?>?>$/i, // |\u00bb$/i,
+  last: /^last\b|\blast$|^end\b|>\|/i, // ? >\u007c| ?
+};
+
+// regexps for identifying links based on the src url of contained images
+const linkWidgetImgSrcPatterns = {
+  first: /first/i,
+  prev: /rev(?!iew)/i, // match [p]revious, but not [p]review
+  next: /ne?xt|fwd|forward/i,
+  last: /last/i,
+};
+
+// link is an <a href> link
+function linkWidgetGuessLinkRel(link, txt) {
+  if(linkWidgetLinkTextPatterns.next.test(txt)) return "next";
+  if(linkWidgetLinkTextPatterns.prev.test(txt)) return "prev";
+  if(linkWidgetLinkTextPatterns.first.test(txt)) return "first";
+  if(linkWidgetLinkTextPatterns.last.test(txt)) return "last";
+  
+  const imgs = link.getElementsByTagName("img"), num = imgs.length;
+  for(var i = 0; i != num; ++i) {
+    // guessing is more accurate on relative URLs, and .src is always absolute
+    var src = imgs[i].getAttribute("src");
+    if(linkWidgetImgSrcPatterns.next.test(src)) return "next";
+    if(linkWidgetImgSrcPatterns.prev.test(src)) return "prev";
+    if(linkWidgetImgSrcPatterns.first.test(src)) return "first";
+    if(linkWidgetImgSrcPatterns.last.test(src)) return "last";
+  }  
+  return null;
 }
 
 
