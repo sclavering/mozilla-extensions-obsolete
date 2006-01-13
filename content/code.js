@@ -685,21 +685,6 @@ const linkWidgetItems = {
     const isMenu = rel in this._itemsWhichShouldAlwaysBeMenus;
     return this.items[rel] =
       isMenu ? new LinkWidgetMenu(rel, relNum) : new LinkWidgetItem(rel, relNum);
-  },
-
-  // returns a XULElement to insertBefore(...)
-  getInsertionPointFor: function(relNum) {
-    if(relNum == Infinity) return null;
-    const items = this.items;
-    // binary search the childNodes
-    const kids = this.morePopup.childNodes, num = kids.length;
-    if(!num || kids[num-1].relNum < relNum) return null;
-    for(var i = 0, j = num; i + 1 != j; ) {
-      var m = Math.floor((i + j) / 2);
-      if(kids[m].relNum < relNum) i = m;
-      else j = m;
-    }
-    return kids[i];
   }
 };
 
@@ -881,16 +866,20 @@ LinkWidgetItem.prototype = {
 
     mi.linkWidgetItem = m.linkWidgetItem = p.linkWidgetItem = this;
     mi.relNum = m.relNum = this.relNum;
-
     m.appendChild(p);
-    const where = linkWidgetItems.getInsertionPointFor(this.relNum);
-    const morePopup = linkWidgetItems.morePopup;
-    if(where) {
-      morePopup.insertBefore(m, where);
-      morePopup.insertBefore(mi, where);
+    
+    const mpopup = linkWidgetItems.morePopup, kids = mpopup.childNodes, num = kids.length;
+    var insertionpoint = null;
+    if(this.relNum != Infinity && num != 0) {
+      for(var i = 0, node = kids[i]; i < num && node.relNum < this.relNum; i += 2, node = kids[i]);
+      if(i != num) insertionpoint = node;
+    }
+    if(insertionpoint) {
+      mpopup.insertBefore(m, insertionpoint);
+      mpopup.insertBefore(mi, insertionpoint);
     } else {
-      morePopup.appendChild(m);
-      morePopup.appendChild(mi);
+      mpopup.appendChild(m);
+      mpopup.appendChild(mi);
     }
   }
 };
