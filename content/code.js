@@ -129,9 +129,7 @@ function linkWidgetLinkAddedHandler(event) {
   var doc = elt.ownerDocument;
   if(!(elt instanceof HTMLLinkElement) || !elt.href || !(elt.rel || elt.rev)) return;
   var rels = linkWidgetGetLinkRels(elt.rel, elt.rev, elt.type, elt.title);
-  if(!rels) return;
-  var linkInfo = new LinkWidgetLink(elt.href, elt.title, elt.hreflang, elt.media);
-  linkWidgetAddLinkForPage(linkInfo, doc, rels);
+  if(rels) linkWidgetAddLinkForPage(elt.href, elt.title, elt.hreflang, elt.media, doc, rels);
 }
 
 
@@ -171,11 +169,11 @@ function linkWidgetPageLoadedHandler(event) {
   if(!linkWidgetPrefGuessUpAndTopFromURL) return;
   if(!links.up) {
     var upUrl = linkWidgetUtils.guessUpUrl(doc.location);
-    if(upUrl) linkWidgetAddLinkForPage(new LinkWidgetLink(upUrl), doc, {up: true});
+    if(upUrl) linkWidgetAddLinkForPage(upUrl, null, null, null, doc, {up: true});
   }
   if(!links.top) {
     var topUrl = linkWidgetUtils.guessTopUrl(doc.location);
-    if(topUrl) linkWidgetAddLinkForPage(new LinkWidgetLink(topUrl), doc, {top: true});
+    if(topUrl) linkWidgetAddLinkForPage(topUrl, null, null, null, doc, {top: true});
   }
 }
 
@@ -200,7 +198,8 @@ function linkWidgetRefreshLinks() {
 }
 
 
-function linkWidgetAddLinkForPage(linkInfo, doc, rels) {
+function linkWidgetAddLinkForPage(url, txt, lang, media, doc, rels) {
+  const linkInfo = new LinkWidgetLink(url, txt, lang, media);
   // put the link in a rel->url->link map on the document's XPCNativeWrapper
   var doclinks = doc.linkWidgetLinks || (doc.linkWidgetLinks = {});
   for(var r in rels) {
@@ -483,12 +482,12 @@ function linkWidgetGuessPrevNextLinksFromURL(doc, guessPrev, guessNext) {
     if(guessPrev) {
       var prv = ""+(num-1);
       while(prv.length < old.length) prv = "0" + prv;
-      linkWidgetAddLinkForPage(new LinkWidgetLink(pre + prv + post), doc, { prev: true });
+      linkWidgetAddLinkForPage(pre + prv + post, null, null, null, doc, { prev: true });
     }
     if(guessNext) {
       var nxt = ""+(num+1);
       while(nxt.length < old.length) nxt = "0" + nxt;
-      linkWidgetAddLinkForPage(new LinkWidgetLink(pre + nxt + post), doc, { next: true });
+      linkWidgetAddLinkForPage(pre + nxt + post, null, null, null, doc, { next: true });
     }
 }
 
@@ -515,9 +514,7 @@ function linkWidgetScanPageForLinks(doc) {
       var rel = linkWidgetGuessLinkRel(link, txt);
       if(rel) rels = {}, rels[rel] = true;
     }
-    if(!rels) continue;
-    var info = new LinkWidgetLink(href, txt, link.hreflang, null);
-    linkWidgetAddLinkForPage(info, doc, rels);
+    if(rels) linkWidgetAddLinkForPage(href, txt, link.hreflang, null, doc, rels);
   }
 }
 
