@@ -168,12 +168,12 @@ function linkWidgetPageLoadedHandler(event) {
 
   if(!linkWidgetPrefGuessUpAndTopFromURL) return;
   if(!links.up) {
-    var upUrl = linkWidgetUtils.guessUpUrl(doc.location);
+    var upUrl = linkWidgetGuessUp(doc.location);
     if(upUrl) linkWidgetAddLinkForPage(upUrl, null, null, null, doc, {up: true});
   }
   if(!links.top) {
-    var topUrl = linkWidgetUtils.guessTopUrl(doc.location);
-    if(topUrl) linkWidgetAddLinkForPage(topUrl, null, null, null, doc, {top: true});
+    var topUrl = location.protocol + "//" + location.host + "/"
+    linkWidgetAddLinkForPage(topUrl, null, null, null, doc, {top: true});
   }
 }
 
@@ -206,7 +206,6 @@ function linkWidgetAddLinkForPage(url, txt, lang, media, doc, rels) {
     if(!(r in doclinks)) doclinks[r] = {};
     // we leave any existing link with the same URL alone so that guessed
     // links don't replace page-provided ones (which are likely to have better descriptions)
-    var url = linkInfo.url;
     if(url in doclinks[r]) delete rels[r];
     else doclinks[r][url] = linkInfo;
   }
@@ -317,7 +316,7 @@ LinkWidgetLink.prototype = {
       if(this.media && !/\b(all|screen)\b/i.test(this.media)) longTitle += this.media + ": ";
       // XXX this produces stupid results if there is an hreflang present but no title
       // (gives "French: ", should be something like "French [language] version")
-      if(this.lang) longTitle += linkWidgetUtils.getLanguageName(this.lang) + ": ";
+      if(this.lang) longTitle += linkWidgetGetLanguageName(this.lang) + ": ";
       if(this.title) longTitle += this.title;
       // the 'if' here is to ensure the long title isn't just the url
       else if(longTitle) longTitle += this.url;
@@ -393,32 +392,24 @@ function linkWidgetGetLinkRels(relStr, revStr, mimetype, title) {
   return haveRels ? rels : null;
 }
 
-const linkWidgetUtils = {
-  // code is a language code, e.g. en, en-GB, es, fr-FR
-  getLanguageName: function(code) {
-    const dict = this._languageDictionary;
+// a map from 2/3-letter lang codes to the langs' names in the current locale
+var linkWidgetLangaugeNames = null;
+
+// code is a language code, e.g. en, en-GB, es, fr-FR
+function linkWidgetGetLanguageName(code) {
+    if(!linkWidgetLangaugeNames) linkWidgetLangaugeNames =
+      linkWidgetLoadStringBundle("chrome://global/locale/languageNames.properties");
+    const dict = linkWidgetLangaugeNames;
     if(code in dict) return dict[code];
     // if we have something like "en-GB", change to "English (GB)"
     var parts = code.match(/^(.{2,3})-(.*)$/);
     // xxx make the parentheses localizable
     if(parts && parts[1] in dict) return dict[parts[1]]+" ("+parts[2]+")";
     return code;
-  },
+}
 
-  // a lazily-initialised dictionary for looking up readable names for 2/3-letter lang codes
-  // e.g. "en" -> "English", "de" -> "German" (or en->Englisch, de->Deutsch)
-  get _languageDictionary() {
-    delete this._languageDictionary; // remove this getter function, so that we can replace with an array
-    return this._languageDictionary =
-      linkWidgetLoadStringBundle("chrome://global/locale/languageNames.properties");
-  },
-
-  // arg is an nsIDOMLocation, with protocol of http(s) or ftp
-  guessTopUrl: function(location) {
-    return location.protocol + "//" + location.host + "/";
-  },
-
-  guessUpUrl: function(location) {
+// arg is an nsIDOMLocation, with protocol of http(s) or ftp
+function linkWidgetGuessUp(location) {
     const ignoreRE = /(?:index|main)\.[\w.]+?$/i;
     const prefix = location.protocol + "//";
     var host = location.host, path = location.pathname, path0 = path, matches, tail;
@@ -436,9 +427,7 @@ const linkWidgetUtils = {
     // dig through subdomains
     matches = host.match(/[^.]*\.(.*)/);
     return matches && /\./.test(matches[1]) ? prefix + matches[1] + "/" : null;
-  }
-};
-
+}
 
 function linkWidgetLoadStringBundle(bundlePath) {
   const strings = {};
@@ -458,8 +447,6 @@ function linkWidgetLoadStringBundle(bundlePath) {
 
   return strings;
 }
-
-
 
 function linkWidgetGuessPrevNextLinksFromURL(doc, guessPrev, guessNext) {
     if(!guessPrev && !guessNext) return;
