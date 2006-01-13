@@ -59,6 +59,12 @@ var linkWidgetStrings = "chrome://linkwidget/locale/main.strings";
 
 var linkWidgetStatusbar = null; // Firefox's usual statusbar
 
+var linkWidgetButtons = {}; // rel -> <toolbarbutton> map
+var linkWidgetViews = {};   // rel -> view map, the views typically being a menu+menuitem
+var linkWidgetMoreMenu = null;
+var linkWidgetMorePopup = null;
+
+
 function linkWidgetStartup() {
   window.removeEventListener("load", linkWidgetStartup, false);
   linkWidgetStatusbar = document.getElementById("statusbar-display");
@@ -183,7 +189,7 @@ function linkWidgetTabSelectedHandler(event) {
   linkWidgetRefreshLinks();
 }
 
-
+// xxx isn't this too keen to refresh?
 function linkWidgetPageShowHandler(event) {
   const doc = event.originalTarget;
   if(doc == gBrowser.contentDocument) linkWidgetRefreshLinks();
@@ -542,15 +548,8 @@ function linkWidgetGuessLinkRel(link, txt) {
 
 
 
-
 // controller for all UI bits displaying <link>s
 const linkWidgetItems = {
-  moreMenu: null,
-  morePopup: null,
-
-  buttons: {}, // rel->button map
-  items: {},   // rel->item map.  domain does not intersect with domain of .buttons
-
   // becomes a rel->num map (numbers all > 0)
   _itemPlacement: [
     "top","up","first","prev","next","last","toc","chapter","section","subsection","appendix",
@@ -573,13 +572,13 @@ const linkWidgetItems = {
   },
 
   _init: function() {
-    this.moreMenu = document.getElementById("linkwidget-more-menu");
-    this.morePopup = document.getElementById("linkwidget-more-popup");
+    linkWidgetMoreMenu = document.getElementById("linkwidget-more-menu");
+    linkWidgetMorePopup = document.getElementById("linkwidget-more-popup");
   },
 
   _initButtons: function() {
     const btns = {top:true, up:true, first:true, prev:true, next:true, last:true};
-    const buttons = this.buttons = {};
+    const buttons = linkWidgetButtons = {};
     for(var rel in btns) {
       var elt = document.getElementById("linkwidget-"+rel);
       if(elt) buttons[rel] = initLinkWidgetButton(elt, rel);
@@ -590,9 +589,9 @@ const linkWidgetItems = {
   // and destroy any menus/menuitems for which a button is now present
   updateForToolbarCustomisation: function() {
     this._init();
-    for each(var btn in this.buttons) btn.clear();
+    for each(var btn in linkWidgetButtons) btn.clear();
     this._initButtons();
-    const buttons = this.buttons, items = this.items, moreMenu = this.moreMenu;
+    const buttons = linkWidgetButtons, items = linkWidgetViews, moreMenu = linkWidgetMoreMenu;
     for(var rel in items) {
       var item = items[rel];
       if(!buttons[rel] && moreMenu) continue;
@@ -612,7 +611,7 @@ const linkWidgetItems = {
       item.addLink(linkInfo);
       if(item instanceof LinkWidgetItem) enableMoreMenu = true;
     }
-    if(enableMoreMenu) this.moreMenu.disabled = false;
+    if(enableMoreMenu) linkWidgetMoreMenu.disabled = false;
   },
 
   // rels is a rel->{url->linkInfo} map
@@ -625,32 +624,32 @@ const linkWidgetItems = {
       if(item instanceof LinkWidgetItem) enableMoreMenu = true;
       item.replaceLinks(rels[rel]);
     }
-    if(enableMoreMenu) this.moreMenu.disabled = false;
+    if(enableMoreMenu) linkWidgetMoreMenu.disabled = false;
   },
 
   clearAll: function() {
-    for each(var btn in this.buttons) btn.clear();
-    for each(var item in this.items) item.clear();
-    if(this.moreMenu) this.moreMenu.disabled = true;
+    for each(var btn in linkWidgetButtons) btn.clear();
+    for each(var item in linkWidgetViews) item.clear();
+    if(linkWidgetMoreMenu) linkWidgetMoreMenu.disabled = true;
   },
 
   onMoreMenuShowing: function() {
-    for each(var item in this.items) item.show();
+    for each(var item in linkWidgetViews) item.show();
   },
 
   onMoreMenuHidden: function() {
-    for each(var item in this.items) item._isShowing = false;
-    const kids = this.morePopup.childNodes, num = kids.length;
+    for each(var item in linkWidgetViews) item._isShowing = false;
+    const kids = linkWidgetMorePopup.childNodes, num = kids.length;
     for(var i = 0; i != num; ++i) kids[i].linkWidgetItem._isShowing = false;
   },
 
   getItem: function(rel) {
-    const item = this.buttons[rel] || this.items[rel];
+    const item = linkWidgetButtons[rel] || linkWidgetViews[rel];
     if(item) return item;
-    if(!this.moreMenu) return null;
+    if(!linkWidgetMoreMenu) return null;
     const relNum = this._itemPlacement[rel] || Infinity;
     const isMenu = rel in this._itemsWhichShouldAlwaysBeMenus;
-    return this.items[rel] =
+    return linkWidgetViews[rel] =
       isMenu ? new LinkWidgetMenu(rel, relNum) : new LinkWidgetItem(rel, relNum);
   }
 };
@@ -835,7 +834,7 @@ LinkWidgetItem.prototype = {
     mi.relNum = m.relNum = this.relNum;
     m.appendChild(p);
     
-    const mpopup = linkWidgetItems.morePopup, kids = mpopup.childNodes, num = kids.length;
+    const mpopup = linkWidgetMorePopup, kids = mpopup.childNodes, num = kids.length;
     var insertionpoint = null;
     if(this.relNum != Infinity && num != 0) {
       for(var i = 0, node = kids[i]; i < num && node.relNum < this.relNum; i += 2, node = kids[i]);
