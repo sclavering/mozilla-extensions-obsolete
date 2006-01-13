@@ -155,8 +155,8 @@ function linkWidgetPageLoadedHandler(event) {
   const win = doc.defaultView;
   if(win != win.top) return;
 
-  if(doc._linkWidget_haveGuessedLinks) return;
-  doc._linkWidget_haveGuessedLinks = true;
+  if(doc.linkWidgetHasGuessedLinks) return;
+  doc.linkWidgetHasGuessedLinks = true;
 
   const links = doc.linkWidgetLinks || (doc.linkWidgetLinks = {});
 
