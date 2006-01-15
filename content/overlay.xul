@@ -99,9 +99,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
       oncommand="return linkWidgetLoadPage(event);" onclick="linkWidgetItemClicked(event);"
       onmouseover="linkWidgetMouseEnter(event);" onmouseout="linkWidgetMouseExit(event);"
       >
-    <menupopup id="linkwidget-more-popup"
-        onpopupshowing="linkWidgetItems.onMoreMenuShowing();"
-        onpopuphidden="linkWidgetItems.onMoreMenuHidden();"/>
+    <menupopup id="linkwidget-more-popup" onpopupshowing="linkWidgetOnMoreMenuShowing();"/>
   </toolbarbutton>
 </toolbarpalette>
 

@@ -198,9 +198,15 @@ function linkWidgetPageShowHandler(event) {
 
 function linkWidgetRefreshLinks() {
   linkWidgetItems.clearAll();
-  var doc = content.document;
-  if(!doc.linkWidgetLinks) return;
-  linkWidgetItems.handleLinksForRels(doc.linkWidgetLinks);
+  const doc = content.document, links = doc.linkWidgetLinks;
+  if(!links) return;
+
+  var enableMoreMenu = false;
+  for(var rel in links) {
+    if(rel in linkWidgetButtons) linkWidgetButtons[rel].replaceLinks(links[rel]);
+    else enableMoreMenu = true;
+  }
+  if(linkWidgetMoreMenu && enableMoreMenu) linkWidgetMoreMenu.disabled = false;
 }
 
 
@@ -216,7 +222,29 @@ function linkWidgetAddLinkForPage(url, txt, lang, media, doc, rels) {
     else doclinks[r][url] = linkInfo;
   }
 
-  if(doc == content.document) linkWidgetItems.handleLinkForRels(linkInfo, rels);
+  if(doc != content.document) return;
+  var enableMoreMenu = false;
+  for(var rel in rels) {
+    // buttons need updating immediately, but anything else can wait till the menu is showing
+    if(rel in linkWidgetButtons) linkWidgetButtons[rel].addLink(linkInfo);
+    else enableMoreMenu = true;
+  }
+  if(linkWidgetMoreMenu && enableMoreMenu) linkWidgetMoreMenu.disabled = false;
+}
+
+function linkWidgetOnMoreMenuShowing() {
+  const linkmaps = content.document.linkWidgetLinks;
+  // Update all existing views
+  for(var rel in linkWidgetViews) linkWidgetViews[rel].show(linkmaps[rel] || null);
+  // Create any new views that are needed
+  for(rel in linkmaps) {
+    if(rel in linkWidgetViews || rel in linkWidgetButtons) continue;
+    var relNum = linkWidgetItems._itemPlacement[rel] || Infinity;
+    var isMenu = rel in linkWidgetItems._itemsWhichShouldAlwaysBeMenus;
+    var item = linkWidgetViews[rel] =
+      isMenu ? new LinkWidgetMenu(rel, relNum) : new LinkWidgetItem(rel, relNum);
+    item.show(linkmaps[rel]);
+  }
 }
 
 
@@ -284,11 +312,12 @@ function linkWidgetLoadPage(e) {
 
 // only works for linkType=top/up/first/prev/next/last (i.e. only for buttons)
 // used for keyboard shortcut handling
-function linkWidgetGo(linkType) {
-  const item = linkWidgetItems.getItem(linkType);
+function linkWidgetGo(rel) {
+  if(!linkWidgetButtons[rel]) return;
+  const item = linkWidgetButtons[rel];
   if(!item || !item.links.length) return;
   const url = item.getAttribute("href");
-  const sourceURL = content.document.documentURI; // item.ltSourceURL;
+  const sourceURL = content.document.documentURI;
   linkWidgetLoadPageInCurrentBrowser(url, sourceURL);
 }
 
@@ -603,58 +632,15 @@ const linkWidgetItems = {
     if(moreMenu) moreMenu.disabled = true;
   },
 
-  handleLinkForRels: function(linkInfo, rels) {
-    var enableMoreMenu = false;
-    for(var rel in rels) {
-      var item = this.getItem(rel);
-      if(!item) continue;
-      item.addLink(linkInfo);
-      if(item instanceof LinkWidgetItem) enableMoreMenu = true;
-    }
-    if(enableMoreMenu) linkWidgetMoreMenu.disabled = false;
-  },
-
-  // rels is a rel->{url->linkInfo} map
-  // assumes no handleLinkForRels since the last clearAll (which is OK)
-  handleLinksForRels: function(rels) {
-    var enableMoreMenu = false;
-    for(var rel in rels) {
-      var item = this.getItem(rel);
-      if(!item) continue;
-      if(item instanceof LinkWidgetItem) enableMoreMenu = true;
-      item.replaceLinks(rels[rel]);
-    }
-    if(enableMoreMenu) linkWidgetMoreMenu.disabled = false;
-  },
-
   clearAll: function() {
     for each(var btn in linkWidgetButtons) btn.clear();
     for each(var item in linkWidgetViews) item.clear();
     if(linkWidgetMoreMenu) linkWidgetMoreMenu.disabled = true;
-  },
-
-  onMoreMenuShowing: function() {
-    for each(var item in linkWidgetViews) item.show();
-  },
-
-  onMoreMenuHidden: function() {
-    for each(var item in linkWidgetViews) item._isShowing = false;
-    const kids = linkWidgetMorePopup.childNodes, num = kids.length;
-    for(var i = 0; i != num; ++i) kids[i].linkWidgetItem._isShowing = false;
-  },
-
-  getItem: function(rel) {
-    const item = linkWidgetButtons[rel] || linkWidgetViews[rel];
-    if(item) return item;
-    if(!linkWidgetMoreMenu) return null;
-    const relNum = this._itemPlacement[rel] || Infinity;
-    const isMenu = rel in this._itemsWhichShouldAlwaysBeMenus;
-    return linkWidgetViews[rel] =
-      isMenu ? new LinkWidgetMenu(rel, relNum) : new LinkWidgetItem(rel, relNum);
   }
 };
 
 
+// xxx some of this should be moved to linkWidgetButton now
 const linkWidgetItemBase = {
   _linksHaveChanged: true, // has our set of links changed since the menu was last shown
   _menuNeedsRefresh: true,
@@ -788,11 +774,15 @@ LinkWidgetItem.prototype = {
     this.menuitem = this.menu = this.popup = null;
   },
 
-  show: function() {
-    this._isShowing = true;
-    if(!this._linksHaveChanged) return;
-    this._linksHaveChanged = false;
-    const links = this.links, numLinks = links.length;
+  show: function(linkmap) {
+    // xxx temporary hackishness
+    const links = [];
+    if(linkmap) for(var i in linkmap) links.push(linkmap[i]);
+    const numLinks = links.length;
+    // xxx even more hackish. will fix buildMenu eventually
+    this._menuNeedsRefresh = true;
+    this.links = links;
+    
     if(!this.menuitem) {
       if(!numLinks) return;
       this.createElements();
@@ -860,11 +850,14 @@ function LinkWidgetMenu(rel, relNum) {
 LinkWidgetMenu.prototype = {
   __proto__: LinkWidgetItem.prototype,
 
-  show: function() {
-    this._isShowing = true;
-    if(!this._linksHaveChanged) return;
-    this._linksHaveChanged = false;
-    const links = this.links, numLinks = links.length;
+  show: function(linkmap) {
+    // hacks as above
+    const links = []
+    if(linkmap) for(var i in linkmap) links.push(linkmap[i]);
+    const numLinks = links.length;
+    this._menuNeedsRefresh = true;
+    this.links = links;
+
     if(!this.menuitem) {
       if(!numLinks) return;
       this.createElements();
