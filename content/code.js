@@ -644,7 +644,6 @@ const linkWidgetItems = {
 const linkWidgetItemBase = {
   _linksHaveChanged: true, // has our set of links changed since the menu was last shown
   _menuNeedsRefresh: true,
-  _isShowing: false,
 
   links: [], // an array of LinkWidgetLink's
   popup: null,
@@ -652,7 +651,7 @@ const linkWidgetItemBase = {
   addLink: function(link) {
     this.links.push(link);
     this._linksHaveChanged = this._menuNeedsRefresh = true;
-    if(this._isShowing) this.show();
+    this.show();
   },
 
   // links is a url->info map
@@ -660,13 +659,13 @@ const linkWidgetItemBase = {
     const ls = this.links = [];
     for each(var info in links) ls.push(info);
     this._linksHaveChanged = this._menuNeedsRefresh = true;
-    if(this._isShowing) this.show();
+    this.show();
   },
 
   clear: function() {
     this.links = [];
     this._linksHaveChanged = this._menuNeedsRefresh = true;
-    if(this._isShowing) this.show();
+    this.show();
   },
 
   show: function() {
@@ -725,7 +724,6 @@ function initLinkWidgetButton(elt, rel) {
 
 const linkWidgetButton = {
   __proto__: linkWidgetItemBase,
-  _isShowing: true,
 
   show: function() {
     this._linksHaveChanged = false;
