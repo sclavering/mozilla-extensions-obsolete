@@ -96,15 +96,6 @@ window.addEventListener("load", linkWidgetStartup, false);
 window.addEventListener("unload", linkWidgetShutdown, false);
 
 
-function linkWidgetToolboxCustomizeDone(somethingChanged) {
-  if(somethingChanged) {
-    linkWidgetItems.updateForToolbarCustomisation();
-    linkWidgetRefreshLinks();
-  }
-  this._preLinkWidget_customizeDone(somethingChanged);
-}
-
-
 function linkWidgetLoadPrefs() {
   const branch = gPrefService.getBranch(linkWidgetPrefPrefix);
   linkWidgetPrefScanHyperlinks = branch.getBoolPref("scanHyperlinks");
@@ -203,7 +194,7 @@ function linkWidgetRefreshLinks() {
 
   var enableMoreMenu = false;
   for(var rel in links) {
-    if(rel in linkWidgetButtons) linkWidgetButtons[rel].replaceLinks(links[rel]);
+    if(rel in linkWidgetButtons) linkWidgetButtons[rel].show(links[rel]);
     else enableMoreMenu = true;
   }
   if(linkWidgetMoreMenu && enableMoreMenu) linkWidgetMoreMenu.disabled = false;
@@ -212,21 +203,20 @@ function linkWidgetRefreshLinks() {
 
 function linkWidgetAddLinkForPage(url, txt, lang, media, doc, rels) {
   const linkInfo = new LinkWidgetLink(url, txt, lang, media);
-  // put the link in a rel->url->link map on the document's XPCNativeWrapper
+  // put the link in a rel->[link] map on the document's XPCNativeWrapper
   var doclinks = doc.linkWidgetLinks || (doc.linkWidgetLinks = {});
   for(var r in rels) {
-    if(!(r in doclinks)) doclinks[r] = {};
-    // we leave any existing link with the same URL alone so that guessed
-    // links don't replace page-provided ones (which are likely to have better descriptions)
-    if(url in doclinks[r]) delete rels[r];
-    else doclinks[r][url] = linkInfo;
+    if(!doclinks[r]) doclinks[r] = [], doclinks[r].urls = {};
+    // link guessing often leads to new links with the same URL, which should be ignored
+    if(url in doclinks[r].urls) delete rels[r];
+    else doclinks[r].push(linkInfo);
   }
 
   if(doc != content.document) return;
   var enableMoreMenu = false;
   for(var rel in rels) {
     // buttons need updating immediately, but anything else can wait till the menu is showing
-    if(rel in linkWidgetButtons) linkWidgetButtons[rel].addLink(linkInfo);
+    if(rel in linkWidgetButtons) linkWidgetButtons[rel].show(doclinks[rel]);
     else enableMoreMenu = true;
   }
   if(linkWidgetMoreMenu && enableMoreMenu) linkWidgetMoreMenu.disabled = false;
@@ -247,10 +237,31 @@ function linkWidgetOnMoreMenuShowing() {
   }
 }
 
+function linkWidgetToolboxCustomizeDone(somethingChanged) {
+  this._preLinkWidget_customizeDone(somethingChanged);
+  if(!somethingChanged) return;
+
+  linkWidgetItems._init();
+  for each(var btn in linkWidgetButtons) btn.show(null);
+  linkWidgetItems._initButtons();
+  for(var rel in linkWidgetViews) {
+    var item = linkWidgetViews[rel];
+    if(!linkWidgetButtons[rel] && linkWidgetMoreMenu) continue;
+    item.destroy();
+    delete linkWidgetViews[rel];
+  }
+  // Can end up incorrectly enabled if e.g. only the Top menuitem was active,
+  // and that gets replaced by a button.
+  if(linkWidgetMoreMenu) linkWidgetMoreMenu.disabled = true;
+
+  linkWidgetRefreshLinks();
+}
+
 
 
 // Code to show urls in the status bar (setting statustext attribute does zilch).
-// Rather complex because it worries about restoring the old text, and only doing so if something else hasn't modified the text in the meantime.
+// Rather complex because it worries about restoring the old text, and only doing
+// so if something else hasn't modified the text in the meantime.
 
 var linkWidgetOldStatusbarText = null;
 
@@ -294,7 +305,7 @@ function linkWidgetItemClicked(e) {
 
 function linkWidgetButtonRightClicked(e) {
   const t = e.target, ot = e.originalTarget;
-  if(ot.localName=="toolbarbutton" && t.links.length>1) t.firstChild.showPopup();
+  if(ot.localName=="toolbarbutton" && t.numLinks > 1) t.firstChild.showPopup();
 }
 
 function linkWidgetLoadPage(e) {
@@ -315,7 +326,7 @@ function linkWidgetLoadPage(e) {
 function linkWidgetGo(rel) {
   if(!linkWidgetButtons[rel]) return;
   const item = linkWidgetButtons[rel];
-  if(!item || !item.links.length) return;
+  if(!item || !item.numLinks) return;
   const url = item.getAttribute("href");
   const sourceURL = content.document.documentURI;
   linkWidgetLoadPageInCurrentBrowser(url, sourceURL);
@@ -614,27 +625,9 @@ const linkWidgetItems = {
     }
   },
 
-  // called after toolbar customisation is finished.  must stop using any items that are no longer present,
-  // and destroy any menus/menuitems for which a button is now present
-  updateForToolbarCustomisation: function() {
-    this._init();
-    for each(var btn in linkWidgetButtons) btn.clear();
-    this._initButtons();
-    const buttons = linkWidgetButtons, items = linkWidgetViews, moreMenu = linkWidgetMoreMenu;
-    for(var rel in items) {
-      var item = items[rel];
-      if(!buttons[rel] && moreMenu) continue;
-      item.destroy();
-      delete items[rel];
-    }
-    // Can end up incorrectly enabled if e.g. only the Top menuitem was active,
-    // and that gets replaced by a button.
-    if(moreMenu) moreMenu.disabled = true;
-  },
-
   clearAll: function() {
-    for each(var btn in linkWidgetButtons) btn.clear();
-    for each(var item in linkWidgetViews) item.clear();
+    for each(var btn in linkWidgetButtons) btn.show(null);
+    for each(var item in linkWidgetViews) item.show(null);
     if(linkWidgetMoreMenu) linkWidgetMoreMenu.disabled = true;
   }
 };
@@ -642,31 +635,7 @@ const linkWidgetItems = {
 
 // xxx some of this should be moved to linkWidgetButton now
 const linkWidgetItemBase = {
-  _linksHaveChanged: true, // has our set of links changed since the menu was last shown
-  _menuNeedsRefresh: true,
-
-  links: [], // an array of LinkWidgetLink's
   popup: null,
-
-  addLink: function(link) {
-    this.links.push(link);
-    this._linksHaveChanged = this._menuNeedsRefresh = true;
-    this.show();
-  },
-
-  // links is a url->info map
-  replaceLinks: function(links) {
-    const ls = this.links = [];
-    for each(var info in links) ls.push(info);
-    this._linksHaveChanged = this._menuNeedsRefresh = true;
-    this.show();
-  },
-
-  clear: function() {
-    this.links = [];
-    this._linksHaveChanged = this._menuNeedsRefresh = true;
-    this.show();
-  },
 
   show: function() {
     throw "show() not implemented for some Link Widget item";
@@ -675,13 +644,12 @@ const linkWidgetItemBase = {
   destroy: function() {},
 
   buildMenu: function() {
-    if(!this._menuNeedsRefresh) return true;
-    this._menuNeedsRefresh = false;
     const p = this.popup;
     while(p.hasChildNodes()) p.removeChild(p.lastChild);
-    const ls = this.links, num = ls.length;
+    // this code won't be running unless the doc has links for this rel
+    const links = content.document.linkWidgetLinks[this.rel], num = links.length;
     for(var i = 0; i != num; i++) {
-      var l = ls[i];
+      var l = links[i];
       // longTitle || url was used in transientitem
       var href = l.url, label = l.longTitle, tooltip = l.title;
       var mi = document.createElement("menuitem");
@@ -691,7 +659,6 @@ const linkWidgetItemBase = {
       mi.setAttribute("tooltiptext1", tooltip);
       p.appendChild(mi);
     }
-    return true;
   }
 };
 
@@ -712,7 +679,6 @@ function initLinkWidgetButton(elt, rel) {
   elt.setAttribute("tooltip", "linkwidget-tooltip");
   elt.addEventListener("DOMMouseScroll", linkWidgetMouseScrollHandler, false);
   for(var i in linkWidgetButton) elt[i] = linkWidgetButton[i];
-  elt.links = []; // each button needs its own array, not a reference to a shared one
   var popup = elt.popup = document.createElement("menupopup");
   elt.appendChild(popup);
   popup.setAttribute("onpopupshowing", "return this.parentNode.buildMenu();");
@@ -724,10 +690,10 @@ function initLinkWidgetButton(elt, rel) {
 
 const linkWidgetButton = {
   __proto__: linkWidgetItemBase,
+  numLinks: 0,
 
-  show: function() {
-    this._linksHaveChanged = false;
-    const links = this.links, numLinks = links.length;
+  show: function(links) {
+    const numLinks = this.numLinks = links ? links.length : 0
     this.disabled = !numLinks;
     if(!numLinks) {
       this.removeAttribute("href");
@@ -736,6 +702,7 @@ const linkWidgetButton = {
       return;
     }
     const link = links[0];
+    // xxx this sets these attributes every time a link is added to the current doc
     this.setAttribute("href", link.url);
     this.setAttribute("tooltiptext1", link.longTitle);
     if(numLinks == 1) {
@@ -752,7 +719,6 @@ const linkWidgetButton = {
 
 // switches automatically between being a single menu item and a whole sub menu
 function LinkWidgetItem(rel, relNum) {
-  this.links = [];
   this.rel = rel;
   this.relNum = relNum
 }
@@ -772,14 +738,8 @@ LinkWidgetItem.prototype = {
     this.menuitem = this.menu = this.popup = null;
   },
 
-  show: function(linkmap) {
-    // xxx temporary hackishness
-    const links = [];
-    if(linkmap) for(var i in linkmap) links.push(linkmap[i]);
-    const numLinks = links.length;
-    // xxx even more hackish. will fix buildMenu eventually
-    this._menuNeedsRefresh = true;
-    this.links = links;
+  show: function(links) {
+    const numLinks = links ? links.length : 0;
     
     if(!this.menuitem) {
       if(!numLinks) return;
@@ -841,21 +801,14 @@ LinkWidgetItem.prototype = {
 
 // an item that's always a submenu (e.g. Chapters)
 function LinkWidgetMenu(rel, relNum) {
-  this.links = [];
   this.rel = rel;
   this.relNum = relNum;
 }
 LinkWidgetMenu.prototype = {
   __proto__: LinkWidgetItem.prototype,
 
-  show: function(linkmap) {
-    // hacks as above
-    const links = []
-    if(linkmap) for(var i in linkmap) links.push(linkmap[i]);
-    const numLinks = links.length;
-    this._menuNeedsRefresh = true;
-    this.links = links;
-
+  show: function(links) {
+    const numLinks = links ? links.length : 0;
     if(!this.menuitem) {
       if(!numLinks) return;
       this.createElements();
