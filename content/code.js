@@ -383,6 +383,7 @@ LinkWidgetLink.prototype = {
 const linkWidgetIgnoreRels =
   /\b(?:stylesheet\b|icon\b|pingback\b|fontdef\b|p3pv|schema\.|meta\b)/i;
 
+// null values mean that rel should be ignored
 const linkWidgetRelConversions = {
   home: "top",
   origin: "top",
@@ -424,7 +425,8 @@ function linkWidgetGetLinkRels(relStr, revStr, mimetype, title) {
     var relValues = relStr.split(whitespace);
     for(var i = 0; i != relValues.length; i++) {
       var rel = relValues[i].toLowerCase();
-      rel = linkWidgetRelConversions[rel] || rel;
+      // this has to use "in", because the entries can be null (meaning "ignore")
+      rel = rel in linkWidgetRelConversions ? linkWidgetRelConversions[rel] : rel;
       if(rel) rels[rel] = true, haveRels = true;
     }
   }
