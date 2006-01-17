@@ -42,6 +42,20 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 const linkWidgetPrefPrefix = "extensions.linkwidget.";
 
+// rels which should always use a submenu of the More menu, even for a single item
+const linkWidgetMenuRels = {}; // rel -> true map
+const _linkWidgetMenuRels = ["chapter", "section", "subsection", "bookmark", "alternate"];
+
+// known rels in the order they should appear on the More menu
+const linkWidgetMenuOrdering = {}; // rel -> int map
+const _linkWidgetMenuOrdering = [
+  "top","up","first","prev","next","last","toc","chapter","section","subsection","appendix",
+  "glossary","index","help","search","author","copyright","bookmark","alternate"
+];
+
+const linkWidgetButtonRels = {}; // rel -> true map
+const _linkWidgetButtonRels = ["top","up","first","prev","next","last"];
+
 const linkWidgetEventHandlers = {
   "select": "linkWidgetTabSelectedHandler",
   "DOMLinkAdded": "linkWidgetLinkAddedHandler",
@@ -69,7 +83,11 @@ function linkWidgetStartup() {
   window.removeEventListener("load", linkWidgetStartup, false);
   linkWidgetStatusbar = document.getElementById("statusbar-display");
   linkWidgetStrings = linkWidgetLoadStringBundle(linkWidgetStrings);
-  linkWidgetItems.init();
+  for(var i in _linkWidgetMenuOrdering) linkWidgetMenuOrdering[_linkWidgetMenuOrdering[i]] = (i-0) + 1;
+  for each(i in _linkWidgetMenuRels) linkWidgetMenuRels[i] = true;
+  for each(i in _linkWidgetButtonRels) linkWidgetButtonRels[i] = true;
+  linkWidgetInitMoreMenu();
+  linkWidgetInitVisbileButtons();
 
   setTimeout(linkWidgetDelayedStartup, 1); // needs to happen after Fx's delayedStartup()
 }
@@ -121,6 +139,19 @@ function linkWidgetMouseScrollHandler(event) {
 }
 
 
+function linkWidgetInitMoreMenu() {
+  linkWidgetMoreMenu = document.getElementById("linkwidget-more-menu");
+  linkWidgetMorePopup = document.getElementById("linkwidget-more-popup");
+}
+
+function linkWidgetInitVisbileButtons() {
+  linkWidgetButtons = {};
+  for(var rel in linkWidgetButtonRels) {
+    var elt = document.getElementById("linkwidget-"+rel);
+    if(elt) linkWidgetButtons[rel] = initLinkWidgetButton(elt, rel);
+  }
+}
+
 function linkWidgetLinkAddedHandler(event) {
   var elt = event.originalTarget;
   var doc = elt.ownerDocument;
@@ -139,7 +170,8 @@ function linkWidgetPageHideHandler(event) {
   if(!(doc instanceof Document)) doc = doc.ownerDocument;
   // don't clear the links for unload/pagehide from a background tab, or from a subframe
   if(doc != gBrowser.contentDocument) return;
-  linkWidgetItems.clearAll();
+  for each(var btn in linkWidgetButtons) btn.show(null);
+  if(linkWidgetMoreMenu) linkWidgetMoreMenu.disabled = true;
 }
 
 
@@ -188,7 +220,9 @@ function linkWidgetPageShowHandler(event) {
 
 
 function linkWidgetRefreshLinks() {
-  linkWidgetItems.clearAll();
+  for each(var btn in linkWidgetButtons) btn.show(null);
+  if(linkWidgetMoreMenu) linkWidgetMoreMenu.disabled = true;
+
   const doc = content.document, links = doc.linkWidgetLinks;
   if(!links) return;
 
@@ -229,8 +263,8 @@ function linkWidgetOnMoreMenuShowing() {
   // Create any new views that are needed
   for(rel in linkmaps) {
     if(rel in linkWidgetViews || rel in linkWidgetButtons) continue;
-    var relNum = linkWidgetItems._itemPlacement[rel] || Infinity;
-    var isMenu = rel in linkWidgetItems._itemsWhichShouldAlwaysBeMenus;
+    var relNum = linkWidgetMenuOrdering[rel] || Infinity;
+    var isMenu = rel in linkWidgetMenuRels;
     var item = linkWidgetViews[rel] =
       isMenu ? new LinkWidgetMenu(rel, relNum) : new LinkWidgetItem(rel, relNum);
     item.show(linkmaps[rel]);
@@ -241,9 +275,9 @@ function linkWidgetToolboxCustomizeDone(somethingChanged) {
   this._preLinkWidget_customizeDone(somethingChanged);
   if(!somethingChanged) return;
 
-  linkWidgetItems._init();
+  linkWidgetInitMoreMenu();
   for each(var btn in linkWidgetButtons) btn.show(null);
-  linkWidgetItems._initButtons();
+  linkWidgetInitVisbileButtons();
   for(var rel in linkWidgetViews) {
     var item = linkWidgetViews[rel];
     if(!linkWidgetButtons[rel] && linkWidgetMoreMenu) continue;
@@ -587,52 +621,6 @@ function linkWidgetGuessLinkRel(link, txt) {
   }  
   return null;
 }
-
-
-
-// controller for all UI bits displaying <link>s
-const linkWidgetItems = {
-  // becomes a rel->num map (numbers all > 0)
-  _itemPlacement: [
-    "top","up","first","prev","next","last","toc","chapter","section","subsection","appendix",
-    "glossary","index","help","search","author","copyright","bookmark","alternate"
-  ],
-  // becomes a rel->true map
-  _itemsWhichShouldAlwaysBeMenus: [
-    "chapter","section","subsection", "bookmark", "alternate"
-  ],
-
-  init: function() {
-    const order = this._itemPlacement;
-    const placement = this._itemPlacement = {};
-    for(var i = 0; i != order.length; ++i) placement[order[i]] = i + 1;
-    const menuList = this._itemsWhichShouldAlwaysBeMenus;
-    const menus = this._itemsWhichShouldAlwaysBeMenus = {};
-    for each(m in menuList) menus[m] = true;
-    this._init();
-    this._initButtons();
-  },
-
-  _init: function() {
-    linkWidgetMoreMenu = document.getElementById("linkwidget-more-menu");
-    linkWidgetMorePopup = document.getElementById("linkwidget-more-popup");
-  },
-
-  _initButtons: function() {
-    const btns = {top:true, up:true, first:true, prev:true, next:true, last:true};
-    const buttons = linkWidgetButtons = {};
-    for(var rel in btns) {
-      var elt = document.getElementById("linkwidget-"+rel);
-      if(elt) buttons[rel] = initLinkWidgetButton(elt, rel);
-    }
-  },
-
-  clearAll: function() {
-    for each(var btn in linkWidgetButtons) btn.show(null);
-    for each(var item in linkWidgetViews) item.show(null);
-    if(linkWidgetMoreMenu) linkWidgetMoreMenu.disabled = true;
-  }
-};
 
 
 // xxx some of this should be moved to linkWidgetButton now
