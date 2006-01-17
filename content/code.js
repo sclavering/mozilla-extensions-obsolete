@@ -650,8 +650,7 @@ const linkWidgetItemBase = {
     const links = content.document.linkWidgetLinks[this.rel], num = links.length;
     for(var i = 0; i != num; i++) {
       var l = links[i];
-      // longTitle || url was used in transientitem
-      var href = l.url, label = l.longTitle, tooltip = l.title;
+      var href = l.url, label = l.longTitle || l.url, tooltip = l.title;
       var mi = document.createElement("menuitem");
       mi.className = "menuitem-iconic";
       mi.setAttribute("href", href);
