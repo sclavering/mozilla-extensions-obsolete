@@ -64,7 +64,6 @@ const linkWidgetEventHandlers = {
   "pageshow": "linkWidgetPageShowHandler"
 };
 
-var linkWidget = null;
 var linkWidgetPrefUseLinkGuessing = false;
 var linkWidgetPrefGuessUpAndTopFromURL = false;
 var linkWidgetPrefGuessPrevAndNextFromURL = false;
@@ -189,7 +188,7 @@ function linkWidgetPageLoadedHandler(event) {
 
   if(linkWidgetPrefScanHyperlinks) linkWidgetScanPageForLinks(doc);
 
-  const protocol = doc.location.protocol;
+  const loc = doc.location, protocol = loc.protocol;
   if(!/^(?:https|http|ftp)\:$/.test(protocol)) return;
 
   if(linkWidgetPrefGuessPrevAndNextFromURL)
@@ -197,11 +196,11 @@ function linkWidgetPageLoadedHandler(event) {
 
   if(!linkWidgetPrefGuessUpAndTopFromURL) return;
   if(!links.up) {
-    var upUrl = linkWidgetGuessUp(doc.location);
+    var upUrl = linkWidgetGuessUp(loc);
     if(upUrl) linkWidgetAddLinkForPage(upUrl, null, null, null, doc, {up: true});
   }
   if(!links.top) {
-    var topUrl = location.protocol + "//" + location.host + "/"
+    var topUrl = protocol + "//" + loc.host + "/"
     linkWidgetAddLinkForPage(topUrl, null, null, null, doc, {top: true});
   }
 }
