@@ -763,7 +763,6 @@ LinkWidgetItem.prototype = {
     m.setAttribute("label", linkWidgetStrings["2"+rel] || relStr);
     m.hidden = true;
     m.className = "menu-iconic";
-    m.setAttribute("container", "true");
     const p = this.popup = document.createElement("menupopup");
     p.setAttribute("onpopupshowing", "this.linkWidgetItem.buildMenu();");
 
