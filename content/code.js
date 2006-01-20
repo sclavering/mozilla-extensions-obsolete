@@ -235,14 +235,15 @@ function linkWidgetRefreshLinks() {
 
 
 function linkWidgetAddLinkForPage(url, txt, lang, media, doc, rels) {
-  const linkInfo = new LinkWidgetLink(url, txt, lang, media);
+  const link = new LinkWidgetLink(url, txt, lang, media);
   // put the link in a rel->[link] map on the document's XPCNativeWrapper
   var doclinks = doc.linkWidgetLinks || (doc.linkWidgetLinks = {});
   for(var r in rels) {
-    if(!doclinks[r]) doclinks[r] = [], doclinks[r].urls = {};
-    // link guessing often leads to new links with the same URL, which should be ignored
-    if(url in doclinks[r].urls) delete rels[r];
-    else doclinks[r].push(linkInfo);
+    var rellinks = doclinks[r] || (doclinks[r] = []);
+    var relurls = rellinks.urls || (rellinks.urls = {});
+    // duplicate links are typically guessed links, and have inferior descriptions
+    if(url in relurls) delete rels[r];
+    else rellinks.push(link), relurls[url] = true;
   }
 
   if(doc != content.document) return;
