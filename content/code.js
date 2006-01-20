@@ -301,7 +301,7 @@ var linkWidgetOldStatusbarText = null;
 
 function linkWidgetMouseEnter(e) {
   const t = e.target;
-  const href = t.getAttribute("href");
+  const href = t.linkURL;
   if(!href) return;
   linkWidgetOldStatusbarText = linkWidgetStatusbar.getAttribute("label");
   linkWidgetStatusbar.setAttribute("label", href);
@@ -309,7 +309,7 @@ function linkWidgetMouseEnter(e) {
 
 function linkWidgetMouseExit(e) {
   const t = e.target;
-  const href = t.getAttribute("href");
+  const href = t.linkURL;
   const txt = linkWidgetStatusbar.getAttribute("label");
   if(txt==href) linkWidgetStatusbar.setAttribute("label", linkWidgetOldStatusbarText);
   linkWidgetOldStatusbarText = null;
@@ -319,7 +319,7 @@ function linkWidgetMouseExit(e) {
 function linkWidgetFillTooltip(tooltip, event) {
   const elt = document.tooltipNode, line1 = tooltip.firstChild, line2 = tooltip.lastChild;
   const text1 = elt.getAttribute("tooltiptext1") || elt.getAttribute("tooltiptext0");
-  const text2 = elt.getAttribute("href");
+  const text2 = elt.linkURL;
   line1.hidden = !(line1.value = text1);
   line2.hidden = !(line2.value = text2);
   // don't show the tooltip if it's over a submenu of the More menu
@@ -343,7 +343,7 @@ function linkWidgetButtonRightClicked(e) {
 }
 
 function linkWidgetLoadPage(e) {
-  const url = e.target.getAttribute("href");
+  const url = e.target.linkURL;
   const sourceURL = content.document.documentURI;
   const button = e.type=="command" ? 0 : e.button;
   // Make handleLinkClick find the right origin URL
@@ -361,7 +361,7 @@ function linkWidgetGo(rel) {
   if(!linkWidgetButtons[rel]) return;
   const item = linkWidgetButtons[rel];
   if(!item || !item.numLinks) return;
-  const url = item.getAttribute("href");
+  const url = item.linkURL;
   const sourceURL = content.document.documentURI;
   linkWidgetLoadPageInCurrentBrowser(url, sourceURL);
 }
@@ -643,7 +643,7 @@ const linkWidgetItemBase = {
       var href = l.url, label = l.longTitle || l.url, tooltip = l.title;
       var mi = document.createElement("menuitem");
       mi.className = "menuitem-iconic";
-      mi.setAttribute("href", href);
+      mi.linkURL = href;
       mi.setAttribute("label", label);
       mi.setAttribute("tooltiptext1", tooltip);
       p.appendChild(mi);
@@ -685,14 +685,14 @@ const linkWidgetButton = {
     const numLinks = this.numLinks = links ? links.length : 0
     this.disabled = !numLinks;
     if(!numLinks) {
-      this.removeAttribute("href");
+      this.linkURL = null;
       this.removeAttribute("tooltiptext1");
       this.removeAttribute("multi");
       return;
     }
     const link = links[0];
     // xxx this sets these attributes every time a link is added to the current doc
-    this.setAttribute("href", link.url);
+    this.linkURL = link.url;
     this.setAttribute("tooltiptext1", link.longTitle);
     if(numLinks == 1) {
       // just setting .disabled will not do anything, presumably because the
@@ -743,7 +743,7 @@ LinkWidgetItem.prototype = {
     case 1:
       const link = links[0];
       m.hidden = true;
-      mi.setAttribute("href", link.url);
+      mi.linkURL = link.url;
       mi.hidden = false;
       mi.setAttribute("tooltiptext1", link.longTitle);
       break;
