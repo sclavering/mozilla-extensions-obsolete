@@ -318,7 +318,7 @@ function linkWidgetMouseExit(e) {
 
 function linkWidgetFillTooltip(tooltip, event) {
   const elt = document.tooltipNode, line1 = tooltip.firstChild, line2 = tooltip.lastChild;
-  const text1 = elt.getAttribute("tooltiptext1") || elt.getAttribute("tooltiptext0");
+  const text1 = elt.preferredTooltipText || elt.getAttribute("fallbackTooltipText");
   const text2 = elt.linkURL;
   line1.hidden = !(line1.value = text1);
   line2.hidden = !(line2.value = text2);
@@ -645,7 +645,7 @@ const linkWidgetItemBase = {
       mi.className = "menuitem-iconic";
       mi.linkURL = href;
       mi.setAttribute("label", label);
-      mi.setAttribute("tooltiptext1", tooltip);
+      mi.preferredTooltipText = tooltip;
       p.appendChild(mi);
     }
   }
@@ -686,14 +686,14 @@ const linkWidgetButton = {
     this.disabled = !numLinks;
     if(!numLinks) {
       this.linkURL = null;
-      this.removeAttribute("tooltiptext1");
+      this.preferredTooltipText = null;
       this.removeAttribute("multi");
       return;
     }
     const link = links[0];
     // xxx this sets these attributes every time a link is added to the current doc
     this.linkURL = link.url;
-    this.setAttribute("tooltiptext1", link.longTitle);
+    this.preferredTooltipText = link.longTitle;
     if(numLinks == 1) {
       // just setting .disabled will not do anything, presumably because the
       // dropmarker xbl:inherits the toolbarbutton's disabled attribute.
@@ -745,7 +745,7 @@ LinkWidgetItem.prototype = {
       m.hidden = true;
       mi.linkURL = link.url;
       mi.hidden = false;
-      mi.setAttribute("tooltiptext1", link.longTitle);
+      mi.preferredTooltipText = link.longTitle;
       break;
     default:
       mi.hidden = true;
