@@ -623,15 +623,8 @@ function linkWidgetGuessLinkRel(link, txt) {
 }
 
 
-// xxx some of this should be moved to linkWidgetButton now
 const linkWidgetItemBase = {
   popup: null,
-
-  show: function() {
-    throw "show() not implemented for some Link Widget item";
-  },
-
-  destroy: function() {},
 
   buildMenu: function() {
     const p = this.popup;
