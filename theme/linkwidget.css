@@ -15,53 +15,72 @@ Contributor(s):
 /* for the default theme we use icons with built-in dropmarkers, but other themes might want to keep them separate */
 .linkwidget-button dropmarker { display: none }
 
-.linkwidget-button > .toolbarbutton-menubutton-button { -moz-box-orient: horizontal; }
+toolbar[iconsize="small"] .linkwidget-button > .toolbarbutton-menubutton-button { -moz-box-orient: horizontal; }
 
 /* Charamel sets -moz-image-region on the <hbox> wrapping the <image> within <menuitem>s */
 .linkwidget-button .menu-iconic-left { -moz-image-region: inherit !important; }
 
-#linkwidget-top { -moz-image-region: rect(0 16px 16px 0); }
-#linkwidget-top:hover { -moz-image-region: rect(16px 16px 32px 0); }
-#linkwidget-top[multi] { -moz-image-region: rect(0 112px 16px 96px); }
-#linkwidget-top[multi]:hover { -moz-image-region: rect(16px 112px 32px 96px); }
-#linkwidget-top[disabled=true] { -moz-image-region: rect(32px 16px 48px 0); }
+#linkwidget-top { -moz-image-region: rect(0 24px 24px 0); }
+#linkwidget-top[multi] { -moz-image-region: rect(40px 24px 64px 0); }
+#linkwidget-top[disabled=true] { opacity: 0.5 }
 
-#linkwidget-up { -moz-image-region: rect(0 32px 16px 16px); }
-#linkwidget-up:hover { -moz-image-region: rect(16px 32px 32px 16px); }
-#linkwidget-up[multi] { -moz-image-region: rect(0 128px 16px 112px); }
-#linkwidget-up[multi]:hover { -moz-image-region: rect(16px 128px 32px 112px); }
-#linkwidget-up[disabled=true]   { -moz-image-region: rect(32px 32px 48px 16px); }
+#linkwidget-up { -moz-image-region: rect(0 48px 24px 24px); }
+#linkwidget-up[multi] { -moz-image-region: rect(40px 48px 64px 24px); }
+#linkwidget-up[disabled=true] { opacity: 0.5 }
 
-#linkwidget-first { -moz-image-region: rect(0 48px 16px 32px); }
-#linkwidget-first:hover { -moz-image-region: rect(16px 48px 32px 32px); }
-#linkwidget-first[multi] { -moz-image-region: rect(0 144px 16px 128px); }
-#linkwidget-first[multi]:hover { -moz-image-region: rect(16px 144px 32px 128px); }
-#linkwidget-first[disabled=true]   { -moz-image-region: rect(32px 48px 48px 32px); }
+#linkwidget-first { -moz-image-region: rect(0 72px 24px 48px); }
+#linkwidget-first[multi] { -moz-image-region: rect(40px 72px 64px 48px); }
+#linkwidget-first[disabled=true] { opacity: 0.5 }
 
-#linkwidget-prev { -moz-image-region: rect(0 64px 16px 48px); }
-#linkwidget-prev:hover { -moz-image-region: rect(16px 64px 32px 48px); }
-#linkwidget-prev[multi] { -moz-image-region: rect(0 160px 16px 144px); }
-#linkwidget-prev[multi]:hover { -moz-image-region: rect(16px 160px 32px 144px); }
-#linkwidget-prev[disabled=true]   { -moz-image-region: rect(32px 64px 48px 48px); }
+#linkwidget-prev { -moz-image-region: rect(0 96px 24px 72px); }
+#linkwidget-prev[multi] { -moz-image-region: rect(40px 96px 64px 72px); }
+#linkwidget-prev[disabled=true] { opacity: 0.5 }
 
-#linkwidget-next { -moz-image-region: rect(0 80px 16px 64px); }
-#linkwidget-next:hover { -moz-image-region: rect(16px 80px 32px 64px); }
-#linkwidget-next[multi] { -moz-image-region: rect(0 176px 16px 160px); }
-#linkwidget-next[multi]:hover { -moz-image-region: rect(16px 176px 32px 160px); }
-#linkwidget-next[disabled=true]   { -moz-image-region: rect(32px 80px 48px 64px); }
+#linkwidget-next { -moz-image-region: rect(0 120px 24px 96px); }
+#linkwidget-next[multi] { -moz-image-region: rect(40px 120px 64px 96px); }
+#linkwidget-next[disabled=true] { opacity: 0.5 }
 
-#linkwidget-last { -moz-image-region: rect(0 96px 16px 80px); }
-#linkwidget-last:hover { -moz-image-region: rect(16px 96px 32px 80px); }
-#linkwidget-last[multi] { -moz-image-region: rect(0 192px 16px 176px); }
-#linkwidget-last[multi]:hover { -moz-image-region: rect(16px 192px 32px 176px); }
-#linkwidget-last[disabled=true]   { -moz-image-region: rect(32px 96px 48px 80px); }
+#linkwidget-last { -moz-image-region: rect(0 144px 24px 120px); }
+#linkwidget-last[multi] { -moz-image-region: rect(40px 144px 64px 120px); }
+#linkwidget-last[disabled=true] { opacity: 0.5 }
 
 /* folder, page and email icons */
-.linkwidget-button menuitem { -moz-image-region: rect(32px 144px 48px 128px); }
-.linkwidget-button menu, #linkwidget-more-menu { -moz-image-region: rect(32px 160px 48px 144px); }
+.linkwidget-button menu, #linkwidget-more-menu { -moz-image-region: rect(0 168px 24px 144px); }
 .linkwidget-button menu[open=true],
-#linkwidget-more-menu[open=true] { -moz-image-region: rect(32px 176px 48px 160px); }
-#linkwidget-more-menu[disabled=true] { -moz-image-region: rect(32px 192px 48px 176px); }
-.linkwidget-button menuitem[href^="mailto:"] { -moz-image-region: rect(32px 112px 48px 96px); }
+#linkwidget-more-menu[open=true] { -moz-image-region: rect(40px 168px 64px 144px); }
+#linkwidget-more-menu[disabled=true] { opacity: 0.5 }
+
+
+toolbar[iconsize="small"] #linkwidget-top { -moz-image-region: rect(24px 16px 40px 0); }
+toolbar[iconsize="small"] #linkwidget-top[multi] { -moz-image-region: rect(64px 16px 80px 0); }
+toolbar[iconsize="small"] #linkwidget-top[disabled=true] { opacity: 0.5 }
+
+toolbar[iconsize="small"] #linkwidget-up { -moz-image-region: rect(24px 32px 40px 16px); }
+toolbar[iconsize="small"] #linkwidget-up[multi] { -moz-image-region: rect(64px 32px 80px 16px); }
+toolbar[iconsize="small"] #linkwidget-up[disabled=true]   { opacity: 0.5 }
+
+toolbar[iconsize="small"] #linkwidget-first { -moz-image-region: rect(24px 48px 40px 32px); }
+toolbar[iconsize="small"] #linkwidget-first[multi] { -moz-image-region: rect(64px 48px 80px 32px); }
+toolbar[iconsize="small"] #linkwidget-first[disabled=true]   { opacity: 0.5 }
+
+toolbar[iconsize="small"] #linkwidget-prev { -moz-image-region: rect(24px 64px 40px 48px); }
+toolbar[iconsize="small"] #linkwidget-prev[multi] { -moz-image-region: rect(64px 64px 80px 48px); }
+toolbar[iconsize="small"] #linkwidget-prev[disabled=true]   { opacity: 0.5 }
+
+toolbar[iconsize="small"] #linkwidget-next { -moz-image-region: rect(24px 80px 40px 64px); }
+toolbar[iconsize="small"] #linkwidget-next[multi] { -moz-image-region: rect(64px 80px 80px 64px); }
+toolbar[iconsize="small"] #linkwidget-next[disabled=true]   { opacity: 0.5 }
+
+toolbar[iconsize="small"] #linkwidget-last { -moz-image-region: rect(24px 96px 40px 80px); }
+toolbar[iconsize="small"] #linkwidget-last[multi] { -moz-image-region: rect(64px 96px 80px 80px); }
+toolbar[iconsize="small"] #linkwidget-last[disabled=true]   { opacity: 0.5 }
+
+/* folder, page and email icons */
+toolbar[iconsize="small"] .linkwidget-button menuitem { -moz-image-region: rect(24px 144px 40px 128px); }
+toolbar[iconsize="small"] .linkwidget-button menu, #linkwidget-more-menu { -moz-image-region: rect(64px 112px 80px 96px); }
+toolbar[iconsize="small"] .linkwidget-button menu[open=true],
+toolbar[iconsize="small"] #linkwidget-more-menu[open=true] { -moz-image-region: rect(64px 128px 80px 112px); }
+toolbar[iconsize="small"] #linkwidget-more-menu[disabled=true] { opacity: 0.5 }
+toolbar[iconsize="small"] .linkwidget-button menuitem[href^="mailto:"] { -moz-image-region: rect(24px 112px 40px 96px); }
 
 #status-bar .linkwidget-button { max-height: none; }
