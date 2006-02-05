@@ -12,6 +12,8 @@ Contributor(s):
   list-style-image: url(chrome://linkwidget/skin/buttons.png) !important;
 }
 
+.linkwidget-button[disabled=true] { opacity: 0.5 }
+
 /* for the default theme we use icons with built-in dropmarkers, but other themes might want to keep them separate */
 .linkwidget-button dropmarker { display: none }
 
@@ -22,65 +24,51 @@ toolbar[iconsize="small"] .linkwidget-button > .toolbarbutton-menubutton-button 
 
 #linkwidget-top { -moz-image-region: rect(0 24px 24px 0); }
 #linkwidget-top[multi] { -moz-image-region: rect(40px 24px 64px 0); }
-#linkwidget-top[disabled=true] { opacity: 0.5 }
 
 #linkwidget-up { -moz-image-region: rect(0 48px 24px 24px); }
 #linkwidget-up[multi] { -moz-image-region: rect(40px 48px 64px 24px); }
-#linkwidget-up[disabled=true] { opacity: 0.5 }
 
 #linkwidget-first { -moz-image-region: rect(0 72px 24px 48px); }
 #linkwidget-first[multi] { -moz-image-region: rect(40px 72px 64px 48px); }
-#linkwidget-first[disabled=true] { opacity: 0.5 }
 
 #linkwidget-prev { -moz-image-region: rect(0 96px 24px 72px); }
 #linkwidget-prev[multi] { -moz-image-region: rect(40px 96px 64px 72px); }
-#linkwidget-prev[disabled=true] { opacity: 0.5 }
 
 #linkwidget-next { -moz-image-region: rect(0 120px 24px 96px); }
 #linkwidget-next[multi] { -moz-image-region: rect(40px 120px 64px 96px); }
-#linkwidget-next[disabled=true] { opacity: 0.5 }
 
 #linkwidget-last { -moz-image-region: rect(0 144px 24px 120px); }
 #linkwidget-last[multi] { -moz-image-region: rect(40px 144px 64px 120px); }
-#linkwidget-last[disabled=true] { opacity: 0.5 }
 
 /* folder, page and email icons */
 .linkwidget-button menu, #linkwidget-more-menu { -moz-image-region: rect(0 168px 24px 144px); }
 .linkwidget-button menu[open=true],
 #linkwidget-more-menu[open=true] { -moz-image-region: rect(40px 168px 64px 144px); }
-#linkwidget-more-menu[disabled=true] { opacity: 0.5 }
 
 
 toolbar[iconsize="small"] #linkwidget-top { -moz-image-region: rect(24px 16px 40px 0); }
 toolbar[iconsize="small"] #linkwidget-top[multi] { -moz-image-region: rect(64px 16px 80px 0); }
-toolbar[iconsize="small"] #linkwidget-top[disabled=true] { opacity: 0.5 }
 
 toolbar[iconsize="small"] #linkwidget-up { -moz-image-region: rect(24px 32px 40px 16px); }
 toolbar[iconsize="small"] #linkwidget-up[multi] { -moz-image-region: rect(64px 32px 80px 16px); }
-toolbar[iconsize="small"] #linkwidget-up[disabled=true]   { opacity: 0.5 }
 
 toolbar[iconsize="small"] #linkwidget-first { -moz-image-region: rect(24px 48px 40px 32px); }
 toolbar[iconsize="small"] #linkwidget-first[multi] { -moz-image-region: rect(64px 48px 80px 32px); }
-toolbar[iconsize="small"] #linkwidget-first[disabled=true]   { opacity: 0.5 }
 
 toolbar[iconsize="small"] #linkwidget-prev { -moz-image-region: rect(24px 64px 40px 48px); }
 toolbar[iconsize="small"] #linkwidget-prev[multi] { -moz-image-region: rect(64px 64px 80px 48px); }
-toolbar[iconsize="small"] #linkwidget-prev[disabled=true]   { opacity: 0.5 }
 
 toolbar[iconsize="small"] #linkwidget-next { -moz-image-region: rect(24px 80px 40px 64px); }
 toolbar[iconsize="small"] #linkwidget-next[multi] { -moz-image-region: rect(64px 80px 80px 64px); }
-toolbar[iconsize="small"] #linkwidget-next[disabled=true]   { opacity: 0.5 }
 
 toolbar[iconsize="small"] #linkwidget-last { -moz-image-region: rect(24px 96px 40px 80px); }
 toolbar[iconsize="small"] #linkwidget-last[multi] { -moz-image-region: rect(64px 96px 80px 80px); }
-toolbar[iconsize="small"] #linkwidget-last[disabled=true]   { opacity: 0.5 }
 
 /* folder, page and email icons */
 toolbar[iconsize="small"] .linkwidget-button menuitem { -moz-image-region: rect(24px 144px 40px 128px); }
 toolbar[iconsize="small"] .linkwidget-button menu, #linkwidget-more-menu { -moz-image-region: rect(64px 112px 80px 96px); }
 toolbar[iconsize="small"] .linkwidget-button menu[open=true],
 toolbar[iconsize="small"] #linkwidget-more-menu[open=true] { -moz-image-region: rect(64px 128px 80px 112px); }
-toolbar[iconsize="small"] #linkwidget-more-menu[disabled=true] { opacity: 0.5 }
 toolbar[iconsize="small"] .linkwidget-button menuitem[href^="mailto:"] { -moz-image-region: rect(24px 112px 40px 96px); }
 
 #status-bar .linkwidget-button { max-height: none; }
