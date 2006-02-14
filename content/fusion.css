@@ -1,6 +1,0 @@
-#urlbar {
-  -moz-binding: url(chrome://fusion/content/fusion.xml#urlbar);
-}
-#urlbar-progressmeter {
-  -moz-binding: url(chrome://fusion/content/fusion.xml#urlbar-progressmeter);
-}

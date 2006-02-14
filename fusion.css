@@ -1,0 +1,23 @@
+/* Absolutely essential bindings stuff */
+#urlbar {
+  -moz-binding: url(chrome://fusion/content/fusion.xml#urlbar);
+  /* Can't use an anonymous <stack> because of child selectors in default themes' CSS */
+  /* display: -moz-stack !important; */
+}
+#fusion-progressmeter {
+  -moz-binding: url(chrome://fusion/content/fusion.xml#fusion-progressmeter);
+}
+
+/* Styles that don't look too horrific with default themes */
+#fusion-progressmeter {
+  -moz-appearance: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+#fusion-progressmeter > .progress-bar {
+  -moz-appearance: none;
+  /* not the greatest choice, but text is usually readable through it */
+  background: highlight;
+}

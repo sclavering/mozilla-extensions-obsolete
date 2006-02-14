@@ -1,0 +1,2 @@
+zip -ur0 fusion.jar fusion.css fusion.xml fusion.xul
+zip -ur9 fusion.xpi fusion.jar install.rdf chrome.manifest
