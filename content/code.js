@@ -168,7 +168,8 @@ function linkWidgetPageHideHandler(event) {
   var doc = event.originalTarget;
   if(!(doc instanceof Document)) doc = doc.ownerDocument;
   // don't clear the links for unload/pagehide from a background tab, or from a subframe
-  if(doc != gBrowser.contentDocument) return;
+  // If docShell is null accessing .contentDocument throws an exception
+  if(!gBrowser.docShell || doc != gBrowser.contentDocument) return;
   for each(var btn in linkWidgetButtons) btn.show(null);
   if(linkWidgetMoreMenu) linkWidgetMoreMenu.disabled = true;
 }
@@ -214,7 +215,8 @@ function linkWidgetTabSelectedHandler(event) {
 // xxx isn't this too keen to refresh?
 function linkWidgetPageShowHandler(event) {
   const doc = event.originalTarget;
-  if(doc == gBrowser.contentDocument) linkWidgetRefreshLinks();
+  // If docShell is null accessing .contentDocument throws an exception
+  if(gBrowser.docShell && doc == gBrowser.contentDocument) linkWidgetRefreshLinks();
 }
 
 
