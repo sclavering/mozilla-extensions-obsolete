@@ -29,7 +29,7 @@ var GoTo = {
     while(menu.hasChildNodes()) menu.removeChild(menu.lastChild);
 
     var cm = gContextMenu;
-    var url = cm.onLink ? cm.linkURL() : _content.document.location.href;
+    var url = cm.onLink ? cm.linkURL : content.document.location.href;
     if(!url) return;
 
     var matches, str, regexp, groupEnd, originalUrl = url;

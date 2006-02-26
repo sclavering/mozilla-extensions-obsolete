@@ -1,0 +1,2 @@
+zip -ur0 goto.jar content locale -x '*CVS*'
+zip -ur9 goto.xpi goto.jar install.rdf chrome.manifest

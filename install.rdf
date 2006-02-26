@@ -2,34 +2,22 @@
 
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns="http://www.mozilla.org/2004/em-rdf#">
+<rdf:Description about="urn:mozilla:install-manifest">
 
-  <rdf:Description about="urn:mozilla:install-manifest">
-    <id>goto</id>
+<id>goto@clav.mozdev.org</id>
+<name>Go To</name>
+<version>0.6</version>
+<description>Dig through URLs via the context menu</description>
+<homepageURL>http://clav.mozdev.org/</homepageURL>
 
-    <name>Go To</name>
-    <version>0.5.1</version>
+<creator>Stephen Clavering</creator>
+<contributor>Andrea (Italian translation)</contributor>
 
-    <description>Dig through URLs via the context menu</description>
-
-    <creator>Stephen Clavering</creator>
-    <contributor>Andrea (Italian translation)</contributor>
-    <homepageURL>http://clav.mozdev.org/</homepageURL>
-    <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
-
-    <targetApplication>
-      <rdf:Description>
-        <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
-        <minVersion>0.9</minVersion>
-        <maxVersion>1.0</maxVersion>
-      </rdf:Description>
-    </targetApplication>
-
-    <file>
-      <rdf:Description about="urn:mozilla:extension:file:goto.jar">
-        <package>content/</package>
-        <locale>locale/en/</locale>
-        <locale>locale/it/</locale>
-      </rdf:Description>
-    </file>
-  </rdf:Description>
+<targetApplication>
+<rdf:Description>
+<id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
+<minVersion>1.4</minVersion>
+<maxVersion>1.5.0.*</maxVersion>
+</rdf:Description>
+</targetApplication>
 </rdf:RDF>
