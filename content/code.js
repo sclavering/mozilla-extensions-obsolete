@@ -637,7 +637,7 @@ const linkWidgetItemBase = {
       var l = links[i];
       var href = l.url, label = l.longTitle || l.url, tooltip = l.title;
       var mi = document.createElement("menuitem");
-      mi.className = "menuitem-iconic";
+      mi.className = "menuitem-iconic linkwidget-menuitem";
       mi.linkURL = href;
       mi.setAttribute("label", label);
       mi.preferredTooltipText = tooltip;
@@ -752,13 +752,13 @@ LinkWidgetItem.prototype = {
     const rel = this.rel;
     const mi = this.menuitem = document.createElement("menuitem");
     const relStr = linkWidgetStrings[rel] || rel;
-    const relclass = linkWidgetButtonRels[rel] ? " rel-"+rel : "";
-    mi.className = "menuitem-iconic" + relclass;
+    const relclass = linkWidgetButtonRels[rel] ? " linkwidget-rel-"+rel : "";
+    mi.className = "menuitem-iconic linkwidget-menuitem " + relclass;
     mi.setAttribute("label", relStr);
     const m = this.menu = document.createElement("menu");
     m.setAttribute("label", linkWidgetStrings["2"+rel] || relStr);
     m.hidden = true;
-    m.className = "menu-iconic" + relclass;
+    m.className = "menu-iconic linkwidget-menu" + relclass;
     const p = this.popup = document.createElement("menupopup");
     p.setAttribute("onpopupshowing", "this.linkWidgetItem.buildMenu();");
 
