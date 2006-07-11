@@ -48,7 +48,7 @@
 <!ENTITY next.tooltip "Next page in sequence">
 <!ENTITY last.label "Last">
 <!ENTITY last.tooltip "Last page in sequence">
-<!ENTITY more.label "More">
+<!ENTITY more.label "Links">
 <!ENTITY more.tooltip "Other related pages">
 
 <!-- keyboard shortcuts -->
