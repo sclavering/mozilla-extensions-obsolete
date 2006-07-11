@@ -19,6 +19,7 @@ Contributor(s):
 
 toolbar[iconsize="small"] .linkwidget-button > .toolbarbutton-menubutton-button { -moz-box-orient: horizontal; }
 
+
 /* Charamel sets -moz-image-region on the <hbox> wrapping the <image> within <menuitem>s */
 .linkwidget-button .menu-iconic-left { -moz-image-region: inherit !important; }
 
@@ -40,10 +41,10 @@ toolbar[iconsize="small"] .linkwidget-button > .toolbarbutton-menubutton-button 
 #linkwidget-last { -moz-image-region: rect(0 144px 24px 120px); }
 #linkwidget-last[multi] { -moz-image-region: rect(40px 144px 64px 120px); }
 
-/* folder, page and email icons */
-.linkwidget-button menu, #linkwidget-more-menu { -moz-image-region: rect(0 168px 24px 144px); }
-.linkwidget-button menu[open=true],
+#linkwidget-more-menu { -moz-image-region: rect(0 168px 24px 144px); }
 #linkwidget-more-menu[open=true] { -moz-image-region: rect(40px 168px 64px 144px); }
+
+
 
 
 toolbar[iconsize="small"] #linkwidget-top { -moz-image-region: rect(24px 16px 40px 0); }
@@ -65,10 +66,15 @@ toolbar[iconsize="small"] #linkwidget-last { -moz-image-region: rect(24px 96px 4
 toolbar[iconsize="small"] #linkwidget-last[multi] { -moz-image-region: rect(64px 96px 80px 80px); }
 
 /* folder, page and email icons */
-toolbar[iconsize="small"] .linkwidget-button menuitem { -moz-image-region: rect(24px 144px 40px 128px); }
-toolbar[iconsize="small"] .linkwidget-button menu, #linkwidget-more-menu { -moz-image-region: rect(64px 112px 80px 96px); }
-toolbar[iconsize="small"] .linkwidget-button menu[open=true],
+toolbar[iconsize="small"] #linkwidget-more-menu { -moz-image-region: rect(64px 112px 80px 96px); }
 toolbar[iconsize="small"] #linkwidget-more-menu[open=true] { -moz-image-region: rect(64px 128px 80px 112px); }
-toolbar[iconsize="small"] .linkwidget-button menuitem[href^="mailto:"] { -moz-image-region: rect(24px 112px 40px 96px); }
+
 
 #status-bar .linkwidget-button { max-height: none; }
+
+
+/* menuitems and submenus */
+.linkwidget-button menu { -moz-image-region: rect(64px 112px 80px 96px); }
+.linkwidget-button menu[open=true] { -moz-image-region: rect(64px 128px 80px 112px); }
+.linkwidget-button menuitem { -moz-image-region: rect(24px 144px 40px 128px); }
+.linkwidget-button menuitem[href^="mailto:"] { -moz-image-region: rect(24px 112px 40px 96px); }
