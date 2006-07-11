@@ -752,12 +752,13 @@ LinkWidgetItem.prototype = {
     const rel = this.rel;
     const mi = this.menuitem = document.createElement("menuitem");
     const relStr = linkWidgetStrings[rel] || rel;
-    mi.className = "menuitem-iconic";
+    const relclass = linkWidgetButtonRels[rel] ? " rel-"+rel : "";
+    mi.className = "menuitem-iconic" + relclass;
     mi.setAttribute("label", relStr);
     const m = this.menu = document.createElement("menu");
     m.setAttribute("label", linkWidgetStrings["2"+rel] || relStr);
     m.hidden = true;
-    m.className = "menu-iconic";
+    m.className = "menu-iconic" + relclass;
     const p = this.popup = document.createElement("menupopup");
     p.setAttribute("onpopupshowing", "this.linkWidgetItem.buildMenu();");
 
