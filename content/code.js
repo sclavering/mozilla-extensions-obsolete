@@ -594,7 +594,7 @@ const linkWidgetLinkTextPatterns = {
   first: /^first\b|\bfirst$|^begin|\|<|\u00ab/i, // ? >\u007c| ?
   prev: /^prev(?:ious)?\b|prev$|previous$|^back\b|\bback$|^<<?-?\s?$|\u00ab/i, // \u003c / = | <=
   next: /^next\b|\bcontinue\b|next$|^\s?-?>?>$/i, // |\u00bb$/i,
-  last: /^last\b|\blast$|^end\b|>\|/i, // ? >\u007c| ?
+  last: /^last\b|\blast$|^end\b|>\|/i // ? >\u007c| ?
 };
 
 // regexps for identifying links based on the src url of contained images
@@ -602,7 +602,7 @@ const linkWidgetImgSrcPatterns = {
   first: /first/i,
   prev: /rev(?!iew)/i, // match [p]revious, but not [p]review
   next: /ne?xt|fwd|forward/i,
-  last: /last/i,
+  last: /last/i
 };
 
 // link is an <a href> link
