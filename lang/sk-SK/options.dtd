@@ -13,6 +13,6 @@ Preklad:
 <!ENTITY linkGuessing "Odhadovanie odkazov">
 <!ENTITY linkGuessingDescription "Mnohé stránky neposkytujú HTML element &lt;link&gt;, na ktorom Panel odkazov závisí:">
 
-<!ENTITY scanHyperlinks "Hľadať odkazy na Prvú, Predošlú, Ďalšiu a Poslednú stránku v obyčajných odkazoch na stránke">
+<!ENTITY scanHyperlinks "Hľadať odkazy na Prvú, Predchádzajúcu, Ďalšiu a Poslednú stránku v obyčajných odkazoch na stránke">
 <!ENTITY guessUpAndTopFromURL "Odhadnúť odkazy Nahor a Vrchol podľa URL stránky">
 <!ENTITY guessPrevAndNextFromURL "Odhadnúť odkazy na Ďalšiu a Poslednú stránku podľa numerických častí URL stránky">
