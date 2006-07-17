@@ -17,7 +17,7 @@ Translated from en-US version, which was by:
 <!ENTITY first.label "Primo">
 <!ENTITY first.tooltip "Prima pagina in sequenza">
 <!ENTITY prev.label "Precedente">
-<!ENTITY prev.tooltip "Pagina prederente">
+<!ENTITY prev.tooltip "Pagina precedente">
 <!ENTITY next.label "Successivo">
 <!ENTITY next.tooltip "Pagina successiva">
 <!ENTITY last.label "Ultimo">
