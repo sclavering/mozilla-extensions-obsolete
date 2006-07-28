@@ -216,7 +216,13 @@ function linkWidgetTabSelectedHandler(event) {
 function linkWidgetPageShowHandler(event) {
   const doc = event.originalTarget;
   // If docShell is null accessing .contentDocument throws an exception
-  if(gBrowser.docShell && doc == gBrowser.contentDocument) linkWidgetRefreshLinks();
+  if(!gBrowser.docShell || doc != gBrowser.contentDocument) return;
+  // DOMContentLoaded doesn't exist for images being shown on their own (and the load
+  // event isn't reliable) so we wait for the pageshow event corresponding to page load.
+  if((doc instanceof ImageDocument) && !event.persisted) {
+    linkWidgetGuessPrevNextLinksFromURL(doc, true, true);
+  }
+  linkWidgetRefreshLinks();
 }
 
 
