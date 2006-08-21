@@ -15,3 +15,4 @@ locale linkwidget ja-JP jar:linkwidget.jar!/lang/ja-JP/
 locale linkwidget nl-NL jar:linkwidget.jar!/lang/nl-NL/
 locale linkwidget sk-SK jar:linkwidget.jar!/lang/sk-SK/
 locale linkwidget pt-BR jar:linkwidget.jar!/lang/pt-BR/
+locale linkwidget zh-TW jar:linkwidget.jar!/lang/zh-TW/
