@@ -176,26 +176,23 @@ function linkWidgetPageHideHandler(event) {
 
 
 function linkWidgetPageLoadedHandler(event) {
-  var doc = event.originalTarget;
-  if(!linkWidgetPrefUseLinkGuessing) return;
-  if(!(doc instanceof HTMLDocument)) return;
-  const win = doc.defaultView;
-  if(win != win.top) return;
+  const doc = event.originalTarget, win = doc.defaultView;
+  if(win != win.top || doc.linkWidgetHasGuessedLinks) return;
 
-  if(doc.linkWidgetHasGuessedLinks) return;
   doc.linkWidgetHasGuessedLinks = true;
-
   const links = doc.linkWidgetLinks || (doc.linkWidgetLinks = {});
+  const isHTML = doc instanceof HTMLDocument && !(doc instanceof ImageDocument);
+  if(isHTML && !linkWidgetPrefUseLinkGuessing) return; 
 
-  if(linkWidgetPrefScanHyperlinks) linkWidgetScanPageForLinks(doc);
+  if(linkWidgetPrefScanHyperlinks && isHTML) linkWidgetScanPageForLinks(doc);
 
   const loc = doc.location, protocol = loc.protocol;
-  if(!/^(?:https|http|ftp)\:$/.test(protocol)) return;
+  if(!/^(?:https?|ftp)\:$/.test(protocol)) return;
 
-  if(linkWidgetPrefGuessPrevAndNextFromURL)
+  if(linkWidgetPrefGuessPrevAndNextFromURL || !isHTML)
     linkWidgetGuessPrevNextLinksFromURL(doc, !links.prev, !links.next);
 
-  if(!linkWidgetPrefGuessUpAndTopFromURL) return;
+  if(!linkWidgetPrefGuessUpAndTopFromURL && isHTML) return;
   if(!links.up) {
     var upUrl = linkWidgetGuessUp(loc);
     if(upUrl) linkWidgetAddLinkForPage(upUrl, null, null, null, doc, {up: true});
@@ -215,13 +212,10 @@ function linkWidgetTabSelectedHandler(event) {
 // xxx isn't this too keen to refresh?
 function linkWidgetPageShowHandler(event) {
   const doc = event.originalTarget;
+  // Link guessing for things with no DOMContentLoaded (e.g. ImageDocument)
+  if(!doc.linkWidgetHasGuessedLinks) linkWidgetPageLoadedHandler(event);
   // If docShell is null accessing .contentDocument throws an exception
   if(!gBrowser.docShell || doc != gBrowser.contentDocument) return;
-  // DOMContentLoaded doesn't exist for images being shown on their own (and the load
-  // event isn't reliable) so we wait for the pageshow event corresponding to page load.
-  if((doc instanceof ImageDocument) && !event.persisted) {
-    linkWidgetGuessPrevNextLinksFromURL(doc, true, true);
-  }
   linkWidgetRefreshLinks();
 }
 
@@ -598,7 +592,8 @@ function linkWidgetScanPageForLinks(doc) {
 const linkWidgetLinkTextPatterns = {
   // XXX some pages use << for first and < for prev, so we should handle things like that differently
   first: /^first\b|\bfirst$|^begin|\|<|\u00ab/i, // ? >\u007c| ?
-  prev: /^prev(?:ious)?\b|prev$|previous$|^back\b|\bback$|^<<?-?\s?$|\u00ab/i, // \u003c / = | <=
+  // pages often have many "back to foo" links, which shouldn't be seen as rel=prev
+  prev: /^prev(?:ious)?\b|prev$|previous$|^back\b(?! to\b)|\bback$|^<<?-?\s?$|\u00ab/i, // \u003c / = | <=
   next: /^next\b|\bcontinue\b|next$|^\s?-?>?>$/i, // |\u00bb$/i,
   last: /^last\b|\blast$|^end\b|>\|/i // ? >\u007c| ?
 };
