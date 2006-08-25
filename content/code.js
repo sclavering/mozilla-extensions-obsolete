@@ -357,24 +357,19 @@ function linkWidgetLoadPage(e) {
   linkWidgetLoadPageInCurrentBrowser(url, sourceURL);
 }
 
-// only works for linkType=top/up/first/prev/next/last (i.e. only for buttons)
-// used for keyboard shortcut handling
+// Used for keyboard shortcuts
 function linkWidgetGo(rel) {
-  if(!linkWidgetButtons[rel]) return;
-  const item = linkWidgetButtons[rel];
-  if(!item || !item.numLinks) return;
-  const url = item.linkURL;
-  const sourceURL = content.document.documentURI;
-  linkWidgetLoadPageInCurrentBrowser(url, sourceURL);
+  const links = content.document.linkWidgetLinks || {};
+  if(!links[rel]) return;
+  linkWidgetLoadPageInCurrentBrowser(links[rel][0].url);
 }
 
 function linkWidgetLoadPageInCurrentBrowser(url, sourceURL) {
+  if(!sourceURL) sourceURL = content.document.documentURI;
   urlSecurityCheck(url, sourceURL);
   gBrowser.loadURI(url);
   content.focus();
 }
-
-
 
 
 
