@@ -42,6 +42,20 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 const linkWidgetPrefPrefix = "extensions.linkwidget.";
 
+// Used in link-guessing. Populated from preferences with related names.
+const linkWidgetRegexps = {
+  "ignore_rels": null,
+  "guess_up_skip": null,
+  "first": null,
+  "prev": null,
+  "next": null,
+  "last": null,
+  "img_first": null,
+  "img_prev": null,
+  "img_next": null,
+  "img_last": null
+}
+
 // rels which should always use a submenu of the More menu, even for a single item
 const linkWidgetMenuRels = {}; // rel -> true map
 const _linkWidgetMenuRels = ["chapter", "section", "subsection", "bookmark", "alternate"];
@@ -120,10 +134,23 @@ function linkWidgetLoadPrefs() {
   linkWidgetPrefGuessPrevAndNextFromURL = branch.getBoolPref("guessPrevAndNextFromURL");
   linkWidgetPrefUseLinkGuessing = linkWidgetPrefScanHyperlinks
       || linkWidgetPrefGuessUpAndTopFromURL || linkWidgetPrefGuessPrevAndNextFromURL;
+  // Isn't retrieving unicode strings from the pref service fun?
+  const nsIStr = Components.interfaces.nsISupportsString;
+  for(var prefname in linkWidgetRegexps) {
+    var raw = branch.getComplexValue("regexp." + prefname, nsIStr).data;
+    // RegExpr throws an exception if the string isn't a valid regexp pattern
+    try {
+      linkWidgetRegexps[prefname] = new RegExp(raw, "i");
+    } catch(e) {
+      Components.utils.reportError(e);
+      // A regexp that can never match (since multiline flag not set)
+      linkWidgetRegexps[prefname] = /$ /;
+    }
+  }
 }
 
 
-var linkWidgetPrefObserver = {
+const linkWidgetPrefObserver = {
   observe: function(subject, topic, data) {
 //    dump("lwpref: subject="+subject.root+" topic="+topic+" data="+data+"\n");
     // there're only three of them
@@ -404,16 +431,6 @@ LinkWidgetLink.prototype = {
 };
 
 
-
-// Ignore whole links if their rel attribute matches this regexp.
-// "meta" is for FOAF - see mozdev bug 10027 and/or http://rdfweb.org/topic/Autodiscovery
-// "schema.foo" is used by Dublin Core and FOAF.
-// "icon" turns up as "shortcut icon" too, I think.
-// "stylesheet" is here because of "alternate stylesheet", which also needs ignoring
-// pingback, fontdef and p3pv are inherited from Mozilla. XXX could they be moved to standardiseRelType?
-const linkWidgetIgnoreRels =
-  /\b(?:stylesheet\b|icon\b|pingback\b|fontdef\b|p3pv|schema\.|meta\b)/i;
-
 // null values mean that rel should be ignored
 const linkWidgetRelConversions = {
   home: "top",
@@ -440,7 +457,7 @@ const linkWidgetRevToRel = {
 
 function linkWidgetGetLinkRels(relStr, revStr, mimetype, title) {
   // Ignore certain links
-  if(linkWidgetIgnoreRels.test(relStr)) return null;
+  if(linkWidgetRegexps.ignore_rels.test(relStr)) return null;
   // Ignore anything Firefox regards as an RSS/Atom-feed link
   if(relStr && /alternate/i.test(relStr)) {
     const type = mimetype.replace(/\s|;.*/g, "").toLowerCase();
@@ -489,7 +506,7 @@ function linkWidgetGetLanguageName(code) {
 
 // arg is an nsIDOMLocation, with protocol of http(s) or ftp
 function linkWidgetGuessUp(location) {
-    const ignoreRE = /(?:index|main)\.[\w.]+?$/i;
+    const ignoreRE = linkWidgetRegexps.guess_up_skip;
     const prefix = location.protocol + "//";
     var host = location.host, path = location.pathname, path0 = path, matches, tail;
     if(location.search && location.search!="?") return prefix + host + path;
@@ -584,39 +601,22 @@ function linkWidgetScanPageForLinks(doc) {
   }
 }
 
-const linkWidgetLinkTextPatterns = {
-  // XXX some pages use << for first and < for prev, so we should handle things like that differently
-  first: /^first\b|\bfirst$|^begin|\|<|\u00ab/i, // ? >\u007c| ?
-  // pages often have many "back to foo" links, which shouldn't be seen as rel=prev
-  prev: /^prev(?:ious)?\b|prev$|previous$|^back\b(?! to\b)|\bback$|^<<?-?\s?$|\u00ab/i, // \u003c / = | <=
-  next: /^next\b|\bcontinue\b|next$|^\s?-?>?>$/i, // |\u00bb$/i,
-  last: /^last\b|\blast$|^end\b|>\|/i // ? >\u007c| ?
-};
-
-// regexps for identifying links based on the src url of contained images
-const linkWidgetImgSrcPatterns = {
-  first: /first/i,
-  prev: /rev(?!iew)/i, // match [p]revious, but not [p]review
-  next: /ne?xt|fwd|forward/i,
-  last: /last/i
-};
 
 // link is an <a href> link
 function linkWidgetGuessLinkRel(link, txt) {
-  if(linkWidgetLinkTextPatterns.next.test(txt)) return "next";
-  if(linkWidgetLinkTextPatterns.prev.test(txt)) return "prev";
-  if(linkWidgetLinkTextPatterns.first.test(txt)) return "first";
-  if(linkWidgetLinkTextPatterns.last.test(txt)) return "last";
-  
+  if(linkWidgetRegexps.next.test(txt)) return "next";
+  if(linkWidgetRegexps.prev.test(txt)) return "prev";
+  if(linkWidgetRegexps.first.test(txt)) return "first";
+  if(linkWidgetRegexps.last.test(txt)) return "last";
   const imgs = link.getElementsByTagName("img"), num = imgs.length;
   for(var i = 0; i != num; ++i) {
     // guessing is more accurate on relative URLs, and .src is always absolute
     var src = imgs[i].getAttribute("src");
-    if(linkWidgetImgSrcPatterns.next.test(src)) return "next";
-    if(linkWidgetImgSrcPatterns.prev.test(src)) return "prev";
-    if(linkWidgetImgSrcPatterns.first.test(src)) return "first";
-    if(linkWidgetImgSrcPatterns.last.test(src)) return "last";
-  }  
+    if(linkWidgetRegexps.img_next.test(src)) return "next";
+    if(linkWidgetRegexps.img_prev.test(src)) return "prev";
+    if(linkWidgetRegexps.img_first.test(src)) return "first";
+    if(linkWidgetRegexps.img_last.test(src)) return "last";
+  }
   return null;
 }
 
