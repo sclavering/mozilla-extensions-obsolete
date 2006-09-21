@@ -78,7 +78,6 @@ const linkWidgetEventHandlers = {
   "pageshow": "linkWidgetPageShowHandler"
 };
 
-var linkWidgetPrefUseLinkGuessing = false;
 var linkWidgetPrefGuessUpAndTopFromURL = false;
 var linkWidgetPrefGuessPrevAndNextFromURL = false;
 var linkWidgetPrefScanHyperlinks = false;
@@ -132,8 +131,6 @@ function linkWidgetLoadPrefs() {
   linkWidgetPrefScanHyperlinks = branch.getBoolPref("scanHyperlinks");
   linkWidgetPrefGuessUpAndTopFromURL = branch.getBoolPref("guessUpAndTopFromURL");
   linkWidgetPrefGuessPrevAndNextFromURL = branch.getBoolPref("guessPrevAndNextFromURL");
-  linkWidgetPrefUseLinkGuessing = linkWidgetPrefScanHyperlinks
-      || linkWidgetPrefGuessUpAndTopFromURL || linkWidgetPrefGuessPrevAndNextFromURL;
   // Isn't retrieving unicode strings from the pref service fun?
   const nsIStr = Components.interfaces.nsISupportsString;
   for(var prefname in linkWidgetRegexps) {
@@ -209,12 +206,11 @@ function linkWidgetPageLoadedHandler(event) {
   doc.linkWidgetHasGuessedLinks = true;
   const links = doc.linkWidgetLinks || (doc.linkWidgetLinks = {});
   const isHTML = doc instanceof HTMLDocument && !(doc instanceof ImageDocument);
-  if(isHTML && !linkWidgetPrefUseLinkGuessing) return; 
 
   if(linkWidgetPrefScanHyperlinks && isHTML) linkWidgetScanPageForLinks(doc);
 
   const loc = doc.location, protocol = loc.protocol;
-  if(!/^(?:https?|ftp)\:$/.test(protocol)) return;
+  if(!/^(?:https?|ftp|file)\:$/.test(protocol)) return;
 
   if(linkWidgetPrefGuessPrevAndNextFromURL || !isHTML)
     linkWidgetGuessPrevNextLinksFromURL(doc, !links.prev, !links.next);
@@ -557,6 +553,8 @@ function linkWidgetGuessPrevNextLinksFromURL(doc, guessPrev, guessNext) {
     for(e = url.length; e > min && !isDigit(url[e-1]); --e);
     if(e==min) return;
     for(s = e - 1; s > min && isDigit(url[s-1]); --s);
+    // avoid guessing "foo%21bar" as next from "foo%20bar" (i.e. "foo bar")
+    if(s && url[s-1] == "%") return;
 
     var old = url.substring(s,e);
     var num = parseInt(old, 10); // force base 10 because number could start with zeros
