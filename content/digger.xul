@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://digger/locale/">
+
+<overlay id="digger" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript" src="digger.js"/>
+
+<toolbarbutton id="go-button" context="digger-menu"/>
+<toolbarbutton id="goup-button" context="digger-menu"/>
+<!-- overlay the icon in the URL bar -->
+<deck id="page-proxy-deck" context="digger-menu"/>
+
+<popupset id="mainPopupSet">
+  <popup id="digger-menu"
+      oncommand="diggerLoadURL(event, this, false);"
+      onclick="if(event.button == 1) diggerLoadURL(event, this, true);"
+      onpopupshowing="return diggerBuildGoMenu(this);"
+      />
+</popupset>
+
+<popup id="contentAreaContextMenu">
+  <menu id="context-digger" label="&digger.label;" insertafter="context-sep-stop">
+    <menupopup id="digger-menu"
+        oncommand="diggerLoadURL(event, this, false);"
+        onclick="if(event.button == 1) diggerLoadURL(event, this, true);"
+        onpopupshowing="return diggerBuildContextMenu(this);"
+        />
+  </menu>
+</popup>
+
+</overlay>

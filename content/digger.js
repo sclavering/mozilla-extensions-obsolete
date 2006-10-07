@@ -1,21 +1,16 @@
-<?xml version="1.0"?>
+function diggerInit(ev) {
+  removeEventListener("load", diggerInit, false);
+  const cm = document.getElementById("contentAreaContextMenu");
+  cm.addEventListener("popupshowing", diggerShowContextSubmenu, false);
+}
+addEventListener("load", diggerInit, false);
 
-<!DOCTYPE overlay>
 
-<overlay id="digger" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+function diggerShowContextSubmenu(ev) {
+  const cm = gContextMenu;
+  cm.showItem("context-digger", cm.onLink || !(cm.isTextSelected || cm.onImage || cm.onTextInput));
+}
 
-<toolbarbutton id="go-button" context="digger-menu"/>
-<toolbarbutton id="goup-button" context="digger-menu"/>
-
-<popupset id="mainPopupSet">
-  <popup id="digger-menu"
-      oncommand="diggerLoadURL(event, this, false);"
-      onclick="if(event.button==1) diggerLoadURL(event, this, true);"
-      onpopupshowing="return diggerBuildMenu(this);"
-      />
-</popupset>
-
-<script type="application/x-javascript"><![CDATA[
 
 function diggerLoadURL(e, popup, isMiddleClick) {
   var url = e.target.getAttribute("label");
@@ -23,14 +18,30 @@ function diggerLoadURL(e, popup, isMiddleClick) {
   if(isMiddleClick) popup.hidePopup();
 }
 
-function diggerBuildMenu(menu) {
+
+function diggerBuildGoMenu(menu) {
   var url = gURLBar.value || content.location.href;
   if(!url || url=="about:blank") return false;
+  return diggerFillMenu(url, menu, false);
+}
 
+
+function diggerBuildContextMenu(menu) {
+  const cm = gContextMenu;
+  const url = cm.onLink ? cm.linkURL : content.document.location.href;
+  if(!url) return;
+  diggerFillMenu(url, menu, true);
+}
+
+
+function diggerFillMenu(url, menu, show_original) {
+  if(menu.url == url) return true;
+  menu.url = url;
   // clear menu
   while(menu.hasChildNodes()) menu.removeChild(menu.lastChild);
 
-  var needSeparator = false, haveItems = false;
+  var needSeparator = false; // set true to insert a separator between groups
+  var haveItems = false;     // true iff a link has been inserted 
 
   function addItem(label) {
     if(needSeparator && haveItems)
@@ -40,6 +51,8 @@ function diggerBuildMenu(menu) {
     menu.appendChild(menuitem);
     haveItems = true;
   }
+
+  if(show_original) addItem(url);
 
   // chop off query string
   var i = url.lastIndexOf("?");
@@ -62,7 +75,7 @@ function diggerBuildMenu(menu) {
   if(path.length) {
     path.pop();
     while(path.length) {
-      addItem(pre+path.join("/")+"/");
+      addItem(pre + path.join("/") + "/");
       path.pop();
     }
     addItem(pre);
@@ -70,26 +83,20 @@ function diggerBuildMenu(menu) {
   needSeparator = true;
 
   // ftp equiv. to http and vice versa
-  if(protocol=="http://") {
-    addItem("ftp://"+host.replace(/^www\./, "ftp.")+"/");
-  } else if(protocol=="ftp://") {
-    addItem("http://"+host.replace(/^ftp\./, "www.")+"/");
+  if(protocol == "http://") {
+    addItem("ftp://" + host.replace(/^www\./, "ftp.") + "/");
+  } else if(protocol == "ftp://") {
+    addItem("http://" + host.replace(/^ftp\./, "www.") + "/");
   }
   needSeparator = true;
 
   // dig through subdomains
   bits = host.split(".");
-  if(bits.length > 2) {
-    while(bits.length > 2) {
-      bits.shift();
-      addItem(protocol+bits.join(".")+"/");
-    }
+  while(bits.length > 2) {
+    bits.shift();
+    addItem(protocol + bits.join(".") + "/");
   }
 
   // we might not have put anything on the menu
   return haveItems;
 }
-
-]]></script>
-
-</overlay>
