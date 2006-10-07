@@ -11,6 +11,12 @@
 <!-- overlay the icon in the URL bar -->
 <deck id="page-proxy-deck" context="digger-menu"/>
 
+<!-- Not the "right" way to do things :-p -->
+<window id="main-window"
+    digger-google="&google-cache;"
+    digger-archiveorg="&archive.org-cache;"
+    />
+
 <popupset id="mainPopupSet">
   <popup id="digger-menu"
       oncommand="diggerLoadURL(event);"
@@ -21,7 +27,7 @@
 </popupset>
 
 <popup id="contentAreaContextMenu">
-  <menu id="context-digger" label="&digger.label;" insertafter="context-sep-stop">
+  <menu id="context-digger" label="&dig-menu;" insertafter="context-sep-stop">
     <menupopup id="digger-menu"
         oncommand="diggerLoadURL(event);"
         onclick="diggerMiddleClick(event, this, true);"

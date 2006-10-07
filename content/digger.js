@@ -43,17 +43,18 @@ function diggerBuildContextMenu(menu) {
 function diggerFillMenu(url, menu, show_original) {
   if(menu.url == url) return menu.hasChildNodes();
   menu.url = url;
+  var originalUrl = url;
   // clear menu
   while(menu.hasChildNodes()) menu.removeChild(menu.lastChild);
 
   var needSeparator = false; // set true to insert a separator between groups
   var haveItems = false;     // true iff a link has been inserted
 
-  function addItem(label) {
+  function addItem(label, url) {
     if(needSeparator && haveItems)
       menu.appendChild(document.createElement("menuseparator")), needSeparator = false;
     var menuitem = document.createElement("menuitem");
-    menuitem.digger_url = label;
+    menuitem.digger_url = url || label;
     menuitem.setAttribute("label", label);
     menu.appendChild(menuitem);
     haveItems = true;
@@ -89,19 +90,20 @@ function diggerFillMenu(url, menu, show_original) {
   }
   needSeparator = true;
 
-  // ftp equiv. to http and vice versa
-  if(protocol == "http://") {
-    addItem("ftp://" + host.replace(/^www\./, "ftp.") + "/");
-  } else if(protocol == "ftp://") {
-    addItem("http://" + host.replace(/^ftp\./, "www.") + "/");
-  }
-  needSeparator = true;
-
   // dig through subdomains
   bits = host.split(".");
   while(bits.length > 2) {
     bits.shift();
     addItem(protocol + bits.join(".") + "/");
+  }
+
+  // Google cache and archive.org
+  needSeparator = true;
+  const items = ["google", "archiveorg"];
+  const urls = ["http://google.com/search?q=cache:", "http://web.archive.org/web/*/"];
+  for(var i = 0; i != items.length; ++i) {
+    var label = document.documentElement.getAttribute("digger-" + items[i]);
+    addItem(label, urls[i] + originalUrl);
   }
 
   // we might not have put anything on the menu

@@ -1,1 +1,3 @@
-<!ENTITY digger.label "Dig">
+<!ENTITY dig-menu "Dig">
+<!ENTITY google-cache "Find page in Google's cache">
+<!ENTITY archive.org-cache "Find page in the Internet Archive">
