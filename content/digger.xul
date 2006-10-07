@@ -13,17 +13,18 @@
 
 <popupset id="mainPopupSet">
   <popup id="digger-menu"
-      oncommand="diggerLoadURL(event, this, false);"
-      onclick="if(event.button == 1) diggerLoadURL(event, this, true);"
+      oncommand="diggerLoadURL(event);"
+      onclick="diggerMiddleClick(event, this);"
       onpopupshowing="return diggerBuildGoMenu(this);"
+      position="after_start"
       />
 </popupset>
 
 <popup id="contentAreaContextMenu">
   <menu id="context-digger" label="&digger.label;" insertafter="context-sep-stop">
     <menupopup id="digger-menu"
-        oncommand="diggerLoadURL(event, this, false);"
-        onclick="if(event.button == 1) diggerLoadURL(event, this, true);"
+        oncommand="diggerLoadURL(event);"
+        onclick="diggerMiddleClick(event, this, true);"
         onpopupshowing="return diggerBuildContextMenu(this);"
         />
   </menu>

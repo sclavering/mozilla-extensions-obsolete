@@ -12,10 +12,16 @@ function diggerShowContextSubmenu(ev) {
 }
 
 
-function diggerLoadURL(e, popup, isMiddleClick) {
-  var url = e.target.getAttribute("label");
-  openUILink(url, e);
-  if(isMiddleClick) popup.hidePopup();
+function diggerLoadURL(event) {
+  openUILink(event.target.digger_url, event);
+}
+
+
+function diggerMiddleClick(event, popup, closeParent) {
+  if(event.button != 1) return;
+  diggerLoadURL(event);
+  popup.hidePopup();
+  if(closeParent) popup.parentNode.parentNode.hidePopup();
 }
 
 
@@ -35,18 +41,19 @@ function diggerBuildContextMenu(menu) {
 
 
 function diggerFillMenu(url, menu, show_original) {
-  if(menu.url == url) return true;
+  if(menu.url == url) return menu.hasChildNodes();
   menu.url = url;
   // clear menu
   while(menu.hasChildNodes()) menu.removeChild(menu.lastChild);
 
   var needSeparator = false; // set true to insert a separator between groups
-  var haveItems = false;     // true iff a link has been inserted 
+  var haveItems = false;     // true iff a link has been inserted
 
   function addItem(label) {
     if(needSeparator && haveItems)
       menu.appendChild(document.createElement("menuseparator")), needSeparator = false;
     var menuitem = document.createElement("menuitem");
+    menuitem.digger_url = label;
     menuitem.setAttribute("label", label);
     menu.appendChild(menuitem);
     haveItems = true;
