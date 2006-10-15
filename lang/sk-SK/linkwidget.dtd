@@ -11,8 +11,8 @@ Author:
 <!ENTITY up.tooltip "O úroveň vyššie">
 <!ENTITY first.label "Prvá">
 <!ENTITY first.tooltip "Prvá stránka v postupnosti">
-<!ENTITY prev.label "Predošlá">
-<!ENTITY prev.tooltip "Predošlá stránka v postupnosti">
+<!ENTITY prev.label "Predchádzajúca">
+<!ENTITY prev.tooltip "Predchádzajúca stránka v postupnosti">
 <!ENTITY next.label "Ďalšia">
 <!ENTITY next.tooltip "Ďalšia stránka v postupnosti">
 <!ENTITY last.label "Posledná">

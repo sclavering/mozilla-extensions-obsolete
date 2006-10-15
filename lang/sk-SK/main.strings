@@ -4,14 +4,14 @@
 top   = Vrchol
 up    = Nahor
 first = Prvá
-prev  = Predošlá
+prev  = Predchádzajúca
 next  = Ďalšia
 last  = Posledná
 
 toc        = Obsah
 chapter    = Kapitoly
-section    = Sections
-subsection = Sekcie
+section    = Sekcie
+subsection = Podsekcie
 appendix   = Dodatok
 2appendix  = Dodatky
 glossary   = Glosár
@@ -19,7 +19,7 @@ glossary   = Glosár
 index      = Register
 2index     = Registre
 
-help   = Pomoc
+help   = Pomocník
 search = Hľadanie
 author = Autori
 copyright = Copyright
