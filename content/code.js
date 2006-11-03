@@ -83,8 +83,6 @@ var linkWidgetPrefGuessPrevAndNextFromURL = false;
 var linkWidgetPrefScanHyperlinks = false;
 var linkWidgetStrings = "chrome://linkwidget/locale/main.strings";
 
-var linkWidgetStatusbar = null; // Firefox's usual statusbar
-
 var linkWidgetButtons = {}; // rel -> <toolbarbutton> map
 var linkWidgetViews = {};   // rel -> view map, the views typically being a menu+menuitem
 var linkWidgetMoreMenu = null;
@@ -93,7 +91,6 @@ var linkWidgetMorePopup = null;
 
 function linkWidgetStartup() {
   window.removeEventListener("load", linkWidgetStartup, false);
-  linkWidgetStatusbar = document.getElementById("statusbar-display");
   linkWidgetStrings = linkWidgetLoadStringBundle(linkWidgetStrings);
   for(var i in _linkWidgetMenuOrdering) linkWidgetMenuOrdering[_linkWidgetMenuOrdering[i]] = (i-0) + 1;
   for each(i in _linkWidgetMenuRels) linkWidgetMenuRels[i] = true;
@@ -317,27 +314,14 @@ function linkWidgetToolboxCustomizeDone(somethingChanged) {
 }
 
 
-
-// Code to show urls in the status bar (setting statustext attribute does zilch).
-// Rather complex because it worries about restoring the old text, and only doing
-// so if something else hasn't modified the text in the meantime.
-
-var linkWidgetOldStatusbarText = null;
-
 function linkWidgetMouseEnter(e) {
   const t = e.target;
-  const href = t.linkURL;
-  if(!href) return;
-  linkWidgetOldStatusbarText = linkWidgetStatusbar.getAttribute("label");
-  linkWidgetStatusbar.setAttribute("label", href);
+  XULBrowserWindow.setOverLink(t.linkURL || "", null);
 }
 
 function linkWidgetMouseExit(e) {
   const t = e.target;
-  const href = t.linkURL;
-  const txt = linkWidgetStatusbar.getAttribute("label");
-  if(txt==href) linkWidgetStatusbar.setAttribute("label", linkWidgetOldStatusbarText);
-  linkWidgetOldStatusbarText = null;
+  XULBrowserWindow.setOverLink("", null);
 }
 
 
@@ -456,6 +440,7 @@ function linkWidgetGetLinkRels(relStr, revStr, mimetype, title) {
   if(linkWidgetRegexps.ignore_rels.test(relStr)) return null;
   // Ignore anything Firefox regards as an RSS/Atom-feed link
   if(relStr && /alternate/i.test(relStr)) {
+    // xxx have seen JS errors where "mimetype has no properties" (i.e., is null)
     const type = mimetype.replace(/\s|;.*/g, "").toLowerCase();
     const feedtype = /^application\/(?:rss|atom)\+xml$/;
     const xmltype = /^(?:application|text)\/(?:rdf\+)?xml$/;
@@ -583,8 +568,7 @@ function linkWidgetScanPageForLinks(doc) {
     if(!href || href.charAt(0)=='#') continue; // ignore internal links
 
     var txt = link.innerHTML
-        .replace(/<[^>]+alt="([^"]*)"[^>]*>/ig, " $1 ") // keep alt attrs
-        .replace(/<[^>]+alt='([^']*)'[^>]*>/ig, " $1 ")
+        .replace(/<[^>]+alt=(["'])([^\1]*)\1[^>]*>/ig, " $2 ") // keep alt attrs
         .replace(/<[^>]*>/g, "") // drop tags + comments
         .replace("&lt;", "<")
         .replace("&gt;", ">")
