@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-
-<!-- registering stylesheets via contents.rdf does not work reliably,
-     so we use this otherwise-pointless overlay -->
-
-<?xml-stylesheet href="chrome://tabx/content/tabx.css" type="text/css"?>
-<overlay id="tabx"/>

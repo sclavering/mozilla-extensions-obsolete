@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript">
+<![CDATA[
+// Firefox 2.0.0.0 has a browser.tabs.closeButtons pref that if set to 1 is
+// supposed to always show close buttons on every tab, except that the original
+// version of this function decides not to do so if the tabs are overflowing
+// the tab strip.  Since the user has installed Tab X, let's assume they really
+// really want the buttons there all the time, and that they probably don't
+// care about the value of the pref.
+function tabx_tabs_adjustTabstrip() {
+  this.setAttribute("closebuttons", "alltabs");
+}
+
+function tabx_onload(event) {
+  removeEventListener("load", tabx_onload, false);
+  const tabs = gBrowser.mTabContainer; // the <xul:tabs> in <tabbrowser>'s XBL
+  tabs.adjustTabstrip = tabx_tabs_adjustTabstrip;
+  tabs.adjustTabstrip();
+}
+
+addEventListener("load", tabx_onload, false);
+]]>
+</script>
+</overlay>

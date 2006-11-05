@@ -1,3 +1,0 @@
-#!/bin/sh
-zip -ur chrome/tabx.jar content -x '*CVS*'
-zip -ur tabx.xpi chrome install.rdf -x '*CVS*'
