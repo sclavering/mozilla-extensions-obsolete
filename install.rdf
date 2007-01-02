@@ -6,10 +6,9 @@
 
 <id>goup@clav.mozdev.org</id>
 <name>Go Up</name>
-<version>1.0</version>
+<version>3.0</version>
 <description>Easily navigate 'up' a level in a web site</description>
 <homepageURL>http://clav.mozdev.org/</homepageURL>
-<iconURL>chrome://goup/content/icon.png</iconURL>
 
 <creator>Stephen Clavering</creator>
 <contributor>Andrea (Italian translator)</contributor>
@@ -17,8 +16,8 @@
 <targetApplication>
   <r:Description>
     <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
-    <minVersion>1.4.1</minVersion>
-    <maxVersion>1.5.0.*</maxVersion>
+    <minVersion>2.0</minVersion>
+    <maxVersion>3.0.*</maxVersion>
   </r:Description>
 </targetApplication>
 

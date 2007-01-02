@@ -1,0 +1,8 @@
+content goup jar:goup.zip!/content/ xpcnativewrappers=yes
+overlay chrome://browser/content/browser.xul chrome://goup/content/goup.xul
+
+skin goup classic/1.0 jar:goup.zip!/theme/
+style chrome://global/content/customizeToolbar.xul chrome://goup/skin/goup.css
+
+locale goup en jar:goup.zip!/lang/en/
+locale goup it jar:goup.zip!/lang/it/

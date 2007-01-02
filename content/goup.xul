@@ -20,21 +20,25 @@
       oncommand="goup_up(null);"/>
 </keyset>
 
-<script type="application/x-javascript"><![CDATA[
+<script type="text/javascript"><![CDATA[
+
+const goup_protocol_regex = /^ftp|http|https|file$/;
 
 function goup_top() {
   const loc = content.document.location, pro = loc.protocol;
-  if(/^ftp|http|https$/.test(pro)) openUILink(pro + "//" + loc.host, null);
+  if(goup_protocol_regex.test(pro)) openUILink(pro + "//" + loc.host, null);
 } 
 
 function goup_up(e) {
-  const loc = content.document.location, pro = loc.protocol;
-  if(!/^ftp|http|https$/.test(pro)) return;
-  const up = goup_getUpUrl(loc.href);
+  const loc = content.document.location;
+  if(!goup_protocol_regex.test(loc.protocol)) return;
+  const up = goup_getUpUrl(loc);
   if(up) openUILink(up, e);
 }
 
-function goup_getUpUrl(url) {
+function goup_getUpUrl(location) {
+    if(location.hash) return location.href.substr(0, location.href.length - location.hash.length);
+    var url = location.href;
     var matches, origUrl = url;
     // trim filename (this makes subdriectory digging easier)
     matches = url.match(/(^.*\/)(.*)/);
