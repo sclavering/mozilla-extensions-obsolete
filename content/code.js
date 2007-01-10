@@ -82,7 +82,6 @@ var linkWidgetPrefGuessUpAndTopFromURL = false;
 var linkWidgetPrefGuessPrevAndNextFromURL = false;
 var linkWidgetPrefScanHyperlinks = false;
 var linkWidgetStrings = "chrome://linkwidget/locale/main.strings";
-
 var linkWidgetButtons = {}; // rel -> <toolbarbutton> map
 var linkWidgetViews = {};   // rel -> view map, the views typically being a menu+menuitem
 var linkWidgetMoreMenu = null;
@@ -364,7 +363,6 @@ function linkWidgetLoadPage(e) {
   linkWidgetLoadPageInCurrentBrowser(url, sourceURL);
 }
 
-// Used for keyboard shortcuts
 function linkWidgetGo(rel) {
   const links = content.document.linkWidgetLinks || {};
   if(!links[rel]) return;
@@ -374,10 +372,9 @@ function linkWidgetGo(rel) {
 function linkWidgetLoadPageInCurrentBrowser(url, sourceURL) {
   if(!sourceURL) sourceURL = content.document.documentURI;
   urlSecurityCheck(url, sourceURL);
-  gBrowser.loadURI(url);
+  gBrowser.loadURI(url, sourceURL);
   content.focus();
 }
-
 
 
 function LinkWidgetLink(url, title, lang, media) {
@@ -568,7 +565,7 @@ function linkWidgetScanPageForLinks(doc) {
     if(!href || href.charAt(0)=='#') continue; // ignore internal links
 
     var txt = link.innerHTML
-        .replace(/<[^>]+alt=(["'])([^\1]*)\1[^>]*>/ig, " $2 ") // keep alt attrs
+        .replace(/<[^>]+alt=(["'])(.*?)\1[^>]*>/ig, " $2 ") // keep alt attrs
         .replace(/<[^>]*>/g, "") // drop tags + comments
         .replace("&lt;", "<")
         .replace("&gt;", ">")
