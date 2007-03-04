@@ -360,7 +360,7 @@ function linkWidgetLoadPage(e) {
   // handleLinkClick deals with modified left-clicks, and middle-clicks
   const didHandleClick = handleLinkClick(fakeEvent, url, null);
   if(didHandleClick || button != 0) return;
-  linkWidgetLoadPageInCurrentBrowser(url, sourceURL);
+  linkWidgetLoadPageInCurrentBrowser(url);
 }
 
 function linkWidgetGo(rel) {
@@ -369,10 +369,11 @@ function linkWidgetGo(rel) {
   linkWidgetLoadPageInCurrentBrowser(links[rel][0].url);
 }
 
-function linkWidgetLoadPageInCurrentBrowser(url, sourceURL) {
-  if(!sourceURL) sourceURL = content.document.documentURI;
-  urlSecurityCheck(url, sourceURL);
-  gBrowser.loadURI(url, sourceURL);
+function linkWidgetLoadPageInCurrentBrowser(url) {
+  // urlSecurityCheck wanted a URL-as-string for Fx 2.0, but an nsIPrincipal on trunk
+  if(gBrowser.contentPrincipal) urlSecurityCheck(url, gBrowser.contentPrincipal);
+  else urlSecurityCheck(url, content.document.documentURI);
+  gBrowser.loadURI(url);
   content.focus();
 }
 
