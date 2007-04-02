@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!-- kill the spare separator -->
+<menuseparator id="endHistorySeparator" hidden="true"/>
+
+<!-- override event handlers to not create history menu items -->
+<script type="text/javascript"><![CDATA[
+// Based on (and replaces) the browser.js version, but without the code to add
+// ten menu items for the most-recently visited pages across all tabs.
+function updateGoMenu(aEvent, goMenu) {
+  if (aEvent.target != aEvent.currentTarget)
+    return;
+  HistoryMenu.toggleRecentlyClosedTabs();
+}
+// Replaces the browser.js version, which only cleaned up the 10 menu items.
+function onGoMenuHidden() {
+}
+]]>
+</script>
+
+</overlay>
