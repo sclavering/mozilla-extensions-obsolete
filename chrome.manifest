@@ -1,0 +1,3 @@
+overlay chrome://browser/content/browser.xul chrome://locktab/content/locktab.xul
+content locktab jar:locktab.zip!/code/
+locale locktab en jar:locktab.zip!/lang/en/

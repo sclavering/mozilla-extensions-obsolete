@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://locktab/content/locktab.css" type="text/css"?>
+
+<overlay id="locktab-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript"><![CDATA[
+
+var locktab_original_contentAreaClick = null;
+
+const locktab = {
+  _initialised: false,
+  // The Reload Tab and Close Tab menuitems, at present
+  _menuitems_to_disable: [],
+  // the Lock Tab menuitem
+  _menuitem: null,
+
+  // called as an event handler, so this!=locktab
+  init: function() {
+    dump("hello there! from locktab\n");
+    if(locktab._initialised) return;
+    locktab._initialised = true;
+    // hook functions
+    gBrowser._pre_locktab_removeTab = gBrowser.removeTab;
+    gBrowser.removeTab = locktab._tabbrowser_removeTab;
+    locktab_original_contentAreaClick = contentAreaClick;
+    contentAreaClick = locktab._contentAreaClick;
+
+//     const ss = Components.classes["@mozilla.org/browser/sessionstore;1"].getService(Components.interfaces.nsISessionStore);
+//     ss.persistTabAttribute('_locktab_isLocked');
+
+    // create and add context menu item
+    const mi = locktab._menuitem = document.createElement("menuitem");
+    mi.setAttribute("type", "checkbox");
+    mi.setAttribute("label", "Lock Tab");
+    mi.setAttribute("oncommand", "locktab.toggleTabLock();");
+    const ms = document.createElement("menuseparator");
+    const menupopup = document.getElementById('content').mStrip.childNodes[1];
+    menupopup.appendChild(ms);
+    menupopup.appendChild(mi);
+
+    // stuff to get context menu updated properly
+    menupopup.addEventListener("popupshowing", locktab.updateLockTabMenuItem, false);
+    const items = menupopup.childNodes, to_disable = locktab._menuitems_to_disable;
+    for(var i = 0; i != items.length; ++i) {
+      var item = items[i], oncmd = item.getAttribute("oncommand");
+      if(oncmd && /\bremoveTab\b|\breloadTab\b/.test(oncmd)) to_disable.push(item);
+    }
+  },
+
+  // called as an event handler, so this!=locktab
+  updateLockTabMenuItem: function(event) {
+    const tab = document.popupNode;
+    dump("updateLockTabMenuItem: tab: "+tab+" "+tab.localName+"\n");
+    const isLocked = locktab.tabIsLocked(tab);
+    var mi = locktab._menuitem;
+    mi.setAttribute("checked", isLocked);
+    for each(mi in locktab._menuitems_to_disable) mi.setAttribute("disabled", isLocked);
+  },
+
+  toggleTabLock: function() {
+    const tab = document.popupNode;
+    dump("toggleTabLock: tab: "+tab+" "+tab.localName+"\n");
+    if(this.tabIsLocked(tab)) this._unlockTab(tab);
+    else this._lockTab(tab);
+  },
+
+  tabIsLocked: function(tab) {
+    dump("tabIsLocked: tab: "+tab+" "+tab.localName+"\n");
+    return tab.getAttribute("_locktab_isLocked") == "true";
+  },
+
+  _lockTab: function(tab) {
+    const browser = gBrowser.getBrowserForTab(tab);
+    tab.setAttribute("_locktab_isLocked", "true");
+    browser._lockedtab_webNavigation_wrapper =
+      new locktab_FakeWebNavigation(browser.webNavigation);
+    browser.__defineGetter__("webNavigation", this._lockedTab_browser_webNavigation_getter);
+  },
+
+  _unlockTab: function(tab) {
+    const browser = gBrowser.getBrowserForTab(tab);
+    tab.removeAttribute("_locktab_isLocked");
+    browser._lockedtab_webNavigation_wrapper = null;
+    browser.__defineGetter__("webNavigation", this._default_browser_webNavigation_getter);
+  },
+
+  // copy of the standard <xul:browser>'s webNavigation <xbl:property>'s onget=
+  _default_browser_webNavigation_getter: function() {
+    return this.docShell.QueryInterface(Components.interfaces.nsIWebNavigation);
+  },
+
+  // This is a replacement webNavigation getter for <browser>s for locked tabs.
+  _lockedTab_browser_webNavigation_getter: function() {
+//     alert("I am the walrus!");
+    return this._lockedtab_webNavigation_wrapper;
+  },
+
+  // a replacement for <xul:tabbrowser>'s removeTab method
+  _tabbrowser_removeTab: function(aTab) {
+    if(aTab.localName != "tab") aTab = this.mCurrentTab; // to match tabbrowser.xml
+    if(aTab.getAttribute("_locktab_isLocked") == "true") return;
+    this._pre_locktab_removeTab(aTab);
+  },
+
+  // A replacement/wrapper for the global contentAreaClick function.
+  // contentAreaClick is called by the tabbrowser's onclick attribute.  If it
+  // returns true, some internal mechanism will handle triggering a page load
+  // when clicking a link, and returning false prevents this.
+  _contentAreaClick: function(event, fieldNormalClicks) {
+    const rv = locktab_original_contentAreaClick(event, fieldNormalClicks);
+    return !locktab.tabIsLocked(gBrowser.mCurrentTab) && rv;
+  }
+}
+
+
+function locktab_unexpected() { throw Components.results.NS_ERROR_UNEXPECTED; };
+function locktab_notimpl() { throw Components.results.NS_ERROR_NOT_IMPLEMENTED; };
+
+
+// We want to prevent links (or the back/fwd buttons, etc.) from replacing the
+// content of a locked tab.  The Firefox UI code take various different routes
+// for such actions, but eventually calls a method on the .webNavigation field
+// of a <browser>.  So we replace that field with an instance of the following:
+function locktab_FakeWebNavigation(realWebNav) {
+  this._realWebNav = realWebNav;
+}
+locktab_FakeWebNavigation.prototype = {
+  QueryInterface: function(iid) {
+    if(iid == Components.interfaces.nsIWebNavigation) return this;
+    if(iid == Components.interfaces.nsISHistory) return this;
+    return null;
+  },
+
+  // === nsIWebNavigation stuff =================
+
+  // should we proxy these instead?
+  canGoBack: false,
+  canGoForward: false,
+  // maybe these should silently fail?
+  goBack: locktab_unexpected,
+  goForward: locktab_unexpected,
+  gotoIndex: locktab_unexpected,
+  // do nothing for any of these and blindly hope it doesn't break stuff
+  // xxx would be nice to force loadURI/reload into a new tab
+  loadURI: function() { alert("meese!") },
+  reload: function() {},// alert("hello!")},
+  stop: function() {},
+  // proxy some attributes that are likely to matter
+  get document() { return this._realWebNav.document; },
+  get currentURI() { return this._realWebNav.currentURI; },
+  get referringURI() { return this._realWebNav.referringURI; },
+  get sessionHistory() { return this.QueryInterface(Components.interfaces.nsISHistory); },
+  set sessionHistory(val) { return this._realWebNav.sessionHistory = val; },
+
+  // === nsISHistory stuff ======================
+
+  get count() { return 1; },
+  get index() { return 0; },
+  get count() { return 1; },
+  set count(val) { return 1; },
+  getEntryAtIndex: locktab_notimpl,
+  PurgeHistory: locktab_notimpl,
+  addSHistoryListener: locktab_notimpl,
+  removeSHistoryListener: locktab_notimpl,
+  get SHistoryEnumerator() { locktab_notimpl(); }
+}
+
+window.addEventListener("load", locktab.init, false);
+
+]]></script>
+
+</overlay>
+
