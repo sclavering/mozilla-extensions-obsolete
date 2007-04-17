@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://proxypicker/locale/proxypicker.dtd">
+
+<overlay id="proxypicker" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<toolbarpalette id="BrowserToolbarPalette">
+  <toolbaritem id="proxypicker-toolbaritem" title="&toolbaritem-title;" align="center">
+    <menulist id="proxypicker-menulist" tooltiptext="&menulist-tooltip;"
+              oncommand="alert('hello')">
+      <menupopup id="proxypicker-popup">
+        <menuitem id="proxypicker-none" label="&no-proxy-menuitem;"/>
+        <menuitem id="proxypicker-auto" label="&auto-proxy-menuitem;"/>
+        <menuseparator id="proxypicker-sep1"/>
+        <menuseparator id="proxypicker-sep2"/>
+        <menuitem id="proxypicker-manage" label="&manage-proxies-menuitem;"/>
+      </menupopup>
+    </menulist>
+  </toolbaritem>
+</toolbarpalette>
+
+<script type="application/x-javascript" src="proxypicker.js"/>
+
+</overlay>

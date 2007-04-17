@@ -1,0 +1,10 @@
+@import "chrome://global/skin/";
+
+row {
+  -moz-box-align: center;
+  margin-left: 23px; /* as for formatting.css's .indent style */
+}
+
+row > label {
+  text-align: right;
+}
