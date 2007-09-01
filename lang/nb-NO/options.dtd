@@ -1,0 +1,15 @@
+<!--
+Licence: MPL 1.1/GPL 2.0/LGPL 2.1
+
+Translated by:
+  Einar Ryeng <einarr@pvv.ntnu.no>
+-->
+
+<!ENTITY title "Innstilling av Link Widgets">
+
+<!ENTITY linkGuessing "Lenkegjetting">
+<!ENTITY linkGuessingDescription "«Link Widgets» kan gjette lenker for mange sider som ikke gir dem.">
+
+<!ENTITY scanHyperlinks "Søk gjennom lenker på siden for å finne sannsynlige lenker til første, forrige, neste og siste side.">
+<!ENTITY guessUpAndTopFromURL "Gjett på lenkene til siden over og toppsiden basert på URL-en til siden.">
+<!ENTITY guessPrevAndNextFromURL "Gjett på lenkene til forrige og neste side basert på tall i URL-en til siden.">
