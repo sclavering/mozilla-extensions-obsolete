@@ -352,10 +352,9 @@ function linkWidgetButtonRightClicked(e) {
 
 function linkWidgetLoadPage(e) {
   const url = e.target.linkURL;
-  const sourceURL = content.document.documentURI;
   const button = e.type=="command" ? 0 : e.button;
   // Make handleLinkClick find the right origin URL
-  const fakeEvent = { target: { ownerDocument: { location : { href: sourceURL }}},
+  const fakeEvent = { target: { ownerDocument: content.document },
       button: button, __proto__: e }; // proto must be set last
   // handleLinkClick deals with modified left-clicks, and middle-clicks
   const didHandleClick = handleLinkClick(fakeEvent, url, null);
