@@ -4,8 +4,8 @@
 
 <binding id="toolbar" extends="chrome://global/content/bindings/toolbar.xml#toolbar">
   <implementation>
-    <field name="_toolboxProperties">
-    statusbuttonsUselessVariable = { // get parsing errors without the assignment
+    <constructor><![CDATA[
+    const toolboxprops = {
       // tricks various things into believing our toolbars are children of the toolbox
       childNodesGetter: function() {
         const kids = this.__proto__.__lookupGetter__("childNodes").call(this);
@@ -32,19 +32,16 @@
         return tag=="toolbarpaletteitem" ? document.getElementsByTagName(tag)
           : this._pre_statusbuttons_getElementsByTagName(tag);
       }
-    }
-    </field>
+    };
 
-    <field name="_pre_statusbuttons_setAttribute">this.setAttribute</field>
-
-    <field name="setAttribute">
-      function(name, val) {
+      // prevent our iconsize and mode (text vs text+icons vs icons only) being changed
+      this._pre_statusbuttons_setAttribute = this.setAttribute;
+      this.setAttribute = function(name, val) {
         if(name == "iconsize" || name == "mode") return;
         this._pre_statusbuttons_setAttribute(name, val);
-      }
-    </field>
-
-    <constructor><![CDATA[
+      };
+      this._pre_statusbuttons_insertItem = this.insertItem;
+      
       // For Thunderbird, this runs before the code in the .xul file
       if(!statusbuttonsToolbox) {
         if(window.BrowserCustomizeToolbar) { // it's Firefox
@@ -61,7 +58,6 @@
           toolboxId = "mail-toolbox";
         }
         const toolbox = statusbuttonsToolbox = document.getElementById(toolboxId);
-        const toolboxprops = this._toolboxProperties;
         toolbox.__defineGetter__("childNodes", toolboxprops.childNodesGetter);
         toolbox._pre_statusbuttons_addEventListener = toolbox.addEventListener;
         toolbox.addEventListener = toolboxprops.addEventListener;

@@ -26,7 +26,6 @@
 </statusbar>
 
 <script type="application/x-javascript"><![CDATA[
-var statusbuttonsUselessVariable = null; // see bindings.xml (declaring it here avoids a warning)
 var statusbuttonsToolbarsAreBeingCustomised = false;
 
 var statusbuttonsOldCustomizeToolbar = null;
