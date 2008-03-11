@@ -5,24 +5,34 @@
 <overlay id="statusbuttonsOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <statusbar id="status-bar">
-  <toolbar
+  <toolbox
+      id="statusbuttons-toolbox-left"
+      class="statusbuttons-toolbox"
+      position="1"
+      >
+   <toolbar
     id="statusbuttons-toolbar-left"
     class="statusbuttons-toolbar"
     context="toolbar-context-menu"
     customizable="true"
     mode="icons"
     iconsize="small"
-    position="1"
     />
-  <toolbar
+  </toolbox>
+  <toolbox
+      id="statusbuttons-toolbox-right"
+      class="statusbuttons-toolbox"
+      position="1000"
+      >
+   <toolbar
     id="statusbuttons-toolbar-right"
     class="statusbuttons-toolbar"
     context="toolbar-context-menu"
     customizable="true"
     mode="icons"
     iconsize="small"
-    position="1000"
     />
+  </toolbox>
 </statusbar>
 
 <script type="application/x-javascript"><![CDATA[
