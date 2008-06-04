@@ -1,2 +1,2 @@
-zip -ur0 digger.jar content lang -x '*CVS*'
-zip -ur9 digger.xpi digger.jar install.rdf chrome.manifest
+zip -ur0 digger.zip content lang
+zip -ur9 digger.xpi digger.zip install.rdf chrome.manifest
