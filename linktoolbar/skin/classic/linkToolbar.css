@@ -1,0 +1,67 @@
+/*
+Licence: MPL 1.1/GPL 2.0/LGPL 2.1
+
+The Original Code is the Link Toolbar extension for Firefox
+
+Contributor(s):
+  Stephen Clavering <mozilla@clav.me.uk>
+  Chris Neale <cdn@mozdev.org>  (tweaks and email icon for mailto: links)
+*/
+
+.linktoolbar-button, .linktoolbar-button menu, .linktoolbar-button menuitem {
+  list-style-image: url(chrome://linktoolbar/skin/buttons.png) !important;
+}
+
+/* for the default theme we use icons with built-in dropmarkers, but other themes might want to keep them separate */
+.linktoolbar-button dropmarker { display: none }
+
+.linktoolbar-button > .toolbarbutton-menubutton-button { -moz-box-orient: horizontal; }
+
+/* Charamel sets -moz-image-region on the <hbox> wrapping the <image> within <menuitem>s */
+.linktoolbar-button .menu-iconic-left { -moz-image-region: inherit !important; }
+
+#linktoolbar-top { -moz-image-region: rect(0 16px 16px 0); }
+#linktoolbar-top:hover { -moz-image-region: rect(16px 16px 32px 0); }
+#linktoolbar-top[multi] { -moz-image-region: rect(0 112px 16px 96px); }
+#linktoolbar-top[multi]:hover { -moz-image-region: rect(16px 112px 32px 96px); }
+#linktoolbar-top[disabled=true] { -moz-image-region: rect(32px 16px 48px 0); }
+
+#linktoolbar-up { -moz-image-region: rect(0 32px 16px 16px); }
+#linktoolbar-up:hover { -moz-image-region: rect(16px 32px 32px 16px); }
+#linktoolbar-up[multi] { -moz-image-region: rect(0 128px 16px 112px); }
+#linktoolbar-up[multi]:hover { -moz-image-region: rect(16px 128px 32px 112px); }
+#linktoolbar-up[disabled=true]   { -moz-image-region: rect(32px 32px 48px 16px); }
+
+#linktoolbar-first { -moz-image-region: rect(0 48px 16px 32px); }
+#linktoolbar-first:hover { -moz-image-region: rect(16px 48px 32px 32px); }
+#linktoolbar-first[multi] { -moz-image-region: rect(0 144px 16px 128px); }
+#linktoolbar-first[multi]:hover { -moz-image-region: rect(16px 144px 32px 128px); }
+#linktoolbar-first[disabled=true]   { -moz-image-region: rect(32px 48px 48px 32px); }
+
+#linktoolbar-prev { -moz-image-region: rect(0 64px 16px 48px); }
+#linktoolbar-prev:hover { -moz-image-region: rect(16px 64px 32px 48px); }
+#linktoolbar-prev[multi] { -moz-image-region: rect(0 160px 16px 144px); }
+#linktoolbar-prev[multi]:hover { -moz-image-region: rect(16px 160px 32px 144px); }
+#linktoolbar-prev[disabled=true]   { -moz-image-region: rect(32px 64px 48px 48px); }
+
+#linktoolbar-next { -moz-image-region: rect(0 80px 16px 64px); }
+#linktoolbar-next:hover { -moz-image-region: rect(16px 80px 32px 64px); }
+#linktoolbar-next[multi] { -moz-image-region: rect(0 176px 16px 160px); }
+#linktoolbar-next[multi]:hover { -moz-image-region: rect(16px 176px 32px 160px); }
+#linktoolbar-next[disabled=true]   { -moz-image-region: rect(32px 80px 48px 64px); }
+
+#linktoolbar-last { -moz-image-region: rect(0 96px 16px 80px); }
+#linktoolbar-last:hover { -moz-image-region: rect(16px 96px 32px 80px); }
+#linktoolbar-last[multi] { -moz-image-region: rect(0 192px 16px 176px); }
+#linktoolbar-last[multi]:hover { -moz-image-region: rect(16px 192px 32px 176px); }
+#linktoolbar-last[disabled=true]   { -moz-image-region: rect(32px 96px 48px 80px); }
+
+/* folder, page and email icons */
+.linktoolbar-button menuitem { -moz-image-region: rect(32px 144px 48px 128px); }
+.linktoolbar-button menu, #linktoolbar-more-menu { -moz-image-region: rect(32px 160px 48px 144px); }
+.linktoolbar-button menu[open=true],
+#linktoolbar-more-menu[open=true] { -moz-image-region: rect(32px 176px 48px 160px); }
+#linktoolbar-more-menu[disabled=true] { -moz-image-region: rect(32px 192px 48px 176px); }
+.linktoolbar-button menuitem[href^="mailto:"] { -moz-image-region: rect(32px 112px 48px 96px); }
+
+#status-bar .linktoolbar-button { max-height: none; }

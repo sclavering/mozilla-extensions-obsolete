@@ -1,0 +1,5 @@
+<!ENTITY default.label "Stop/Herlaad">
+<!ENTITY reload.label "Herlaad">
+<!ENTITY reload.tooltip "Herlaad de huidige pagina">
+<!ENTITY stop.label "Stop">
+<!ENTITY stop.tooltip "Stop laden van huidige pagina">

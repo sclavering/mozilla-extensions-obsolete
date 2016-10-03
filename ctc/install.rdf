@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<r:RDF xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+       xmlns="http://www.mozilla.org/2004/em-rdf#">
+<r:Description about="urn:mozilla:install-manifest">
+
+<id>ctc@clav.mozdev.org</id>
+<name>CTC</name>
+<version>1.0</version>
+<description>Adds "Close Tab" to the context menu</description>
+<creator>Stephen Clavering</creator>
+<homepageURL>http://clav.mozdev.org/</homepageURL>
+
+<targetApplication>
+  <r:Description>
+    <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
+    <minVersion>1.4.1</minVersion>
+    <maxVersion>1.5.0.*</maxVersion>
+  </r:Description>
+</targetApplication>
+</r:Description>
+</r:RDF>

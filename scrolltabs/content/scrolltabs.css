@@ -1,0 +1,7 @@
+.tabbrowser-tabs {
+  -moz-binding: url(chrome://scrolltabs/content/scrolltabs.xml#tabs);
+}
+tabbrowser tab {
+  min-width: 80px;
+  max-width: 200px;
+}

@@ -1,0 +1,8 @@
+<!ENTITY zoomin.label "Größer">
+<!ENTITY zoomin.tooltip "Schriftgrad vergrößern">
+
+<!ENTITY zoomreset.label "Normal">
+<!ENTITY zoomreset.tooltip "Normaler Schriftgrad">
+
+<!ENTITY zoomout.label "Kleiner">
+<!ENTITY zoomout.tooltip "Schriftgrad verkleinern">

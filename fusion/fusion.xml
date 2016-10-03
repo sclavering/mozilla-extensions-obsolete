@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+
+<bindings id="fusion"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+<binding id="urlbar"
+         extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
+
+  <content sizetopopup="pref">
+    <xul:hbox class="autocomplete-textbox-container" flex="1"
+          onfocus="this.setAttribute('fusion_hasfocus', 'true');"
+          onblur="this.removeAttribute('fusion_hasfocus');">
+      <xul:stack class="fusion-stack" flex="1">
+        <xul:hbox class="fusion-urlbar-main">
+          <children includes="deck"/>
+          <xul:hbox class="textbox-input-box" flex="1" xbl:inherits="tooltiptext=inputtooltiptext">
+            <children/>
+            <html:input anonid="input" class="autocomplete-textbox textbox-input" flex="1" allowevents="true"
+                xbl:inherits="onfocus,onblur,value,type,disabled,size,readonly,userAction"/>
+          </xul:hbox>
+        </xul:hbox>
+        <xul:progressmeter mode="normal" value="0" id="fusion-progressmeter"/>
+      </xul:stack>
+      <children includes="hbox"/>
+    </xul:hbox>
+  </content>
+</binding>
+
+
+<binding id="fusion-progressmeter" extends="chrome://global/content/bindings/progressmeter.xml#progressmeter">
+  <implementation>
+    <constructor>
+      window.gfusionProgressMeter = this;
+
+      // override the init method so that the new progress meter will be used
+      var proto = nsBrowserStatusHandler.prototype;
+
+      // Don't want proto.init==proto.preFusionInit
+      if(proto.preFusionInit) return;
+
+      proto.preFusionInit = proto.init;
+      proto.init = function() {
+        this.preFusionInit();
+        this.statusMeter = document.getElementById("fusion-progressmeter");
+
+        // Rather than hiding the panel that the stalled progress meter would be in, we want to
+        // reset the meter. We do this here because this happens to be executed during
+        // prepareForStartup() in browser.js after the code that normally sets gProgressMeterPanel
+        gProgressMeterPanel = {
+          set collapsed(val) {
+            if(val) gfusionProgressMeter.value = 0;
+          }
+        };
+      };
+    </constructor>
+
+    <!-- code in browser.js tries to uncollapse the parentNode, which wouldn't work now -->
+    <field name="parentNode">null, { collapsed: false }</field>
+
+    <field name="urlbar">document.getBindingParent(this)</field>
+
+    <property name="value" onget="return this.getAttribute('value');">
+      <setter><![CDATA[
+        var p = Math.round(val);
+        if(p == 100) p = 0;
+        var c = this.value;
+        if(p == c) return p;
+        var delta = p - c;
+        if(delta > 3 || p == 0 || delta < -3) this.setAttribute("value", p);
+        if(p==0) this.urlbar.removeAttribute("fusion-hasprogress");
+        else if(c==0) this.urlbar.setAttribute("fusion-hasprogress", "true");
+        return p;
+      ]]></setter>
+    </property>
+  </implementation>
+</binding>
+</bindings>

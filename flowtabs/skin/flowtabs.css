@@ -1,0 +1,11 @@
+/* Margins round tabs don't look right if they span multiple rows.
+   Having tabs change size (because of padding changes and bold text) also looks lousy. */
+tabbrowser tab {
+  margin: 0;
+  padding: 1px 4px 3px;
+}
+tabbrowser tab[selected="true"] {
+  font-weight: normal; /* otherwise tabs change size when selected */
+  padding: 1px 4px 3px;
+  margin: 0;
+}

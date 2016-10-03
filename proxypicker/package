@@ -1,0 +1,2 @@
+zip -ur0 proxypicker.zip code lang -x '*CVS*'
+zip -ur9 proxypicker.xpi proxypicker.zip install.rdf chrome.manifest -x '*CVS*'

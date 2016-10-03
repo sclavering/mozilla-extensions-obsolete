@@ -1,0 +1,5 @@
+<!ENTITY label   "Paranoia">
+<!ENTITY tooltip "Protect your privacy">
+
+<!ENTITY prompttitle "Paranoia">
+<!ENTITY promptmsg   "Delete all privacy-sensitive information Firefox has saved? (e.g. cookies, history of visited web sites, etc.)">

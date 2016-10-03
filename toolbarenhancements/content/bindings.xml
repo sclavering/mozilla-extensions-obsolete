@@ -1,0 +1,398 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE bindings SYSTEM "chrome://tbx/locale/">
+
+<bindings id="tbx-bindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="toolbar" extends="chrome://global/content/bindings/toolbar.xml#toolbar-base">
+    <implementation>
+      <field name="firstPermanentChild">null</field>
+      <field name="lastPermanentChild">null</field>
+
+      <property name="toolbarName"
+                onget="return this.getAttribute('toolbarname');"
+                onset="this.setAttribute('toolbarname', val); return val;"/>
+
+      <property name="currentSet">
+        <getter>
+          <![CDATA[
+            var node = this.firstChild;
+            var currentSet = "";
+            while (node) {
+              if (node.id &&
+                  node.localName == "toolbaritem" ||
+                  node.localName == "toolbarbutton" ||
+                  node.localName == "toolbarseparator" ||
+                  node.localName == "toolbarspring" ||
+                  node.localName == "toolbarspacer")
+              {
+                if (currentSet)
+                  currentSet += ",";
+
+                if (node.localName == "toolbarseparator")
+                  currentSet += "separator";
+                else if (node.localName == "toolbarspring")
+                  currentSet += "spring";
+                else if (node.localName == "toolbarspacer")
+                  currentSet += "spacer";
+                else
+                  currentSet += node.id;
+              }
+              node = node.nextSibling;
+            }
+
+            return currentSet ? currentSet : "__empty";
+          ]]>
+        </getter>
+
+        <setter>
+          <![CDATA[
+            // Remove all items before the first permanent child and after the last permanent child.
+            while (this.lastChild) {
+              if (this.lastChild == this.lastPermanentChild ||
+                  (this.lastChild.localName == "toolbarpaletteitem" &&
+                  this.lastChild.firstChild == this.lastPermanentChild))
+                break;
+              this.removeChild(this.lastChild);
+            }
+
+            while (this.firstChild) {
+              if (this.firstChild == this.firstPermanentChild ||
+                  (this.firstChild.localName == "toolbarpaletteitem" &&
+                  this.firstChild.firstChild == this.firstPermanentChild))
+                break;
+              this.removeChild(this.firstChild);
+            }
+
+            var firstChildID = this.firstPermanentChild ? this.firstPermanentChild.id : "";
+            var lastChildID = this.lastPermanentChild ? this.lastPermanentChild.id : "";
+
+            if (val == "__empty")
+              return;
+
+            if (val) {
+              var itemIds = val.split(",");
+              var before = true;
+              for (var i = 0; i < itemIds.length; i++) {
+                if (itemIds[i] == firstChildID || itemIds[i] == lastChildID)
+                  before = false;
+                else
+                  this.insertItem(itemIds[i], null, null, before);
+              }
+            }
+          ]]>
+        </setter>
+      </property>
+
+      <method name="insertItem">
+        <parameter name="aId"/>
+        <parameter name="aBeforeElt"/>
+        <parameter name="aWrapper"/>
+        <parameter name="aBeforePermanent"/>
+        <body>
+          <![CDATA[
+            var newItem = null;
+
+            // Create special cases of palette items.
+            var uniqueId;
+            if (aId == "separator") {
+              newItem = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul",
+                                                 "toolbarseparator");
+              uniqueId = (new Date()).getTime()+this.childNodes.length;
+              newItem.id = "separator" + uniqueId;
+            } else if (aId == "spring") {
+              newItem = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul",
+                                                 "toolbarspring");
+              uniqueId = (new Date()).getTime()+this.childNodes.length;
+              newItem.flex = 1;
+              newItem.id = "spring" + uniqueId;
+            } else if (aId == "spacer") {
+              newItem = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul",
+                                                 "toolbarspacer");
+              uniqueId = (new Date()).getTime()+this.childNodes.length;
+              newItem.id = "spacer" + uniqueId;
+            } else {
+              // Attempt to locate an item with a matching id within palette.
+              var paletteItem = this.parentNode.palette.firstChild;
+              while (paletteItem) {
+                var paletteId = paletteItem.id;
+                if (paletteId == aId) {
+                  newItem = paletteItem.cloneNode(true);
+                  break;
+                }
+                paletteItem = paletteItem.nextSibling;
+              }
+            }
+
+            if (!newItem)
+              return false;
+
+            var insertItem = newItem;
+
+            // Wrap the item in another node if so inclined.
+            if (aWrapper) {
+              aWrapper.appendChild(newItem);
+              insertItem = aWrapper;
+            }
+
+            // Insert the palette item into the toolbar.
+            if (aBeforeElt)
+              this.insertBefore(insertItem, aBeforeElt);
+            else if (aBeforePermanent && this.firstPermanentChild)
+                this.insertBefore(insertItem, this.firstPermanentChild);
+            else
+                this.appendChild(insertItem);
+
+            return newItem;
+          ]]>
+        </body>
+      </method>
+
+      <constructor>
+        <![CDATA[
+          this.firstPermanentChild = this.firstChild;
+          this.lastPermanentChild = this.lastChild;
+
+          // Build up our contents from the palette
+          var currentSet = this.getAttribute("currentset");
+          if(!currentSet && this.getAttribute("anonymous")=="true") {
+            // for the tab-strip toolbars, which are in XBL, so can't have their
+            // attributes persisted.  use an attr on the document instead
+            var attr = "_toolbar_currentset_"+this.getAttribute('anonid');
+            currentSet = document.documentElement.getAttribute(attr);
+          }
+          if(!currentSet) currentSet = this.getAttribute("defaultset");
+          if(currentSet) this.currentSet = currentSet;
+        ]]>
+      </constructor>
+    </implementation>
+  </binding>
+
+
+  <binding id="customisable-toolbox" extends="chrome://global/content/bindings/toolbar.xml#toolbar-base">
+    <implementation>
+      <field name="anonymous">false</field>
+
+      <field name="palette">null</field>
+
+      <field name="toolbarset">null</field>
+
+      <field name="customToolbarCount">0</field>
+
+      <constructor>
+        <![CDATA[
+          // is this toolbox anonymous (in a xbl binding)
+          // (if so it can't have attrs persisted on it, so state
+          // will be stored in attrs of the documentElement)
+          if(this.getAttribute('anonymous')=='true') this.anonymous = true;
+
+          // initialise palette.  we leave it in a hash on the document
+          // for other toolboxes to use too.
+          var paletteId = this.getAttribute("palette");
+          if(!("toolbarpalettes" in document))
+            document.toolbarpalettes = new Array();
+          if(paletteId in document.toolbarpalettes) {
+            this.palette = document.toolbarpalettes[paletteId];
+          } else {
+            var palette = document.getElementById(paletteId);
+            palette.parentNode.removeChild(palette);
+            document.toolbarpalettes[paletteId] = palette;
+            this.palette = palette;
+          }
+
+          // Look to see if there is a toolbarset.
+          var toolbarset = this.firstChild;
+          while (toolbarset && toolbarset.localName != "toolbarset")
+            toolbarset = toolbarset.nextSibling;
+          this.toolbarset = toolbarset;
+
+          var elt, attr;
+
+          if(toolbarset) {
+            // attr indicated that the toolbox below the tab bar is in xbl, so can't
+            // have attrs persisted.  they're persisted on the document instead.
+            elt = this.anonymous ? document.documentElement : toolbarset;
+            attr = this.anonymous ? '_toolbarset_' + toolbarset.getAttribute('anonid') + '_toolbar' : 'toolbar';
+
+            var index = 0;
+            while(elt.hasAttribute(attr+(++index))) {
+              var toolbarInfo = elt.getAttribute(attr+index);
+              var infoSplit = toolbarInfo.split(":");
+              this.appendCustomToolbar(infoSplit[0], infoSplit[1], false);
+            }
+          }
+
+          // restore toolbar modes, collapsed-ness, and icon size
+          elt = document.documentElement;
+          for(var node = this.firstChild; node; node = node.nextSibling) {
+            if(node.localName!="toolbar") continue;
+
+            attr = '_toolbox_' + this.id + '_toolbar_' + node.id;
+
+            var collapsed = elt.getAttribute(attr+"-collapsed")=="true";
+            node.collapsed = collapsed;
+
+            var mode = elt.getAttribute(attr+"-mode");
+            if(mode) node.setAttribute("mode",mode);
+
+            var iconsize = elt.getAttribute(attr+"-iconsize");
+            if(iconsize) node.setAttribute("iconsize",iconsize);
+
+            var fullscreen = elt.getAttribute(attr+"-showfullscreen");
+            if(fullscreen) node.setAttribute("fullscreentoolbar","true");
+          }
+        ]]>
+      </constructor>
+
+      <method name="appendCustomToolbar">
+        <parameter name="aName"/>
+        <parameter name="aCurrentSet"/>
+        <parameter name="inCustomisationMode"/>
+        <body>
+          <![CDATA[
+            var toolbar = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul",
+                                                  "toolbar");
+            toolbar.id = "__customToolbar_" + aName.replace(" ", "");
+            toolbar.setAttribute("customizable", "true");
+            toolbar.setAttribute("customindex", ++this.customToolbarCount);
+            toolbar.setAttribute("toolbarname", aName);
+            toolbar.setAttribute("currentset", aCurrentSet);
+            toolbar.setAttribute("mode", this.getAttribute("mode"));
+            toolbar.setAttribute("iconsize", this.getAttribute("iconsize"));
+            // while in customisation mode we use different context menus,
+            // and store the normal-mode context menu in an |oldcontext| attr
+            var context = inCustomisationMode ? "oldcontext" : "context";
+            toolbar.setAttribute(context, this.toolbarset.getAttribute("context"));
+            toolbar.setAttribute("class", "chromeclass-toolbar");
+
+            this.insertBefore(toolbar, this.toolbarset);
+            return toolbar;
+          ]]>
+        </body>
+      </method>
+
+      <!-- the following methods are used because we can't just persist() the state of the
+           various attributes they set on toolbars, because the toolbars haven't been created
+           at the point where persisted attributes are restored.
+
+           also for the toolbars below the tabbar, the entire toolbox is in xbl, so can't have
+           attributes persisted, so we have to store the state on the documentElement!
+           -->
+      <method name="hideToolbar">
+        <parameter name="aToolbar"/>
+        <parameter name="aHide"/>
+        <body><![CDATA[
+          aToolbar.collapsed = aHide;
+
+          var elt = document.documentElement;
+          var attr = '_toolbox_' + this.id + '_toolbar_' + aToolbar.id + "-collapsed";
+          if(aHide) elt.setAttribute(attr,aHide);
+          else elt.removeAttribute(attr);
+          document.persist(elt.id,attr);
+        ]]></body>
+      </method>
+
+      <method name="setToolbarMode">
+        <parameter name="aToolbar"/>
+        <parameter name="aMode"/>
+        <body><![CDATA[
+          aToolbar.setAttribute("mode",aMode);
+
+          var elt = document.documentElement;
+          var attr = '_toolbox_' + this.id + '_toolbar_' + aToolbar.id + "-mode";
+          elt.setAttribute(attr,aMode);
+          document.persist(elt.id,attr);
+        ]]></body>
+      </method>
+
+      <method name="setToolbarIconSize">
+        <parameter name="aToolbar"/>
+        <parameter name="aSize"/>
+        <body><![CDATA[
+          aToolbar.setAttribute("iconsize",aSize);
+
+          var elt = document.documentElement;
+          var attr = '_toolbox_' + this.id + '_toolbar_' + aToolbar.id + "-iconsize";
+          elt.setAttribute(attr,aSize);
+          document.persist(elt.id,attr);
+        ]]></body>
+      </method>
+
+      <method name="showToolbarInFullscreen">
+        <parameter name="aToolbar"/>
+        <parameter name="aShow"/>
+        <body><![CDATA[
+          var elt = document.documentElement;
+          var attr = '_toolbox_' + this.id + '_toolbar_' + aToolbar.id + "-showfullscreen";
+          if(aShow) {
+            aToolbar.setAttribute("fullscreentoolbar","true");
+            elt.setAttribute(attr,aShow);
+          } else {
+            aToolbar.removeAttribute("fullscreentoolbar");
+            elt.removeAttribute(attr);
+          }
+          document.persist(elt.id,attr);
+        ]]></body>
+      </method>
+    </implementation>
+  </binding>
+
+
+  <!-- like chrome://global/content/bindings/toolbar.xml#toolbarpaletteitem, but with a vbox rather than hbox -->
+  <binding id="toolbarpaletteitem-vertical" extends="chrome://global/content/bindings/toolbar.xml#toolbar-base" display="xul:button">
+    <content>
+      <xul:vbox class="toolbarpaletteitem-box" flex="1" xbl:inherits="type,place">
+        <children/>
+      </xul:vbox>
+    </content>
+  </binding>
+
+
+
+  <!-- Binding attached to the <hbox class="tabbrowser-strip"/> inside the
+       <tabbrowser/> so that we can have a toolbar at each end of it.
+       The anonid's are used when persisting the toolbar's attributes. -->
+  <binding id="tab-strip-toolbars">
+    <content>
+      <xul:toolbox id="tbx-tableft-toolbox" anonid="tbx-toolbox-tableft"
+          class="tbx-toolbox-plain tbx-tabbar-toolbox"
+          palette="BrowserToolbarPalette" context="toolbar-context-menu"
+          customiseContext="toolbar-customise-context-menu"
+          >
+        <xul:toolbar anonid="tbx-toolbar-tableft"
+            class="tbx-toolbar-plain tbx-tabbar-toolbar"
+            anonymous="true" customizable="true" mode="icons" iconsize="small"/>
+      </xul:toolbox>
+      <children/>
+      <xul:toolbox id="tbx-tabright-toolbox" anonid="tbx-toolbox-tabright"
+          class="tbx-toolbox-plain tbx-tabbar-toolbox"
+          palette="BrowserToolbarPalette" context="toolbar-context-menu"
+          customiseContext="toolbar-customise-context-menu"
+          >
+        <xul:toolbar anonid="tbx-toolbar-tabright"
+            class="tbx-toolbar-plain tbx-tabbar-toolbar"
+            anonymous="true" customizable="true" mode="icons" iconsize="small"/>
+      </xul:toolbox>
+    </content>
+  </binding>
+
+  <!-- binding attached to the <tabbox/> immediately inside <tabbrowser/> to insert a toolbox
+       between it and the deck of <browser/>s -->
+  <binding id="tabbrowser-tabbox" display="xul:box" extends="chrome://global/content/bindings/tabbox.xml#tabbox">
+    <content>
+      <children includes="hbox"/>
+      <xul:toolbox id="tbx-belowtabs-toolbox" anonid="tbx-toolbox-belowtabs"
+          class="tbx-toolbox-belowtabs"
+          palette="BrowserToolbarPalette" anonymous="true"
+          context="toolbar-context-menu" customiseContext="toolbar-customise-context-menu"
+          >
+        <xul:toolbarset anonymous="true" anonid="tbx-toolbarset-belowtabs"/>
+      </xul:toolbox>
+      <children includes="tabpanels"/>
+    </content>
+  </binding>
+
+</bindings>

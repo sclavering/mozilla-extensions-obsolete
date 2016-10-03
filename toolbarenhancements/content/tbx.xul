@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://tbx/content/tbx.css" type="text/css"?>
+<?xml-stylesheet href="chrome://tbx/skin/" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://tbx/locale/">
+
+<overlay id="tbxBrowserOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="tbx.js" type="application/x-javascript"/>
+  <script src="buttons.js" type="application/x-javascript"/>
+
+
+  <!-- allow sidebar and download manager toggles to be middle clicked -->
+  <toolbarbutton id="history-button" onclick="tbxCommands.historyPanel(event);"/>
+  <toolbarbutton id="bookmarks-button" onclick="tbxCommands.bookmarksPanel(event);"/>
+  <toolbarbutton id="downloads-button" onclick="tbxCommands.downloadsInTab(event);"/>
+
+
+  <!-- new buttons -->
+  <toolbarpalette id="BrowserToolbarPalette">
+    <!-- Options -->
+    <toolbarbutton class="tbx-button toolbarbutton-1" id="tbx-options-button"
+        oncommand="openPreferences()"
+        label="&tbx-options-button.label;" tooltiptext="&tbx-options-button.tooltip;"
+        />
+
+    <!-- Add Bookmark, Manage Bookmarks -->
+    <toolbarbutton class="tbx-button toolbarbutton-1" id="tbx-addbookmark-button"
+        command="Browser:AddBookmarkAs"
+        label="&tbx-addbookmark-button.label;" tooltiptext="&tbx-addbookmark-button.tooltip;"
+        />
+    <toolbarbutton class="tbx-button toolbarbutton-1" id="tbx-managebookmarks-button"
+        oncommand="tbxCommands.bookmarkManager(event);"
+        onclick="tbxCommands.bookmarkManager2(event);"
+        label="&tbx-managebookmarks-button.label;" tooltiptext="&tbx-managebookmarks-button.tooltip;"
+        />
+
+    <!-- Save -->
+    <toolbarbutton class="tbx-button toolbarbutton-1"
+        id="tbx-save-button" command="Browser:SavePage"
+        label="&tbx-save-button.label;" tooltiptext="&tbx-save-button.tooltip;"
+        />
+
+    <!-- View Source -->
+    <toolbarbutton class="tbx-button toolbarbutton-1" id="tbx-viewsource-button"
+        command="View:PageSource"
+        onclick="tbxCommands.viewSource(event,window._content.document);"
+        label="&tbx-viewsource-button.label;" tooltiptext="&tbx-viewsource-button.tooltip;"
+        />
+
+    <!-- Javascript Console -->
+    <toolbarbutton class="tbx-button toolbarbutton-1" id="tbx-jsconsole-button"
+        oncommand="toJavaScriptConsole();" onclick="tbxCommands.jsConsole(event);"
+        label="&tbx-jsconsole-button.label;" tooltiptext="&tbx-jsconsole-button.tooltip;"
+        />
+
+    <!-- Toggle Full Screen Mode -->
+    <toolbarbutton class="tbx-button toolbarbutton-1" id="tbx-fullscreen-button"
+        command="View:FullScreen"
+        label="&tbx-fullscreen-button.label;" tooltiptext="&tbx-fullscreen-button.tooltip;"
+        />
+
+    <!-- Clear Cache -->
+    <toolbarbutton class="toolbarbutton-1 tbx-button"
+        id="tbx-clearcache-button" oncommand="tbxCommands.clearCache();"
+        label="&tbx-clearcache-button.label;" tooltiptext="&tbx-clearcache-button.tooltip;"
+        />
+
+    <!-- View Page Info -->
+    <toolbarbutton class="tbx-button toolbarbutton-1"
+        id="tbx-pageinfo-button" command="View:PageInfo"
+        label="&tbx-pageinfo-button.label;" tooltiptext="&tbx-pageinfo-button.tooltip;"
+        />
+
+    <!-- Toggle Javascript, Images and Plugins for the current tab -->
+    <!-- These don't have type=checkbox because it makes them too difficult to style nicely -->
+    <toolbarbutton class="tbx-button toolbarbutton-1"
+        id="tbx-javascript-tabpref" oncommand="tbxToggleJavascriptInTab(this);"
+        label="&tbx-javascript-tabpref.label;" tooltiptext="&tbx-javascript-tabpref.tooltip;"
+        />
+    <toolbarbutton class="tbx-button toolbarbutton-1"
+        id="tbx-images-tabpref" oncommand="tbxToggleImagesInTab(this);"
+        label="&tbx-images-tabpref.label;" tooltiptext="&tbx-images-tabpref.tooltip;"
+        />
+    <toolbarbutton class="tbx-button toolbarbutton-1"
+        id="tbx-metaredirects-tabpref" oncommand="tbxToggleMetaRedirectsInTab(this);"
+        label="&tbx-metaredirects-tabpref.label;" tooltiptext="&tbx-metaredirects-tabpref.tooltip;"
+        />
+    <toolbarbutton class="tbx-button toolbarbutton-1"
+        id="tbx-plugins-tabpref" oncommand="tbxTogglePluginsInTab(this);"
+        label="&tbx-plugins-tabpref.label;" tooltiptext="&tbx-plugins-tabpref.tooltip;"
+        />
+  </toolbarpalette>
+
+
+  <!-- override customise toolbars, so we can pass all our toolboxes as extra args to the palette window -->
+  <command id="cmd_CustomizeToolbars" oncommand="tbxBrowserCustomizeToolbar();"/>
+
+  <!-- Toolboxes need a |palette| attribute so they use the new xbl widget, and a different
+       context menu while customising -->
+  <toolbox id="navigator-toolbox"
+      customiseContext="toolbar-customise-context-menu"
+      palette="BrowserToolbarPalette"
+      />
+
+  <!-- another toolbox at the bottom of the window -->
+  <window id="main-window">
+    <toolbox id="tbx-bottom-toolbox" insertbefore="status-bar"
+        palette="BrowserToolbarPalette" context="toolbar-context-menu"
+        customiseContext="toolbar-customise-context-menu"
+        mode="icons" iconsize="small"
+        >
+      <toolbarset id="tbx-bottom-toolbars" context="toolbar-context-menu"/>
+    </toolbox>
+  </window>
+
+  <!-- toolboxes at left and right -->
+  <hbox id="browser">
+    <toolbox id="tbx-left-toolbox" insertbefore="sidebar-box"
+        vertical="true"
+        palette="BrowserToolbarPalette" context="toolbar-context-menu"
+        customiseContext="toolbar-customise-context-menu"
+        mode="icons" iconsize="small"
+        >
+      <toolbarset id="tbx-left-toolbars" context="toolbar-context-menu"/>
+    </toolbox>
+    <toolbox id="tbx-right-toolbox" insertafter="appcontent"
+       vertical="true"
+        palette="BrowserToolbarPalette" context="toolbar-context-menu"
+        customiseContext="toolbar-customise-context-menu"
+        mode="icons" iconsize="small"
+        >
+      <toolbarset id="tbx-right-toolbars" context="toolbar-context-menu"/>
+    </toolbox>
+  </hbox>
+
+
+  <!-- toolbars at each end of the status bar.
+       position attr used to try and ensure they always end up at the ends,
+       regardless of what other extensions the user has installed. -->
+  <statusbar id="status-bar">
+    <toolbox id="tbx-toolbox-statusbar-left" class="tbx-toolbox-plain tbx-statusbar-toolbox"
+        palette="BrowserToolbarPalette" context="toolbar-context-menu"
+        customiseContext="toolbar-customise-context-menu"
+        position="1">
+      <toolbar id="tbx-toolbar-statusbar-left" class="tbx-toolbar-plain"
+          customizable="true" mode="icons" iconsize="small"/>
+    </toolbox>
+    <toolbox id="tbx-toolbox-statusbar-right" class="tbx-toolbox-plain tbx-statusbar-toolbox"
+        palette="BrowserToolbarPalette" context="toolbar-context-menu"
+        customiseContext="toolbar-customise-context-menu"
+        position="100">
+      <toolbar id="tbx-toolbar-statusbar-right" class="tbx-toolbar-plain"
+          customizable="true" mode="icons" iconsize="small"/>
+    </toolbox>
+  </statusbar>
+
+
+  <!-- a new context menu to use for toolbars while customising them -->
+  <popupset id="mainPopupSet">
+    <popup id="toolbar-customise-context-menu"
+        onpopupshowing="tbxInitCustomiseContext(event, this);"
+        oncommand="tbxAdjustToolbar(event);"
+        >
+      <menuitem type="radio" name="mode" value="icons" label="&tbx-mode-icons-only;"/>
+      <menuitem type="radio" name="mode" value="full"  label="&tbx-mode-icons-text;"/>
+      <menuitem type="radio" name="mode" value="text"  label="&tbx-mode-text-only;"/>
+      <menuseparator/>
+      <menuitem type="checkbox" value="smallicons" label="&tbx-mode-small-icons;"/>
+      <menuseparator/>
+      <menuitem type="checkbox" value="fullscreen" label="&tbx-mode-show-in-fullscreen;"/>
+      <menuseparator/>
+      <menuitem type="radio" name="position" value="navigator-toolbox"
+        label="&tbx-toolbar-position-top;"/>
+      <menuitem type="radio" name="position" value="tbx-belowtabs-toolbox"
+        label="&tbx-toolbar-position-belowtabs;"/>
+      <menuitem type="radio" name="position" value="tbx-left-toolbox"
+        label="&tbx-toolbar-position-left;"/>
+      <menuitem type="radio" name="position" value="tbx-right-toolbox"
+        label="&tbx-toolbar-position-right;"/>
+      <menuitem type="radio" name="position" value="tbx-bottom-toolbox"
+        label="&tbx-toolbar-position-bottom;"/>
+    </popup>
+  </popupset>
+
+</overlay>

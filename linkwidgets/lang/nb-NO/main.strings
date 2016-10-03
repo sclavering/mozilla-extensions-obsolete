@@ -1,0 +1,27 @@
+# Menyer bruker 2rel (f.eks. 2index) dersom de er tilgjengelige.
+
+
+top   = Topp
+up    = Opp
+first = Første side
+prev  = Forrige side
+next  = Neste side
+last  = Siste side
+
+toc        = Innholdsfortegnelse
+chapter    = Kapitler
+section    = Underkapitler
+subsection = Seksjoner
+appendix   = Tillegg
+2appendix  = Tillegg
+glossary   = Ordliste
+2glossary  = Ordlister
+index      = Indeks
+2index     = Indekser
+
+help   = Hjelp
+search = Søk
+author = Forfattere
+copyright = Opphavsrett
+bookmark  = Bokmerker
+alternate = Andre versjoner

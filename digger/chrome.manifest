@@ -1,0 +1,4 @@
+overlay chrome://browser/content/browser.xul chrome://digger/content/digger.xul
+
+content digger jar:digger.zip!/content/
+locale digger en jar:digger.zip!/lang/en/

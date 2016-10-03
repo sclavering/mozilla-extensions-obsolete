@@ -1,0 +1,8 @@
+<!ENTITY zoomin.label "Zoom In">
+<!ENTITY zoomin.tooltip "Increase text size">
+
+<!ENTITY zoomreset.label "Reset Zoom">
+<!ENTITY zoomreset.tooltip "Restore the default text size">
+
+<!ENTITY zoomout.label "Zoom Out">
+<!ENTITY zoomout.tooltip "Decrease text size">

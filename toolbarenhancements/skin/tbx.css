@@ -1,0 +1,102 @@
+/* extra toolbar buttons */
+
+.tbx-button { list-style-image: url(chrome://tbx/skin/large.png); }
+toolbar[iconsize=small] .tbx-button { list-style-image: url(chrome://tbx/skin/small.png); }
+
+#tbx-options-button         { -moz-image-region: rect(0 24px 24px 0); }
+#tbx-addbookmark-button     { -moz-image-region: rect(0 48px 24px 24px); }
+#tbx-managebookmarks-button { -moz-image-region: rect(0 72px 24px 48px); }
+#tbx-save-button            { -moz-image-region: rect(0 96px 24px 72px); }
+#tbx-viewsource-button      { -moz-image-region: rect(0 120px 24px 96px); }
+#tbx-jsconsole-button       { -moz-image-region: rect(0 144px 24px 120px); }
+#tbx-fullscreen-button      { -moz-image-region: rect(0 168px 24px 144px); }
+#tbx-clearcache-button      { -moz-image-region: rect(0 264px 24px 240px); }
+#tbx-pageinfo-button        { -moz-image-region: rect(0 288px 24px 264px); }
+#tbx-javascript-tabpref[ischecked=true]    { -moz-image-region: rect(0 312px 24px 288px); }
+#tbx-javascript-tabpref                    { -moz-image-region: rect(0 336px 24px 312px); }
+#tbx-images-tabpref[ischecked=true]        { -moz-image-region: rect(0 360px 24px 336px); }
+#tbx-images-tabpref                        { -moz-image-region: rect(0 384px 24px 360px); }
+#tbx-metaredirects-tabpref[ischecked=true] { -moz-image-region: rect(0 408px 24px 384px); }
+#tbx-metaredirects-tabpref                 { -moz-image-region: rect(0 432px 24px 408px); }
+#tbx-plugins-tabpref[ischecked=true]       { -moz-image-region: rect(0 456px 24px 432px); }
+#tbx-plugins-tabpref                       { -moz-image-region: rect(0 480px 24px 456px); }
+
+
+toolbar[iconsize=small] #tbx-options-button         { -moz-image-region: rect(0 16px 16px 0); }
+toolbar[iconsize=small] #tbx-addbookmark-button     { -moz-image-region: rect(0 32px 16px 16px); }
+toolbar[iconsize=small] #tbx-managebookmarks-button { -moz-image-region: rect(0 48px 16px 32px); }
+toolbar[iconsize=small] #tbx-save-button            { -moz-image-region: rect(0 64px 16px 48px); }
+toolbar[iconsize=small] #tbx-viewsource-button      { -moz-image-region: rect(0 80px 16px 64px); }
+toolbar[iconsize=small] #tbx-jsconsole-button       { -moz-image-region: rect(0 96px 16px 80px); }
+toolbar[iconsize=small] #tbx-fullscreen-button      { -moz-image-region: rect(0 112px 16px 96px); }
+toolbar[iconsize=small] #tbx-clearcache-button      { -moz-image-region: rect(0 176px 16px 160px); }
+toolbar[iconsize=small] #tbx-pageinfo-button        { -moz-image-region: rect(0 192px 16px 176px); }
+toolbar[iconsize=small] #tbx-javascript-tabpref[ischecked=true]    { -moz-image-region: rect(0 208px 16px 192px); }
+toolbar[iconsize=small] #tbx-javascript-tabpref                    { -moz-image-region: rect(0 224px 16px 208px); }
+toolbar[iconsize=small] #tbx-images-tabpref[ischecked=true]        { -moz-image-region: rect(0 240px 16px 224px); }
+toolbar[iconsize=small] #tbx-images-tabpref                        { -moz-image-region: rect(0 256px 16px 240px); }
+toolbar[iconsize=small] #tbx-metaredirects-tabpref[ischecked=true] { -moz-image-region: rect(0 272px 16px 256px); }
+toolbar[iconsize=small] #tbx-metaredirects-tabpref                 { -moz-image-region: rect(0 288px 16px 272px); }
+toolbar[iconsize=small] #tbx-plugins-tabpref[ischecked=true]       { -moz-image-region: rect(0 304px 16px 288px); }
+toolbar[iconsize=small] #tbx-plugins-tabpref                       { -moz-image-region: rect(0 320px 16px 304px); }
+
+
+/* need a min-width so you can easily drag items onto a new toolbar */
+toolbox[vertical=true] > toolbar { min-width: 16px; }
+
+toolbox[vertical=true] > toolbar > toolbarspacer { height: 15px; }
+
+/* spacer while in customise mode */
+toolbox[vertical=true] > toolbar > toolbarpaletteitem[place=toolbar] > toolbarspacer { height: 11px; }
+
+/* separator, both normally and while in customise mode */
+toolbox[vertical=true] > toolbar > toolbarseparator,
+toolbox[vertical=true] > toolbar > toolbarpaletteitem[place=toolbar] > toolbarseparator {
+  margin: 0.2em 2px;
+  border-bottom: 1px solid ThreeDHighlight;
+  border-top: 1px solid ThreeDShadow;
+  height: 2px;
+  border-left: none;
+  border-right: none;
+}
+
+
+/* drag drop feedback when in customisation mode. dragover=left really means dragover=before. */
+toolbox[vertical=true] > toolbar > toolbarpaletteitem[place=toolbar] {
+  margin: -2px -2px;
+  border: none;
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+}
+toolbox[vertical=true] > toolbar > toolbarpaletteitem[dragover="left"] { border-top-color: black; }
+toolbox[vertical=true] > toolbar > toolbarpaletteitem[dragover="right"] { border-bottom-color: black; }
+
+
+/* toolboxes on tab strip and statusbar be completely plain */
+.tbx-toolbox-plain {
+  padding: 0;
+  -moz-box-orient: horizontal;
+  /* "stretch" is the default, and maked the buttons look odd on :hover */
+  -moz-box-align: center;
+}
+.tbx-toolbox-plain, .tbx-toolbar-plain {
+  margin: 0;
+  -moz-appearance: none;
+  border: none !important;
+  background: transparent !important;
+}
+
+
+/* make items in the tab bar more compact */
+.tbx-tabbar-toolbar toolbarbutton,
+.tbx-tabbar-toolbar toolbaritem {
+  padding: 1px;
+  margin: 0;
+}
+
+
+/* need to have a min size so that items can be dragged into the tabbar/statusbar toolbars */
+.tbx-toolbox-plain[incustomisemode="true"] > .tbx-toolbar-plain {
+  min-width: 10px;
+  min-height: 16px;
+}

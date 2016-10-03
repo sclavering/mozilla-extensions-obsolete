@@ -1,0 +1,5 @@
+<!ENTITY default.label "Stop/Reload">
+<!ENTITY reload.label "Reload">
+<!ENTITY reload.tooltip "Reload the current page">
+<!ENTITY stop.label "Stop">
+<!ENTITY stop.tooltip "Stop loading the current page">

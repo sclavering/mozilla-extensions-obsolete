@@ -1,0 +1,3 @@
+overlay chrome://browser/content/browser.xul chrome://proxypicker/content/proxypicker.xul
+content proxypicker jar:proxypicker.zip!/code/
+locale proxypicker en jar:proxypicker.zip!/lang/en/

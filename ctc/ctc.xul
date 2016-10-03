@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://global/locale/tabbrowser.dtd">
+
+<overlay id="ctc" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript"><![CDATA[
+
+window.addEventListener("load", ctc_init, false);
+
+function ctc_init() {
+  document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", ctc_hide, false);
+  window.removeEventListener("load", ctc_init, false);
+}
+
+function ctc_hide() {
+  const cm = gContextMenu;
+  const mi = document.getElementById("context-closetab");
+  // hide "Close Tab" when Back, Stop, etc. are
+  const hidden = cm.isTextSelected || cm.onLink || cm.onImage || cm.onTextInput;
+  mi.hidden = hidden;
+  if(hidden) return;
+  if(gBrowser.mTabContainer.childNodes.length > 1) mi.removeAttribute("disabled");
+  else mi.setAttribute("disabled", "true");
+}
+
+]]></script>
+
+<popup id="contentAreaContextMenu">
+  <menuitem id="context-closetab" label="&closeTab.label;"
+      oncommand="gBrowser.removeCurrentTab()" insertafter="context-stop"/>
+</popup>
+
+</overlay>

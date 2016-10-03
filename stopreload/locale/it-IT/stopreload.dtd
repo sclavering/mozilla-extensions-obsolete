@@ -1,0 +1,5 @@
+<!ENTITY default.label "Stop/Ricarica">
+<!ENTITY reload.label "Ricarica">
+<!ENTITY reload.tooltip "Ricarica pagina corrente">
+<!ENTITY stop.label "Stop">
+<!ENTITY stop.tooltip "Interrompe il caricamento della pagina">

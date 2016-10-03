@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<overlay id="MenuTweakerOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript"><![CDATA[
+
+function menutweakerInit() {
+  var sheet = document.styleSheets[0];
+  var ids = "";
+  var menulabels = "";
+  var menuitemlabels = "";
+  var selectors = "";
+  // the prefs won't be set until MenuTweaker settings dialogue has been used at least once
+  // however it always sets all of them, so we can try-catch all together
+  try {
+    // gPrefService wasn't working
+    var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                          .getService(Components.interfaces.nsIPrefService);
+    prefs = prefs.getBranch("extensions.menutweaker.hide.");
+    ids = prefs.getCharPref("by_id");
+    menulabels = prefs.getCharPref("menus_by_label");
+    menuitemlabels = prefs.getCharPref("menuitems_by_label");
+    selectors = prefs.getCharPref("by_selector");
+  } catch(e) { dump("menutweaker: failed to read prefs!"); }
+  // hide the id'd elements
+  if(ids!="") {
+    var cssselector = "#" + ids.replace(/\|/g,", #");
+    sheet.insertRule(cssselector + " { display:none !important; }", sheet.cssRules.length);
+  }
+  // hide the menus by label
+  if(menulabels!="") {
+    var cssselector = 'menu[label="' + menulabels.replace(/\|/g,'"], menu[label="') + '"]';
+    sheet.insertRule(cssselector + " { display:none !important; }", sheet.cssRules.length);
+  }
+  // hide the menuitems by label
+  if(menuitemlabels!="") {
+    var cssselector = 'menuitem[label="' + menuitemlabels.replace(/\|/g,'"], menuitem[label="') + '"]';
+    sheet.insertRule(cssselector + " { display:none !important; }", sheet.cssRules.length);
+  }
+  // selectors, used to hide menu-separators that have no ID. note: already a valid css selector
+  if(selectors!="") {
+    sheet.insertRule(selectors + " { display:none !important; }", sheet.cssRules.length);
+  }
+}
+
+window.addEventListener("load", menutweakerInit, false);
+
+
+]]></script>
+
+</overlay>

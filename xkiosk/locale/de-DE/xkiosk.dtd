@@ -1,0 +1,5 @@
+<!ENTITY label   "Paranoia">
+<!ENTITY tooltip "Löscht alle Informationen.">
+
+<!ENTITY prompttitle "Informationen löschen">
+<!ENTITY promptmsg   "Wollen Sie alle privaten Informationen löschen?">

@@ -1,0 +1,4 @@
+overlay chrome://browser/content/browser.xul chrome://goto/content/goto.xul
+content goto jar:goto.jar!/content/
+locale goto en jar:goto.jar!/locale/en/
+locale goto it jar:goto.jar!/locale/it/

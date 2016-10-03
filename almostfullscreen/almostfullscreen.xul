@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<overlay id="almostfullscreen" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript"><![CDATA[
+var almostFullScreen = {
+  width: 0,
+  height: 0,
+  left: 0,
+  top: 0,
+  wasMaximized: false,
+  on: false
+};
+
+// position, dimensions, and state before going full screen
+gAFSWasMaximized = false;
+
+// Override the function called when trying to start/stop full screen mode.
+// many properties of Window objects that people forget exist are used here
+function BrowserFullScreen() {
+  if(almostFullScreen.on) {
+    document.documentElement.removeAttribute("hidechrome");
+    resizeTo(almostFullScreen.width, almostFullScreen.height);
+    // the moveTo often does nothing on Fx 2.0 Ubuntu Edgy if not done in setTimeout
+    setTimeout(function() { moveTo(almostFullScreen.left, almostFullScreen.top); }, 0);
+    if(almostFullScreen.wasMaximized) maximize();
+  } else {
+    almostFullScreen.wasMaximized = windowState == STATE_MAXIMIZED;
+    if(almostFullScreen.wasMaximized) restore(); // else we'd get the wrong dimensions
+    almostFullScreen.width = outerWidth;
+    almostFullScreen.height = outerHeight;
+    almostFullScreen.left = screenX;
+    almostFullScreen.top = screenY;
+    document.documentElement.setAttribute("hidechrome", "true");
+    moveTo(screen.availLeft, screen.availTop);
+    resizeTo(screen.availWidth, screen.availHeight);
+  }
+  almostFullScreen.on = !almostFullScreen.on;
+  almostFullScreenToggle(!almostFullScreen.on);
+}
+
+// Like browser.js's FullScreen.toggle, but without using the magical window.fullScreen
+// Hides toolbars, and stuff.
+function almostFullScreenToggle(fullScreen) {
+  FullScreen.showXULChrome("toolbar", fullScreen);
+  FullScreen.showXULChrome("statusbar", fullScreen);
+  document.getElementById("fullScreenItem").setAttribute("checked", !fullScreen);
+}
+
+]]></script>
+
+</overlay>

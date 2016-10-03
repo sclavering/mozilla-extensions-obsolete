@@ -1,0 +1,1 @@
+zip -ur9 almostfullscreen.xpi almostfullscreen.xul install.rdf chrome.manifest

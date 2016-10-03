@@ -1,0 +1,7 @@
+#xkiosk-button {
+  list-style-image: url(x.png);
+  -moz-image-region: rect(0 24px 24px 0);
+}
+toolbar[iconsize="small"] #xkiosk-button {
+  -moz-image-region: rect(0 40px 16px 24px);
+}

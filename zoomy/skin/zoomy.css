@@ -1,0 +1,9 @@
+/* selecting by id (rather than class) to take precedence over the iconsize=small decl. in browser.css */
+#zoomy-zoomin, #zoomy-zoomout, #zoomy-zoomreset { list-style-image: url(zoomy.png); }
+
+#zoomy-zoomin { -moz-image-region: rect(0 24px 24px 0); }
+#zoomy-zoomout { -moz-image-region: rect(0 48px 24px 24px); }
+#zoomy-zoomreset { -moz-image-region: rect(0 72px 24px 48px); }
+toolbar[iconsize=small] #zoomy-zoomin { -moz-image-region: rect(24px 16px 40px 0); }
+toolbar[iconsize=small] #zoomy-zoomout { -moz-image-region: rect(24px 32px 40px 16px); }
+toolbar[iconsize=small] #zoomy-zoomreset { -moz-image-region: rect(24px 48px 40px 32px); }

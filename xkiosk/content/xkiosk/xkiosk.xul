@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://xkiosk/skin/" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://xkiosk/locale/xkiosk.dtd">
+
+<overlay id="xkiosk-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript" src="xkiosk.js"/>
+
+<toolbarpalette id="BrowserToolbarPalette">
+  <toolbarbutton class="toolbarbutton-1"
+      id="xkiosk-button" oncommand="xkioskPromptClearAll(this);"
+      label="&label;" tooltiptext="&tooltip;"
+      prompttitle="&prompttitle;" promptmsg="&promptmsg;"
+      />
+</toolbarpalette>
+
+</overlay>

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://statusbuttons/content/statusbuttons.css" type="text/css"?>
+
+<overlay id="statusbuttonsOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<statusbar id="status-bar">
+  <toolbox
+      id="statusbuttons-toolbox-left"
+      class="statusbuttons-toolbox"
+      position="1"
+      >
+   <toolbar
+    id="statusbuttons-toolbar-left"
+    class="statusbuttons-toolbar"
+    context="toolbar-context-menu"
+    customizable="true"
+    mode="icons"
+    iconsize="small"
+    />
+  </toolbox>
+  <toolbox
+      id="statusbuttons-toolbox-right"
+      class="statusbuttons-toolbox"
+      position="1000"
+      >
+   <toolbar
+    id="statusbuttons-toolbar-right"
+    class="statusbuttons-toolbar"
+    context="toolbar-context-menu"
+    customizable="true"
+    mode="icons"
+    iconsize="small"
+    />
+  </toolbox>
+</statusbar>
+
+<script type="application/x-javascript"><![CDATA[
+var statusbuttonsToolbarsAreBeingCustomised = false;
+
+var statusbuttonsOldCustomizeToolbar = null;
+var statusbuttonsOldToolboxCustomizeDone = null;
+
+var statusbuttonsToolbox = null;
+
+function statusbuttonsCustomizeToolbar(id) { // id arg is Tb only
+  statusbuttonsToolbarsAreBeingCustomised = true;
+  document.getElementById("statusbuttons-toolbar-left").setAttribute("incustomisemode", "true");
+  document.getElementById("statusbuttons-toolbar-right").setAttribute("incustomisemode", "true");
+  statusbuttonsOldCustomizeToolbar(id);
+}
+
+function statusbuttonsToolboxCustomizeDone(aToolboxChanged) {
+  statusbuttonsToolbarsAreBeingCustomised = false;
+  document.getElementById("statusbuttons-toolbar-left").removeAttribute("incustomisemode");
+  document.getElementById("statusbuttons-toolbar-right").removeAttribute("incustomisemode");
+  statusbuttonsOldToolboxCustomizeDone(aToolboxChanged);
+}
+
+]]></script>
+
+</overlay>

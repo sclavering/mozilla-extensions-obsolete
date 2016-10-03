@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://goup/skin/" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://goup/locale/goup.dtd">
+
+<overlay id="goup" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<toolbarpalette id="BrowserToolbarPalette">
+  <toolbarbutton id="goup-button" class="toolbarbutton-1"
+      oncommand="goup_up(event);"
+      onclick="if(event.button==1) goup_up(event);"
+      label="&label;" tooltiptext="&tooltip;"/>
+</toolbarpalette>
+
+<keyset id="mainKeyset">
+  <key id="goup-key-top" keycode="&keycode.top;" modifiers="&modifiers.top;"
+      oncommand="goup_top();"/>
+  <key id="goup-key-up" keycode="&keycode.up;" modifiers="&modifiers.up;"
+      oncommand="goup_up(null);"/>
+</keyset>
+
+<script type="text/javascript"><![CDATA[
+
+const goup_protocol_regex = /^ftp|http|https|file$/;
+
+function goup_top() {
+  const loc = content.document.location, pro = loc.protocol;
+  if(goup_protocol_regex.test(pro)) openUILink(pro + "//" + loc.host, null);
+} 
+
+function goup_up(e) {
+  const loc = content.document.location;
+  if(!goup_protocol_regex.test(loc.protocol)) return;
+  const up = goup_getUpUrl(loc);
+  if(up) openUILink(up, e);
+}
+
+function goup_getUpUrl(location) {
+    if(location.hash) return location.href.substr(0, location.href.length - location.hash.length);
+    var url = location.href;
+    var matches, origUrl = url;
+    // trim filename (this makes subdriectory digging easier)
+    matches = url.match(/(^.*\/)(.*)/);
+    if(!matches) return null; //only fails if "url" has no /'s
+    url = matches[1];
+    if(url!=origUrl && !/(index|main)\.(php3?|html?)/i.test(url))
+      return url;
+    // dig through subdirs
+    matches = url.match(/^([^\/]*?:\/\/.*\/)[^\/]+?\//);
+    if(matches) return matches[1];
+    // we've reach (ht|f)tp://foo.com/, climb up through subdomains
+    // split into protocol and domain
+    matches = url.match(/([^:]*:\/\/)?(.*)/);
+    var protocol = matches[1], domain = matches[2];
+    matches = domain.match(/^[^\.]*\.(.*)/);
+    if(matches) return (protocol+matches[1]);
+    return null;
+}
+
+
+]]></script>
+
+</overlay>

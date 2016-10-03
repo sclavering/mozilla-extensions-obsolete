@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://browser/locale/">
+
+<overlay id="GoHomeOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript"><![CDATA[
+
+window.addEventListener("load",goHomeInit,false);
+
+function goHomeInit() {
+  document.getElementById("contentAreaContextMenu").addEventListener("popupshowing",goHomeHide,false);
+}
+
+// hide the Home item when approproiate (use same logic as for Back, Stop etc.)
+function goHomeHide() {
+  var cm = gContextMenu;
+  document.getElementById("context-home").hidden = (cm.isTextSelected || cm.onLink || cm.onImage || cm.onTextInput);
+}
+
+]]></script>
+
+<popup id="contentAreaContextMenu">
+  <menuitem id="context-home" label="&goHomeCmd.label;" command="Browser:Home" insertafter="context-stop"/>
+</popup>
+
+</overlay>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://fusion/content/fusion.css" type="text/css"?>
+
+<!DOCTYPE overlay>
+
+<overlay id="fusion">
+
+<!-- not absolutely necessary, since it would be hidden anyway -->
+<progressmeter id="statusbar-icon" removeelement="true"/>
+
+</overlay>

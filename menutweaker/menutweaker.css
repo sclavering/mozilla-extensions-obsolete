@@ -1,0 +1,3 @@
+@import url(chrome://global/skin/);
+
+listitem[menu] { font-weight: bold; }

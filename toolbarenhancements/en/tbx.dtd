@@ -1,0 +1,52 @@
+<!ENTITY tbx-options-button.label "Options">
+<!ENTITY tbx-options-button.tooltip "Open the Options window">
+
+<!ENTITY tbx-addbookmark-button.label "Bookmark">
+<!ENTITY tbx-addbookmark-button.tooltip "Bookmark this page...">
+
+<!ENTITY tbx-managebookmarks-button.label "Bookmarks...">
+<!ENTITY tbx-managebookmarks-button.tooltip "Manage Bookmarks">
+
+<!ENTITY tbx-save-button.label "Save">
+<!ENTITY tbx-save-button.tooltip "Save Page ...">
+
+<!ENTITY tbx-jsconsole-button.label "JS Console">
+<!ENTITY tbx-jsconsole-button.tooltip "Open the Javascript Console">
+
+<!ENTITY tbx-viewsource-button.label "Source">
+<!ENTITY tbx-viewsource-button.tooltip "View page source">
+
+<!ENTITY tbx-fullscreen-button.label "Full Screen">
+<!ENTITY tbx-fullscreen-button.tooltip "Toggle full screen mode">
+
+<!ENTITY tbx-clearcache-button.label "Clear Cache">
+<!ENTITY tbx-clearcache-button.tooltip "Clear the cache">
+
+<!ENTITY tbx-pageinfo-button.label "Info">
+<!ENTITY tbx-pageinfo-button.tooltip "View Page Info">
+
+<!ENTITY tbx-javascript-tabpref.label "Javascript">
+<!ENTITY tbx-javascript-tabpref.tooltip "Enable/Disable Javascript in the current tab">
+
+<!ENTITY tbx-images-tabpref.label "Images">
+<!ENTITY tbx-images-tabpref.tooltip "Enable/Disable Images in the current tab">
+
+<!ENTITY tbx-metaredirects-tabpref.label "Redirections">
+<!ENTITY tbx-metaredirects-tabpref.tooltip "Enable/Disable Meta Redirections in the current tab">
+
+<!ENTITY tbx-plugins-tabpref.label "Plug-ins">
+<!ENTITY tbx-plugins-tabpref.tooltip "Enable/Disable Plug-ins in the current tab">
+
+
+<!ENTITY tbx-toolbar-position-top       "Top">
+<!ENTITY tbx-toolbar-position-belowtabs "Below Tabs">
+<!ENTITY tbx-toolbar-position-left      "Left">
+<!ENTITY tbx-toolbar-position-right     "Right">
+<!ENTITY tbx-toolbar-position-bottom    "Bottom">
+
+
+<!ENTITY tbx-mode-icons-only "Icons Only">
+<!ENTITY tbx-mode-icons-text "Icons and Text">
+<!ENTITY tbx-mode-text-only "Text Only">
+<!ENTITY tbx-mode-small-icons "Small Icons">
+<!ENTITY tbx-mode-show-in-fullscreen "Show in Full-Screen mode">

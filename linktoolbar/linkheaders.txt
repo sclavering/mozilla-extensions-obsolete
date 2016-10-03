@@ -1,0 +1,45 @@
+This is the section of RFC2068 (HTTP/1.1) which defined the http Link: header
+
+19.6.2.4 Link
+
+   The Link entity-header field provides a means for describing a
+   relationship between two resources, generally between the requested
+   resource and some other resource. An entity MAY include multiple Link
+   values. Links at the metainformation level typically indicate
+   relationships like hierarchical structure and navigation paths. The
+   Link field is semantically equivalent to the <LINK> element in
+   HTML.[5]
+
+          Link           = "Link" ":" #("<" URI ">" *( ";" link-param )
+
+          link-param     = ( ( "rel" "=" relationship )
+                             | ( "rev" "=" relationship )
+                             | ( "title" "=" quoted-string )
+                             | ( "anchor" "=" <"> URI <"> )
+                             | ( link-extension ) )
+
+          link-extension = token [ "=" ( token | quoted-string ) ]
+
+          relationship   = sgml-name
+                         | ( <"> sgml-name *( SP sgml-name) <"> )
+
+          sgml-name      = ALPHA *( ALPHA | DIGIT | "." | "-" )
+
+   Relationship values are case-insensitive and MAY be extended within
+   the constraints of the sgml-name syntax. The title parameter MAY be
+   used to label the destination of a link such that it can be used as
+   identification within a human-readable menu. The anchor parameter MAY
+   be used to indicate a source anchor other than the entire current
+   resource, such as a fragment of this resource or a third resource.
+
+   Examples of usage include:
+
+       Link: <http://www.cern.ch/TheBook/chapter2>; rel="Previous"
+
+       Link: <mailto:timbl@w3.org>; rev="Made"; title="Tim Berners-Lee"
+
+   The first example indicates that chapter2 is previous to this
+   resource in a logical navigation path. The second indicates that the
+   person responsible for making the resource available is identified by
+   the given e-mail address.
+

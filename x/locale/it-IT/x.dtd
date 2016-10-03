@@ -1,0 +1,10 @@
+<!ENTITY label   "Paranoia">
+<!ENTITY tooltip "Protegge la tua Privacy">
+
+<!ENTITY dialogtitle "Elimina le informazioni relative alla Privacy">
+<!ENTITY clearHistory   "Cancella la Cronologia">
+<!ENTITY clearFormInfo  "Cancella le informazioni relative alla compilazione dei Moduli">
+<!ENTITY clearPasswords "Cancella le Password salvate">
+<!ENTITY clearDownloads "Cancella la cronologia dei Download">
+<!ENTITY clearCookies   "Cancella i Cookie">
+<!ENTITY clearCache     "Cancella la Cache">

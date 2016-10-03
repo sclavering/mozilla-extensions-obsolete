@@ -1,0 +1,2 @@
+zip -ur0 digger.zip content lang
+zip -ur9 digger.xpi digger.zip install.rdf chrome.manifest

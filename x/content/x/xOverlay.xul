@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://x/skin/" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://x/locale/">
+
+<overlay id="x-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<toolbarpalette id="BrowserToolbarPalette">
+  <toolbarbutton id="x-button" label="&label;" tooltiptext="&tooltip;" class="toolbarbutton-1"
+    oncommand="window.openDialog('chrome://x/content/xDialog.xul','paranoia','centerscreen,chrome,dialog,modal');"
+    />
+</toolbarpalette>
+
+</overlay>

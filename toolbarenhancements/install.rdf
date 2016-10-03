@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<r:RDF xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+       xmlns="http://www.mozilla.org/2004/em-rdf#">
+
+  <r:Description about="urn:mozilla:install-manifest">
+    <id>tbx</id>
+
+    <name>Toolbar Enhancements</name>
+    <version>0.16.2</version>
+    <description>Adds various toolbar buttons and increases toolbar configurability</description>
+
+    <creator>Stephen Clavering</creator>
+    <homepageURL>http://clav.mozdev.org/</homepageURL>
+    <updateURL>http://clav.mozdev.org/updates.rdf</updateURL>
+
+    <targetApplication>
+      <r:Description>
+        <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
+        <minVersion>1.0</minVersion>
+        <maxVersion>1.0</maxVersion>
+      </r:Description>
+    </targetApplication>
+
+    <file>
+      <r:Description about="urn:mozilla:extension:file:tbx.jar">
+        <package>content/</package>
+        <skin>skin/</skin>
+        <locale>en/</locale>
+      </r:Description>
+    </file>
+  </r:Description>
+</r:RDF>

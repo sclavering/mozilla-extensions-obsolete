@@ -1,0 +1,54 @@
+/* full size toolbar icons */
+
+#navbutton-top, #navbutton-up, #navbutton-first,
+#navbutton-prev, #navbutton-next, #navbutton-last {
+  list-style-image: url(chrome://navbuttons/skin/large.png);
+}
+
+#navbutton-top { -moz-image-region: rect(1px 33px 33px 1px); }
+#navbutton-top[disabled="true"] { -moz-image-region: rect(35px 33px 67px 1px); }
+
+#navbutton-up { -moz-image-region: rect(1px 67px 33px 35px);}
+#navbutton-up[disabled="true"] { -moz-image-region: rect(35px 67px 67px 35px); }
+
+#navbutton-first { -moz-image-region: rect(1px 101px 33px 69px); }
+#navbutton-first[disabled="true"] { -moz-image-region: rect(35px 101px 67px 69px); }
+
+#navbutton-prev { -moz-image-region: rect(1px 135px 33px 103px); }
+#navbutton-prev[disabled="true"] { -moz-image-region: rect(35px 135px 67px 103px); }
+
+#navbutton-next { -moz-image-region: rect(1px 169px 33px 137px); }
+#navbutton-next[disabled="true"] { -moz-image-region: rect(35px 169px 67px 137px); }
+
+#navbutton-last { -moz-image-region: rect(1px 203px 33px 171px); }
+#navbutton-last[disabled="true"] { -moz-image-region: rect(35px 203px 67px 171px); }
+
+
+/* small icons toolbar */
+
+toolbar[iconsize="small"] #navbutton-top,
+toolbar[iconsize="small"] #navbutton-up,
+toolbar[iconsize="small"] #navbutton-first,
+toolbar[iconsize="small"] #navbutton-prev,
+toolbar[iconsize="small"] #navbutton-next,
+toolbar[iconsize="small"] #navbutton-last {
+  list-style-image: url("chrome://navbuttons/skin/small.png");
+}
+
+toolbar[iconsize="small"] #navbutton-top { -moz-image-region: rect(1px 25px 25px 1px); }
+toolbar[iconsize="small"] #navbutton-top[disabled="true"] { -moz-image-region: rect(27px 25px 51px 1px); }
+
+toolbar[iconsize="small"] #navbutton-up { -moz-image-region: rect(1px 51px 25px 27px);}
+toolbar[iconsize="small"] #navbutton-up[disabled="true"] { -moz-image-region: rect(27px 51px 51px 27px); }
+
+toolbar[iconsize="small"] #navbutton-first { -moz-image-region: rect(1px 77px 25px 53px); }
+toolbar[iconsize="small"] #navbutton-first[disabled="true"] { -moz-image-region: rect(27px 77px 51px 53px); }
+
+toolbar[iconsize="small"] #navbutton-prev { -moz-image-region: rect(1px 103px 25px 79px); }
+toolbar[iconsize="small"] #navbutton-prev[disabled="true"] { -moz-image-region: rect(27px 103px 51px 79px); }
+
+toolbar[iconsize="small"] #navbutton-next { -moz-image-region: rect(1px 129px 25px 105px); }
+toolbar[iconsize="small"] #navbutton-next[disabled="true"] { -moz-image-region: rect(27px 129px 51px 105px); }
+
+toolbar[iconsize="small"] #navbutton-last { -moz-image-region: rect(1px 155px 25px 131px); }
+toolbar[iconsize="small"] #navbutton-last[disabled="true"] { -moz-image-region: rect(27px 155px 51px 131px); }

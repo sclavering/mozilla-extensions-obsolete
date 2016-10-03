@@ -1,0 +1,7 @@
+<!ENTITY label "Sali">
+<!ENTITY tooltip "Sali di un livello in questo sito web">
+
+<!ENTITY keycode.top "VK_UP">
+<!ENTITY modifiers.top "alt shift">
+<!ENTITY keycode.up "VK_UP">
+<!ENTITY modifiers.up "alt">

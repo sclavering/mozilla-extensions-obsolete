@@ -1,0 +1,10 @@
+<!ENTITY label   "Paranoia">
+<!ENTITY tooltip "Löscht private Informationen">
+
+<!ENTITY dialogtitle "Informationen löschen">
+<!ENTITY clearHistory   "Chronik löschen">
+<!ENTITY clearFormInfo  "Formulardaten löschen">
+<!ENTITY clearPasswords "Passwörter löschen">
+<!ENTITY clearDownloads "Download-Chronik löschen">
+<!ENTITY clearCookies   "Cookies löschen">
+<!ENTITY clearCache     "Cache löschen">

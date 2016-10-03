@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+
+<bindings id="statusbuttons-bindings" xmlns="http://www.mozilla.org/xbl">
+
+<binding id="toolbar" extends="chrome://global/content/bindings/toolbar.xml#toolbar">
+  <implementation>
+    <constructor><![CDATA[
+    const toolboxprops = {
+      // tricks various things into believing our toolbars are children of the toolbox
+      childNodesGetter: function() {
+        const kids = this.__proto__.__lookupGetter__("childNodes").call(this);
+        return Array.concat(Array.slice(kids), this._statusbuttons_toolbars);
+      },
+
+      // copies the drag* event listeners used by the customisation window onto our toolbars
+      addEventListener: function(name, func, capture) {
+        const extras = this._statusbuttons_toolbars, elen = extras.length;
+        if(statusbuttonsToolbarsAreBeingCustomised) // paranoia
+          for each(var extra in this._statusbuttons_toolbars) extra.addEventListener(name, func, capture);
+        this._pre_statusbuttons_addEventListener(name, func, capture);
+      },
+
+      removeEventListener: function(name, func, capture) {
+        const extras = this._statusbuttons_toolbars, elen = extras.length;
+        if(statusbuttonsToolbarsAreBeingCustomised)
+          for(var i = 0; i != elen; ++i) extras[i].removeEventListener(name, func, capture);
+        this._pre_statusbuttons_removeEventListener(name, func, capture);
+      },
+
+      // needed to make unwrapping items at the end of customisation work properly
+      getElementsByTagName: function(tag) {
+        return tag=="toolbarpaletteitem" ? document.getElementsByTagName(tag)
+          : this._pre_statusbuttons_getElementsByTagName(tag);
+      }
+    };
+
+      // prevent our iconsize and mode (text vs text+icons vs icons only) being changed
+      this._pre_statusbuttons_setAttribute = this.setAttribute;
+      this.setAttribute = function(name, val) {
+        if(name == "iconsize" || name == "mode") return;
+        this._pre_statusbuttons_setAttribute(name, val);
+      };
+      this._pre_statusbuttons_insertItem = this.insertItem;
+      
+      // For Thunderbird, this runs before the code in the .xul file
+      if(!statusbuttonsToolbox) {
+        if(window.BrowserCustomizeToolbar) { // it's Firefox
+          statusbuttonsOldCustomizeToolbar = BrowserCustomizeToolbar;
+          BrowserCustomizeToolbar = statusbuttonsCustomizeToolbar;
+          statusbuttonsOldToolboxCustomizeDone = BrowserToolboxCustomizeDone;
+          BrowserToolboxCustomizeDone = statusbuttonsToolboxCustomizeDone;
+          var toolboxId = "navigator-toolbox";
+        } else { // it's Thunderbird
+          statusbuttonsOldCustomizeToolbar = CustomizeMailToolbar;
+          CustomizeMailToolbar = statusbuttonsCustomizeToolbar;
+          statusbuttonsOldToolboxCustomizeDone = MailToolboxCustomizeDone;
+          MailToolboxCustomizeDone = statusbuttonsToolboxCustomizeDone;
+          toolboxId = "mail-toolbox";
+        }
+        const toolbox = statusbuttonsToolbox = document.getElementById(toolboxId);
+        toolbox.__defineGetter__("childNodes", toolboxprops.childNodesGetter);
+        toolbox._pre_statusbuttons_addEventListener = toolbox.addEventListener;
+        toolbox.addEventListener = toolboxprops.addEventListener;
+        toolbox._pre_statusbuttons_removeEventListener = toolbox.removeEventListener;
+        toolbox.removeEventListener = toolboxprops.removeEventListener;
+        toolbox._pre_statusbuttons_getElementsByTagName = toolbox.getElementsByTagName;
+        toolbox.getElementsByTagName = toolboxprops.getElementsByTagName;
+        toolbox._statusbuttons_toolbars = [];
+        if(!toolbox.palette)
+          toolbox.palette = toolbox.removeChild(toolbox.getElementsByTagName("toolbarpalette")[0]);
+      }
+
+      statusbuttonsToolbox._statusbuttons_toolbars.push(this);
+      // the binding we're inheriting from expects this
+      this.parentNode.palette = statusbuttonsToolbox.palette;
+      // the overridden constructor did this
+      const set = this.getAttribute("currentset") || this.getAttribute("defaultset");
+      if(set) this.currentSet = set;
+    ]]></constructor>
+  </implementation>
+</binding>
+</bindings>

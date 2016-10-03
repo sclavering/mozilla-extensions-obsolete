@@ -1,0 +1,11 @@
+.tabbrowser-tabs {
+  -moz-binding: url(chrome://flowtabs/content/flowtabs.xml#tabs);
+}
+.tabbrowser-tabs > hbox {
+  display: block;
+}
+tabbrowser tab {
+  display: inline;
+  min-width: 100px;
+  max-width: 150px;
+}

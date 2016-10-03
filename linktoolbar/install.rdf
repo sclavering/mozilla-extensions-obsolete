@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<r:RDF xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.mozilla.org/2004/em-rdf#">
+<r:Description about="urn:mozilla:install-manifest">
+
+<id>linktoolbar@cdn.mozdev.org</id>
+<name>Link Toolbar</name>
+<version>1.3</version>
+<description>A site-navigation tool</description>
+<homepageURL>http://cdn.mozdev.org/linkToolbar/</homepageURL>
+<optionsURL>chrome://linktoolbar/content/options.xul</optionsURL>
+
+<creator>Stephen Clavering</creator>
+<contributor>Chris Neale</contributor>
+<contributor>Xavier Robin (French translator)</contributor>
+<contributor>Giancarlo Dessì (Localizzazione italiana)</contributor>
+<contributor>Rob de Vries (Dutch translator)</contributor>
+<contributor>Peter Ondraska (Slovensky preklad)</contributor>
+<contributor>Tomáš Kopečný (cs-CZ translator)</contributor>
+<contributor>Rotem Liss (תרגום לעברית)</contributor>
+<contributor>Japanese Firefox Community</contributor>
+<contributor>Alexander Gieg (tradução para Português Brasileiro)</contributor>
+<contributor>Sönke Tesch (German translator)</contributor>
+<contributor>Antonio de Urquia (Spanish translator)</contributor>
+
+<targetApplication>
+  <r:Description>
+    <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id>
+    <minVersion>1.4</minVersion>
+    <maxVersion>1.5.0.*</maxVersion>
+  </r:Description>
+</targetApplication>
+</r:Description>
+</r:RDF>

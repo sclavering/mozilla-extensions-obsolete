@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://tabbin/skin/tabbin.css" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://tabbin/locale/tabbin.dtd">
+
+<overlay id="tabbin" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<toolbarpalette id="BrowserToolbarPalette">
+  <toolbarbutton id="tabbin" class="toolbarbutton-1" type="menu" disabled="true"
+      label="&label;" tooltiptext="&tooltip;" orient="vertical">
+    <menupopup id="tabbin-popup"
+        onpopupshowing="tabBinBuildTabList(this);"
+        oncommand="tabBinRestoreTab(event.originalTarget.tabBinHiddenTabIndex);"
+        />
+  </toolbarbutton>
+</toolbarpalette>
+
+<script type="application/x-javascript"><![CDATA[
+
+var gTabBinButton = null;
+var gTabBinActive = false;
+var gTabBinHiddenTabs = [];
+var gTabBinMaxTabsInBin = 5;
+
+
+function tabBinOnLoad() {
+  gBrowser._preTabBin_removeTab = gBrowser.removeTab;
+  setTimeout(tabBinDelayedStartup, 1); // so it happens after Fx's delayedStartup().
+  tabBinInit();
+}
+
+addEventListener("load", tabBinOnLoad, false);
+
+
+function tabBinDelayedStartup() {
+  // load settings
+  try {
+    gTabBinMaxTabsInBin = gPrefService.getIntPref("extensions.tabbin.numTabsInBin");
+  } catch(e) {}
+
+  // replace the toolbar customisation callback
+  var box = document.getElementById("navigator-toolbox");
+  box._preTabBin_customizeDone = box.customizeDone;
+  box.customizeDone = tabBinToolboxCustomizeDone;
+}
+
+
+function tabBinToolboxCustomizeDone(somethingChanged) {
+  if(somethingChanged) tabBinInit();
+  this._preTabBin_customizeDone(somethingChanged);
+}
+
+
+function tabBinInit() {
+  var btn = gTabBinButton = document.getElementById("tabbin");
+  if(btn && !gTabBinActive) {
+    gTabBinActive = true;
+    gBrowser.removeTab = tabBinRemoveTab;
+  } else if(gTabBinActive && !btn) {
+    gTabBinActive = false;
+    // throw away tabs in the bin
+    gBrowser.removeTab = gBrowser._preTabBin_removeTab;
+    for(var i = 0; i != gTabBinHiddenTabs.length; i++) gBrowser.removeTab(gTabBinHiddenTabs[i]);
+    gTabBinHiddenTabs = [];
+  }
+}
+
+
+function tabBinRemoveTab(tab) {
+  if(tab.localName != "tab") return; // just in case.  the standard version makes this check
+
+  // find the tab that should be active after hiding the |tab| arg.
+  var newTab = gBrowser.mCurrentTab;
+  if(tab==newTab) {
+    // look for an unhidden tab after the current tab, or, failing that, before it
+    newTab = newTab.nextSibling;
+    while(newTab && newTab.hidden) newTab = newTab.nextSibling;
+    if(!newTab) {
+      newTab = gBrowser.mCurrentTab.previousSibling;
+      while(newTab && newTab.hidden) newTab = newTab.previousSibling;
+      // if no visible tabs remain then blank the tab (matches Firefox's current behaviour. creating a new blank one would be nicer)
+      if(!newTab) {
+        this.loadURI("about:blank");
+        return;
+      }
+    }
+  }
+
+  // don't save blank tabs
+  var browser = gBrowser.getBrowserForTab(tab), uri = browser.currentURI.spec;
+  if(!uri || uri=="about:blank") {
+    gBrowser._preTabBin_removeTab(tab);
+    gBrowser.selectedTab = newTab;
+    return;
+  }
+
+  // limit closed tab list's length
+  while(gTabBinHiddenTabs.length >= gTabBinMaxTabsInBin) {
+    var tabb = gTabBinHiddenTabs.shift();
+    gBrowser._preTabBin_removeTab(tabb);
+  }
+
+  gTabBinHiddenTabs.push(tab);
+  tab.hidden = true;
+
+  gBrowser.selectedTab = newTab; // always reset, because _preTabBin_removeTab fiddles with it
+  if(gTabBinButton.disabled) gTabBinButton.disabled = false;
+}
+
+
+function tabBinRestoreTab(index) {
+  var tab = gTabBinHiddenTabs.splice(index, 1)[0];
+  tab.hidden = false;
+  if(gTabBinHiddenTabs.length==0) gTabBinButton.disabled = true;
+  gBrowser.selectedTab = tab;
+}
+
+
+function tabBinBuildTabList(popup) {
+  while(popup.hasChildNodes()) popup.removeChild(popup.lastChild);
+
+  for(var i = gTabBinHiddenTabs.length; i != 0;) {
+    var tab = gTabBinHiddenTabs[--i];
+    var browser = gBrowser.getBrowserForTab(tab), doc = browser.contentDocument;
+    var title = doc.__proto__.__lookupGetter__('title').call(doc);
+    var uri = browser.currentURI.spec;
+    var icon = tab.getAttribute("image");
+
+    var mi = document.createElement("menuitem");
+    mi.setAttribute("label", title || uri);
+    mi.setAttribute("tooltiptext", title ? uri : "");
+    mi.className = "menuitem-iconic tabbin-menuitem";
+    if(icon) mi.setAttribute("image", icon);
+    mi.tabBinHiddenTabIndex = i;
+    popup.appendChild(mi);
+  }
+}
+
+]]></script>
+
+</overlay>

@@ -1,0 +1,2 @@
+zip -ur0 linkwidget.jar content lang theme -x '*~'
+zip -ur9 linkwidget.xpi linkwidget.jar defaults install.rdf chrome.manifest -x '*CVS*'

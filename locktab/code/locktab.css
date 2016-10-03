@@ -1,0 +1,5 @@
+/* Colour locked tabs using the text selection colour. It's generally not too ugly. */
+tab[_locktab_isLocked=true],
+tab[_locktab_isLocked=true] > hbox {
+  background-color: highlight;
+}

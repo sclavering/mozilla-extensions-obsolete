@@ -1,0 +1,10 @@
+<!ENTITY label   "Paranoia">
+<!ENTITY tooltip "Protect your privacy">
+
+<!ENTITY dialogtitle "Clear Privacy Information">
+<!ENTITY clearHistory   "Clear the history of visited pages">
+<!ENTITY clearFormInfo  "Clear saved form information">
+<!ENTITY clearPasswords "Clear stored passwords">
+<!ENTITY clearDownloads "Clear the download history">
+<!ENTITY clearCookies   "Clear all cookies">
+<!ENTITY clearCache     "Clear the cache">

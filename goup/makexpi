@@ -1,0 +1,2 @@
+zip -ur0 goup.zip content lang theme
+zip -ur9 goup.xpi goup.zip install.rdf chrome.manifest
